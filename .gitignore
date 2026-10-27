@@ -17,3 +17,4 @@ output/workbook/*.json
 output/workbook/*.md
 audit/renders/
 .DS_Store
+output/theme_b/*.md
