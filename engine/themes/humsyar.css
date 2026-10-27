@@ -26,6 +26,11 @@
   --c-definition:#2F5D8A; --bg-definition:#EDF3F9;
   --c-example:#5A7A72;    --bg-example:#EFF4F2;
   --c-summary:#0B3050;    --bg-summary:#EBF0F7;
+  --c-exception:#C05621;  --bg-exception:#FBEFE6;
+  --c-mnemonic:#7C3AED;   --bg-mnemonic:#F3EFFD;
+  --c-formula:#0E7490;    --bg-formula:#EAF6F9;
+  --c-terminology:#546E7A;--bg-terminology:#EFF3F5;
+  --c-unresolved:#5F6B7A; --bg-unresolved:#F0F2F4;
   /* تایپ */
   --fs-body:10pt; --lh:1.88;
   --fs-h-topic:16.5pt; --fs-h-section:12pt; --fs-h-sub:10.5pt;
@@ -111,8 +116,8 @@ p.body .src{ margin-inline-start:4pt; }
 
 /* ============================================================= سربرگ مبحث (شناسنامهٔ فشرده) */
 .topic{ margin-top:10pt; }
-.topic-head{ break-inside:avoid; margin-bottom:8pt; }
-.topic-head__row{ display:flex; align-items:center; gap:9pt; border-bottom:2.2px solid var(--brand); padding-bottom:5pt;}
+.topic-head{ break-inside:avoid; margin-bottom:7pt; }
+.topic-head__row{ display:flex; align-items:center; gap:9pt; border-bottom:2.2px solid var(--brand); padding-bottom:4pt;}
 .topic-num{
   flex:0 0 auto; background:var(--brand-deep); color:#fff; border-radius:9px;
   font-weight:700; font-size:9pt; line-height:1.55; text-align:center; padding:3pt 9pt;
@@ -122,10 +127,10 @@ p.body .src{ margin-inline-start:4pt; }
 .topic-head__pages{ margin-inline-start:auto; font-size:7.8pt; color:var(--faint); white-space:nowrap;}
 .topic-card{
   margin-top:6pt; border:1px solid var(--line); border-radius:var(--r); background:#fcfefe;
-  padding:6pt 10pt 4pt; font-size:8.6pt; line-height:1.78;
+  padding:5pt 10pt 3.5pt; font-size:8.6pt; line-height:1.7;
 }
 .topic-card .why b{ color:var(--brand); }
-.topic-card__grid{ display:grid; grid-template-columns:1.25fr 1fr; gap:2pt 14pt; margin-top:4pt;}
+.topic-card__grid{ display:grid; grid-template-columns:1.25fr 1fr; gap:2pt 14pt; margin-top:3pt;}
 .topic-card h3{ font-size:8.6pt; color:var(--brand-deep); font-weight:700; margin-bottom:1pt;}
 .topic-card ul{ list-style:none; }
 .topic-card li::before{ content:"▸ "; color:var(--brand); font-weight:700;}
@@ -174,17 +179,29 @@ p.body .src{ margin-inline-start:4pt; }
 .callout--example{ border-color:var(--c-example); background:var(--bg-example); border-inline-start-style:dotted; border-inline-start-width:4px; }
 .callout--example .callout__head{ color:var(--c-example); }
 .callout--summary{ border-color:var(--c-summary); background:var(--bg-summary); border-inline-start-width:6px; }
+.callout--exception{ border-color:var(--c-exception); background:var(--bg-exception); border-inline-start-style:dotted; border-inline-start-width:5px; }
+.callout--exception .callout__head{ color:var(--c-exception); }
+.callout--mnemonic{ border-color:var(--c-mnemonic); background:var(--bg-mnemonic); }
+.callout--mnemonic .callout__head{ color:var(--c-mnemonic); }
+.callout--formula{ border-color:var(--c-formula); background:var(--bg-formula); }
+.callout--formula .callout__head{ color:var(--c-formula); }
+.callout--terminology{ border-color:var(--c-terminology); background:var(--bg-terminology); }
+.callout--terminology .callout__head{ color:var(--c-terminology); }
+.callout--unresolved{ border-color:var(--c-unresolved); background:var(--bg-unresolved); border-style:dashed; border-inline-start-style:solid; }
+.callout--unresolved .callout__head{ color:var(--c-unresolved); }
 .callout--summary .callout__head{ color:var(--c-summary); }
 .callout--exam .callout__head{ color:var(--c-exam); }
 
 /* ============================================================= جدول */
-.tblwrap{ margin:8pt 0; break-inside:avoid; }
+.tblwrap{ margin:8pt 0; break-inside:avoid; border:1pt solid #C4D6E4; border-radius:9pt;
+  overflow:hidden; background:#FFF; }
 .tblwrap__cap--cont .tt{ font-size:9pt; color:var(--muted); font-weight:600; }
 table.tbl thead{ display:table-header-group; }
 table.tbl tr{ break-inside:avoid; }
 table.tbl.tbl--dense{ line-height:1.66; }
 table.tbl.tbl--dense td{ padding:2.4pt 6pt; }
-.tblwrap__cap{ display:flex; align-items:baseline; gap:7pt; margin-bottom:4pt; break-after:avoid;}
+.tblwrap__cap{ display:flex; align-items:baseline; gap:7pt; padding:5pt 8pt 4pt;
+  border-bottom:.6pt solid #DCE8F1; break-after:avoid;}
 .tblwrap__cap .tno{
   background:var(--brand-deep); color:#fff; font-size:8pt; font-weight:700;
   border-radius:5px; padding:0 7px; line-height:1.8; white-space:nowrap;
@@ -194,10 +211,14 @@ table.tbl.tbl--dense td{ padding:2.4pt 6pt; }
 table.tbl{ width:100%; border-collapse:collapse; font-size:9.2pt; line-height:1.8; }
 table.tbl th{
   background:var(--brand); color:#fff; font-weight:700; padding:4pt 7pt;
-  border:1px solid var(--brand); text-align:right; font-size:9.2pt;
+  border-bottom:2pt solid var(--brand-deep); border-inline-end:.5pt solid #DCE8F1;
+  text-align:right; font-size:9.2pt;
 }
-table.tbl td{ border:1px solid var(--line); padding:3.5pt 7pt; vertical-align:top; }
-table.tbl tbody tr:nth-child(even){ background:#f6fafb; }
+table.tbl td{ border-bottom:.5pt solid var(--line); border-inline-end:.5pt solid var(--line);
+  padding:3.5pt 7pt; vertical-align:top; }
+table.tbl th:last-child, table.tbl td:last-child{ border-inline-end:none; }
+table.tbl tbody tr:last-child td{ border-bottom:none; }
+/* راه‌راه فقط در سبک مرجع (tbl--zebra) — یک سیستم سایه‌زنی واحد، بدون تداخل */
 table.tbl td.rowh{ font-weight:700; color:var(--brand-ink); background:var(--tint); white-space:nowrap;}
 table.tbl .hl{ font-weight:700; color:var(--c-conflict); }
 
@@ -344,10 +365,10 @@ table.tbl .hl{ font-weight:700; color:var(--c-conflict); }
 /* جدول مقایسه‌ای: ستون نخست چسبانِ بصری + سربرگ موجودیتی */
 .tbl--compare td:first-child{ font-weight:700; color:var(--brand-deep); background:#F7FAFC; }
 .tbl th.th-ent{ background:color-mix(in srgb, var(--th-ent) 16%, white); color:var(--th-ent);
-  border-bottom:2.2pt solid var(--th-ent); }
-.tbl--zebra tbody tr:nth-child(even) td{ background:#FAFCFE; }
+  border-bottom:2pt solid var(--th-ent); }
+.tbl--zebra tbody tr:nth-child(even) td{ background:#F4F9FB; }
 /* نوار پیشرفت نقشهٔ جلسه در سرآغاز مبحث */
-.pstrip{ display:flex; gap:3pt; margin:6pt 0 2pt; flex-wrap:wrap; }
+.pstrip{ display:flex; gap:3pt; margin:4pt 0 1pt; flex-wrap:wrap; }
 .pstrip__c{ flex:1 1 0; min-width:0; display:flex; align-items:center; gap:3pt; padding:3pt 5pt;
   border-radius:7pt; border:.6pt solid #D7E3EC; color:#5B7186; font-size:7.6pt; line-height:1.5;
   white-space:normal; background:#FFF; }
@@ -366,15 +387,15 @@ table.tbl .hl{ font-weight:700; color:var(--c-conflict); }
 .lists{ display:flex; gap:14pt; margin-top:10pt; }
 .lists__col{ flex:1 1 0; min-width:0; }
 .lists__col h2{ font-size:12.5pt; color:var(--brand-deep); margin:0 0 5pt; }
-.lists ol{ list-style:none; padding:0; margin:0; font-size:8.8pt; line-height:1.78; }
+.lists ol{ list-style:none; padding:0; margin:0; font-size:8.6pt; line-height:1.62; }
 .lists li{ display:flex; align-items:baseline; gap:4pt; }
 .lists .ln{ flex:none; font-weight:700; color:var(--brand); }
 .lists .dots{ flex:1; border-bottom:.5pt dotted #B9CBDA; transform:translateY(-2pt); }
 .lists .pno{ flex:none; font-weight:700; color:var(--brand-deep); }
 /* نمونهٔ واقعی کادرها در راهنمای خواندن */
 .guide__samples{ display:flex; gap:8pt; margin-top:8pt; flex-wrap:wrap; }
-.guide-sample{ flex:1 1 30%; margin:0 !important; font-size:8.4pt; }
-.guide-sample p{ margin:2pt 0 0; line-height:1.8; }
+.guide-sample{ flex:1 1 30%; margin:0 !important; font-size:8.1pt; }
+.guide-sample p{ margin:1.5pt 0 0; line-height:1.7; }
 /* تم چاپ کم‌جوهر: داخل روشن و تخت، جلد همان تیره می‌ماند */
 body.print-theme .callout, body.print-theme .topic-card, body.print-theme .summary-box{
   background:#FFF !important; box-shadow:none !important; }
@@ -383,8 +404,6 @@ body.print-theme .pstrip__c--cur{ background:#FFF; color:var(--brand-deep); bord
 body.print-theme .numbadge{ background:#FFF; }
 
 /* ===== مرحلهٔ ۲+۳ (Round 5): یادگیری فعال و مادهٔ پایانی ===== */
-.prov-ribbon{ display:inline-block; margin-bottom:4pt; padding:1pt 7pt; border-radius:999px;
-  background:#FEF3C7; border:.6pt dashed #D97706; color:#92400E; font-size:7.8pt; font-weight:700; }
 /* TL;DR بالای بخش: جملهٔ محوری خود متن، پیش از جزئیات */
 .tldr{ border:1pt solid var(--brand); border-radius:10pt; padding:7pt 10pt 6pt; margin:8pt 0 10pt;
   background:linear-gradient(180deg,#F2FAF8,#FFFFFF); break-inside:avoid; }
@@ -414,8 +433,8 @@ body.print-theme .numbadge{ background:#FFF; }
 .glossary, .answerkey, .colophon{ margin-top:14pt; border-top:1.6pt solid var(--brand); padding-top:8pt; }
 .glossary h2, .answerkey h2, .colophon h2{ font-size:14pt; color:var(--brand-deep); margin:0 0 4pt;
   break-after:avoid; }
-.gloss__note{ font-size:8.6pt; color:#5B7186; margin:0 0 6pt; }
-.gloss__grid{ columns:2; column-gap:16pt; font-size:9.2pt; line-height:1.9; }
+.gloss__note{ font-size:8pt; color:#5B7186; margin:0 0 4pt; }
+.gloss__grid{ columns:2; column-gap:14pt; font-size:8.3pt; line-height:1.66; }
 .gloss__it{ display:flex; align-items:baseline; gap:4pt; break-inside:avoid; }
 .gloss__fa{ font-weight:600; }
 .gloss__it .dots{ flex:1; border-bottom:.5pt dotted #B9CBDA; transform:translateY(-2pt); }
@@ -427,3 +446,12 @@ body.print-theme .numbadge{ background:#FFF; }
 .col__row{ display:flex; gap:8pt; margin:3pt 0; font-size:9.2pt; line-height:1.85; }
 .col__row b{ flex:none; width:92pt; color:var(--brand-deep); }
 .col__brand{ margin-top:7pt; text-align:left; font-weight:800; color:var(--brand-deep); font-size:9.5pt; }
+
+/* ===== راند ۶: کتابخانهٔ آیکون و نقطهٔ رنگی موجودیت ===== */
+.ic{ vertical-align:-2.5pt; flex:none; }
+.edot{ display:inline-block; width:6.5pt; height:6.5pt; border-radius:50%; margin-inline-end:3.5pt;
+  background:var(--ed, var(--chip-ent, #9FB4C6)); border:.5pt solid rgba(11,48,80,.35);
+  vertical-align:-.5pt; }
+.chip--ent{ border-color:var(--chip-ent) !important; color:var(--chip-ent); font-weight:700; }
+.guide__ents{ margin-top:5pt; font-size:7.9pt; line-height:1.95; color:var(--brand-deep); }
+.guide__ents .chip{ margin:1pt 0 1pt 4pt; white-space:nowrap; display:inline-block; }

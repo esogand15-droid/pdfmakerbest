@@ -17,8 +17,9 @@ from typing import Any
 import yaml
 
 REVIEW_STATUSES = {"extracted", "editorial", "needs_review", "approved", "unresolved_conflict"}
-CALLOUT_KINDS = {"key", "clinical", "warning", "bridge", "conflict", "exam",
-                 "definition", "example", "summary"}
+CALLOUT_KINDS = {"key", "clinical", "warning", "exception", "bridge", "conflict",
+                 "exam", "definition", "example", "summary", "mnemonic",
+                 "formula", "terminology", "unresolved"}
 FIGURE_LAYOUTS = {"auto", "side", "full"}
 
 

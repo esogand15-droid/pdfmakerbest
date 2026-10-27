@@ -182,13 +182,16 @@ def _stamp_furniture(doc, frame_pdfs, page_topics: dict | None = None) -> None:
         overlay = overlays.get(key) or overlays.get("_single")
         if overlay is not None:
             page.show_pdf_page(page.rect, overlay, 0)
-            # نوار پیشرفت مطالعه: هندسهٔ خالص، بدون متن — بالای خط پایین قاب
+            # نوار پیشرفت مطالعه: از راست پر می‌شود (جهت خواندن فارسی) و در چاپ
+            # سیاه‌وسفید هم با قاب تیره + پُری تیره + شیار سفید قابل تشخیص است.
             frac = i / max(1, total - 1)
-            tx0, tx1, ty = 58 * MM, 152 * MM, 288.35 * MM
-            page.draw_rect(pymupdf.Rect(tx0, ty, tx1, ty + 0.85 * MM),
-                           color=None, fill=(0.855, 0.898, 0.933), radius=0.5)
-            page.draw_rect(pymupdf.Rect(tx0, ty, tx0 + (tx1 - tx0) * frac, ty + 0.85 * MM),
-                           color=None, fill=(0.043, 0.478, 0.431), radius=0.5)
+            tx0, tx1, ty, th = 56 * MM, 154 * MM, 288.2 * MM, 1.15 * MM
+            page.draw_rect(pymupdf.Rect(tx0, ty, tx1, ty + th),
+                           color=(0.13, 0.23, 0.33), fill=(1, 1, 1), width=0.8, radius=0.5)
+            fw = (tx1 - tx0) * frac
+            if fw > 0.6 * MM:
+                page.draw_rect(pymupdf.Rect(tx1 - fw, ty, tx1, ty + th),
+                               color=None, fill=(0.13, 0.23, 0.33), radius=0.5)
             cx, cy = 105 * MM, CAPSULE_CY_MM * MM
             r = pymupdf.Rect(cx - 8 * MM, cy - 2.6 * MM, cx + 8 * MM, cy + 2.6 * MM)
             page.draw_rect(r, color=(0.043, 0.43, 0.42), fill=(1, 1, 1), width=0.7, radius=0.5)

@@ -14,42 +14,26 @@ from html import escape
 
 from .diagrams import tree_svg
 from .entities import entity_color, entity_css_vars
+from .icons import CALLOUT_ICONS, icon_svg
 from .model import Block, Session, Source, Topic
 from .planner import Plan, fa_num
 
-# آیکون‌های مینیمال اینلاین برای کادرها (stroke=currentColor)
-_ICONS = {
-    "key": '<path d="M7 1 L13 7 L7 13 L1 7 Z" fill="currentColor"/>',
-    "clinical": '<circle cx="7" cy="7" r="6" fill="none" stroke="currentColor" stroke-width="1.6"/>'
-                '<path d="M7 4 v6 M4 7 h6" stroke="currentColor" stroke-width="1.8"/>',
-    "warning": '<path d="M7 1.5 L13.5 12.5 H0.5 Z" fill="none" stroke="currentColor" stroke-width="1.6"/>'
-               '<path d="M7 5.5 v3.4" stroke="currentColor" stroke-width="1.8"/><circle cx="7" cy="11" r="1" fill="currentColor"/>',
-    "bridge": '<path d="M1 5 h9 M7.5 2.5 L10.5 5 L7.5 7.5 M13 9 H4 M6.5 6.5 L3.5 9 L6.5 11.5" fill="none" stroke="currentColor" stroke-width="1.5"/>',
-    "conflict": '<path d="M7 13 V7 M7 7 C7 4 3 4 3 1.8 M7 7 C7 4 11 4 11 1.8" fill="none" stroke="currentColor" stroke-width="1.6"/>'
-                '<circle cx="3" cy="1.8" r="1.2" fill="currentColor"/><circle cx="11" cy="1.8" r="1.2" fill="currentColor"/>',
-    "exam": '<circle cx="7" cy="7" r="5.6" fill="none" stroke="currentColor" stroke-width="1.5"/>'
-            '<circle cx="7" cy="7" r="2.8" fill="none" stroke="currentColor" stroke-width="1.5"/>'
-            '<circle cx="7" cy="7" r="0.9" fill="currentColor"/>',
-    "definition": '<path d="M7 3 C5.8 1.9 3.8 1.6 1.8 1.9 V11.6 C3.8 11.3 5.8 11.7 7 12.7 C8.2 11.7 10.2 11.3 12.2 11.6 V1.9 C10.2 1.6 8.2 1.9 7 3 Z" fill="none" stroke="currentColor" stroke-width="1.4"/>'
-                  '<path d="M7 3 V12.7" stroke="currentColor" stroke-width="1.2"/>',
-    "example": '<circle cx="6" cy="6" r="4.4" fill="none" stroke="currentColor" stroke-width="1.5"/>'
-               '<path d="M9.3 9.3 L13 13" stroke="currentColor" stroke-width="1.7"/>'
-               '<circle cx="6" cy="6" r="1.5" fill="currentColor"/>',
-    "summary": '<path d="M1.5 3.5 h11 M1.5 7 h11 M1.5 10.5 h7" stroke="currentColor" stroke-width="1.7"/>',
-}
 KIND_LABELS = {
-    "key": "نکتهٔ کلیدی", "clinical": "نکتهٔ بالینی", "warning": "استثنا / هشدار",
-    "bridge": "از ساختار تا عملکرد", "conflict": "اختلاف منابع", "exam": "نکتهٔ امتحانی",
-    "definition": "تعریف اصطلاح", "example": "مثال آموزشی", "summary": "جمع‌بندی سریع",
+    "key": "نکتهٔ کلیدی", "clinical": "نکتهٔ بالینی", "warning": "هشدار",
+    "exception": "استثنا", "bridge": "از ساختار تا عملکرد", "conflict": "اختلاف منابع",
+    "exam": "نکتهٔ امتحانی", "definition": "تعریف اصطلاح", "example": "مثال آموزشی",
+    "summary": "جمع‌بندی سریع", "mnemonic": "یادیار", "formula": "فرمول",
+    "terminology": "اصطلاح‌شناسی", "unresolved": "نیازمند بررسی",
 }
 # ترتیب استاندارد نمایش راهنمای کادرها
-KIND_ORDER = ["key", "clinical", "warning", "bridge", "conflict", "exam",
-              "definition", "example", "summary"]
+KIND_ORDER = ["key", "definition", "clinical", "bridge", "warning", "exception",
+              "conflict", "exam", "mnemonic", "formula", "terminology",
+              "example", "summary", "unresolved"]
 
 
 def icon(kind: str) -> str:
-    return (f'<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">'
-            f'{_ICONS.get(kind, _ICONS["key"])}</svg>')
+    """آیکون ثابت هر گونهٔ کادر از کتابخانهٔ مرکزی SVG."""
+    return icon_svg(CALLOUT_ICONS.get(kind, "note"), 15)
 
 
 def inline(text: str) -> str:
@@ -185,7 +169,7 @@ class Typesetter:
         n = len(self.plan.headings)
         lh = 2.35 if n <= 12 else (2.05 if n <= 20 else 1.8)
         if any(b.type in ("figure", "table") for b in self.session.all_blocks()):
-            lh = max(1.75, lh - 0.45)  # جای فهرست شکل‌ها/جدول‌ها در همان صفحه
+            lh = max(1.58, lh - 0.62)  # جای فهرست شکل‌ها/جدول‌ها و راهنمای رنگ در همان صفحه
         items = []
         for lvl, text, anchor in self.plan.headings:
             pg = self.toc_pages.get(anchor)
@@ -232,6 +216,11 @@ class Typesetter:
             "definition": "تعریف کوتاه و دقیق یک اصطلاح.",
             "example": "مثال آموزشیِ موجود در خود محتوا.",
             "summary": "جمع‌بندی سریع همان بخش.",
+            "exception": "جایی که قاعدهٔ کلی صدق نمی‌کند؛ مرز اعتبار قاعده.",
+            "mnemonic": "یادیار کوتاهِ موجود در خود محتوا برای به‌خاطرسپاری.",
+            "formula": "فرمول یا رابطهٔ عددیِ خود منبع، با نمادهای دقیق خودش.",
+            "terminology": "ریشه و کاربرد اصطلاح، به نقل از خود منبع.",
+            "unresolved": "موردی که هنوز پاسخ قطعی در منابع این جلسه ندارد.",
         }
         # راهنما فقط کادرهایی را توضیح می‌دهد که واقعاً در همین جلسه به کار رفته‌اند
         used = {b.data.get("kind") for b in self.session.all_blocks() if b.type == "callout"}
@@ -260,7 +249,35 @@ class Typesetter:
   جمله دقیقاً از کجای جزوهٔ درس، اسنل یا گری آمده است. اصطلاح‌ها در نخستین ورودشان به صورت
   <span class="term">فارسی <bdi class="en">(English)</bdi></span> می‌آیند. کادرها هم هر کدام معنای ثابتی دارند:</p>
   <div class="guide__samples">{samples}</div>
+  {self._entity_legend()}
 </div>"""
+
+    def _entity_legend(self) -> str:
+        """راهنمای رنگ ثابت مفاهیم: فقط موجودیت‌هایی که واقعاً در همین جلسه به کار رفته‌اند."""
+        from .entities import _load as _ent_load, CONFIG_PATH as _ENT_PATH
+        _by_name, by_id = _ent_load(str(_ENT_PATH))
+        haystacks: list[str] = []
+        for b in self.session.all_blocks():
+            haystacks += [str(f) for f in b.text_fragments()]
+            if b.type == "figure":
+                for lb in b.data.get("labels", []) or []:
+                    if isinstance(lb, dict):
+                        haystacks += [str(lb.get("fa", "")), str(lb.get("en", ""))]
+        hay = " ".join(haystacks)
+        chips = []
+        for eid, ent in by_id.items():
+            names = list(ent.get("fa", [])) + list(ent.get("en", []))
+            if not any(n and n in hay for n in names):
+                continue
+            fa = (ent.get("fa") or [""])[0]
+            en = (ent.get("en") or [""])[0]
+            en_html = f' · <bdi class="en">{escape(en)}</bdi>' if en else ""
+            chips.append(f'<span class="chip chip--ent" style="--chip-ent:{ent["color"]}">'
+                         f'<i class="edot"></i>{escape(fa)}{en_html}</span>')
+        if not chips:
+            return ""
+        return ('<div class="guide__ents"><b>رنگ ثابت مفاهیم این جلسه:</b> '
+                + "".join(chips) + "</div>")
 
     # -------------------------------------------------------------- مبحث
     def topic(self, t: Topic) -> str:
@@ -361,7 +378,9 @@ class Typesetter:
             pg = self.toc_pages.get(terms[fa]["anchor"])
             pg_txt = f"ص {fa_num(pg)}" if pg else "…"
             en_html = f' <bdi class="en">({escape(en)})</bdi>' if en else ""
-            items.append(f'<div class="gloss__it"><span class="gloss__fa">{escape(fa)}{en_html}</span>'
+            col = entity_color(fa) or entity_color(en)
+            dot = f'<i class="edot" style="--ed:{col}"></i>' if col else ""
+            items.append(f'<div class="gloss__it"><span class="gloss__fa">{dot}{escape(fa)}{en_html}</span>'
                          f'<span class="dots"></span><span class="gloss__pg">{pg_txt}</span></div>')
         return (f'<div class="glossary"><h2>واژه‌نامهٔ فارسی–انگلیسی همین جلسه</h2>'
                 f'<p class="gloss__note">فقط اصطلاح‌هایی که در متن همین جلسه آمده‌اند؛ '
@@ -387,15 +406,15 @@ class Typesetter:
             for src in b.sources:
                 if src.book and src.book not in books:
                     books.append(src.book)
-        needs = any(b.status == "needs_review" for b in s.all_blocks())
+        needs = s.draft  # وضعیت انتشار را خود سند اعلام می‌کند، نه حدس موتور
         topics_txt = "؛ ".join(f"مبحث {fa_num(t.number)}: {t.title}" for t in s.topics)
         rows = [
             ("درس و جلسه", f"{s.course} — جلسهٔ {fa_num(s.session_number)}: {s.title}"),
             ("مباحث این نسخه", topics_txt),
             ("نسخهٔ جزوه", s.version),
             ("منابع به‌کاررفته", "؛ ".join(books) if books else "—"),
-            ("وضعیت بازبینی علمی",
-             "پیش‌نویسِ نیازمند بازبینی تیم علمی" if needs else "بازبینی‌شده"),
+            ("وضعیت انتشار",
+             "پیش‌نویس (پایلوت موتور)" if needs else "نسخهٔ نهایی"),
             ("گزارش خطا",
              "اگر جایی خطا یا ناهماهنگی دیدید، شمارهٔ صفحه و عنوان بخش را یادداشت کنید و به تیم علمی برسانید."),
             ("یادداشت",
@@ -410,14 +429,9 @@ class Typesetter:
                 f'<bdi class="en">{escape(self.brand["en"])}</bdi></div></div>')
 
     # ---------------------------------------------------------- بلوک‌های یادگیری
-    def _prov_ribbon(self, b: Block) -> str:
-        if b.data.get("provisional"):
-            return '<div class="prov-ribbon">پیشنهاد برای تأیید تیم علمی</div>'
-        return ""
-
     def b_tldr(self, b: Block) -> str:
         return f"""
-<aside class="tldr" data-bid="{escape(b.id)}">{self._prov_ribbon(b)}
+<aside class="tldr" data-bid="{escape(b.id)}">
   <div class="tldr__head"><span class="tldr__tag">در یک نگاه</span></div>
   <p>{inline(b.data["text"])}</p>
   <div class="srcrow">{src_chips(b.sources, self.show_sources)}</div>
@@ -433,7 +447,7 @@ class Typesetter:
                 f'<div class="qc__body"><p>{inline(str(it.get("q", "")))}</p>'
                 f'<div class="qc__line"></div></div></div>')
         return f"""
-<aside class="qcheck" data-bid="{escape(b.id)}">{self._prov_ribbon(b)}
+<aside class="qcheck" data-bid="{escape(b.id)}">
   <div class="qcheck__head"><span class="qc__tag">خودآزمایی سریع</span>
   <span class="qc__hint">بدون نگاه‌کردن به متن پاسخ دهید؛ پاسخ‌نامه در پایان جلسه است.</span></div>
   {"".join(items_html)}
@@ -517,9 +531,14 @@ class Typesetter:
         d = b.data
         labels = ""
         if d.get("labels"):
-            labels = '<div class="fig__labels">' + "".join(
-                f'<span class="chip">{escape(l["fa"])} · <bdi class="en">{escape(l["en"])}</bdi></span>'
-                for l in d["labels"]) + "</div>"
+            def _lchip(l):
+                col = entity_color(str(l.get("fa", ""))) or entity_color(str(l.get("en", "")))
+                sty = f' style="--chip-ent:{col}"' if col else ""
+                dot = '<i class="edot"></i>' if col else ""
+                cls = " chip--ent" if col else ""
+                return (f'<span class="chip{cls}"{sty}>{dot}{escape(str(l["fa"]))} · '
+                        f'<bdi class="en">{escape(str(l["en"]))}</bdi></span>')
+            labels = '<div class="fig__labels">' + "".join(_lchip(l) for l in d["labels"]) + "</div>"
         encap = (f'<div class="fig__encap">{escape(d["caption_en"])}</div>'
                  if d.get("caption_en") else "")
         srcs = " · ".join(s.label() for s in b.sources)
