@@ -60,26 +60,27 @@ def src_chips(sources: list[Source], show: bool = True) -> str:
 class Typesetter:
     def __init__(self, plan: Plan, *, show_sources: bool = True,
                  toc_pages: dict[str, int] | None = None,
-                 assets_uri: str = "") -> None:
+                 assets_uri: str = "", brand: dict | None = None) -> None:
         self.plan = plan
         self.session = plan.session
         self.show_sources = show_sources
         self.toc_pages = toc_pages or {}
         self.assets_uri = assets_uri  # پیشوند file:// برای مسیر دارایی‌ها
+        self.brand = brand or {"fa": "هامزیار", "en": "HumsYar"}
 
     # -------------------------------------------------------------- اجزای سند
     def document(self, css: str, theme: str = "a") -> str:
         s = self.session
-        body = [self.cover(), self.session_map(), self.toc(), self.reading_guide()]
+        body = [self.toc_page()]
         for topic in s.topics:
             body.append(self.topic(topic))
         if s.closing:
             body.append('<div class="section" style="margin-top:16pt"><h3>جمع‌بندی و مرور جلسه</h3></div>')
-            body.extend(self.block(b) for b in s.closing)
+            body.append(self.render_blocks(s.closing))
         body.append(
-            f'<div class="doc-end"><span class="en">HumsYar</span> · جزوهٔ '
+            f'<div class="doc-end"><span class="en">{escape(self.brand["en"])}</span> · جزوهٔ '
             f'{escape(s.course)} — جلسهٔ {fa_num(s.session_number)} · نسخهٔ {escape(s.version)}'
-            f'<br>این سند با موتور جزوه‌ساز هامزیار از روی جزوهٔ مادرِ تأییدشده تولید شده است؛ '
+            f'<br>این سند با موتور جزوه‌ساز {escape(self.brand["fa"])} از روی جزوهٔ مادر تولید شده است؛ '
             f'ارجاع هر مطلب با برچسب منبع در کنار آن آمده است.</div>'
         )
         return (
@@ -89,24 +90,27 @@ class Typesetter:
             f'<style>{css}</style></head><body>{"".join(body)}</body></html>'
         )
 
-    def cover(self) -> str:
-        s = self.session
-        note = f'<div class="cover__note">{inline(s.note)}</div>' if s.note else ""
-        return f"""
-<header class="cover">
-  <div class="cover__band">
-    <div class="cover__brand"><span class="en">HumsYar · Medical Notes</span>
-      <span>علوم پایهٔ پزشکی</span></div>
-    <h1>{escape(s.course)}<span class="sess">جلسهٔ {fa_num(s.session_number)}: {escape(s.title)}</span></h1>
-    <div class="cover__sub">{escape(s.subtitle)}</div>
-    <div class="cover__meta">
-      <span>جلسهٔ {fa_num(s.session_number)} از {fa_num(s.session_total)}</span>
-      <span>نسخهٔ {escape(s.version)}</span>
-      <span>بر پایهٔ جزوهٔ مادر + اسنل + گری</span>
-    </div>
-  </div>
-  {note}
-</header>"""
+    def toc_page(self) -> str:
+        """صفحهٔ اختصاصی فهرست: نقشهٔ جلسه + فهرست پیونددار + نوار راهنمای خواندن."""
+        return (f'<div class="tocpage">{self.session_map()}{self.toc()}'
+                f'{self.reading_guide()}</div>')
+
+    def render_blocks(self, blocks: list[Block]) -> str:
+        """رندر ترتیبی بلوک‌ها با پشتیبانی جفت‌تصویر (دو شکل هم‌ردیف)."""
+        out: list[str] = []
+        i = 0
+        while i < len(blocks):
+            b = blocks[i]
+            if b.data.get("_pair_first") and i + 1 < len(blocks) \
+                    and blocks[i + 1].id == b.data["_pair_first"]:
+                out.append(f'<div class="figpair" data-bid="{escape(b.id)}">'
+                           f'{self._figure_frame(b, with_bid=False)}'
+                           f'{self._figure_frame(blocks[i + 1], with_bid=False)}</div>')
+                i += 2
+                continue
+            out.append(self.block(b))
+            i += 1
+        return "".join(out)
 
     def session_map(self) -> str:
         s = self.session
@@ -125,13 +129,17 @@ class Typesetter:
         return f'<nav class="session-map"><h2>نقشهٔ جلسه در یک نگاه</h2><ol>{"".join(items)}</ol></nav>'
 
     def toc(self) -> str:
+        n = len(self.plan.headings)
+        lh = 2.35 if n <= 12 else (2.05 if n <= 20 else 1.8)
         items = []
         for lvl, text, anchor in self.plan.headings:
             pg = self.toc_pages.get(anchor)
             items.append(
-                f'<li class="lvl{lvl}"><span>{escape(text)}</span>'
-                f'<span class="dots"></span><span class="pno">{fa_num(pg) if pg else "…"}</span></li>')
-        return f'<nav class="toc"><h2>فهرست مطالب</h2><ol>{"".join(items)}</ol></nav>'
+                f'<li class="lvl{lvl}"><a href="#{escape(anchor)}"><span>{escape(text)}</span>'
+                f'<span class="dots"></span>'
+                f'<span class="pno">{fa_num(pg) if pg else "…"}</span></a></li>')
+        return (f'<nav class="toc" style="--toc-lh:{lh}"><h2>فهرست مطالب</h2>'
+                f'<ol>{"".join(items)}</ol></nav>')
 
     def reading_guide(self) -> str:
         """راهنمای خواندن: معنای کادرها و برچسب منبع — مبلمان ثابت جزوه، نه محتوای علمی."""
@@ -167,7 +175,7 @@ class Typesetter:
         pre_s = "".join(f'<span class="chip">{inline(p)}</span>' for p in t.prereq_suggested)
         head = f"""
 <section class="topic" id="{escape(t.id)}">
-  <div class="topic-head">
+  <div class="topic-head" data-bid="topichead:{escape(t.id)}">
     <div class="topic-head__row">
       <div class="topic-num">مبحث<b>{fa_num(t.number)}</b></div>
       <h2>{escape(t.title)}</h2>
@@ -184,7 +192,7 @@ class Typesetter:
         <span class="chips" style="display:inline-flex">{terms}</span></div>
     </div>
   </div>"""
-        body = "".join(self.block(b) for b in t.blocks)
+        body = self.render_blocks(t.blocks)
         return head + body + "</section>"
 
     # -------------------------------------------------------------- بلوک‌ها
@@ -196,17 +204,17 @@ class Typesetter:
 
     def b_section(self, b: Block) -> str:
         lbl = self.plan.labels.get(b.id, "")
-        return (f'<div class="section" id="{escape(b.id)}">'
+        return (f'<div class="section" id="{escape(b.id)}" data-bid="{escape(b.id)}">'
                 f'<h3>{inline(b.data["title"])}</h3><span class="sno">{escape(lbl)}</span></div>')
 
     def b_paragraph(self, b: Block) -> str:
-        return (f'<p class="body">{inline(b.data["text"])}'
+        return (f'<p class="body" data-bid="{escape(b.id)}">{inline(b.data["text"])}'
                 f'{src_chips(b.sources, self.show_sources)}</p>')
 
     def b_callout(self, b: Block) -> str:
         kind = b.data["kind"]
         return f"""
-<aside class="callout callout--{kind}">
+<aside class="callout callout--{kind}" data-bid="{escape(b.id)}">
   <div class="callout__head">{icon(kind)}<span>{inline(b.data["title"])}</span>
   <span class="kind">{KIND_LABELS.get(kind, kind)}</span></div>
   <p>{inline(b.data["text"])}</p>
@@ -225,13 +233,13 @@ class Typesetter:
                 cells.append(f"<td{cls}>{inline(str(cell))}</td>")
             rows.append(f"<tr>{''.join(cells)}</tr>")
         return f"""
-<div class="tblwrap">
+<div class="tblwrap" data-bid="{escape(b.id)}">
   <div class="tblwrap__cap"><span class="tno">{escape(self.plan.labels.get(b.id, "جدول"))}</span>
   <span class="tt">{inline(d["title"])}</span>{src_chips(b.sources, self.show_sources)}</div>
   <table class="tbl"><thead><tr>{head}</tr></thead><tbody>{"".join(rows)}</tbody></table>
 </div>"""
 
-    def _figure_frame(self, b: Block) -> str:
+    def _caption_inner(self, b: Block) -> str:
         d = b.data
         labels = ""
         if d.get("labels"):
@@ -241,27 +249,33 @@ class Typesetter:
         encap = (f'<div class="fig__encap">{escape(d["caption_en"])}</div>'
                  if d.get("caption_en") else "")
         srcs = " · ".join(s.label() for s in b.sources)
-        sidecap = ' fig--sidecap' if d.get("_layout") == "sidecap" else ""
-        # قاب دور خود تصویر جمع می‌شود (تصویر کوچک‌تر از عرض متن، وسط‌چین)
-        pct = d.get("_width_pct", 100)
-        hug = f' style="width:{pct}%;margin-inline:auto"' if pct < 100 and not sidecap else ""
         return f"""
-<figure class="fig{sidecap}"{hug}><div class="fig__frame">
-  <img src="{self.assets_uri}{escape(str(d.get("_opt_file", d["file"])))}" alt="{escape(str(d["title_fa"]))}">
-  <figcaption class="fig__cap">
     <span class="fno">{escape(self.plan.labels.get(b.id, "شکل"))}</span>
     <span class="ft">{inline(d["title_fa"])}</span>
     <span class="fsrc">{escape(srcs)}</span>
     <p class="fexpl">{inline(d["explain_fa"])}</p>
-    {encap}{labels}
-  </figcaption>
+    {encap}{labels}"""
+
+    def _figure_frame(self, b: Block, with_bid: bool = True, caption: bool = True) -> str:
+        d = b.data
+        sidecap = ' fig--sidecap' if d.get("_layout") == "sidecap" else ""
+        pct = d.get("_width_pct", 100)
+        img_w = f' style="width:{pct}%"' if pct < 100 else ""
+        cap = f'<figcaption class="fig__cap">{self._caption_inner(b)}</figcaption>' if caption else ""
+        return f"""
+<figure class="fig{sidecap}"{' data-bid="' + escape(b.id) + '"' if with_bid else ''}><div class="fig__frame">
+  <img src="{self.assets_uri}{escape(str(d.get("_opt_file", d["file"])))}" alt="{escape(str(d["title_fa"]))}"{img_w}>
+  {cap}
 </div></figure>"""
 
     def b_figure(self, b: Block) -> str:
         if b.data.get("_layout") == "side" and b.data.get("side_text"):
-            return (f'<div class="figside">{self._figure_frame(b)}'
+            # کپشن زیر کل گرید تمام‌عرض می‌نشیند (نه زیر تصویر) تا ارتفاع بلوک باد نکند
+            return (f'<div class="figside" data-bid="{escape(b.id)}">'
+                    f'<div class="figside__grid">{self._figure_frame(b, with_bid=False, caption=False)}'
                     f'<div class="figside__txt"><p class="body">{inline(b.data["side_text"])}'
-                    f'{src_chips(b.sources, self.show_sources)}</p></div></div>')
+                    f'{src_chips(b.sources, self.show_sources)}</p></div></div>'
+                    f'<div class="fig__cap fig__cap--below">{self._caption_inner(b)}</div></div>')
         return self._figure_frame(b)
 
     def _steps(self, steps: list) -> str:
@@ -276,7 +290,7 @@ class Typesetter:
 
     def b_process(self, b: Block) -> str:
         return f"""
-<div class="process">
+<div class="process" data-bid="{escape(b.id)}">
   <div class="process__title"><span class="pno">{escape(self.plan.labels.get(b.id, "مسیر"))}</span>
   <span>{inline(b.data["title"])}</span>{src_chips(b.sources, self.show_sources)}</div>
   {self._steps(b.data["steps"])}
@@ -286,7 +300,7 @@ class Typesetter:
         d = b.data
         fwd, bwd = d["forward"], d["backward"]
         return f"""
-<div class="dual">
+<div class="dual" data-bid="{escape(b.id)}">
   <div class="process__title"><span class="pno">{escape(self.plan.labels.get(b.id, "مسیر"))}</span>
   <span>{inline(d["title"])}</span>{src_chips(b.sources, self.show_sources)}</div>
   <div class="dual__lanes">
@@ -298,7 +312,7 @@ class Typesetter:
 
     def b_tree(self, b: Block) -> str:
         return f"""
-<figure class="tree">
+<figure class="tree" data-bid="{escape(b.id)}">
   <div class="process__title"><span class="pno">نمودار</span>
   <span>{inline(b.data["title"])}</span>{src_chips(b.sources, self.show_sources)}</div>
   {tree_svg(b.data["root"])}
@@ -306,13 +320,13 @@ class Typesetter:
 
     def b_checklist(self, b: Block) -> str:
         items = "".join(f"<li>{inline(i)}</li>" for i in b.data["items"])
-        return (f'<div class="checklist"><h3>{inline(b.data["title"])}</h3>'
+        return (f'<div class="checklist" data-bid="{escape(b.id)}"><h3>{inline(b.data["title"])}</h3>'
                 f'<ul>{items}</ul>{src_chips(b.sources, self.show_sources)}</div>')
 
     def b_summary_box(self, b: Block) -> str:
-        return (f'<div class="summarybox"><h3>{inline(b.data["title"])}</h3>'
+        return (f'<div class="summarybox" data-bid="{escape(b.id)}"><h3>{inline(b.data["title"])}</h3>'
                 f'<p>{inline(b.data["text"])}</p>{src_chips(b.sources, self.show_sources)}</div>')
 
     def b_team_note(self, b: Block) -> str:
-        return (f'<div class="teamnote"><span class="tn-t">یادداشت عضو تیم — '
+        return (f'<div class="teamnote" data-bid="{escape(b.id)}"><span class="tn-t">یادداشت عضو تیم — '
                 f'{inline(b.data["title"])}</span></div>')

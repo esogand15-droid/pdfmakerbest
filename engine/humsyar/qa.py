@@ -19,6 +19,29 @@ from .model import Session, normalize_text
 
 MIN_FONT_PT = 7.0
 BLANK_PAGE_CHARS = 30
+_MM = 72 / 25.4
+
+# قانون برند (راند ۲، بند ۰): فقط «هامزیار» و «HumsYar» درست‌اند.
+WRONG_BRAND_FORMS = ["هام‌یار", "هامیار", "هام یار", "هام زیار", "هامیر",
+                     "Hamsyar", "HamsYar", "Humsyar"]
+
+
+def brand_lint(text: str) -> list[str]:
+    """شکل‌های غلط برندِ یافت‌شده در یک متن."""
+    return [f for f in WRONG_BRAND_FORMS if f in text]
+
+
+def ezafe_lint(text: str) -> list[str]:
+    """همزهٔ اضافهٔ نادرست: «جلسٔه/نسخٔه/جزؤه» و نظایر آن.
+
+    الگوها: حرفی غیر از «ه» + همزه (U+0654) + «ه»؛ و ترکیب «ؤه».
+    روی متن منبع اجرا می‌شود (استخراج PDF ترتیب همزه را وارونه برمی‌گرداند).
+    """
+    import re as _re
+    hits = []
+    for m in _re.finditer(r"[^\sه]ٔه|ؤه", text):
+        hits.append(text[max(0, m.start() - 6):m.end() + 6])
+    return hits
 
 
 def _pdf_text_pages(pdf_path: Path) -> list[str]:
@@ -102,23 +125,101 @@ def run_qa(session: Session, pdf_path: Path,
                 for sp in ln["spans"]:
                     if sp["text"].strip():
                         min_size = min(min_size, sp["size"])
-    unembedded = [f for f in fonts if "+" not in f and f]
+    unembedded = []
+    seen_xref: set[int] = set()
+    for p in doc:
+        for f in p.get_fonts(full=True):
+            if f[0] in seen_xref or not f[3]:
+                continue
+            seen_xref.add(f[0])
+            try:
+                content = doc.extract_font(f[0])[3]
+            except Exception:
+                content = None
+            if not content:
+                unembedded.append(f[3])
     if unembedded:
-        warnings.append(f"فونت(های) بدون تعبیهٔ subset: {unembedded}")
+        warnings.append(f"فونت(های) تعبیه‌نشده در PDF: {unembedded}")
     if min_size < MIN_FONT_PT:
         errors.append(f"فونت ریزتر از آستانه در PDF هست: {min_size:.1f}pt < {MIN_FONT_PT}pt")
 
     # —— صفحات سفید و تراکم
     chars_per_page = [len(t.strip()) for t in page_texts]
     for i, (c, p) in enumerate(zip(chars_per_page, doc), 1):
-        if c < BLANK_PAGE_CHARS and not p.get_images():
+        if i > 1 and c < BLANK_PAGE_CHARS and not p.get_images():
             errors.append(f"صفحهٔ {i} تقریباً خالی است ({c} نویسه)")
-    content_pages = [c for c in chars_per_page if c >= BLANK_PAGE_CHARS]
+    # صفحهٔ ۱ کاور است و ذاتاً متن کمی دارد؛ در آمار تراکم شمرده نمی‌شود
+    content_pages = [c for i, c in enumerate(chars_per_page) if i >= 1 and c >= BLANK_PAGE_CHARS]
     avg_chars = round(sum(content_pages) / len(content_pages)) if content_pages else 0
     sparse = [i + 1 for i, c in enumerate(chars_per_page)
-              if BLANK_PAGE_CHARS <= c < avg_chars * 0.35]
+              if i >= 1 and BLANK_PAGE_CHARS <= c < avg_chars * 0.35]
     if sparse:
         warnings.append(f"صفحات کم‌تراکم نسبت به میانگین (بررسی فضای سفید): {sparse}")
+
+    # —— قانون برند روی متن نهایی PDF + lint همزهٔ اضافه روی متن منبع
+    bad_brand = brand_lint(" ".join(page_texts))
+    if bad_brand:
+        errors.append(f"شکل غلط برند در PDF نهایی: {bad_brand}")
+    ezafe_hits: list[str] = []
+    for b in session.all_blocks():
+        for frag in b.text_fragments():
+            ezafe_hits += [f"{b.id}: …{h}…" for h in ezafe_lint(frag)]
+    if ezafe_hits:
+        errors.append(f"همزهٔ اضافهٔ نادرست در متن منبع: {ezafe_hits[:6]}")
+
+    # —— کاور تمام‌صفحه: نمونه‌برداری پیکسل گوشه‌ها و وسط لبه‌ها نباید سفید خالی باشد
+    cover_ok = None
+    if doc.page_count >= 1:
+        pix = doc[0].get_pixmap(dpi=36)
+        pts = [(2, 2), (pix.width - 3, 2), (2, pix.height - 3), (pix.width - 3, pix.height - 3),
+               (pix.width // 2, 2), (pix.width // 2, pix.height - 3),
+               (2, pix.height // 2), (pix.width - 3, pix.height // 2)]
+        whites = [pt for pt in pts if all(c > 240 for c in pix.pixel(*pt)[:3])]
+        cover_ok = not whites
+        if whites:
+            errors.append(f"کاور تمام‌صفحه نیست؛ نقاط سفید در لبه‌ها: {whites}")
+
+    # —— پُری صفحات محتوایی + ناحیهٔ امن قاب
+    # نوار مبلمان قاب (بالای ۱۱٫۵mm و پایین ۲۸۶mm) از محاسبهٔ محتوا کنار گذاشته می‌شود.
+    fill_per_page: list = []
+    bbox_violations: list[str] = []
+    for i, page in enumerate(doc):
+        if i == 0:
+            fill_per_page.append(None)  # کاور تمام‌صفحه است؛ ناحیهٔ امن قاب ندارد
+            continue
+        ys: list[float] = []
+        for bl in page.get_text("dict")["blocks"]:
+            bb = bl.get("bbox")
+            if not bb:
+                continue
+            if bb[3] < 11.5 * _MM or bb[1] > 286 * _MM:
+                continue  # متن مبلمان قاب
+            if bl.get("type") == 0 and not any(
+                    sp["text"].strip() for ln in bl["lines"] for sp in ln["spans"]):
+                continue
+            ys.append(bb[3])
+            if bb[0] < 12 * _MM - 2 or bb[2] > 198 * _MM + 2:
+                bbox_violations.append(f"صفحهٔ {i + 1}: محتوا بیرون از ناحیهٔ امن قاب (x={bb[0]:.0f}..{bb[2]:.0f})")
+        for img in page.get_images(full=True):
+            for r in page.get_image_rects(img[0]):
+                ys.append(r.y1)
+                if r.x0 < 12 * _MM - 2 or r.x1 > 198 * _MM + 2:
+                    bbox_violations.append(f"صفحهٔ {i + 1}: تصویر بیرون از ناحیهٔ امن قاب")
+        if i == 1 or not ys:
+            fill_per_page.append(None if i == 1 else 0)
+        else:
+            fill_per_page.append(round(min(1.0, max(0.0, (max(ys) - 14 * _MM) / (270 * _MM))) * 100))
+    if bbox_violations:
+        errors.append("؛ ".join(dict.fromkeys(bbox_violations)))
+    content_fills = [f for i, f in enumerate(fill_per_page)
+                     if f is not None and i not in (0, 1, len(fill_per_page) - 1)]
+    fill_avg = round(sum(content_fills) / len(content_fills)) if content_fills else 0
+    sparse_pages = [i + 1 for i, f in enumerate(fill_per_page)
+                    if f is not None and f < 70 and i not in (0, 1, len(fill_per_page) - 1)]
+    if fill_avg and fill_avg < 88:
+        warnings.append(f"میانگین پُری صفحات محتوایی {fill_avg}٪ است (هدف ≥۸۸٪)")
+    if sparse_pages:
+        warnings.append(f"صفحات با پُری زیر ۷۰٪ (نیازمند توضیح/اصلاح): {sparse_pages}")
 
     # —— وضعیت‌های بازبینی برای گزارش انسانی
     review_items: list[str] = []
@@ -139,6 +240,9 @@ def run_qa(session: Session, pdf_path: Path,
         "min_font_pt": round(min_size, 1) if min_size != 999 else None,
         "chars_per_page": chars_per_page,
         "avg_chars_per_page": avg_chars,
+        "cover_full_bleed": cover_ok,
+        "fill_per_page": fill_per_page,
+        "fill_avg_pct": fill_avg,
         "review_items": review_items,
         "needs_review_topics": needs_review_topics,
     }

@@ -95,8 +95,11 @@ p.body .src{ margin-inline-start:4pt; }
 /* فهرست مطالب */
 .toc{ margin-bottom:6pt; break-inside:avoid; }
 .toc ol{ list-style:none; }
-.toc li{ display:flex; align-items:baseline; gap:6pt; font-size:9.4pt; line-height:2; }
-.toc li.lvl2{ font-size:8.7pt; color:var(--muted); margin-inline-start:16pt; line-height:1.85;}
+.toc li{ font-size:9.6pt; line-height:var(--toc-lh,2); }
+.toc li a{ display:flex; align-items:baseline; gap:6pt; color:inherit; text-decoration:none; }
+.tocpage{ break-after:page; }
+.tocpage .guide{ margin-top:10pt; }
+.toc li.lvl2{ font-size:8.8pt; color:var(--muted); margin-inline-start:16pt; }
 .toc .dots{ flex:1; border-bottom:1.2px dotted var(--line); transform:translateY(-3px);}
 .toc .pno{ font-weight:700; color:var(--brand-deep); min-width:14pt; text-align:center;}
 
@@ -113,7 +116,7 @@ p.body .src{ margin-inline-start:4pt; }
 .topic-head__pages{ margin-inline-start:auto; font-size:7.8pt; color:var(--faint); white-space:nowrap;}
 .topic-card{
   margin-top:6pt; border:1px solid var(--line); border-radius:var(--r); background:#fcfefe;
-  padding:7pt 11pt 5pt; font-size:8.9pt; line-height:1.9;
+  padding:6pt 10pt 4pt; font-size:8.6pt; line-height:1.78;
 }
 .topic-card .why b{ color:var(--brand); }
 .topic-card__grid{ display:grid; grid-template-columns:1.25fr 1fr; gap:2pt 14pt; margin-top:4pt;}
@@ -184,8 +187,8 @@ table.tbl .hl{ font-weight:700; color:var(--c-conflict); }
 /* ============================================================= قاب تصویر */
 .fig{ margin:8pt 0; break-inside:avoid; }
 .fig__frame{ border:1px solid var(--line); border-radius:var(--r); overflow:hidden; background:#fff;}
-.fig img{ display:block; width:100%; height:auto; }
-.fig__cap{ padding:6pt 10pt 7pt; font-size:var(--fs-caption); line-height:1.85; border-top:1px solid var(--line-soft); background:#fcfefe;}
+.fig img{ display:block; width:100%; height:auto; margin-inline:auto; }
+.fig__cap{ padding:5pt 9pt 6pt; font-size:var(--fs-caption); line-height:1.8; border-top:1px solid var(--line-soft); background:#fcfefe;}
 .fig__cap .fno{
   display:inline-block; background:var(--brand-deep); color:#fff; font-weight:700; font-size:7.8pt;
   border-radius:5px; padding:0 7px; line-height:1.8; margin-inline-end:5pt; vertical-align:1px;
@@ -195,11 +198,13 @@ table.tbl .hl{ font-weight:700; color:var(--c-conflict); }
 .fig__cap .fexpl{ margin-top:2pt; text-align:justify;}
 .fig__encap{
   direction:ltr; text-align:left; font-family:"DejaVu Sans",sans-serif; font-style:italic;
-  color:var(--muted); font-size:7.9pt; line-height:1.6; margin-top:4pt;
+  color:var(--muted); font-size:7.5pt; line-height:1.55; margin-top:3.5pt;
   border-top:1px dashed var(--line); padding-top:4pt;
 }
 .fig__encap::before{ content:"Original caption — "; font-style:normal; font-weight:700; font-size:7.2pt; color:var(--faint);}
-.fig__labels{ margin-top:5pt; display:flex; flex-wrap:wrap; gap:3pt; }
+.fig__labels{ margin-top:4pt; display:flex; flex-wrap:wrap; gap:2.5pt; }
+.figpair{ display:grid; grid-template-columns:1fr 1fr; gap:9pt; margin:8pt 0; break-inside:avoid; align-items:start; }
+.figpair .fig{ margin:0; width:100% !important; }
 .fig__labels .chip{ font-size:7.6pt; }
 /* چیدمان کنار متن: تصویر + متن لنگر در دو ستون */
 .figside{ display:grid; grid-template-columns:1fr 1fr; gap:11pt; margin:8pt 0; break-inside:avoid; align-items:start;}
@@ -275,11 +280,11 @@ table.tbl .hl{ font-weight:700; color:var(--c-conflict); }
 /* راهنمای خواندن */
 .guide{ margin:4pt 0 6pt; }
 .guide h2{ font-size:11pt; color:var(--brand-deep); margin-bottom:4pt; font-weight:700;}
-.guide p{ font-size:9.2pt; line-height:1.95; text-align:justify; }
+.guide p{ font-size:8.9pt; line-height:1.9; text-align:justify; }
 .guide__grid{ display:grid; grid-template-columns:1fr 1fr; gap:4pt 8pt; margin-top:5pt;}
 .guide__item{
-  display:flex; gap:6pt; align-items:flex-start; font-size:8.6pt; line-height:1.75;
-  border:1px solid var(--line); border-inline-start-width:3px; border-radius:var(--r-sm); padding:4pt 8pt;
+  display:flex; gap:6pt; align-items:flex-start; font-size:8.3pt; line-height:1.7;
+  border:1px solid var(--line); border-inline-start-width:3px; border-radius:var(--r-sm); padding:3pt 7pt;
 }
 .guide__item svg{ margin-top:3pt; flex:0 0 auto; }
 .guide__item--key{ border-inline-start-color:var(--c-key); color:inherit } .guide__item--key svg{ color:var(--c-key) }
@@ -290,6 +295,12 @@ table.tbl .hl{ font-weight:700; color:var(--c-conflict); }
 .guide__item--exam{ border-inline-start-color:var(--c-exam) } .guide__item--exam svg{ color:var(--c-exam) }
 
 /* تصویر عمودی با کپشن کناری */
-.fig--sidecap .fig__frame{ display:grid; grid-template-columns:1.08fr 1fr; align-items:stretch; }
-.fig--sidecap img{ height:100%; object-fit:contain; background:#fff; }
+.fig--sidecap .fig__frame{ display:grid; grid-template-columns:1.08fr 1fr; align-items:start; }
+.fig--sidecap img{ background:#fff; margin-inline:auto; }
 .fig--sidecap .fig__cap{ border-top:none; border-inline-start:1px solid var(--line-soft); }
+
+/* ── شکل کنار متن: کپشن تمام‌عرض زیر گرید ─────────────────────────────── */
+.figside{ display:block; }
+.figside__grid{ display:grid; grid-template-columns:1fr 1fr; gap:11pt; align-items:start; }
+.fig__cap--below{ border:1.2px solid var(--line); border-radius:var(--r); padding:6pt 9pt 5pt; margin-top:5pt; background:#fff; }
+.figside .fig{ margin:0; }

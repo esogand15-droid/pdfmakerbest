@@ -29,10 +29,18 @@ def plain_title(raw: str) -> str:
 
 FA_DIGITS = str.maketrans("0123456789", "۰۱۲۳۴۵۶۷۸۹")
 
-# عرض ناحیهٔ متن A4 با حاشیه‌های پیش‌فرض موتور (میلی‌متر)
-TEXT_WIDTH_MM = 178.0
-SIDE_WIDTH_MM = 84.0
-MIN_FIG_DPI = 110  # زیر این آستانه در گزارش بازبینی پرچم می‌خورد
+# هندسهٔ صفحهٔ A4 با حاشیه‌های موتور (میلی‌متر) — راند ۲: قاب در ۶mm، متن از ۱۴mm
+TEXT_WIDTH_MM = 182.0
+TEXT_HEIGHT_MM = 270.0
+SIDE_WIDTH_MM = 86.0
+SIDECAP_COL_MM = 94.6       # ستون تصویر در چیدمان «کپشن کناری»
+MIN_FIG_DPI = 110           # زیر این آستانه در گزارش بازبینی پرچم می‌خورد
+# سقف ارتفاع تصویر از ارتفاع مفید صفحه (راند ۲، بند ۳)
+MAX_H_WIDE = 0.32 * TEXT_HEIGHT_MM        # تصویر عریض: ≈۸۶mm
+MAX_H_PORTRAIT = 0.42 * TEXT_HEIGHT_MM    # عمودی/مربعی تمام‌عرض: ≈۱۱۳mm
+MAX_H_HARD = 0.45 * TEXT_HEIGHT_MM        # سقف مطلق حتی با کف خوانایی برچسب
+MAX_H_SIDECAP = 118.0
+DEFAULT_WIDTH_CAP_MM = 0.75 * TEXT_WIDTH_MM  # ≈۱۳۶mm مگر تصویر برچسب‌دار ریز
 
 
 def fa_num(v: int | str) -> str:
@@ -99,6 +107,7 @@ def plan_session(session: Session, edition: str,
     for topic in session.topics:
         plan.headings.append((1, f"مبحث {fa_num(topic.number)}: {topic.title}", topic.id))
         topic.blocks = process_blocks(topic.blocks, topic.number, plan)
+        _plan_pairs(topic.blocks, plan, topic.id)
         if edition == "workbook":
             # کادر خالی یادداشتِ تیم در پایان هر مبحث — مبلمان نسخهٔ کاری، نه محتوای علمی
             topic.blocks.append(Block(
@@ -110,55 +119,89 @@ def plan_session(session: Session, edition: str,
 
 
 def _plan_figure(b: Block, plan: Plan, assets_root: Path) -> None:
-    """تصمیم side/full و پایش DPI؛ دلیل تصمیم ثبت می‌شود."""
+    """تصمیم چیدمان + اندازهٔ چاپ تصویر با سقف ارتفاع و کف خوانایی؛ دلیل ثبت می‌شود.
+
+    قواعد راند ۲: ارتفاع تصویر عریض ≤ ≈۳۲٪ و عمودی/مربعی ≤ ≈۴۲٪ ارتفاع مفید صفحه؛
+    عرض تک‌ستونه معمولاً ≤ ۷۵٪ مگر `min_width_mm` (کف خوانایی برچسب‌های داخل تصویر)
+    در داده آمده باشد. تصویر اصلی هرگز دستکاری نمی‌شود؛ فقط اندازهٔ چاپ تعیین می‌شود.
+    """
     fpath = assets_root / str(b.data["file"])
     size = _image_size(fpath) if fpath.exists() else None
     want = str(b.data.get("layout", "auto"))
     has_side_text = bool(b.data.get("side_text"))
+    min_w = float(b.data.get("min_width_mm") or 0)
     if size is None:
         plan.warn(f"{b.id}: فایل تصویر پیدا نشد یا خوانا نیست: {b.data['file']}")
         b.data["_layout"] = "full"
         return
     w, h = size
-    portrait = h > w * 1.05
+    aspect_wh = w / h            # عرض/ارتفاع
+    h_over_w = h / w
+    portraitish = h_over_w >= 0.8  # عمودی یا مربعی
+
     if want == "side" and has_side_text:
         layout, why = "side", "درخواست صریح در داده + متن لنگر موجود است"
     elif want == "full":
-        layout, why = "full", "درخواست صریح در داده"
-    elif portrait and has_side_text:
-        layout, why = "side", "تصویر عمودی است و متن لنگر دارد؛ کنار متن خواناتر و کم‌حجم‌تر است"
-    elif portrait:
-        layout, why = "sidecap", "تصویر عمودی بدون متن لنگر؛ کپشن در ستون کناری تا ارتفاع قاب هدر نرود"
+        layout, why = "full", "درخواست صریح در داده (سقف‌های اندازه همچنان اعمال می‌شوند)"
+    elif portraitish and has_side_text:
+        layout, why = "side", "تصویر عمودی/مربعی با متن لنگر؛ دو ستونه کنار متن"
+    elif portraitish:
+        layout, why = "sidecap", "تصویر عمودی/مربعی؛ کپشن در ستون کناری (پیش‌فرض راند ۲)"
     else:
-        layout, why = "full", "تصویر افقی/بدون متن لنگر؛ تمام‌عرض در سطر مستقل"
+        layout, why = "full", "تصویر عریض؛ تک‌ستونه با سقف ارتفاع"
     if want == "side" and not has_side_text:
-        plan.warn(f"{b.id}: چیدمان side خواسته شده ولی side_text نیست؛ به full برگشت")
-        layout, why = "full", "نبود متن لنگر"
+        plan.warn(f"{b.id}: چیدمان side خواسته شده ولی side_text نیست؛ به sidecap/full برگشت")
+        layout, why = ("sidecap", "نبود متن لنگر") if portraitish else ("full", "نبود متن لنگر")
+    if layout == "sidecap" and min_w > SIDECAP_COL_MM:
+        layout, why = "full", f"کف خوانایی برچسب ({min_w:.0f}mm) از ستون کناری بزرگ‌تر است"
     b.data["_layout"] = layout
-    # قاعدهٔ عرض نمایش (تصویر اصلی دستکاری نمی‌شود؛ فقط اندازهٔ چاپ تعیین می‌شود):
-    #  الف) سقف ارتفاع: نسبت ارتفاع/عرض نمایشی حداکثر ۱٫۱۵ تا قاب+کپشن در یک صفحه جا شود.
-    #  ب) صداقت وضوح: تصویر کم‌پیکسل را تا تمام‌عرض بزرگ نمی‌کنیم (هدف ≈۱۳۵ DPI، کف ۵۵٪
-    #      برای خوانایی برچسب‌های داخل خود تصویر).
-    ratio = h / w
-    pct_tall = 100 if ratio <= 1.15 else max(42, round(115 / ratio))
-    if layout in ("side", "sidecap"):
-        b.data["_width_pct"] = 100
-    else:
-        honest_mm = w / (135 / 25.4)
-        pct_res = max(55, min(100, round(honest_mm / TEXT_WIDTH_MM * 100)))
-        b.data["_width_pct"] = min(pct_tall, pct_res)
+
+    honest_mm = w / (135 / 25.4)  # بزرگ‌نمایی صادقانه بر اساس وضوح بومی
     if layout == "side":
         disp_mm = SIDE_WIDTH_MM
+        img_h = disp_mm * h_over_w
+        # تصویر خیلی بلند در ستون کناری کل صفحه را می‌بلعد؛ عرضش را کم می‌کنیم
+        b.data["_width_pct"] = 100 if img_h <= 102 else max(45, round(102 / img_h * 100))
+        disp_mm = SIDE_WIDTH_MM * b.data["_width_pct"] / 100
     elif layout == "sidecap":
-        disp_mm = TEXT_WIDTH_MM * 0.52
-    else:
-        disp_mm = TEXT_WIDTH_MM * b.data["_width_pct"] / 100
+        disp_mm = SIDECAP_COL_MM
+        img_h = disp_mm * h_over_w
+        b.data["_width_pct"] = 100 if img_h <= MAX_H_SIDECAP else max(42, round(MAX_H_SIDECAP / img_h * 100))
+        disp_mm = SIDECAP_COL_MM * b.data["_width_pct"] / 100
+    else:  # full
+        max_h = MAX_H_WIDE if aspect_wh >= 1.3 else MAX_H_PORTRAIT
+        width_mm = min(TEXT_WIDTH_MM, max_h * aspect_wh, DEFAULT_WIDTH_CAP_MM, honest_mm)
+        if min_w:
+            width_mm = max(width_mm, min(min_w, MAX_H_HARD * aspect_wh, TEXT_WIDTH_MM))
+        width_mm = max(width_mm, 52.0)
+        b.data["_width_pct"] = round(width_mm / TEXT_WIDTH_MM * 100)
+        disp_mm = width_mm
+    b.data["_img_h_mm"] = round(disp_mm * h_over_w, 1)
     eff_dpi = w / (disp_mm / 25.4)
     b.data["_eff_dpi"] = round(eff_dpi)
-    plan.log(f"{b.id}: چیدمان تصویر «{layout}» — {why} (وضوح مؤثر ≈ {round(eff_dpi)} DPI)")
+    plan.log(f"{b.id}: چیدمان تصویر «{layout}» — {why}؛ عرض چاپ ≈{disp_mm:.0f}mm، "
+             f"ارتفاع تصویر ≈{b.data['_img_h_mm']:.0f}mm، وضوح مؤثر ≈{round(eff_dpi)} DPI")
     if eff_dpi < MIN_FIG_DPI:
         plan.warn(
             f"{b.id}: وضوح مؤثر تصویر پایین است (≈{round(eff_dpi)} DPI در عرض {disp_mm:.0f}mm)؛ "
             "نیازمند بازبینی/جایگزینی انسانی — موتور تصویر را دستکاری نمی‌کند")
     for flag in b.data.get("quality_flags", []):
         plan.warn(f"{b.id}: پرچم کیفی تصویر از استخراج: {flag}")
+
+
+def _plan_pairs(topic_blocks: list[Block], plan: Plan, topic_id: str) -> None:
+    """جفت‌تصویر: دو شکلِ پشت‌سرهم و هم‌مبحث در یک ردیف، فقط وقتی هر دو در نیم‌عرض خوانا می‌مانند."""
+    i = 0
+    while i + 1 < len(topic_blocks):
+        a, b = topic_blocks[i], topic_blocks[i + 1]
+        if (a.type == b.type == "figure"
+                and a.data.get("_layout") == b.data.get("_layout") == "full"
+                and not a.data.get("min_width_mm") and not b.data.get("min_width_mm")
+                and float(a.data.get("_img_h_mm", 0)) >= 26
+                and float(b.data.get("_img_h_mm", 0)) >= 26):
+            a.data["_pair_first"] = b.id
+            b.data["_pair_with"] = a.id
+            plan.log(f"{a.id}+{b.id}: جفت‌تصویر در یک ردیف (هر دو در نیم‌عرض خوانا می‌مانند)")
+            i += 2
+            continue
+        i += 1
