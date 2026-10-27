@@ -1,5 +1,5 @@
 /**
- * HamsYar PDF Renderer — تبدیل HTML صفحه‌آرایی‌شده به PDF با Chromium.
+ * HumsYar PDF Renderer — تبدیل HTML صفحه‌آرایی‌شده به PDF با Chromium.
  *
  * اجرا: node render.mjs <input.html> <output.pdf> <config.json>
  * config: { headerRight, headerLeft, footerText, fontFile }
@@ -62,13 +62,14 @@ try {
   const page = await browser.newPage();
   await page.goto(`file://${path.resolve(inputHtml)}`, { waitUntil: "networkidle0", timeout: 120000 });
   await page.evaluate(() => document.fonts.ready);
+  const m = cfg.margin || { top: "14mm", bottom: "13mm", left: "14mm", right: "14mm" };
   await page.pdf({
     path: outputPdf,
     format: "A4",
     printBackground: true,
-    displayHeaderFooter: true,
+    displayHeaderFooter: Boolean(cfg.headerFooter),
     tagged: true,
-    margin: { top: "15mm", bottom: "13mm", left: "14mm", right: "14mm" },
+    margin: m,
     headerTemplate: `${hdrStyle}<div class="h"><span>${cfg.headerRight || ""}</span><span class="b">${cfg.headerLeft || ""}</span></div>`,
     footerTemplate: `${hdrStyle}<div class="f"><span>${cfg.footerText || ""}</span><span class="p">صفحهٔ <b><span class="pageNumber"></span></b> از <span class="totalPages"></span></span></div>`,
   });

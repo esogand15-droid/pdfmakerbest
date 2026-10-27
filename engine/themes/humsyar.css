@@ -1,5 +1,5 @@
 /* ============================================================
-   HamsYar Design System — سیستم طراحی جزوات علوم پایهٔ پزشکی
+   HumsYar Design System — سیستم طراحی جزوات علوم پایهٔ پزشکی
    مبنا: توکن‌محور. تغییر تم = تغییر توکن‌ها، نه بازنویسی بلوک‌ها.
    هر رنگ یک نقش معنایی دارد؛ تمایز بلوک‌ها در چاپ سیاه‌وسفید هم
    با برچسب متنی + سبک حاشیه حفظ می‌شود (فقط رنگ نیست).
@@ -7,7 +7,7 @@
 @page { size: A4; }
 
 :root{
-  /* ——— توکن‌های برند (تم A: تیل بالینی هام‌یار) ——— */
+  /* ——— توکن‌های برند (تم A: تیل بالینی هامزیار) ——— */
   --brand:#0b6e6b; --brand-deep:#074f5c; --brand-ink:#0a3d47;
   --accent:#1d5fa8;
   --ink:#182630; --muted:#5d707e; --faint:#8496a3;
@@ -48,7 +48,7 @@ strong{ font-weight:700; }
 p.body{ margin:0 0 6pt; text-align:justify; orphans:2; widows:2; }
 p.body .src{ margin-inline-start:4pt; }
 
-/* ——— برچسب منبع (قابلیت متمایز هام‌یار: ردیابی علمی فشرده) ——— */
+/* ——— برچسب منبع (قابلیت متمایز هامزیار: ردیابی علمی فشرده) ——— */
 .src{
   display:inline-block; font-size:var(--fs-chip); line-height:1.5; color:var(--muted);
   border:1px solid var(--line); border-radius:20px; padding:0 6px; vertical-align:2px;

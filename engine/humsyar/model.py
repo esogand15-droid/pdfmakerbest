@@ -1,5 +1,5 @@
 """
-مدل محتوای ساختاریافتهٔ HamsYar — لایهٔ دادهٔ موتور.
+مدل محتوای ساختاریافتهٔ HumsYar — لایهٔ دادهٔ موتور.
 
 اصول (از پرامپت پروژه):
 - محتوا از ارائه (HTML/CSS) جداست. هر بلوک شناسهٔ پایدار دارد.
@@ -91,6 +91,9 @@ class Session:
     session_total: int
     subtitle: str = ""
     version: str = "۰٫۱"
+    cover_motif: str = "histology-neuron-glia"  # نقش کاور؛ برای هر جلسه در پیکربندی محتوا
+    frame_theme: str = "anatomy-nervous"        # تم قاب موضوعی صفحات (none = بدون قاب)
+    draft: bool = False                          # در حالت پیش‌نویس روی کاور برچسب پایلوت می‌آید
     note: str = ""  # یادداشت شفافیت (مثلاً «پایلوت»)
     session_map: list[dict[str, Any]] = field(default_factory=list)  # همهٔ مباحث جلسه
     topics: list[Topic] = field(default_factory=list)
@@ -141,6 +144,9 @@ def load_session(path: str) -> Session:
         id=str(raw["id"]), course=str(raw["course"]), title=str(raw["title"]),
         session_number=int(raw["session_number"]), session_total=int(raw["session_total"]),
         subtitle=str(raw.get("subtitle", "")), version=str(raw.get("version", "۰٫۱")),
+        cover_motif=str(raw.get("cover_motif", "histology-neuron-glia")),
+        frame_theme=str(raw.get("frame_theme", "anatomy-nervous")),
+        draft=bool(raw.get("draft", False)),
         note=str(raw.get("note", "")), session_map=list(raw.get("session_map", [])),
         topics=topics, closing=[_block(b) for b in raw.get("closing", [])],
     )

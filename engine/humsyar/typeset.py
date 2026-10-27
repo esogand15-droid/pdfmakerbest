@@ -79,7 +79,7 @@ class Typesetter:
         body.append(
             f'<div class="doc-end"><span class="en">HumsYar</span> · جزوهٔ '
             f'{escape(s.course)} — جلسهٔ {fa_num(s.session_number)} · نسخهٔ {escape(s.version)}'
-            f'<br>این سند با موتور جزوه‌ساز هام‌یار از روی جزوهٔ مادرِ تأییدشده تولید شده است؛ '
+            f'<br>این سند با موتور جزوه‌ساز هامزیار از روی جزوهٔ مادرِ تأییدشده تولید شده است؛ '
             f'ارجاع هر مطلب با برچسب منبع در کنار آن آمده است.</div>'
         )
         return (

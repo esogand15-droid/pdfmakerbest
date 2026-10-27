@@ -37,7 +37,7 @@ def _render_pdf(html: str, out_pdf: Path, work: Path, session: Session) -> None:
     cfg = {
         "headerRight": f"{session.course} — جلسهٔ {fa_num(session.session_number)}: {session.title}",
         "headerLeft": "HumsYar",
-        "footerText": "هام‌یار · جزوهٔ علوم پایهٔ پزشکی",
+        "footerText": "هامزیار · جزوهٔ علوم پایهٔ پزشکی",
         "fontFile": str(REPO_ROOT / "assets" / "fonts" / "Vazirmatn-Regular.ttf"),
     }
     cfg_path = work / "render_config.json"
@@ -116,7 +116,7 @@ def _add_bookmarks(pdf_path: Path, plan: Plan, toc_pages: dict[str, int]) -> Non
         "title": f"{s.course} — جلسهٔ {s.session_number}: {s.title} | HumsYar",
         "author": "HumsYar",
         "subject": f"جزوهٔ نهایی {s.course}، جلسهٔ {s.session_number} از {s.session_total}",
-        "creator": f"HamsYar PDF Engine {__version__}",
+        "creator": f"HumsYar PDF Engine {__version__}",
     })
     tmp = pdf_path.with_suffix(".tmp.pdf")
     doc.save(str(tmp), garbage=3, deflate=True)

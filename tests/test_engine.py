@@ -1,4 +1,4 @@
-"""تست‌های موتور هام‌یار — اجرا: pytest tests/ (از ریشهٔ مخزن، با venv فعال)."""
+"""تست‌های موتور هامزیار — اجرا: pytest tests/ (از ریشهٔ مخزن، با venv فعال)."""
 import sys
 from pathlib import Path
 

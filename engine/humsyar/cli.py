@@ -1,4 +1,4 @@
-"""رابط خط فرمان موتور هام‌یار.
+"""رابط خط فرمان موتور هامزیار.
 
 مثال‌ها:
   python -m humsyar.cli build ../../content/session01_pilot.yaml --edition final
@@ -13,7 +13,7 @@ import sys
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(prog="humsyar", description="موتور جزوه‌ساز هام‌یار")
+    ap = argparse.ArgumentParser(prog="humsyar", description="موتور جزوه‌ساز هامزیار")
     sub = ap.add_subparsers(dest="cmd", required=True)
 
     b = sub.add_parser("build", help="ساخت PDF نهایی از فایل محتوای جلسه")
