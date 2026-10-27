@@ -43,7 +43,8 @@ def _pages_with(pdf_path: str, probe: str) -> list[int]:
     import pymupdf
     doc = pymupdf.open(pdf_path)
     n = normalize_text(probe)[:30]
-    return [i + 1 for i, p in enumerate(doc) if n in normalize_text(p.get_text())]
+    # صفحات ۱–۲ (کاور و فهرست‌ها) شمرده نمی‌شوند؛ عنوان جدول در «فهرست جدول‌ها» هم می‌آید
+    return [i + 1 for i, p in enumerate(doc) if i >= 2 and n in normalize_text(p.get_text())]
 
 
 # سناریو ۱ و ۶: جدول کوتاه با فارسی/انگلیسی/عدد، سالم و یکپارچه

@@ -50,12 +50,76 @@ def _pdf_text_pages(pdf_path: Path) -> list[str]:
     return [p.get_text() for p in doc]
 
 
+_BIDI_STRIP = None  # در نخستین فراخوانی ساخته می‌شود
+
+
+def bidi_lint(session: Session) -> list[str]:
+    """هشدار برای رشتهٔ لاتینِ برهنه در متن‌های رندرشوندهٔ درون‌خطی.
+
+    متن علمی دست نمی‌خورد؛ فقط گزارش می‌شود که عبارت لاتین بدون ایزوله‌سازی
+    ([en:...] یا [[term:...]]) آمده و در رندر ممکن است جهتش در جملهٔ فارسی
+    به‌هم بریزد. برچسب‌های شکل و کپشن انگلیسی مستثنا هستند (رندرشان ایزوله است).
+    """
+    import re as _re
+    pat_strip = _re.compile(r"\[\[term:[^\]]+\]\]|\[\[num:[^\]]+\]\]|\[en:[^\]]+\]")
+    pat_lat = _re.compile(r"[A-Za-z][A-Za-z0-9 ,.\-/()]{2,}")
+
+    def fields(b) -> list[str]:
+        d = b.data
+        if b.type == "paragraph":
+            return [str(d.get("text", ""))]
+        if b.type == "callout":
+            return [str(d.get("text", "")), str(d.get("title", ""))]
+        if b.type == "table":
+            return ([str(d.get("title", ""))] + [str(h) for h in d.get("headers", [])]
+                    + [str(c) for r in d.get("rows", []) for c in r])
+        if b.type == "figure":
+            return [str(d.get("explain_fa", "")), str(d.get("title_fa", "")),
+                    str(d.get("side_text", ""))]
+        if b.type == "section":
+            return [str(d.get("title", ""))]
+        if b.type == "summary_box":
+            return [str(d.get("text", "")), str(d.get("title", ""))]
+        if b.type == "checklist":
+            return [str(x) for x in d.get("items", [])]
+        if b.type in ("process", "dual_process"):
+            out = [str(d.get("title", "")), str(d.get("rail", "")), str(d.get("note", ""))]
+            for key in ("steps", "forward", "backward"):
+                v = d.get(key)
+                if isinstance(v, dict):
+                    out.append(str(v.get("title", "")))
+                    v = v.get("steps", [])
+                for st in v or []:
+                    if isinstance(st, dict):
+                        out += [str(st.get("head", "")), str(st.get("text", ""))]
+            return out
+        return []
+
+    hits: list[str] = []
+    for b in session.all_blocks():
+        for f in fields(b):
+            cleaned = pat_strip.sub("", f).replace("**", "")
+            for m in pat_lat.finditer(cleaned):
+                hits.append(f"{b.id}: «{m.group(0).strip()[:40]}»")
+    for t in session.topics:
+        for f in [t.why, *t.objectives, *t.prereq_required, *t.prereq_suggested]:
+            cleaned = pat_strip.sub("", str(f)).replace("**", "")
+            for m in pat_lat.finditer(cleaned):
+                hits.append(f"{t.id}: «{m.group(0).strip()[:40]}»")
+    return hits
+
+
 def run_qa(session: Session, pdf_path: Path,
            control_facts: list[str] | None = None) -> dict[str, Any]:
     import pymupdf
     doc = pymupdf.open(str(pdf_path))
     errors: list[str] = []
     warnings: list[str] = []
+    bidi_hits = bidi_lint(session)
+    if bidi_hits:
+        warnings.append(
+            f"رشتهٔ لاتین بدون ایزوله‌سازی bidi ({len(bidi_hits)} مورد): "
+            + "؛ ".join(bidi_hits[:5]) + ("؛ …" if len(bidi_hits) > 5 else ""))
 
     page_texts = [p.get_text() for p in doc]
     full_norm = normalize_text(" ".join(page_texts))
@@ -102,6 +166,19 @@ def run_qa(session: Session, pdf_path: Path,
         for frag in b.text_fragments():
             model_nums += numbers(frag)
     pdf_nums = numbers(full_norm)
+    # نمای دوم: اسپن‌ها با فاصله — جلوی چسبیدن عدد به شمارهٔ صفحهٔ چیپِ منبع را می‌گیرد
+    # شمارش اسپن‌به‌اسپن و جمع (نرمال‌سازی فاصله‌ها را حذف می‌کند، پس اتصال با فاصله کافی نیست)
+    _span_nums: _Counter = _Counter()
+    for _pg in doc:
+        for _bl in _pg.get_text("dict")["blocks"]:
+            if _bl.get("type") != 0:
+                continue
+            for _ln in _bl["lines"]:
+                for _sp in _ln["spans"]:
+                    _span_nums += numbers(_sp["text"])
+    for _n, _c in _span_nums.items():
+        if _c > pdf_nums[_n]:
+            pdf_nums[_n] = _c
     lost = {n: c - pdf_nums[n] for n, c in model_nums.items() if pdf_nums[n] < c}
     if lost:
         errors.append(f"اعدادی از مدل در PDF کم است (چک‌سام اعداد): {lost}")
@@ -205,6 +282,8 @@ def run_qa(session: Session, pdf_path: Path,
                 continue
             if bb[3] < 11.5 * _MM or bb[1] > 286 * _MM:
                 continue  # متن مبلمان قاب
+            if (bb[3] - bb[1]) > 3 * max(1.0, bb[2] - bb[0]) and (bb[2] - bb[0]) < 10 * _MM:
+                continue  # زبانهٔ انگشت‌نمای عمودی قاب (مبلمان لبه‌ای)
             if bl.get("type") == 0 and not any(
                     sp["text"].strip() for ln in bl["lines"] for sp in ln["spans"]):
                 continue
@@ -268,11 +347,19 @@ def run_qa(session: Session, pdf_path: Path,
         if not cap_pages or not last_cells:
             continue  # شاهد قابل اتکا نیست؛ چک رد می‌شود (نه خطا)
         last_pages = _pages_with(max(last_cells, key=len))
+        # عبارت‌های جدول ممکن است در عنوان بخش/پاراگراف هم تکرار شوند؛ اثبات
+        # یکپارچگی = یک صفحه که عنوان + ردیف نخست + ردیف آخر را با هم داشته باشد.
+        first_cells = [str(c) for c in rows[0] if len(normalize_text(str(c))) >= 12]
+        common = set(cap_pages) & set(last_pages)
+        if first_cells:
+            _fp = _pages_with(max(first_cells, key=len))
+            if _fp:  # نبودِ شاهد، مخالفِ شاهد نیست
+                common &= set(_fp)
         tables_checked += 1
-        if last_pages and cap_pages[0] not in last_pages:
+        if last_pages and not common:
             tables_split_badly.append(
-                f"{b.id}: عنوان در صفحهٔ {cap_pages[0] + 1} ولی آخرین ردیف در صفحهٔ "
-                f"{[p + 1 for p in last_pages]}")
+                f"{b.id}: عنوان در صفحات {[p + 1 for p in cap_pages]} ولی ردیف آخر در "
+                f"{[p + 1 for p in last_pages]} (هیچ صفحه‌ای هر سه را با هم ندارد)")
     if tables_split_badly:
         errors.append("جدول(های) شکستهٔ غیرمجاز: " + "؛ ".join(tables_split_badly))
 

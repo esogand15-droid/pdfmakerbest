@@ -1,0 +1,228 @@
+"""تست‌های راند ۵ — کیفیت نهادی: رنگِ معنایی، یادگیری فعالِ مشتق از متن،
+مادهٔ پایانی، قاب چندواریانتی و سخت‌سازی‌های QA.
+
+مهم‌ترین اثبات: TL;DR و خودآزمایی سریعِ پایلوت کلمه‌به‌کلمه از جمله‌های خود
+جزوه مشتق شده‌اند (نه دانش بیرونی) و برچسب «پیشنهاد برای تأیید تیم علمی» دارند.
+"""
+import re
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "engine"))
+
+from humsyar.build import _page_topics
+from humsyar.entities import entity_color, entity_css_vars
+from humsyar.model import load_session, normalize_text, validate
+from humsyar.planner import plan_session
+from humsyar.qa import bidi_lint
+from humsyar.typeset import Typesetter
+
+ROOT = Path(__file__).resolve().parents[1]
+PILOT = ROOT / "content" / "session01_pilot.yaml"
+BLANK = "……"
+
+
+def _plan():
+    s = load_session(str(PILOT))
+    return s, plan_session(s, "final", ROOT)
+
+
+def _sentences(text: str) -> list[str]:
+    return [p.strip() for p in re.split(r"(?<=\.)\s+", str(text)) if p.strip()]
+
+
+# ---------------------------------------------------------------- موجودیت‌ها
+def test_entity_colors_exact_match_only():
+    assert entity_color("آستروسیت") == "#B45309"
+    assert entity_color("Schwann cell") == "#059669"
+    assert entity_color("Anterograde") == "#0284C7"
+    assert entity_color("Retrograde") == "#EA580C"
+    # نام ناشناس یا تقریبی رنگ نمی‌گیرد (حدس فازی ممنوع)
+    assert entity_color("سلول گلیال") is None
+    assert entity_color("آستروسیت‌ها و غیره") is None
+    assert entity_color("") is None
+
+
+def test_entity_css_vars_generated():
+    css = entity_css_vars()
+    assert "--ent-astrocyte:#B45309" in css
+    assert "--ent-schwann:#059669" in css
+
+
+def test_comparison_table_headers_get_entity_colors():
+    s, plan = _plan()
+    html = Typesetter(plan).document("")
+    # سربرگ «آکسون/دندریت» در جدول مقایسه باید رنگ موجودیتی بگیرد
+    assert 'class="th-ent"' in html
+    assert "--th-ent:#0B3050" in html  # آکسون
+    assert "--th-ent:#0B7A6E" in html  # دندریت
+    assert "tbl--compare" in html
+
+
+# ---------------------------------------------------------------- bidi
+def test_bidi_lint_pilot_is_clean():
+    assert bidi_lint(load_session(str(PILOT))) == []
+
+
+def test_bidi_lint_flags_bare_latin(tmp_path):
+    import yaml
+    raw = yaml.safe_load(PILOT.read_text(encoding="utf-8"))
+    # یک پاراگراف با لاتین برهنه به انتهای نخستین مبحث اضافه کن
+    raw["topics"][0]["blocks"].append({
+        "id": "x-bidi", "type": "paragraph", "status": "needs_review",
+        "sources": [{"book": "جزوهٔ درس", "pages": "۱"}],
+        "text": "این جمله دارای عبارت Bare Latin Term بدون ایزوله‌سازی است.",
+    })
+    p = tmp_path / "bad.yaml"
+    p.write_text(yaml.dump(raw, allow_unicode=True), encoding="utf-8")
+    hits = bidi_lint(load_session(str(p)))
+    assert hits and any("x-bidi" in h for h in hits)
+
+
+# ------------------------------------------------- TL;DR و خودآزمایی (اشتقاق)
+def _section_paragraphs(session, sec_id):
+    out, on = [], False
+    for b in session.all_blocks():
+        if b.type == "section":
+            on = b.id == sec_id
+            continue
+        if on and b.type == "paragraph":
+            out.append(b)
+    return out
+
+
+def _section_of(session, block_id):
+    cur = None
+    for b in session.all_blocks():
+        if b.type == "section":
+            cur = b.id
+        if b.id == block_id:
+            return cur
+    return None
+
+
+def test_tldr_text_is_verbatim_sentence_of_its_section():
+    s = load_session(str(PILOT))
+    tldrs = [b for b in s.all_blocks() if b.type == "tldr"]
+    assert tldrs, "پایلوت باید دست‌کم یک TL;DR داشته باشد"
+    for tb in tldrs:
+        assert tb.data.get("provisional") is True
+        assert tb.status == "needs_review"
+        sec = _section_of(s, tb.id)
+        sents = [normalize_text(x) for p in _section_paragraphs(s, sec)
+                 for x in _sentences(p.data["text"])]
+        assert normalize_text(tb.data["text"]) in sents, tb.id
+
+
+def test_quick_check_items_are_cloze_of_verbatim_sentences():
+    s = load_session(str(PILOT))
+    qcs = [b for b in s.all_blocks() if b.type == "quick_check"]
+    assert qcs
+    for qb in qcs:
+        assert qb.data.get("provisional") is True
+        assert qb.status == "needs_review"
+        sec = _section_of(s, qb.id)
+        sents = [x for p in _section_paragraphs(s, sec) for x in _sentences(p.data["text"])]
+        for item in qb.data["items"]:
+            q, a = str(item["q"]), str(item["a"])
+            assert BLANK in q
+            # جای‌گذاری پاسخ (با نشانه‌گذاری خودش) در جای خالی باید عین جملهٔ
+            # اصلیِ متن شود — نرمال‌سازی، نشانه‌گذاری دو طرف را هم‌شکل می‌کند.
+            filled = normalize_text(q.replace(BLANK, a))
+            ok = any(filled == normalize_text(sent) for sent in sents)
+            assert ok, (qb.id, q[:60])
+
+
+def test_provisional_ribbon_and_answer_key_render():
+    s, plan = _plan()
+    ts = Typesetter(plan)
+    html = ts.document("")
+    assert html.count("پیشنهاد برای تأیید تیم علمی") >= 4  # ۲ TLDR + ۲ خودآزمایی
+    assert "پاسخ‌نامهٔ خودآزمایی سریع" in html
+    assert "تپهٔ آکسونی" in html.split("پاسخ‌نامهٔ خودآزمایی سریع")[1]
+    assert len(ts._qc_items) == 4
+
+
+# ---------------------------------------------------------- مادهٔ پایانی
+def test_glossary_only_session_terms_with_pages():
+    s, plan = _plan()
+    ts = Typesetter(plan, toc_pages={})
+    g = ts.glossary()
+    assert "واژه‌نامه" in g
+    # هر اصطلاح واژه‌نامه باید در دادهٔ جلسه ریشه داشته باشد
+    known = set()
+    for t in s.topics:
+        for kt in t.key_terms:
+            known.add(str(kt.get("fa", "")).strip())
+    fafound = [x.strip() for x in re.findall(r'gloss__fa">([^<]+)', g)]
+    assert len(fafound) >= 20
+    assert "تپهٔ آکسونی" in fafound  # از برچسب شکل/اصطلاح درون‌متنی
+    # بدون toc_pages جای شماره‌ها «…» است (پایداری ارتفاع بین گذrها)
+    assert "…" in g
+
+
+def test_colophon_from_session_data():
+    s, plan = _plan()
+    c = Typesetter(plan).colophon()
+    assert "شناسنامهٔ این نسخه" in c
+    assert s.version in c
+    assert "پیش‌نویسِ نیازمند بازبینی تیم علمی" in c  # پایلوت needs_review است
+    assert "HumsYar" in c and "هامزیار" in c
+
+
+# ------------------------------------------------------------- نمودار ریلی
+def test_dual_rail_svg_from_block_data():
+    s, plan = _plan()
+    html = Typesetter(plan).document("")
+    assert 'class="dualrail"' in html
+    assert "#0284C7" in html and "#EA580C" in html  # رنگ ثابت دو جهت
+    assert "آنتروگراد: از سوما به پایانه" in html  # عین عنوان داده
+
+
+# ---------------------------------------------- فهرست شکل‌ها/جدول‌ها و پایداری
+def test_lists_render_stable_across_passes():
+    s, plan = _plan()
+    no_pages = Typesetter(plan).figure_table_lists()
+    assert "فهرست شکل‌ها" in no_pages and "…" in no_pages
+    pages = {b.id: 7 for b in s.all_blocks() if b.type in ("figure", "table")}
+    with_pages = Typesetter(plan, fig_pages=pages).figure_table_lists()
+    assert with_pages.count("<li>") == no_pages.count("<li>")  # همان ساختار، فقط عدد
+    assert "۷" in with_pages
+
+
+# ---------------------------------------------------------- قاب چندواریانتی
+def test_page_topics_mapping():
+    s, plan = _plan()
+    toc = {t.id: (3 if t.number == 4 else 8) for t in s.topics}
+    pt = _page_topics(s, plan, toc, total_pages=16)
+    assert pt[2] == {}                      # صفحهٔ فهرست: بدون مبحث
+    assert pt[3]["number"] == 4 and pt[7]["number"] == 4
+    assert pt[8]["number"] == 6 and pt[16]["number"] == 6
+    assert pt[8]["order"] > pt[3]["order"]  # زبانه پایین‌تر می‌رود
+
+
+# ---------------------------------------------------------------- کاور
+def test_cover_brand_plate_present():
+    from humsyar.brand import load_brand
+    from humsyar.cover import cover_html
+    s = load_session(str(PILOT))
+    brand = load_brand(ROOT)
+    html = cover_html(s, brand, "")
+    assert ".cv-brand::before" in html  # صفحهٔ تیرهٔ پشت برند (رفع تداخل با نورون)
+
+
+# ---------------------------------------------------------------- نشان عدد
+def test_number_badge_markup_roundtrip():
+    from humsyar.model import normalize_text as nz
+    assert nz("تا [[num:۶۰ قطعه]] میلین") == nz("تا ۶۰ قطعه میلین")
+    s, plan = _plan()
+    html = Typesetter(plan).document("")
+    assert 'class="numbadge"' in html
+    assert "۶۰ قطعهٔ بین‌گره‌ای" in html
+
+
+def test_new_block_types_validate():
+    s = load_session(str(PILOT))
+    assert validate(s) == []
+    types = {b.type for b in s.all_blocks()}
+    assert {"tldr", "quick_check"} <= types
