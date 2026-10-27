@@ -15,6 +15,7 @@ from html import escape
 from .diagrams import tree_svg
 from .entities import entity_color, entity_css_vars
 from .icons import CALLOUT_ICONS, icon_svg
+from .revision import extract_items
 from .model import Block, Session, Source, Topic
 from .planner import Plan, fa_num
 
@@ -86,6 +87,7 @@ class Typesetter:
         if s.closing:
             body.append('<div class="section" style="margin-top:16pt"><h3>جمع‌بندی و مرور جلسه</h3></div>')
             body.append(self.render_blocks(s.closing))
+        body.append(self.revision_map())
         body.append(self.glossary())
         body.append(self.answer_key())
         body.append(self.colophon())
@@ -340,6 +342,108 @@ class Typesetter:
                 f'{src_chips(b.sources, self.show_sources)}</p>')
 
     # ---------------------------------------------------------- مادهٔ پایانی
+    def revision_map(self) -> str:
+        """نقشهٔ جامع مرور: همهٔ گزاره‌های علمی جلسه، عین عبارت منبع، زیر بخش خودشان.
+
+        سطح ۱ = ساختار (مبحث ← بخش + ارجاع صفحه)؛ سطح ۲ = جزئیات کامل هر بخش.
+        چیزی خلاصه یا بازنویسی نمی‌شود؛ جزئیات درون تصویرها با ارجاع به خود شکل می‌آیند.
+        """
+        cfg = (self.plan.layout_cfg or {}).get("revision_map", {})
+        if not cfg.get("enabled", True):
+            return ""
+        items = extract_items(self.session)
+        if len(items) < 8:
+            return ""
+        # عنوان بخش‌ها و ترتیب سند
+        sec_titles: dict[str, str] = {}
+        for t in self.session.topics:
+            sec_titles[t.id] = f"مبحث {fa_num(t.number)}: {t.title}"
+            for b in t.blocks:
+                if b.type == "section":
+                    sec_titles[b.id] = str(b.data.get("title", ""))
+        sec_titles["closing"] = "جمع‌بندی و مرور جلسه"
+        order: list[str] = []
+        by_sec: dict[str, list] = {}
+        for it in items:
+            if it.section_id not in by_sec:
+                by_sec[it.section_id] = []
+                order.append(it.section_id)
+            by_sec[it.section_id].append(it)
+        n_visual = sum(1 for it in items if it.kind == "figure_visual")
+        n_real = len(items) - n_visual
+
+        def item_html(it) -> str:
+            if it.kind == "figure_visual":
+                lbl = escape(self.plan.labels.get(it.block_id, "شکل"))
+                pg = self.fig_pages.get(it.block_id)
+                pg_txt = f"ص {fa_num(pg)}" if pg else "…"
+                return (f'<div class="rev__it rev__it--visual">{icon_svg("microscope", 11)}'
+                        f'<span><b>{lbl}:</b> جزئیات درون تصویر را سرِ خود شکل مرور کنید '
+                        f'({pg_txt})</span></div>')
+            if it.kind == "terminology":
+                en = it.meta.get("en", "")
+                col = entity_color(it.text) or entity_color(en)
+                sty = f' style="--chip-ent:{col}"' if col else ""
+                dot = '<i class="edot"></i>' if col else ""
+                en_h = f' · <bdi class="en">{escape(en)}</bdi>' if en else ""
+                return (f'<span class="chip rev__term{" chip--ent" if col else ""}"{sty}>'
+                        f'{dot}{escape(it.text)}{en_h}</span>')
+            pre = ""
+            if it.meta.get("table_title"):
+                pre = (f'<div class="rev__sub">{icon_svg("compare", 11)}'
+                       f'{escape(it.meta["table_title"])}</div>')
+            if it.meta.get("lane_title"):
+                pre = (f'<div class="rev__sub">{icon_svg("process", 11)}'
+                       f'{escape(it.meta["lane_title"])}</div>')
+            if it.meta.get("title"):
+                pre = f'<div class="rev__sub">{escape(it.meta["title"])}</div>'
+            step = (f'<b class="rev__step">{fa_num(it.meta["step_no"])}</b>'
+                    if it.kind == "process" and it.meta.get("step_no") else "")
+            num = f'<span class="rev__num">{icon_svg("formula", 10)}</span>' if it.has_number else ""
+            lang = ' dir="ltr" lang="en"' if it.meta.get("lang") == "en" else ""
+            body = inline(it.text) if not lang else escape(it.text)
+            return (f'{pre}<div class="rev__it rev__it--{it.kind}">{step}'
+                    f'<span{lang}>{body}</span>{num}</div>')
+
+        panels = []
+        for sec in order:
+            its = by_sec[sec]
+            pg = self.toc_pages.get(sec)
+            pg_txt = f'<span class="rev__pg">ص {fa_num(pg)}</span>' if pg else ""
+            # اصطلاح‌ها پشت سر هم به‌صورت ردیف چیپ می‌آیند؛ بقیه خط‌به‌خط
+            parts: list[str] = []
+            term_buf: list[str] = []
+
+            def flush_terms() -> None:
+                if term_buf:
+                    parts.append(f'<div class="rev__terms">{"".join(term_buf)}</div>')
+                    term_buf.clear()
+
+            for it in its:
+                if it.kind == "terminology":
+                    term_buf.append(item_html(it))
+                else:
+                    flush_terms()
+                    parts.append(item_html(it))
+            flush_terms()
+            panels.append(
+                f'<section class="rev__panel"><header class="rev__head">'
+                f'<span>{escape(sec_titles.get(sec, ""))}</span>{pg_txt}</header>'
+                f'<div class="rev__items">{"".join(parts)}</div></section>')
+        legend = (
+            f'<span class="rev__lg rev__lg--exception">استثنا</span>'
+            f'<span class="rev__lg rev__lg--source_conflict">اختلاف منابع</span>'
+            f'<span class="rev__lg">{icon_svg("formula", 10)} دارای عدد/مقدار</span>'
+            f'<span class="rev__lg">{icon_svg("microscope", 10)} مرور سرِ شکل</span>')
+        return (f'<div class="revmap"><h2>نقشهٔ جامع مرور</h2>'
+                f'<p class="rev__intro">همهٔ {fa_num(n_real)} گزارهٔ علمی این جلسه — جمله‌به‌جمله و '
+                f'ردیف‌به‌ردیف — با همان عبارت خود جزوه، زیر بخش مربوطشان کنار هم چیده شده‌اند؛ '
+                f'چیزی خلاصه یا بازنویسی نشده است. شمارهٔ کنار هر بخش، صفحهٔ متن کامل آن است. '
+                f'جزئیات درون خودِ تصویرها ({fa_num(n_visual)} شکل) در نقشه نمی‌آید و با '
+                f'نشانهٔ میکروسکوپ به خود شکل ارجاع داده شده است.</p>'
+                f'<div class="rev__legend">{legend}</div>'
+                f'{"".join(panels)}</div>')
+
     def glossary(self) -> str:
         """واژه‌نامهٔ فارسی–انگلیسی: فقط معادل‌هایی که در خود جلسه آمده‌اند + صفحهٔ نخستین کاربرد."""
         terms: dict[str, dict[str, str]] = {}

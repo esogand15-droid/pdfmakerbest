@@ -21,6 +21,7 @@ from .model import Session, load_session, normalize_text, validate
 from .packing import measure_blocks, pack
 from .planner import Plan, fa_num, plan_session
 from .qa import render_pages_png, run_qa
+from .revision import coverage_report
 from .typeset import Typesetter
 
 ENGINE_DIR = Path(__file__).resolve().parent.parent
@@ -394,6 +395,7 @@ def build(content_path: str, *, edition: str = "final", theme: str = "a",
         "toc_pages_found": toc_pages, "toc_links": toc_links,
         "planner_decisions": plan.decisions, "planner_warnings": plan.warnings,
         "content_analysis": [p.to_dict() for p in plan.analysis],
+        "coverage": coverage_report(session),
         "layout_decisions": plan.layout_decisions,
         "page_signatures": [{k: v for k, v in s.items() if k != "blocks"}
                              for s in plan.page_signatures],

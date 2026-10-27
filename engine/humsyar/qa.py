@@ -115,6 +115,16 @@ def run_qa(session: Session, pdf_path: Path,
     doc = pymupdf.open(str(pdf_path))
     errors: list[str] = []
     warnings: list[str] = []
+    from .revision import coverage_report as _cov
+    _coverage = _cov(session)
+    if _coverage["unassigned"]:
+        errors.append(
+            f"ماتریس پوشش: {len(_coverage['unassigned'])} گزاره بدون گرهٔ نقشه مانده است: "
+            + "، ".join(_coverage["unassigned"][:5]))
+    if _coverage["unresolved"]:
+        warnings.append(
+            f"ماتریس پوشش: {len(_coverage['unresolved'])} مورد جزئیات درون‌تصویر "
+            f"ماشینی قابل استخراج نیست و به خود شکل ارجاع داده شده است")
     bidi_hits = bidi_lint(session)
     if bidi_hits:
         warnings.append(
@@ -372,6 +382,7 @@ def run_qa(session: Session, pdf_path: Path,
 
     return {
         "ok": not errors,
+        "coverage": _coverage,
         "errors": errors,
         "warnings": warnings,
         "pages": doc.page_count,

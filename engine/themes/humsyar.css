@@ -455,3 +455,36 @@ body.print-theme .numbadge{ background:#FFF; }
 .chip--ent{ border-color:var(--chip-ent) !important; color:var(--chip-ent); font-weight:700; }
 .guide__ents{ margin-top:5pt; font-size:7.9pt; line-height:1.95; color:var(--brand-deep); }
 .guide__ents .chip{ margin:1pt 0 1pt 4pt; white-space:nowrap; display:inline-block; }
+
+/* ===== راند ۷: نقشهٔ جامع مرور (Master Revision Map) ===== */
+.revmap{ margin-top:14pt; border-top:1.6pt solid var(--brand); padding-top:8pt; }
+.revmap h2{ font-size:14pt; color:var(--brand-deep); margin:0 0 4pt; break-after:avoid; }
+.rev__intro{ font-size:8.4pt; color:#43586C; line-height:1.8; margin:0 0 5pt; }
+.rev__legend{ display:flex; gap:5pt; flex-wrap:wrap; margin-bottom:7pt; font-size:7.8pt; }
+.rev__lg{ border:.6pt solid #C4D6E4; border-radius:999px; padding:0 7pt; line-height:1.9; background:#FFF; }
+.rev__lg--exception{ border-inline-start:3.5pt dotted var(--c-exception); color:var(--c-exception); font-weight:700; }
+.rev__lg--source_conflict{ border-style:dashed; border-color:var(--c-conflict); color:var(--c-conflict); font-weight:700; }
+.rev__panel{ border:1pt solid #C4D6E4; border-radius:9pt; overflow:hidden; margin:0 0 8pt; background:#FFF; }
+.rev__head{ display:flex; justify-content:space-between; align-items:baseline; gap:8pt;
+  background:#F2F7FB; border-bottom:.6pt solid #DCE8F1; padding:4pt 8pt;
+  font-weight:800; color:var(--brand-deep); font-size:9.6pt; break-after:avoid; }
+.rev__pg{ flex:none; font-size:8pt; color:var(--brand); border:.6pt solid var(--brand);
+  border-radius:999px; padding:0 6pt; line-height:1.8; background:#FFF; }
+.rev__items{ columns:2; column-gap:14pt; padding:6pt 8pt; font-size:8.05pt; line-height:1.62; }
+.rev__it{ break-inside:avoid; margin:0 0 3.5pt; padding:2.5pt 6pt; border-radius:6pt;
+  border-inline-start:2.5pt solid #D7E3EC; background:#FCFDFE; }
+.rev__it--exception{ border-inline-start:3.5pt dotted var(--c-exception); background:var(--bg-exception); }
+.rev__it--source_conflict{ border:.7pt dashed var(--c-conflict); background:var(--bg-conflict); }
+.rev__it--clinical{ border-inline-start-color:var(--c-clinical); background:var(--bg-clinical); }
+.rev__it--key{ border-inline-start-color:var(--c-key); background:var(--bg-key); font-weight:600; }
+.rev__it--summary{ border-inline-start-color:var(--c-summary); background:var(--bg-summary); }
+.rev__it--visual{ border-inline-start-color:#9FB4C6; color:#43586C; font-size:7.9pt; }
+.rev__it--table_row{ border-inline-start-color:#B9CBDA; }
+.rev__sub{ break-inside:avoid; break-after:avoid; font-weight:800; color:var(--brand-deep);
+  font-size:8.3pt; margin:5pt 0 3pt; }
+.rev__step{ display:inline-flex; width:11pt; height:11pt; border-radius:50%; background:var(--brand);
+  color:#FFF; align-items:center; justify-content:center; font-size:7.4pt; margin-inline-end:4pt; }
+.rev__num{ color:var(--c-formula); margin-inline-start:3pt; }
+.rev__terms{ break-inside:avoid; margin:2pt 0 5pt; line-height:2.05; }
+.rev__term{ margin:1pt 0 1pt 3pt; white-space:nowrap; display:inline-block; }
+body.print-theme .rev__it, body.print-theme .rev__head{ background:#FFF !important; }

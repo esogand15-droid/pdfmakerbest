@@ -26,3 +26,9 @@ affinity:
   definition_led: { full: 0.70, sidecap: 0.80, side: 0.75 }
   summary:        { full: 0.75, sidecap: 0.75, side: 0.70 }
   mixed:          { full: 0.75, sidecap: 0.75, side: 0.70 }
+
+# نقشهٔ جامع مرور (Master Revision Map): استخراج مکانیکیِ بی‌اتلاف گزاره‌ها و
+# چیدمان فشردهٔ آن‌ها زیر بخش خودشان؛ فونت زیر کف خوانایی نمی‌رود و اگر محتوا
+# در یک صفحه جا نشد، نقشه به‌صورت چندصفحه‌ایِ کامل ادامه پیدا می‌کند.
+revision_map:
+  enabled: true
