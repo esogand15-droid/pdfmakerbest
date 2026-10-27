@@ -7,19 +7,25 @@
 @page { size: A4; }
 
 :root{
-  /* ——— توکن‌های برند (تم A: تیل بالینی هامزیار) ——— */
-  --brand:#0b6e6b; --brand-deep:#074f5c; --brand-ink:#0a3d47;
-  --accent:#1d5fa8;
-  --ink:#182630; --muted:#5d707e; --faint:#8496a3;
-  --line:#d7e3e8; --line-soft:#e7eff2;
-  --paper:#ffffff; --tint:#eef6f5; --tint-blue:#edf3fa;
+  /* ——— پالت لوگوی هامزیار (مبنای توکن‌ها؛ تم A: Clinical Teal) ——— */
+  --navy:#0A0F1E; --dark:#0D1524; --blue:#2563EB; --blue-lt:#3B82F6;
+  --teal:#14B8A6; --teal-br:#2DD4BF; --soft:#F0F6FF;
+  /* توکن‌های نقشی (مشتق خوانا از همان پالت؛ تیل روشن لوگو برای متن ریز کنتراست ندارد) */
+  --brand:#0B7A6E; --brand-deep:#0B3050; --brand-ink:#0C2A3E;
+  --accent:var(--blue);
+  --ink:#16222E; --muted:#5B6B7A; --faint:#8595A5;
+  --line:#D5E2EC; --line-soft:#E6EFF6;
+  --paper:#ffffff; --tint:#EAF5F2; --tint-blue:var(--soft);
   /* نقش‌های معنایی کادرها */
-  --c-key:#0b6e6b;       --bg-key:#e9f4f3;
-  --c-clinical:#1e7a4f;  --bg-clinical:#eaf5ee;
-  --c-warning:#a86a08;   --bg-warning:#fdf4e0;
-  --c-bridge:#1d5fa8;    --bg-bridge:#edf3fa;
-  --c-conflict:#b3382e;  --bg-conflict:#fbeeec;
-  --c-exam:#5b4bc4;      --bg-exam:#f0eefa;
+  --c-key:#0B7A6E;       --bg-key:#E7F4F1;
+  --c-clinical:#1E7A4F;  --bg-clinical:#EAF5EE;
+  --c-warning:#A86A08;   --bg-warning:#FDF4E0;
+  --c-bridge:#2563EB;    --bg-bridge:#EEF3FE;
+  --c-conflict:#B3382E;  --bg-conflict:#FBEEEC;
+  --c-exam:#5B4BC4;      --bg-exam:#F0EEFA;
+  --c-definition:#2F5D8A; --bg-definition:#EDF3F9;
+  --c-example:#5A7A72;    --bg-example:#EFF4F2;
+  --c-summary:#0B3050;    --bg-summary:#EBF0F7;
   /* تایپ */
   --fs-body:10pt; --lh:1.88;
   --fs-h-topic:16.5pt; --fs-h-section:12pt; --fs-h-sub:10.5pt;
@@ -163,10 +169,21 @@ p.body .src{ margin-inline-start:4pt; }
 .callout--conflict{ border-color:var(--c-conflict); background:var(--bg-conflict); border-style:dashed; border-inline-start-style:solid;}
 .callout--conflict .callout__head{ color:var(--c-conflict); }
 .callout--exam{ border-color:var(--c-exam); background:var(--bg-exam); }
+.callout--definition{ border-color:var(--c-definition); background:var(--bg-definition); }
+.callout--definition .callout__head{ color:var(--c-definition); }
+.callout--example{ border-color:var(--c-example); background:var(--bg-example); border-inline-start-style:dotted; border-inline-start-width:4px; }
+.callout--example .callout__head{ color:var(--c-example); }
+.callout--summary{ border-color:var(--c-summary); background:var(--bg-summary); border-inline-start-width:6px; }
+.callout--summary .callout__head{ color:var(--c-summary); }
 .callout--exam .callout__head{ color:var(--c-exam); }
 
 /* ============================================================= جدول */
-.tblwrap{ margin:8pt 0; }
+.tblwrap{ margin:8pt 0; break-inside:avoid; }
+.tblwrap__cap--cont .tt{ font-size:9pt; color:var(--muted); font-weight:600; }
+table.tbl thead{ display:table-header-group; }
+table.tbl tr{ break-inside:avoid; }
+table.tbl.tbl--dense{ line-height:1.66; }
+table.tbl.tbl--dense td{ padding:2.4pt 6pt; }
 .tblwrap__cap{ display:flex; align-items:baseline; gap:7pt; margin-bottom:4pt; break-after:avoid;}
 .tblwrap__cap .tno{
   background:var(--brand-deep); color:#fff; font-size:8pt; font-weight:700;
@@ -293,6 +310,9 @@ table.tbl .hl{ font-weight:700; color:var(--c-conflict); }
 .guide__item--bridge{ border-inline-start-color:var(--c-bridge) } .guide__item--bridge svg{ color:var(--c-bridge) }
 .guide__item--conflict{ border-inline-start-color:var(--c-conflict) } .guide__item--conflict svg{ color:var(--c-conflict) }
 .guide__item--exam{ border-inline-start-color:var(--c-exam) } .guide__item--exam svg{ color:var(--c-exam) }
+.guide__item--definition{ border-inline-start-color:var(--c-definition) } .guide__item--definition svg{ color:var(--c-definition) }
+.guide__item--example{ border-inline-start-color:var(--c-example) } .guide__item--example svg{ color:var(--c-example) }
+.guide__item--summary{ border-inline-start-color:var(--c-summary) } .guide__item--summary svg{ color:var(--c-summary) }
 
 /* تصویر عمودی با کپشن کناری */
 .fig--sidecap .fig__frame{ display:grid; grid-template-columns:1.08fr 1fr; align-items:start; }

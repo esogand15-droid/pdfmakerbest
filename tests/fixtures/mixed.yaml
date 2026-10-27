@@ -1,0 +1,115 @@
+id: fixture_mixed
+course: درس آزمایشی موتور
+title: آزمون ترکیبی شکل و متن
+session_number: 99
+session_total: 99
+subtitle: فیکسچر آزمون خودکار
+version: آزمون
+draft: true
+cover_motif: histology-neuron-glia
+frame_theme: anatomy-nervous
+note: سند مصنوعی آزمون موتور؛ هیچ ادعای علمی ندارد.
+session_map:
+- number: 1
+  id: fx-t01
+  title: مبحث آزمایشی یک
+- number: 2
+  id: fx-t02
+  title: مبحث آزمایشی دو
+topics:
+- id: fx-t01
+  number: 1
+  title: مبحث آزمایشی یک
+  mother_pages: آزمون
+  status: needs_review
+  why: دلیل آزمایشی برای سنجش سربرگ مبحث.
+  objectives:
+  - هدف آزمایشی یک
+  - هدف آزمایشی دو
+  prereq_required: []
+  prereq_suggested: []
+  key_terms:
+  - fa: اصطلاح آزمایشی
+    en: Test term
+  blocks:
+  - id: fxc-s1
+    type: section
+    status: needs_review
+    title: شکل بزرگ آزمایشی
+  - id: fxc-p1
+    type: paragraph
+    status: needs_review
+    sources:
+    - book: سند آزمون
+      pages: ۱
+    text: 'این پاراگراف طولانیِ آزمایشی برای سنجش ترکیب فارسی و انگلیسی در یک متن
+      راست‌به‌چپ است؛ اصطلاح‌هایی مانند [[term:انتقال آکسونی|Axonal transport]] و
+      [en:GFAP] و عددهایی مثل ۴۰۰ و 12.5 باید بدون به‌هم‌ریختن جهت جمله بنشینند. این
+      پاراگراف طولانیِ آزمایشی برای سنجش ترکیب فارسی و انگلیسی در یک متن راست‌به‌چپ
+      است؛ اصطلاح‌هایی مانند [[term:انتقال آکسونی|Axonal transport]] و [en:GFAP] و
+      عددهایی مثل ۴۰۰ و 12.5 باید بدون به‌هم‌ریختن جهت جمله بنشینند. این پاراگراف
+      طولانیِ آزمایشی برای سنجش ترکیب فارسی و انگلیسی در یک متن راست‌به‌چپ است؛ اصطلاح‌هایی
+      مانند [[term:انتقال آکسونی|Axonal transport]] و [en:GFAP] و عددهایی مثل ۴۰۰
+      و 12.5 باید بدون به‌هم‌ریختن جهت جمله بنشینند. '
+  - id: fxc-f1
+    type: figure
+    status: needs_review
+    sources:
+    - book: سند آزمون
+      pages: ۴
+    file: assets/figures/session01/p26_x103.png
+    layout: auto
+    title_fa: تصویر آزمایشی بزرگ با زیرنویس کامل
+    explain_fa: این تصویرِ موجود در دارایی‌های پروژه فقط برای سنجش چیدمان شکل، زیرنویس
+      و برچسب‌ها در فیکسچر آزمون به کار رفته است.
+    caption_en: Test fixture figure for layout validation only.
+    labels:
+    - fa: برچسب آزمایشی
+      en: Test label
+  - id: fxc-pr1
+    type: process
+    status: needs_review
+    sources:
+    - book: سند آزمون
+      pages: ۴
+    title: مسیر آزمایشی سه‌مرحله‌ای
+    steps:
+    - گام یک آزمایشی
+    - گام دو آزمایشی
+    - گام سه آزمایشی
+- id: fx-t02
+  number: 2
+  title: مبحث آزمایشی دو
+  mother_pages: آزمون
+  status: needs_review
+  why: دلیل آزمایشی برای سنجش سربرگ مبحث.
+  objectives:
+  - هدف آزمایشی یک
+  - هدف آزمایشی دو
+  prereq_required: []
+  prereq_suggested: []
+  key_terms:
+  - fa: اصطلاح آزمایشی
+    en: Test term
+  blocks:
+  - id: fxc-s2
+    type: section
+    status: needs_review
+    title: بخش دوم آزمایشی
+  - id: fxc-p2
+    type: paragraph
+    status: needs_review
+    sources:
+    - book: سند آزمون
+      pages: ۱
+    text: این پاراگرافِ آزمایشی فقط برای سنجش صفحه‌آرایی موتور است و محتوای علمی ندارد.
+      هدفش این است که فضای صفحه به‌تدریج پر شود تا رفتار جدول‌ها و کادرها نزدیک انتهای
+      صفحه دیده شود. در متن واقعی جزوه، هر جمله منبع خودش را دارد.
+closing:
+- id: fxc-ck1
+  type: checklist
+  status: needs_review
+  title: چک‌لیست آزمایشی پایان سند
+  items:
+  - مورد آزمایشی یک
+  - مورد آزمایشی دو

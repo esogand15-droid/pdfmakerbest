@@ -49,10 +49,23 @@ try {
                y: +(r.top * PX2MM).toFixed(2), w: +(r.width * PX2MM).toFixed(2),
                h: +(r.height * PX2MM).toFixed(2) };
     });
-    return { blocks, tocLinks };
+    // ارتفاع ردیف‌های هر جدول: برای سیاست Keep Together و تقسیم کنترل‌شده روی مرز ردیف‌ها
+    const tables = {};
+    for (const el of document.querySelectorAll(".tblwrap[data-bid]")) {
+      const cap = el.querySelector(".tblwrap__cap");
+      const thead = el.querySelector("thead");
+      const rows = [...el.querySelectorAll("tbody tr")].map(
+        (tr) => +(tr.getBoundingClientRect().height * PX2MM).toFixed(2));
+      tables[el.dataset.bid] = {
+        cap: cap ? +(cap.getBoundingClientRect().height * PX2MM).toFixed(2) : 0,
+        head: thead ? +(thead.getBoundingClientRect().height * PX2MM).toFixed(2) : 0,
+        rows,
+      };
+    }
+    return { blocks, tocLinks, tables };
   });
   writeFileSync(outputJson, JSON.stringify(data));
-  console.log("MEASURE_OK", data.blocks.length, data.tocLinks.length);
+  console.log("MEASURE_OK", data.blocks.length, data.tocLinks.length, Object.keys(data.tables).length);
 } finally {
   await browser.close();
 }

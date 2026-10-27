@@ -59,13 +59,13 @@ def _render_pdf(html: str, out_pdf: Path, work: Path, session: Session,
         raise RuntimeError(f"رندر PDF ({tag}) ناموفق بود:\n{proc.stdout}\n{proc.stderr}")
 
 
-def _find_heading_pages(pdf_path: Path, plan: Plan) -> dict[str, int]:
+def _find_heading_pages(pdf_path: Path, plan: Plan, start: int = 1) -> dict[str, int]:
     """شمارهٔ صفحهٔ هر سرفصل در PDF بدنه (بدون کاور) با جست‌وجوی ترتیبی نرمال‌شده."""
     import pymupdf
     doc = pymupdf.open(str(pdf_path))
     pages_norm = [normalize_text(p.get_text()) for p in doc]
     found: dict[str, int] = {}
-    start = 1  # صفحهٔ اول بدنه فهرست است؛ محتوا از صفحهٔ دوم بدنه شروع می‌شود
+    # start: نخستین اندیس صفحهٔ محتوا (بدنه: ۱ بعد از فهرست؛ نهایی: ۲ بعد از کاور+فهرست)
     for _lvl, display, anchor in plan.headings:
         parts = display.split(": ", 1)
         seg = parts[-1]
@@ -127,7 +127,7 @@ def _stamp_furniture(doc, frame_pdf: Path | None) -> None:
             tw = pymupdf.TextWriter(page.rect)
             tw.append((cx - font.text_length(txt, fontsize=9) / 2, cy + 3.2),
                       txt, font=font, fontsize=9)
-            tw.write_text(page, color=(0.027, 0.31, 0.36))
+            tw.write_text(page, color=(0.043, 0.188, 0.314))
 
 
 def _stamp_toc_links(doc, toc_pages: dict[str, int],
@@ -199,8 +199,19 @@ def build(content_path: str, *, edition: str = "final", theme: str = "a",
     out = Path(out_dir).resolve()
     work = out / "_work"
     work.mkdir(parents=True, exist_ok=True)
+    # مدیریت خطای صریح: تصویر گمشده یعنی توقف فوری با نام بلوک، نه PDF ناقص
+    missing_figs = [f"{b.id} ← {b.data.get('file')}" for b in session.all_blocks()
+                    if b.type == "figure"
+                    and not (REPO_ROOT / str(b.data.get("file", ""))).exists()]
+    if missing_figs:
+        raise FileNotFoundError(
+            "فایل تصویر برای بلوک(های) زیر پیدا نشد؛ ساخت متوقف شد: "
+            + "؛ ".join(missing_figs))
     _optimize_figures(session, work)
     plan = plan_session(session, edition, REPO_ROOT)
+    if not brand.get("logo_uri"):
+        plan.warn("فایل لوگوی رسمی برند پیدا نشد؛ کاور و سربرگ با برند تایپوگرافیک ساخته می‌شوند "
+                  f"(مسیر مورد انتظار: {brand.get('logo')})")
 
     font_css = _font_css()
     css = font_css + "\n" + (ENGINE_DIR / "themes" / "humsyar.css").read_text(encoding="utf-8")
@@ -213,13 +224,21 @@ def build(content_path: str, *, edition: str = "final", theme: str = "a",
     html_a = ts.document(css, theme)
     html_a_path = work / "measure.html"
     html_a_path.write_text(html_a, encoding="utf-8")
-    heights, toc_link_rects = measure_blocks(html_a_path, work, ENGINE_DIR)
-    pack(session, plan, heights)
+    heights, toc_link_rects, table_meta = measure_blocks(html_a_path, work, ENGINE_DIR)
+    pack(session, plan, heights, table_meta)
 
     # رندر بدنه و یافتن شمارهٔ واقعی صفحات (با آفست +۱ برای کاور)
     ts_b = Typesetter(plan, show_sources=show_sources, assets_uri=assets_uri, brand=brand)
     _render_pdf(ts_b.document(css, theme), body_pdf, work, session,
                 margin=BODY_MARGIN, tag="body1")
+    # گذر بازخورد: اصلاح رانش شبیه‌سازی با شواهد PDF واقعی (حداکثر دو دور)
+    from .packing import feedback_adjust
+    for fb_round in (1, 2):
+        if not feedback_adjust(session, body_pdf, plan, heights):
+            break
+        ts_fb = Typesetter(plan, show_sources=show_sources, assets_uri=assets_uri, brand=brand)
+        _render_pdf(ts_fb.document(css, theme), body_pdf, work, session,
+                    margin=BODY_MARGIN, tag=f"body1fb{fb_round}")
     toc_pages = {k: v + 1 for k, v in _find_heading_pages(body_pdf, plan).items()}
 
     ts_c = Typesetter(plan, show_sources=show_sources, toc_pages=toc_pages,
@@ -248,7 +267,18 @@ def build(content_path: str, *, edition: str = "final", theme: str = "a",
     final.close()
     toc_links = _add_bookmarks(pdf_path, plan, toc_pages, brand, toc_link_rects)
 
+    # بازبینی نهایی شماره‌های فهرست روی خود PDF نهایی (پس از ادغام کاور)
+    verify = _find_heading_pages(pdf_path, plan, start=2)
+    toc_mismatch = {k: (toc_pages.get(k), v) for k, v in verify.items()
+                    if toc_pages.get(k) not in (None, v)}
+    if toc_mismatch:
+        plan.log(f"[بازبینی فهرست] ناهمخوانی شمارهٔ صفحه در فهرست: {toc_mismatch}")
+
     qa = run_qa(session, pdf_path, control_facts)
+    qa["toc_verified"] = not toc_mismatch
+    if toc_mismatch:
+        qa["warnings"] = list(qa.get("warnings", [])) + [
+            f"شمارهٔ صفحهٔ فهرست با PDF نهایی نمی‌خواند: {toc_mismatch}"]
     qa["toc_links"] = toc_links
     renders = render_pages_png(pdf_path, out / "pages")
 

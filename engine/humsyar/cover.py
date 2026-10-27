@@ -21,11 +21,11 @@ from .planner import fa_num
 
 # پالت کاور (هماهنگ با Design System؛ نسخهٔ تیره)
 C = {
-    "bg1": "#07242e", "bg2": "#0a3b52", "bg3": "#081e3a",
-    "glow": "#2fbfa8", "cyan": "#7fe3d0", "cyan2": "#3fa7c4",
-    "myelin": "#e9cf9a", "myelin2": "#d9b96f", "axon": "#ffd98a",
-    "soma": "#ffe9b8", "nucleus": "#b3813c", "ink": "#ffffff",
-    "mint": "#a8e6d8", "pale": "#bfe8de",
+    "bg1": "#0A0F1E", "bg2": "#0D2B52", "bg3": "#0D1524",
+    "glow": "#2DD4BF", "cyan": "#8FE8DC", "cyan2": "#3B82F6",
+    "myelin": "#BFDBFE", "myelin2": "#93C5FD", "axon": "#7DD3FC",
+    "soma": "#E0F2FE", "nucleus": "#2563EB", "ink": "#ffffff",
+    "mint": "#99F6E4", "pale": "#BAE6FD",
 }
 
 
@@ -97,7 +97,7 @@ def motif_histology_neuron_glia(seed: int) -> str:
         for _ in range(7))
     g.append(f'''<g opacity="0.95">
       <path d="M {sx-9} {sy-14} Q {sx-4} {sy-7} {sx-5.5} {sy-2}" fill="none" stroke="{C['axon']}" stroke-width="0.9"/>
-      <circle cx="{sx}" cy="{sy}" r="5.6" fill="#0a3040" stroke="{C['cyan']}" stroke-width="0.7"/>{ves}
+      <circle cx="{sx}" cy="{sy}" r="5.6" fill="#0D2B52" stroke="{C['cyan']}" stroke-width="0.7"/>{ves}
       <path d="M {sx-7} {sy+8.4} Q {sx} {sy+11} {sx+7} {sy+8.4}" fill="none" stroke="{C['mint']}" stroke-width="0.8"/>
       <path d="M {sx-7} {sy+11.4} Q {sx} {sy+14} {sx+7} {sy+11.4}" fill="none" stroke="{C['mint']}" stroke-width="0.8" opacity="0.75"/>
       <circle cx="{sx-1.5}" cy="{sy+8}" r="0.55" fill="{C['cyan']}"/><circle cx="{sx+1.8}" cy="{sy+7.6}" r="0.55" fill="{C['cyan']}"/>
@@ -117,7 +117,7 @@ def motif_histology_neuron_glia(seed: int) -> str:
     g.append("".join(micro))
 
     # ——— نورون قهرمان ———
-    soma_x, soma_y, soma_r = 130.0, 156.0, 12.5
+    soma_x, soma_y, soma_r = 130.0, 181.0, 12.5  # پایین‌تر: ناحیهٔ عنوان/برند/لوگو آزاد بماند
     dend: list[str] = []
     # شش دندریت اصلی: پرهیز از قطاع پایین-چپ (مسیر آکسون)
     for base_ang in (-2.75, -2.15, -1.55, -0.95, -0.35, 0.35, 2.95):
@@ -168,7 +168,7 @@ def motif_histology_neuron_glia(seed: int) -> str:
     # سوما و هسته (روی همه‌چیز)
     g.append(f'''<circle cx="{soma_x}" cy="{soma_y}" r="{soma_r}" fill="url(#soma)" opacity="0.97"/>
       <circle cx="{soma_x - 1}" cy="{soma_y - 1}" r="4.6" fill="{C['nucleus']}" opacity="0.85"/>
-      <circle cx="{soma_x - 1}" cy="{soma_y - 1}" r="1.5" fill="#7a551f"/>''')
+      <circle cx="{soma_x - 1}" cy="{soma_y - 1}" r="1.5" fill="#1D4ED8"/>''')
 
     # ——— الیگودندروسیت (پایین-راست): یک سلول، چند قطعه ———
     ox, oy = 164.0, 238.0
@@ -191,7 +191,7 @@ def motif_histology_neuron_glia(seed: int) -> str:
         <stop offset="0" stop-color="{C['myelin']}"/><stop offset="1" stop-color="{C['myelin2']}"/>
       </linearGradient>
       <radialGradient id="soma" cx="0.42" cy="0.4" r="0.75">
-        <stop offset="0" stop-color="#fff3d6"/><stop offset="1" stop-color="{C['myelin2']}"/>
+        <stop offset="0" stop-color="#EFF6FF"/><stop offset="1" stop-color="{C['myelin2']}"/>
       </radialGradient>
     </defs>'''
     return defs + "".join(g)
@@ -214,6 +214,9 @@ def cover_html(session: Session, brand: dict[str, str], font_css: str) -> str:
     """سند HTML مستقل کاور؛ با حاشیهٔ صفر رندر و به ابتدای PDF چسبانده می‌شود."""
     draft_badge = ('<span class="cv-draft">پایلوت موتور — نسخهٔ آزمایشی</span>'
                    if session.draft else "")
+    # لوگوی رسمی شفاف زیر عنوان؛ اگر فایل نبود، همان برند تایپوگرافیک می‌ماند
+    logo_img = (f'<img class="cv-logo" src="{brand["logo_uri"]}" alt="{escape(brand["fa"])}">'
+                if brand.get("logo_uri") else "")
     title_parts = session.title.split(": ", 1)
     t1 = escape(title_parts[0])
     t2 = escape(title_parts[1]) if len(title_parts) > 1 else ""
@@ -223,7 +226,7 @@ def cover_html(session: Session, brand: dict[str, str], font_css: str) -> str:
 @page {{ size: A4; margin: 0; }}
 * {{ margin:0; padding:0; box-sizing:border-box; }}
 body {{ font-family:"Vazirmatn",sans-serif; }}
-.cover {{ position:relative; width:210mm; height:297mm; overflow:hidden; background:#07242e; }}
+.cover {{ position:relative; width:210mm; height:297mm; overflow:hidden; background:#0A0F1E; }}
 .cover-art {{ position:absolute; inset:0; width:210mm; height:297mm; }}
 .cv-scrim {{ position:absolute; top:0; left:0; right:0; height:118mm;
   background:linear-gradient(180deg, rgba(3,16,22,.62), rgba(3,16,22,.28) 62%, rgba(3,16,22,0)); }}
@@ -231,22 +234,25 @@ body {{ font-family:"Vazirmatn",sans-serif; }}
 .cv-course {{ font-size:12.5pt; font-weight:500; letter-spacing:.4px; }}
 .cv-course::before,.cv-course::after {{ content:""; display:inline-block; width:16mm; height:1px;
   background:{C['cyan']}; opacity:.65; vertical-align:middle; margin:0 4mm; }}
-.cv-center {{ position:absolute; top:34mm; left:14mm; right:14mm; text-align:center; color:#fff; }}
+.cv-center {{ position:absolute; top:30mm; left:14mm; right:14mm; text-align:center; color:#fff;
+  padding:6mm 4mm 7mm; background:radial-gradient(ellipse 62% 58% at 50% 44%, rgba(7,12,26,.62), rgba(7,12,26,.32) 55%, rgba(7,12,26,0) 74%); }}
 .cv-sess {{ display:inline-block; border:1.2px solid {C['cyan']}; color:{C['cyan']};
   border-radius:20px; padding:1.2mm 6mm; font-size:11pt; font-weight:700; background:rgba(4,20,26,.45); }}
 .cv-sess b {{ font-size:14pt; color:#fff; }}
-.cv-title {{ margin-top:7mm; font-size:27pt; font-weight:700; line-height:1.55;
+.cv-title {{ margin-top:5.5mm; font-size:27pt; font-weight:700; line-height:1.55;
   text-shadow:0 1px 14px rgba(0,0,0,.45); }}
 .cv-title .t2 {{ display:block; font-size:19pt; font-weight:500; color:{C['mint']}; margin-top:1.5mm; }}
 .cv-sub {{ margin-top:4mm; font-size:11.5pt; color:{C['pale']}; }}
-.cv-brand {{ margin-top:9mm; color:#fff; }}
+.cv-brand {{ margin-top:5mm; color:#fff; }}
+.cv-logo {{ display:block; width:28mm; height:auto; margin:0 auto 2.5mm;
+  filter:drop-shadow(0 1.5mm 5mm rgba(45,212,191,.28)); }}
 .cv-brand .fa {{ font-size:17pt; font-weight:700; }}
 .cv-brand .en {{ display:block; margin-top:1mm; font-family:"DejaVu Sans",sans-serif;
   font-size:10.5pt; font-weight:700; letter-spacing:3.5px; color:{C['cyan']}; direction:ltr; }}
 .cv-bottom {{ position:absolute; bottom:10mm; left:12mm; right:12mm; display:flex;
   justify-content:space-between; align-items:center; color:{C['pale']}; font-size:9pt;
   border-top:0.6px solid rgba(168,230,216,.4); padding-top:3mm; }}
-.cv-draft {{ border:1px dashed #ffcf7d; color:#ffcf7d; border-radius:20px; padding:.6mm 4mm; font-size:8.4pt; }}
+.cv-draft {{ border:1px dashed #7DD3FC; color:#7DD3FC; border-radius:20px; padding:.6mm 4mm; font-size:8.4pt; }}
 </style></head><body>
 <div class="cover">
   {cover_svg(session)}
@@ -256,7 +262,7 @@ body {{ font-family:"Vazirmatn",sans-serif; }}
     <span class="cv-sess">جلسهٔ <b>{fa_num(session.session_number)}</b> از {fa_num(session.session_total)}</span>
     <div class="cv-title">{t1}<span class="t2">{t2}</span></div>
     <div class="cv-sub">{escape(session.subtitle)}</div>
-    <div class="cv-brand"><span class="fa">{escape(brand['fa'])}</span><span class="en">{escape(brand['en'])}</span></div>
+    <div class="cv-brand">{logo_img}<span class="fa">{escape(brand['fa'])}</span><span class="en">{escape(brand['en'])}</span></div>
   </div>
   <div class="cv-bottom"><span>{escape(brand['tagline_fa'])}</span>{draft_badge}
     <span>نسخهٔ {escape(session.version)}</span></div>

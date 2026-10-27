@@ -108,7 +108,18 @@ def run_qa(session: Session, pdf_path: Path,
 
     # —— تصاویر: شمارش در برابر مدل
     model_figs = [b for b in session.all_blocks() if b.type == "figure"]
-    pdf_img_count = sum(len(p.get_images(full=True)) for p in doc)
+    # تصاویر محتوایی شمرده می‌شوند؛ دارایی برند (لوگوی کاور و نشان تک‌رنگ سربرگ)
+    # اسباب صفحه‌اند، نه شکل علمی: صفحهٔ کاور و تصاویر بسیار کوچک کنار گذاشته می‌شوند.
+    pdf_img_count = 0
+    for i, p in enumerate(doc):
+        if i == 0:
+            continue
+        for img in p.get_images(full=True):
+            keep = False
+            for r in p.get_image_rects(img[0]):
+                if (r.x1 - r.x0) / _MM >= 8 and (r.y1 - r.y0) / _MM >= 8:
+                    keep = True
+            pdf_img_count += 1 if keep else 0
     if pdf_img_count != len(model_figs):
         errors.append(f"تعداد تصاویر PDF ({pdf_img_count}) با مدل ({len(model_figs)}) نمی‌خواند")
 
@@ -221,6 +232,50 @@ def run_qa(session: Session, pdf_path: Path,
     if sparse_pages:
         warnings.append(f"صفحات با پُری زیر ۷۰٪ (نیازمند توضیح/اصلاح): {sparse_pages}")
 
+    # —— Preflight: یکپارچگی جدول‌ها — عنوان و آخرین ردیف هر جدولِ تقسیم‌نشده
+    # باید در یک صفحه باشند؛ جدول قطعه‌بندی‌شده باید برچسب «ادامهٔ جدول» داشته باشد.
+    page_norms = [normalize_text(t) for t in page_texts]
+
+    def _pages_with(slice_text: str) -> list[int]:
+        """صفحاتی (جز کاور/فهرست) که برشِ نرمال‌شدهٔ متن دقیقاً در آن‌ها هست.
+
+        عنوان جدول و سلول‌ها در رندر اسپن واحدند و استخراج معمولاً ترتیب درون‌اسپن
+        را حفظ می‌کند؛ تطابق دقیقِ برش بلند، مثبت کاذبِ روش سه‌گرمی را ندارد.
+        """
+        probe = normalize_text(slice_text)[:30]
+        if len(probe) < 10:
+            return []
+        return [i for i, t in enumerate(page_norms) if i >= 2 and probe in t]
+
+    tables_checked = 0
+    tables_split_badly: list[str] = []
+    for b in session.all_blocks():
+        if b.type != "table":
+            continue
+        rows = b.data.get("rows", [])
+        if not rows:
+            continue
+        chunks = b.data.get("_chunks") or []
+        if len(chunks) > 1:
+            cont_hits = sum(t.count(normalize_text("ادامهٔ جدول")) for t in page_norms)
+            if cont_hits < len(chunks) - 1:
+                tables_split_badly.append(
+                    f"{b.id}: برچسب «ادامهٔ جدول» برای {len(chunks)} قطعه پیدا نشد")
+            tables_checked += 1
+            continue
+        cap_pages = _pages_with(str(b.data.get("title", "")))
+        last_cells = [str(c) for c in rows[-1] if len(normalize_text(str(c))) >= 12]
+        if not cap_pages or not last_cells:
+            continue  # شاهد قابل اتکا نیست؛ چک رد می‌شود (نه خطا)
+        last_pages = _pages_with(max(last_cells, key=len))
+        tables_checked += 1
+        if last_pages and cap_pages[0] not in last_pages:
+            tables_split_badly.append(
+                f"{b.id}: عنوان در صفحهٔ {cap_pages[0] + 1} ولی آخرین ردیف در صفحهٔ "
+                f"{[p + 1 for p in last_pages]}")
+    if tables_split_badly:
+        errors.append("جدول(های) شکستهٔ غیرمجاز: " + "؛ ".join(tables_split_badly))
+
     # —— وضعیت‌های بازبینی برای گزارش انسانی
     review_items: list[str] = []
     for b in session.all_blocks():
@@ -243,6 +298,8 @@ def run_qa(session: Session, pdf_path: Path,
         "cover_full_bleed": cover_ok,
         "fill_per_page": fill_per_page,
         "fill_avg_pct": fill_avg,
+        "tables_checked": tables_checked,
+        "tables_split_badly": tables_split_badly,
         "review_items": review_items,
         "needs_review_topics": needs_review_topics,
     }

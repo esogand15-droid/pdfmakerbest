@@ -24,9 +24,9 @@ FRAME_INSET_MM = 6.0
 SAFE_RECT_MM = (12.0, 12.0, 198.0, 285.0)
 CAPSULE_CY_MM = 291.0  # مرکز کپسول شماره روی خط پایین قاب
 
-_BRAND = "#0b6e6b"
-_DEEP = "#074f5c"
-_SOFT = "#7fb5ad"
+_BRAND = "#0B7A6E"
+_DEEP = "#0B3050"
+_SOFT = "#7FB3A8"
 
 
 def _corner_dendrite(seed: int) -> str:
@@ -99,9 +99,10 @@ def frame_anatomy_nervous(session: Session, brand: dict[str, str]) -> str:
   <rect x="{tab_x1:.1f}" y="3.9" width="{tab_w:.1f}" height="4.6" fill="white"/>
   <text x="{(tab_x1 + tab_x2) / 2:.1f}" y="7.55" font-size="3.1" font-weight="700"
         fill="{_DEEP}" text-anchor="middle" font-family="Vazirmatn">{escape(tab_text)}</text>
-  <!-- برند لاتین سمت مقابل -->
-  <rect x="15" y="3.9" width="26" height="4.6" fill="white"/>
-  <text x="28" y="7.5" font-size="2.7" font-weight="700" letter-spacing="0.7"
+  <!-- برند لاتین سمت مقابل + نشان تک‌رنگ کوچک (اگر دارایی موجود باشد) -->
+  <rect x="13" y="3.9" width="34" height="4.6" fill="white"/>
+  {f'<image href="{brand["logo_mono_uri"]}" x="13.4" y="3.8" width="5.2" height="5.2" preserveAspectRatio="xMidYMid meet"/>' if brand.get("logo_mono_uri") else ""}
+  <text x="{32 if brand.get("logo_mono_uri") else 30}" y="7.5" font-size="2.7" font-weight="700" letter-spacing="0.7"
         fill="{_DEEP}" text-anchor="middle" font-family="DejaVu Sans">{escape(brand['en'])}</text>
   <!-- فوتر روی خط پایین: راست برند، چپ عنوان مجموعه؛ وسط جای کپسول شماره می‌ماند -->
   <rect x="{192 - foot_r_w:.1f}" y="288.9" width="{foot_r_w:.1f}" height="4.4" fill="white"/>

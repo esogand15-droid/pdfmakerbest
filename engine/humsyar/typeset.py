@@ -29,11 +29,21 @@ _ICONS = {
     "exam": '<circle cx="7" cy="7" r="5.6" fill="none" stroke="currentColor" stroke-width="1.5"/>'
             '<circle cx="7" cy="7" r="2.8" fill="none" stroke="currentColor" stroke-width="1.5"/>'
             '<circle cx="7" cy="7" r="0.9" fill="currentColor"/>',
+    "definition": '<path d="M7 3 C5.8 1.9 3.8 1.6 1.8 1.9 V11.6 C3.8 11.3 5.8 11.7 7 12.7 C8.2 11.7 10.2 11.3 12.2 11.6 V1.9 C10.2 1.6 8.2 1.9 7 3 Z" fill="none" stroke="currentColor" stroke-width="1.4"/>'
+                  '<path d="M7 3 V12.7" stroke="currentColor" stroke-width="1.2"/>',
+    "example": '<circle cx="6" cy="6" r="4.4" fill="none" stroke="currentColor" stroke-width="1.5"/>'
+               '<path d="M9.3 9.3 L13 13" stroke="currentColor" stroke-width="1.7"/>'
+               '<circle cx="6" cy="6" r="1.5" fill="currentColor"/>',
+    "summary": '<path d="M1.5 3.5 h11 M1.5 7 h11 M1.5 10.5 h7" stroke="currentColor" stroke-width="1.7"/>',
 }
 KIND_LABELS = {
     "key": "نکتهٔ کلیدی", "clinical": "نکتهٔ بالینی", "warning": "استثنا / هشدار",
     "bridge": "از ساختار تا عملکرد", "conflict": "اختلاف منابع", "exam": "نکتهٔ امتحانی",
+    "definition": "تعریف اصطلاح", "example": "مثال آموزشی", "summary": "جمع‌بندی سریع",
 }
+# ترتیب استاندارد نمایش راهنمای کادرها
+KIND_ORDER = ["key", "clinical", "warning", "bridge", "conflict", "exam",
+              "definition", "example", "summary"]
 
 
 def icon(kind: str) -> str:
@@ -83,10 +93,12 @@ class Typesetter:
             f'<br>این سند با موتور جزوه‌ساز {escape(self.brand["fa"])} از روی جزوهٔ مادر تولید شده است؛ '
             f'ارجاع هر مطلب با برچسب منبع در کنار آن آمده است.</div>'
         )
+        favicon = (f'<link rel="icon" type="image/png" href="{self.brand["favicon_uri"]}">'
+                   if self.brand.get("favicon_uri") else "")
         return (
             '<!DOCTYPE html><html lang="fa" dir="rtl"'
             + (f' data-theme="{theme}"' if theme != "a" else "") + '><head><meta charset="utf-8">'
-            f'<title>{escape(s.course)} — جلسهٔ {fa_num(s.session_number)}: {escape(s.title)}</title>'
+            f'<title>{escape(s.course)} — جلسهٔ {fa_num(s.session_number)}: {escape(s.title)}</title>{favicon}'
             f'<style>{css}</style></head><body>{"".join(body)}</body></html>'
         )
 
@@ -143,14 +155,20 @@ class Typesetter:
 
     def reading_guide(self) -> str:
         """راهنمای خواندن: معنای کادرها و برچسب منبع — مبلمان ثابت جزوه، نه محتوای علمی."""
-        items = [
-            ("key", "نکتهٔ کلیدی", "مفهومی که باید در نگاه اول دیده شود."),
-            ("clinical", "نکتهٔ بالینی", "کاربرد بالینی همان مطلب، به نقل از خود جزوه/منابع."),
-            ("warning", "استثنا / هشدار", "جای اشتباه رایج یا استثنای قاعده."),
-            ("bridge", "از ساختار تا عملکرد", "پل میان آناتومی و کارکرد."),
-            ("conflict", "اختلاف منابع", "جایی که دو منبع عدد/عبارت متفاوت دارند؛ هر دو می‌مانند تا تیم علمی تصمیم بگیرد."),
-            ("exam", "نکتهٔ امتحانی", "فقط وقتی خود منبع چنین برچسبی زده باشد."),
-        ]
+        guide_texts = {
+            "key": "مفهومی که باید در نگاه اول دیده شود.",
+            "clinical": "کاربرد بالینی همان مطلب، به نقل از خود جزوه/منابع.",
+            "warning": "جای اشتباه رایج یا استثنای قاعده.",
+            "bridge": "پل میان آناتومی و کارکرد.",
+            "conflict": "جایی که دو منبع عدد/عبارت متفاوت دارند؛ هر دو می‌مانند تا تیم علمی تصمیم بگیرد.",
+            "exam": "فقط وقتی خود منبع چنین برچسبی زده باشد.",
+            "definition": "تعریف کوتاه و دقیق یک اصطلاح.",
+            "example": "مثال آموزشیِ موجود در خود محتوا.",
+            "summary": "جمع‌بندی سریع همان بخش.",
+        }
+        # راهنما فقط کادرهایی را توضیح می‌دهد که واقعاً در همین جلسه به کار رفته‌اند
+        used = {b.data.get("kind") for b in self.session.all_blocks() if b.type == "callout"}
+        items = [(k, KIND_LABELS[k], guide_texts[k]) for k in KIND_ORDER if k in used]
         rows = "".join(
             f'<div class="guide__item guide__item--{k}">{icon(k)}<span><b>{t}:</b> {d}</span></div>'
             for k, t, d in items)
@@ -221,23 +239,49 @@ class Typesetter:
   <div class="srcrow">{src_chips(b.sources, self.show_sources)}</div>
 </aside>"""
 
-    def b_table(self, b: Block) -> str:
-        d = b.data
+    def _tbl_rows_html(self, d: dict, idxs: list[int]) -> str:
         first_col_head = bool(d.get("row_header"))
-        head = "".join(f"<th>{inline(h)}</th>" for h in d["headers"])
         rows = []
-        for row in d["rows"]:
+        for ri in idxs:
             cells = []
-            for i, cell in enumerate(row):
+            for i, cell in enumerate(d["rows"][ri]):
                 cls = ' class="rowh"' if (i == 0 and first_col_head) else ""
                 cells.append(f"<td{cls}>{inline(str(cell))}</td>")
             rows.append(f"<tr>{''.join(cells)}</tr>")
-        return f"""
-<div class="tblwrap" data-bid="{escape(b.id)}">
-  <div class="tblwrap__cap"><span class="tno">{escape(self.plan.labels.get(b.id, "جدول"))}</span>
-  <span class="tt">{inline(d["title"])}</span>{src_chips(b.sources, self.show_sources)}</div>
-  <table class="tbl"><thead><tr>{head}</tr></thead><tbody>{"".join(rows)}</tbody></table>
-</div>"""
+        return "".join(rows)
+
+    def b_table(self, b: Block) -> str:
+        d = b.data
+        label = escape(self.plan.labels.get(b.id, "جدول"))
+        head = "".join(f"<th>{inline(h)}</th>" for h in d["headers"])
+        colgroup = ""
+        if d.get("col_widths"):
+            colgroup = "<colgroup>" + "".join(
+                f'<col style="width:{float(w)}%">' for w in d["col_widths"]) + "</colgroup>"
+        dense = " tbl--dense" if len(d.get("rows", [])) > 10 else ""
+        chunks = d.get("_chunks") or [list(range(len(d["rows"])))]
+        parts = []
+        for ci, idxs in enumerate(chunks):
+            style = ""
+            if ci == 0 and d.get("_break_before"):
+                style = ' style="break-before:page"'
+            elif ci > 0:
+                style = ' style="break-before:page"'
+            bid = f' data-bid="{escape(b.id)}"' if ci == 0 else ""
+            if ci == 0:
+                cap = (f'<div class="tblwrap__cap"><span class="tno">{label}</span>\n'
+                       f'  <span class="tt">{inline(d["title"])}</span>'
+                       f'{src_chips(b.sources, self.show_sources)}</div>')
+            else:
+                # ادامهٔ همان جدول: همان شماره و عنوان، بدون شمارهٔ مستقل تازه
+                cap = (f'<div class="tblwrap__cap tblwrap__cap--cont"><span class="tno">{label}</span>\n'
+                       f'  <span class="tt">ادامهٔ جدول — {inline(d["title"])}</span></div>')
+            parts.append(f"""
+<div class="tblwrap"{bid}{style}>
+  {cap}
+  <table class="tbl{dense}">{colgroup}<thead><tr>{head}</tr></thead><tbody>{self._tbl_rows_html(d, idxs)}</tbody></table>
+</div>""")
+        return "".join(parts)
 
     def _caption_inner(self, b: Block) -> str:
         d = b.data
