@@ -117,7 +117,7 @@ def motif_histology_neuron_glia(seed: int) -> str:
     g.append("".join(micro))
 
     # ——— نورون قهرمان ———
-    soma_x, soma_y, soma_r = 130.0, 181.0, 12.5  # پایین‌تر: ناحیهٔ عنوان/برند/لوگو آزاد بماند
+    soma_x, soma_y, soma_r = 130.0, 190.0, 12.5  # پایین‌تر: ناحیهٔ عنوان/برند/لوگو آزاد بماند
     dend: list[str] = []
     # شش دندریت اصلی: پرهیز از قطاع پایین-چپ (مسیر آکسون)
     for base_ang in (-2.75, -2.15, -1.55, -0.95, -0.35, 0.35, 2.95):
@@ -243,7 +243,10 @@ body {{ font-family:"Vazirmatn",sans-serif; }}
   text-shadow:0 1px 14px rgba(0,0,0,.45); }}
 .cv-title .t2 {{ display:block; font-size:19pt; font-weight:500; color:{C['mint']}; margin-top:1.5mm; }}
 .cv-sub {{ margin-top:4mm; font-size:11.5pt; color:{C['pale']}; }}
-.cv-brand {{ margin-top:5mm; color:#fff; }}
+.cv-brand {{ position:relative; margin-top:5mm; color:#fff; padding:3mm 0 2mm; }}
+.cv-brand::before {{ content:""; position:absolute; inset:-6mm -22mm -4mm; z-index:-1;
+  background:radial-gradient(ellipse 58% 62% at 50% 50%, rgba(6,11,24,.94), rgba(6,11,24,.78) 55%, rgba(6,11,24,0) 78%); }}
+.cv-brand .fa, .cv-brand .en {{ text-shadow:0 1px 10px rgba(0,0,0,.9), 0 0 3px rgba(0,0,0,.9); }}
 .cv-logo {{ display:block; width:28mm; height:auto; margin:0 auto 2.5mm;
   filter:drop-shadow(0 1.5mm 5mm rgba(45,212,191,.28)); }}
 .cv-brand .fa {{ font-size:17pt; font-weight:700; }}

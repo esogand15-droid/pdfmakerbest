@@ -336,3 +336,94 @@ table.tbl .hl{ font-weight:700; color:var(--c-conflict); }
   display:flex; align-items:center; justify-content:center; }
 .process--strip .sstep .st{ display:block; margin-top:5pt; color:var(--brand-ink); }
 .process--strip .sstep span{ display:block; color:var(--ink); }
+
+/* ===== مرحلهٔ ۱ (Round 5): موجودیت، فهرست‌ها، پیشرفت، نشان عدد، تم چاپ ===== */
+/* نشان عدد برجسته: عدد و واحد دقیقاً از متن خود جزوه، فقط قالب برجسته می‌شود */
+.numbadge{ display:inline-block; padding:0 .45em; border-radius:999px; background:var(--brand-soft,#E6F4F1);
+  color:var(--brand-deep); font-weight:700; border:.4pt solid var(--brand); line-height:1.5; }
+/* جدول مقایسه‌ای: ستون نخست چسبانِ بصری + سربرگ موجودیتی */
+.tbl--compare td:first-child{ font-weight:700; color:var(--brand-deep); background:#F7FAFC; }
+.tbl th.th-ent{ background:color-mix(in srgb, var(--th-ent) 16%, white); color:var(--th-ent);
+  border-bottom:2.2pt solid var(--th-ent); }
+.tbl--zebra tbody tr:nth-child(even) td{ background:#FAFCFE; }
+/* نوار پیشرفت نقشهٔ جلسه در سرآغاز مبحث */
+.pstrip{ display:flex; gap:3pt; margin:6pt 0 2pt; flex-wrap:wrap; }
+.pstrip__c{ flex:1 1 0; min-width:0; display:flex; align-items:center; gap:3pt; padding:3pt 5pt;
+  border-radius:7pt; border:.6pt solid #D7E3EC; color:#5B7186; font-size:7.6pt; line-height:1.5;
+  white-space:normal; background:#FFF; }
+.pstrip__c b{ flex:none; width:12pt; height:12pt; border-radius:50%; display:inline-flex;
+  align-items:center; justify-content:center; background:#EAF1F7; color:#52708C; font-size:8pt; }
+.pstrip__c--done{ color:var(--brand-deep); border-color:#B9D8D2; }
+.pstrip__c--done b{ background:var(--brand); color:#FFF; }
+.pstrip__c--cur{ background:var(--brand-deep); color:#FFF; border-color:var(--brand-deep); font-weight:700; }
+.pstrip__c--cur b{ background:#FFF; color:var(--brand-deep); }
+/* اهداف یادگیری با جای تیک (خودارزیابی خواننده) */
+.objlist{ list-style:none; padding:0; margin:0; }
+.objlist li{ position:relative; padding-right:15pt; margin:2.5pt 0; }
+.objlist li::before{ content:""; position:absolute; right:0; top:3.5pt; width:8.5pt; height:8.5pt;
+  border:1pt solid var(--brand); border-radius:2.5pt; background:#FFF; }
+/* فهرست شکل‌ها و جدول‌ها */
+.lists{ display:flex; gap:14pt; margin-top:10pt; }
+.lists__col{ flex:1 1 0; min-width:0; }
+.lists__col h2{ font-size:12.5pt; color:var(--brand-deep); margin:0 0 5pt; }
+.lists ol{ list-style:none; padding:0; margin:0; font-size:8.8pt; line-height:1.78; }
+.lists li{ display:flex; align-items:baseline; gap:4pt; }
+.lists .ln{ flex:none; font-weight:700; color:var(--brand); }
+.lists .dots{ flex:1; border-bottom:.5pt dotted #B9CBDA; transform:translateY(-2pt); }
+.lists .pno{ flex:none; font-weight:700; color:var(--brand-deep); }
+/* نمونهٔ واقعی کادرها در راهنمای خواندن */
+.guide__samples{ display:flex; gap:8pt; margin-top:8pt; flex-wrap:wrap; }
+.guide-sample{ flex:1 1 30%; margin:0 !important; font-size:8.4pt; }
+.guide-sample p{ margin:2pt 0 0; line-height:1.8; }
+/* تم چاپ کم‌جوهر: داخل روشن و تخت، جلد همان تیره می‌ماند */
+body.print-theme .callout, body.print-theme .topic-card, body.print-theme .summary-box{
+  background:#FFF !important; box-shadow:none !important; }
+body.print-theme .tbl th{ background:#EFF3F7 !important; }
+body.print-theme .pstrip__c--cur{ background:#FFF; color:var(--brand-deep); border-width:1.4pt; }
+body.print-theme .numbadge{ background:#FFF; }
+
+/* ===== مرحلهٔ ۲+۳ (Round 5): یادگیری فعال و مادهٔ پایانی ===== */
+.prov-ribbon{ display:inline-block; margin-bottom:4pt; padding:1pt 7pt; border-radius:999px;
+  background:#FEF3C7; border:.6pt dashed #D97706; color:#92400E; font-size:7.8pt; font-weight:700; }
+/* TL;DR بالای بخش: جملهٔ محوری خود متن، پیش از جزئیات */
+.tldr{ border:1pt solid var(--brand); border-radius:10pt; padding:7pt 10pt 6pt; margin:8pt 0 10pt;
+  background:linear-gradient(180deg,#F2FAF8,#FFFFFF); break-inside:avoid; }
+.tldr__tag{ display:inline-block; background:var(--brand-deep); color:#FFF; border-radius:6pt;
+  padding:1pt 8pt; font-size:8.6pt; font-weight:800; }
+.tldr p{ margin:4pt 0 2pt; font-size:11pt; line-height:1.95; font-weight:600; color:var(--brand-deep); }
+/* خودآزمایی سریع با جای نوشتن پاسخ */
+.qcheck{ border:1pt solid #0B7A6E; border-radius:10pt; padding:8pt 10pt 7pt; margin:10pt 0;
+  background:#FCFEFD; break-inside:avoid; }
+.qc__tag{ display:inline-block; background:var(--brand); color:#FFF; border-radius:6pt;
+  padding:1pt 8pt; font-size:8.6pt; font-weight:800; }
+.qc__hint{ font-size:8.2pt; color:#5B7186; margin-right:6pt; }
+.qc__it{ display:flex; gap:6pt; margin-top:6pt; }
+.qc__n{ flex:none; width:14pt; height:14pt; border-radius:50%; background:var(--brand-deep); color:#FFF;
+  display:inline-flex; align-items:center; justify-content:center; font-size:8.6pt; font-weight:800; }
+.qc__body{ flex:1; min-width:0; }
+.qc__body p{ margin:0; line-height:1.9; }
+.qc__line{ border-bottom:1pt dotted #9FB4C6; height:13pt; }
+/* نمودار ریلی دوجهته */
+.dualrail{ width:100%; height:auto; display:block; margin:4pt 0 2pt; }
+.lane__head{ border-inline-start:3pt solid var(--lane, var(--brand)); padding-inline-start:5pt;
+  color:var(--lane, var(--brand-deep)); }
+/* برداشت کلیدی زیر جدول */
+.tbl__takeaway{ margin:4pt 2pt 8pt; font-size:9.3pt; color:var(--brand-deep);
+  border-inline-start:3pt solid var(--brand); padding:2pt 7pt; background:#F7FAFC; border-radius:6pt; }
+/* واژه‌نامه و پاسخ‌نامه و شناسنامه */
+.glossary, .answerkey, .colophon{ margin-top:14pt; border-top:1.6pt solid var(--brand); padding-top:8pt; }
+.glossary h2, .answerkey h2, .colophon h2{ font-size:14pt; color:var(--brand-deep); margin:0 0 4pt;
+  break-after:avoid; }
+.gloss__note{ font-size:8.6pt; color:#5B7186; margin:0 0 6pt; }
+.gloss__grid{ columns:2; column-gap:16pt; font-size:9.2pt; line-height:1.9; }
+.gloss__it{ display:flex; align-items:baseline; gap:4pt; break-inside:avoid; }
+.gloss__fa{ font-weight:600; }
+.gloss__it .dots{ flex:1; border-bottom:.5pt dotted #B9CBDA; transform:translateY(-2pt); }
+.gloss__pg{ flex:none; color:var(--brand); font-weight:700; font-size:8.4pt; }
+.ak__it{ margin:3pt 0; line-height:1.9; }
+.ak__it b{ color:var(--brand-deep); }
+.colophon{ border:1pt solid #D7E3EC; border-radius:10pt; padding:9pt 11pt; border-top:1.6pt solid var(--brand);
+  background:#FAFCFE; break-inside:avoid; }
+.col__row{ display:flex; gap:8pt; margin:3pt 0; font-size:9.2pt; line-height:1.85; }
+.col__row b{ flex:none; width:92pt; color:var(--brand-deep); }
+.col__brand{ margin-top:7pt; text-align:left; font-weight:800; color:var(--brand-deep); font-size:9.5pt; }

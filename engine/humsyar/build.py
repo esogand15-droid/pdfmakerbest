@@ -70,8 +70,10 @@ def _find_heading_pages(pdf_path: Path, plan: Plan, start: int = 1) -> dict[str,
         parts = display.split(": ", 1)
         seg = parts[-1]
         fa_words = [w for w in display.split() if any("؀" <= ch <= "ۿ" for ch in w)]
+        strong = normalize_text(" ".join(fa_words[:4]))
         cands = [normalize_text(seg)[:40],
-                 normalize_text(parts[0]) if len(parts) > 1 else "",
+                 strong if len(strong) >= 14 else "",
+                 normalize_text(parts[0]) if len(parts) > 1 and len(normalize_text(parts[0])) >= 12 else "",
                  normalize_text(" ".join(seg.split()[:3])),
                  normalize_text(max(fa_words, key=len)) if fa_words else ""]
         for key_n in cands:
@@ -83,6 +85,57 @@ def _find_heading_pages(pdf_path: Path, plan: Plan, start: int = 1) -> dict[str,
                 start = hit
                 break
     return found
+
+
+def _find_block_pages(pdf_path: Path, session: Session, plan: Plan) -> dict[str, int]:
+    """شمارهٔ صفحهٔ هر شکل/جدول در PDF بدنه (جست‌وجوی ترتیبی نرمال‌شده روی عنوان)."""
+    import pymupdf
+    doc = pymupdf.open(str(pdf_path))
+    pages_norm = [normalize_text(p.get_text()) for p in doc]
+    found: dict[str, int] = {}
+    start = 1  # بعد از صفحهٔ فهرست
+    for b in session.all_blocks():
+        if b.type not in ("figure", "table"):
+            continue
+        title = str(b.data.get("title_fa") or b.data.get("title") or "")
+        if not title:
+            continue
+        cands = [normalize_text(title)[:40],
+                 normalize_text(" ".join(title.split()[:3]))]
+        for key_n in cands:
+            if not key_n:
+                continue
+            hit = next((i for i in range(start, len(pages_norm)) if key_n in pages_norm[i]), None)
+            if hit is not None:
+                found[b.id] = hit + 1
+                start = hit
+                break
+    return found
+
+
+def _page_topics(session: Session, plan: Plan,
+                 toc_pages: dict[str, int], total_pages: int) -> dict[int, dict]:
+    """برای هر صفحهٔ نهایی: مبحث جاری (شماره، عنوان کوتاه، ترتیب در نقشهٔ جلسه)."""
+    smap = {int(m["number"]): (i, str(m["title"]))
+            for i, m in enumerate(session.session_map or [])}
+    starts: list[tuple[int, dict]] = []
+    topics_by_id = {t.id: t for t in session.topics}
+    for lvl, _disp, anchor in plan.headings:
+        t = topics_by_id.get(anchor)
+        if t is not None and anchor in toc_pages:
+            order, short = smap.get(t.number, (len(starts), t.title))
+            starts.append((toc_pages[anchor],
+                           {"number": t.number, "short": short, "order": order}))
+    starts.sort(key=lambda x: x[0])  # فقط بر اساس صفحه؛ دیکشنری‌ها مقایسه نمی‌شوند
+    out: dict[int, dict] = {}
+    cur: dict = {}
+    si = 0
+    for pg in range(2, total_pages + 1):
+        while si < len(starts) and starts[si][0] <= pg:
+            cur = starts[si][1]
+            si += 1
+        out[pg] = cur
+    return out
 
 
 def _optimize_figures(session: Session, work: Path) -> None:
@@ -107,19 +160,35 @@ def _optimize_figures(session: Session, work: Path) -> None:
         b.data["_opt_file"] = str(dst.relative_to(REPO_ROOT))
 
 
-def _stamp_furniture(doc, frame_pdf: Path | None) -> None:
+def _stamp_furniture(doc, frame_pdfs, page_topics: dict | None = None) -> None:
     """مهر قاب روی همهٔ صفحات جز کاور + کپسول شمارهٔ صفحه با ارقام فارسی.
 
     انتخاب طراحی (راند ۲): کپسول فقط عدد صفحه را دارد — تمیزتر از «صفحهٔ X از Y»
     و با خط قاب یکپارچه‌تر است. کاور شمرده می‌شود ولی شماره نمی‌خورد.
     """
     import pymupdf
-    overlay = pymupdf.open(str(frame_pdf)) if frame_pdf else None
+    overlays = {}
+    if isinstance(frame_pdfs, dict):
+        overlays = {k: pymupdf.open(str(v)) for k, v in frame_pdfs.items() if v}
+    elif frame_pdfs:
+        overlays = {"_single": pymupdf.open(str(frame_pdfs))}
     font = pymupdf.Font(fontfile=str(REPO_ROOT / "assets" / "fonts" / "Vazirmatn-Bold.ttf"))
-    for i in range(1, doc.page_count):
+    total = doc.page_count
+    for i in range(1, total):
         page = doc[i]
+        pg_no = i + 1
+        info = (page_topics or {}).get(pg_no, {})
+        key = (info.get("number"), pg_no % 2)
+        overlay = overlays.get(key) or overlays.get("_single")
         if overlay is not None:
             page.show_pdf_page(page.rect, overlay, 0)
+            # نوار پیشرفت مطالعه: هندسهٔ خالص، بدون متن — بالای خط پایین قاب
+            frac = i / max(1, total - 1)
+            tx0, tx1, ty = 58 * MM, 152 * MM, 288.35 * MM
+            page.draw_rect(pymupdf.Rect(tx0, ty, tx1, ty + 0.85 * MM),
+                           color=None, fill=(0.855, 0.898, 0.933), radius=0.5)
+            page.draw_rect(pymupdf.Rect(tx0, ty, tx0 + (tx1 - tx0) * frac, ty + 0.85 * MM),
+                           color=None, fill=(0.043, 0.478, 0.431), radius=0.5)
             cx, cy = 105 * MM, CAPSULE_CY_MM * MM
             r = pymupdf.Rect(cx - 8 * MM, cy - 2.6 * MM, cx + 8 * MM, cy + 2.6 * MM)
             page.draw_rect(r, color=(0.043, 0.43, 0.42), fill=(1, 1, 1), width=0.7, radius=0.5)
@@ -181,13 +250,13 @@ def _add_bookmarks(pdf_path: Path, plan: Plan, toc_pages: dict[str, int],
     })
     links = _stamp_toc_links(doc, toc_pages, toc_link_rects)
     tmp = pdf_path.with_suffix(".tmp.pdf")
-    doc.save(str(tmp), garbage=3, deflate=True)
+    doc.save(str(tmp), garbage=4, deflate=True)
     tmp.replace(pdf_path)
     return links
 
 
 def build(content_path: str, *, edition: str = "final", theme: str = "a",
-          show_sources: bool = True, out_dir: str = "output",
+          show_sources: bool = True, print_theme: bool = False, out_dir: str = "output",
           control_facts: list[str] | None = None) -> dict:
     t0 = time.time()
     session = load_session(content_path)
@@ -216,11 +285,12 @@ def build(content_path: str, *, edition: str = "final", theme: str = "a",
     font_css = _font_css()
     css = font_css + "\n" + (ENGINE_DIR / "themes" / "humsyar.css").read_text(encoding="utf-8")
     assets_uri = f"file://{REPO_ROOT}/"
-    pdf_path = out / f"{session.id}_{edition}.pdf"
+    pdf_path = out / f"{session.id}_{edition}{'_print' if print_theme else ''}.pdf"
     body_pdf = work / "body.pdf"
 
     # گذر اندازه‌گیری + بسته‌بندی فضا (look-ahead)
-    ts = Typesetter(plan, show_sources=show_sources, assets_uri=assets_uri, brand=brand)
+    ts = Typesetter(plan, show_sources=show_sources, assets_uri=assets_uri, brand=brand,
+                      print_theme=print_theme)
     html_a = ts.document(css, theme)
     html_a_path = work / "measure.html"
     html_a_path.write_text(html_a, encoding="utf-8")
@@ -228,7 +298,8 @@ def build(content_path: str, *, edition: str = "final", theme: str = "a",
     pack(session, plan, heights, table_meta)
 
     # رندر بدنه و یافتن شمارهٔ واقعی صفحات (با آفست +۱ برای کاور)
-    ts_b = Typesetter(plan, show_sources=show_sources, assets_uri=assets_uri, brand=brand)
+    ts_b = Typesetter(plan, show_sources=show_sources, assets_uri=assets_uri, brand=brand,
+                      print_theme=print_theme)
     _render_pdf(ts_b.document(css, theme), body_pdf, work, session,
                 margin=BODY_MARGIN, tag="body1")
     # حلقهٔ بازرسی بصری: Render → Inspect → Repair → Render Again (حداکثر دو دور)؛
@@ -243,13 +314,16 @@ def build(content_path: str, *, edition: str = "final", theme: str = "a",
         inspection_rounds.append({"round": fb_round, "findings": findings, "repairs": actions})
         if not actions:
             break
-        ts_fb = Typesetter(plan, show_sources=show_sources, assets_uri=assets_uri, brand=brand)
+        ts_fb = Typesetter(plan, show_sources=show_sources, assets_uri=assets_uri, brand=brand,
+                      print_theme=print_theme)
         _render_pdf(ts_fb.document(css, theme), body_pdf, work, session,
                     margin=BODY_MARGIN, tag=f"body1fb{fb_round}")
     inspection_final = inspect_body(body_pdf, session, plan)
     toc_pages = {k: v + 1 for k, v in _find_heading_pages(body_pdf, plan).items()}
+    fig_pages = {k: v + 1 for k, v in _find_block_pages(body_pdf, session, plan).items()}
 
     ts_c = Typesetter(plan, show_sources=show_sources, toc_pages=toc_pages,
+                      fig_pages=fig_pages, print_theme=print_theme,
                       assets_uri=assets_uri, brand=brand)
     html_final = ts_c.document(css, theme)
     (out / f"{session.id}_{edition}.html").write_text(html_final, encoding="utf-8")
@@ -259,19 +333,33 @@ def build(content_path: str, *, edition: str = "final", theme: str = "a",
     cover_pdf = work / "cover.pdf"
     _render_pdf(cover_html(session, brand, font_css), cover_pdf, work, session,
                 margin=ZERO_MARGIN, tag="cover")
-    frame_doc = frame_html(session, brand, font_css)
-    frame_pdf = work / "frame.pdf"
-    if frame_doc is not None:
-        _render_pdf(frame_doc, frame_pdf, work, session, margin=ZERO_MARGIN, tag="frame")
-    else:
-        frame_pdf = None  # type: ignore[assignment]
+    # واریانت قاب به‌ازای (مبحث جاری، زوج/فرد) برای زبانهٔ انگشت‌نما + نوار پیشرفت
+    import pymupdf as _pm
+    _bd = _pm.open(str(body_pdf))
+    page_topics = _page_topics(session, plan, toc_pages, _bd.page_count + 1)
+    _bd.close()
+    frame_pdfs: dict = {}
+    needed = {(page_topics.get(pg, {}).get("number"), pg % 2): page_topics.get(pg, {})
+              for pg in range(2, max(page_topics, default=2) + 1)}
+    for (tnum, par), info in needed.items():
+        fdoc = frame_html(session, brand, font_css,
+                          topic_number=tnum, topic_short=info.get("short", ""),
+                          topic_order=info.get("order", 0),
+                          side=("left" if par == 1 else "right"))
+        if fdoc is None:
+            frame_pdfs = {}
+            break
+        fp = work / f"frame_{tnum}_{par}.pdf"
+        _render_pdf(fdoc, fp, work, session, margin=ZERO_MARGIN, tag=f"frame_{tnum}_{par}")
+        frame_pdfs[(tnum, par)] = fp
 
     # ادغام: کاور + بدنه، مهر قاب و شماره‌ها
     import pymupdf
     final = pymupdf.open(str(cover_pdf))
     final.insert_pdf(pymupdf.open(str(body_pdf)))
-    _stamp_furniture(final, frame_pdf)
-    final.save(str(pdf_path), garbage=3, deflate=True)
+    _stamp_furniture(final, frame_pdfs, page_topics)
+    # garbage=4 جریان‌های فونت تکراریِ واریانت‌های قاب را یکی می‌کند (۵٫۳→۲٫۵MB)
+    final.save(str(pdf_path), garbage=4, deflate=True)
     final.close()
     toc_links = _add_bookmarks(pdf_path, plan, toc_pages, brand, toc_link_rects)
 

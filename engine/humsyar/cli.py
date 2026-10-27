@@ -22,6 +22,7 @@ def main(argv: list[str] | None = None) -> int:
     b.add_argument("--theme", choices=["a", "b"], default="a")
     b.add_argument("--out", default="output")
     b.add_argument("--no-sources", action="store_true", help="پنهان‌کردن برچسب‌های منبع")
+    b.add_argument("--print-theme", action="store_true", help="نسخهٔ کم‌جوهر چاپی (پسوند _print)")
 
     e = sub.add_parser("extract", help="استخراج متن/تصویر از جزوهٔ مادر PDF")
     e.add_argument("pdf")
@@ -32,6 +33,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "build":
         from .build import build
         report = build(args.content, edition=args.edition, theme=args.theme,
+                       print_theme=args.print_theme,
                        show_sources=not args.no_sources, out_dir=args.out)
         qa = report["qa"]
         print(f"PDF: {report['pdf']} ({qa['pages']} صفحه، {report['build_seconds']}s)")

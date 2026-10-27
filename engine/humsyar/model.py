@@ -158,6 +158,7 @@ def load_session(path: str) -> Session:
 BLOCK_TYPES = {
     "section", "paragraph", "callout", "table", "figure", "process",
     "dual_process", "tree", "checklist", "summary_box", "team_note",
+    "tldr", "quick_check",
 }
 
 _REQUIRED: dict[str, list[str]] = {
@@ -172,6 +173,8 @@ _REQUIRED: dict[str, list[str]] = {
     "checklist": ["title", "items"],
     "summary_box": ["title", "text"],
     "team_note": ["title"],
+    "tldr": ["text"],
+    "quick_check": ["items"],
 }
 
 
@@ -251,6 +254,7 @@ def normalize_text(s: str) -> str:
     # برای مقایسهٔ دوطرفه هر دو را به یک صورت متعارف می‌بریم.
     s = s.replace("لا", "ال").replace("لآ", "ال")
     s = re.sub(r"\[\[term:([^\]|]+)\|([^\]]+)\]\]", r"\1 (\2)", s)  # نشانه‌گذاری اصطلاح
+    s = re.sub(r"\[\[num:([^\]]+)\]\]", r"\1", s)  # نشان عدد برجسته
     s = re.sub(r"\[en:([^\]]+)\]", r"\1", s)  # عبارت لاتین ایزوله
     s = re.sub(r"\*\*([^*]+)\*\*", r"\1", s)  # بولد
     s = re.sub(r"\s+", "", s)

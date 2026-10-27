@@ -63,7 +63,9 @@ def _est_text_w(text: str, size_mm: float) -> float:
     return len(text) * size_mm * 0.52
 
 
-def frame_anatomy_nervous(session: Session, brand: dict[str, str]) -> str:
+def frame_anatomy_nervous(session: Session, brand: dict[str, str], *,
+                          topic_number: int | None = None, topic_short: str = "",
+                          topic_order: int = 0, side: str = "left") -> str:
     corner = _corner_dendrite(seed=session.session_number * 7 + 1)
     # چهار گوشه با آینه‌کردن نقش پایه (مبدأ روی گوشهٔ قاب)
     corners = (
@@ -87,6 +89,23 @@ def frame_anatomy_nervous(session: Session, brand: dict[str, str]) -> str:
     tab_x1 = tab_x2 - tab_w
     foot_r = f"{brand['fa']} · {brand['en']}"
     foot_r_w = _est_text_w(foot_r, 2.9) + 6
+    # زبانهٔ انگشت‌نما (thumb index): خواننده از لبهٔ بیرونی می‌فهمد کجاست
+    tab = ""
+    if topic_number is not None:
+        short = topic_short if len(topic_short) <= 26 else topic_short[:25] + "…"
+        ttext = f"مبحث {fa_num(topic_number)} · {short}"
+        ph = min(52.0, max(24.0, _est_text_w(ttext, 2.65) + 9))
+        pw = 6.4
+        py = min(297 - 16 - ph, 38.0 + topic_order * 30.0)
+        px, rot = (210 - 1.1 - pw, 90) if side == "right" else (1.1, -90)
+        cx, cy = px + pw / 2, py + ph / 2
+        tab = (
+            f'<g><rect x="{px:.1f}" y="{py:.1f}" width="{pw}" height="{ph:.1f}" rx="2.2" '
+            f'fill="{_BRAND}"/>'
+            f'<text transform="translate({cx:.1f} {cy:.1f}) rotate({rot})" font-size="2.65" '
+            f'font-weight="700" fill="#FFFFFF" text-anchor="middle" dominant-baseline="central" '
+            f'font-family="Vazirmatn">{escape(ttext)}</text></g>'
+        )
     foot_l = brand["series_fa"]
     foot_l_w = _est_text_w(foot_l, 2.9) + 6
     return f'''<svg class="frame-art" viewBox="0 0 210 297" preserveAspectRatio="none"
@@ -111,13 +130,14 @@ def frame_anatomy_nervous(session: Session, brand: dict[str, str]) -> str:
   <rect x="18" y="288.9" width="{foot_l_w:.1f}" height="4.4" fill="white"/>
   <text x="{18 + foot_l_w / 2:.1f}" y="292.35" font-size="2.9"
         fill="{_DEEP}" text-anchor="middle" font-family="Vazirmatn">{escape(foot_l)}</text>
+{tab}
 </svg>'''
 
 
 FRAME_THEMES = {"anatomy-nervous": frame_anatomy_nervous}
 
 
-def frame_html(session: Session, brand: dict[str, str], font_css: str) -> str | None:
+def frame_html(session: Session, brand: dict[str, str], font_css: str, **kw) -> str | None:
     """سند HTML تک‌صفحه‌ای قاب؛ None یعنی قاب خاموش است."""
     if session.frame_theme == "none":
         return None
@@ -131,4 +151,4 @@ def frame_html(session: Session, brand: dict[str, str], font_css: str) -> str | 
 @page {{ size: A4; margin: 0; }}
 * {{ margin:0; padding:0; }}
 .frame-art {{ width:210mm; height:297mm; display:block; }}
-</style></head><body>{fn(session, brand)}</body></html>"""
+</style></head><body>{fn(session, brand, **kw)}</body></html>"""

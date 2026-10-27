@@ -58,7 +58,7 @@ def _prepare(node: dict[str, Any], depth: int = 0) -> dict[str, Any]:
     }
 
 
-def tree_svg(root: dict[str, Any]) -> str:
+def tree_svg(root: dict[str, Any], color_for=None) -> str:
     tree = _prepare(root)
     # عرض هر ستون = عریض‌ترین گرهٔ آن عمق
     col_w: dict[int, float] = {}
@@ -94,17 +94,21 @@ def tree_svg(root: dict[str, Any]) -> str:
             # خط منحنی از لبهٔ چپ والد به لبهٔ راست فرزند
             x1, x2 = nx, c["_x"] + c["w"]
             mx = (x1 + x2) / 2
+            _cc = color_for(c) if color_for else None
+            _ls = f' style="stroke:{_cc}"' if _cc else ""
             parts.append(
                 f'<path d="M {x1:.0f} {cy:.0f} C {mx:.0f} {cy:.0f}, {mx:.0f} {ccy:.0f}, '
-                f'{x2:.0f} {ccy:.0f}" class="tree-link"/>'
+                f'{x2:.0f} {ccy:.0f}" class="tree-link"{_ls}/>'
             )
         # خود گره
         cls = "tree-node tree-node--alert" if n["alert"] else "tree-node"
         if n["depth"] == 0:
             cls += " tree-node--root"
+        _nc = color_for(n) if color_for else None
+        _rs = f' style="stroke:{_nc}"' if _nc else ""
         parts.append(
             f'<g class="{cls}"><rect x="{nx:.0f}" y="{ny:.0f}" width="{n["w"]:.0f}" '
-            f'height="{n["h"]:.0f}" rx="8"/>'
+            f'height="{n["h"]:.0f}" rx="8"{_rs}/>'
         )
         lines_h = len(n["label_lines"]) * 16 + len(n["note_lines"]) * 14
         ty = cy - lines_h / 2

@@ -13,6 +13,7 @@ import re
 from html import escape
 
 from .diagrams import tree_svg
+from .entities import entity_color, entity_css_vars
 from .model import Block, Session, Source, Topic
 from .planner import Plan, fa_num
 
@@ -56,9 +57,18 @@ def inline(text: str) -> str:
     s = escape(str(text))
     s = re.sub(r"\[\[term:(.+?)\|(.+?)\]\]",
                r'<span class="term">\1 <bdi class="en">(\2)</bdi></span>', s)
+    s = re.sub(r"\[\[num:(.+?)\]\]", r'<span class="numbadge">\1</span>', s)
     s = re.sub(r"\[en:([^\]]+)\]", r'<bdi class="en">\1</bdi>', s)
     s = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", s)
     return s
+
+
+def _tree_color(node: dict) -> str | None:
+    """رنگ ثابت موجودیت از روی برچسب گرهٔ درخت (نام دقیق؛ حدس فازی ممنوع)."""
+    lab = str(node.get("label") or " ".join(node.get("label_lines", [])))
+    cands = [lab, lab.split("(")[0].strip(),
+             lab.rstrip(")").split("(")[-1].strip()]
+    return next((c for c in (entity_color(c) for c in cands) if c), None)
 
 
 def src_chips(sources: list[Source], show: bool = True) -> str:
@@ -70,11 +80,16 @@ def src_chips(sources: list[Source], show: bool = True) -> str:
 class Typesetter:
     def __init__(self, plan: Plan, *, show_sources: bool = True,
                  toc_pages: dict[str, int] | None = None,
+                 fig_pages: dict[str, int] | None = None,
+                 print_theme: bool = False,
                  assets_uri: str = "", brand: dict | None = None) -> None:
         self.plan = plan
         self.session = plan.session
         self.show_sources = show_sources
         self.toc_pages = toc_pages or {}
+        self.fig_pages = fig_pages or {}
+        self._qc_items: list[tuple[int, str]] = []  # (شماره، پاسخ) برای پاسخ‌نامهٔ پایانی
+        self.print_theme = print_theme
         self.assets_uri = assets_uri  # پیشوند file:// برای مسیر دارایی‌ها
         self.brand = brand or {"fa": "هامزیار", "en": "HumsYar"}
 
@@ -87,6 +102,9 @@ class Typesetter:
         if s.closing:
             body.append('<div class="section" style="margin-top:16pt"><h3>جمع‌بندی و مرور جلسه</h3></div>')
             body.append(self.render_blocks(s.closing))
+        body.append(self.glossary())
+        body.append(self.answer_key())
+        body.append(self.colophon())
         body.append(
             f'<div class="doc-end"><span class="en">{escape(self.brand["en"])}</span> · جزوهٔ '
             f'{escape(s.course)} — جلسهٔ {fa_num(s.session_number)} · نسخهٔ {escape(s.version)}'
@@ -99,13 +117,14 @@ class Typesetter:
             '<!DOCTYPE html><html lang="fa" dir="rtl"'
             + (f' data-theme="{theme}"' if theme != "a" else "") + '><head><meta charset="utf-8">'
             f'<title>{escape(s.course)} — جلسهٔ {fa_num(s.session_number)}: {escape(s.title)}</title>{favicon}'
-            f'<style>{css}</style></head><body>{"".join(body)}</body></html>'
+            f'<style>{css}{entity_css_vars()}</style></head>'
+            f'<body class="{"print-theme" if self.print_theme else ""}">{"".join(body)}</body></html>'
         )
 
     def toc_page(self) -> str:
         """صفحهٔ اختصاصی فهرست: نقشهٔ جلسه + فهرست پیونددار + نوار راهنمای خواندن."""
         return (f'<div class="tocpage">{self.session_map()}{self.toc()}'
-                f'{self.reading_guide()}</div>')
+                f'{self.figure_table_lists()}{self.reading_guide()}</div>')
 
     def render_blocks(self, blocks: list[Block]) -> str:
         """رندر ترتیبی بلوک‌ها در بازه‌های بخشی (secpan) با پشتیبانی جفت‌تصویر.
@@ -165,6 +184,8 @@ class Typesetter:
     def toc(self) -> str:
         n = len(self.plan.headings)
         lh = 2.35 if n <= 12 else (2.05 if n <= 20 else 1.8)
+        if any(b.type in ("figure", "table") for b in self.session.all_blocks()):
+            lh = max(1.75, lh - 0.45)  # جای فهرست شکل‌ها/جدول‌ها در همان صفحه
         items = []
         for lvl, text, anchor in self.plan.headings:
             pg = self.toc_pages.get(anchor)
@@ -174,6 +195,30 @@ class Typesetter:
                 f'<span class="pno">{fa_num(pg) if pg else "…"}</span></a></li>')
         return (f'<nav class="toc" style="--toc-lh:{lh}"><h2>فهرست مطالب</h2>'
                 f'<ol>{"".join(items)}</ol></nav>')
+
+    def figure_table_lists(self) -> str:
+        """فهرست شکل‌ها و جدول‌ها — فقط وقتی صفحهٔ واقعی هر مورد از بدنه خوانده شده باشد."""
+        figs, tbls = [], []
+        for b in self.session.all_blocks():
+            if b.type not in ("figure", "table"):
+                continue
+            pg = self.fig_pages.get(b.id)
+            label = escape(self.plan.labels.get(b.id, ""))
+            if b.type == "figure":
+                t = escape(str(b.data.get("title_fa", "")))
+                figs.append(f'<li><span class="ln">{label}</span><span>{t}</span>'
+                            f'<span class="dots"></span><span class="pno">{fa_num(pg) if pg else "…"}</span></li>')
+            elif b.type == "table":
+                t = escape(str(b.data.get("title", "")))
+                tbls.append(f'<li><span class="ln">{label}</span><span>{t}</span>'
+                            f'<span class="dots"></span><span class="pno">{fa_num(pg) if pg else "…"}</span></li>')
+        if not figs and not tbls:
+            return ""
+        col_f = (f'<div class="lists__col"><h2>فهرست شکل‌ها</h2><ol>{"".join(figs)}</ol></div>'
+                 if figs else "")
+        col_t = (f'<div class="lists__col"><h2>فهرست جدول‌ها</h2><ol>{"".join(tbls)}</ol></div>'
+                 if tbls else "")
+        return f'<div class="lists">{col_f}{col_t}</div>'
 
     def reading_guide(self) -> str:
         """راهنمای خواندن: معنای کادرها و برچسب منبع — مبلمان ثابت جزوه، نه محتوای علمی."""
@@ -191,16 +236,30 @@ class Typesetter:
         # راهنما فقط کادرهایی را توضیح می‌دهد که واقعاً در همین جلسه به کار رفته‌اند
         used = {b.data.get("kind") for b in self.session.all_blocks() if b.type == "callout"}
         items = [(k, KIND_LABELS[k], guide_texts[k]) for k in KIND_ORDER if k in used]
-        rows = "".join(
-            f'<div class="guide__item guide__item--{k}">{icon(k)}<span><b>{t}:</b> {d}</span></div>'
-            for k, t, d in items)
+        rows = ""  # نمونهٔ واقعی کادر خودش راهنماست؛ ردیف توضیحی تکراری حذف شد
+        # نمونهٔ واقعی قالب کادر (متن نمونهٔ رابط کاربر است، نه محتوای علمی)
+        sample_texts = {
+            "key": "نمونهٔ کادر: جملهٔ محوری بخش این‌جا برجسته می‌شود.",
+            "clinical": "نمونهٔ کادر: کاربرد بالینی، فقط به نقل از خود منبع.",
+            "warning": "نمونهٔ کادر: استثنا یا دام رایج این‌جا جدا می‌شود.",
+            "conflict": "نمونهٔ کادر: اختلاف دو منبع، بدون دست‌کاری، کنار هم می‌ماند.",
+            "definition": "نمونهٔ کادر: تعریف کوتاه اصطلاح این‌جا می‌آید.",
+            "bridge": "نمونهٔ کادر: پیوند ساختار و کارکرد این‌جا نشان داده می‌شود.",
+            "example": "نمونهٔ کادر: مثال موجود در خود محتوا این‌جا می‌نشیند.",
+            "summary": "نمونهٔ کادر: جمع‌بندی همان بخش این‌جا می‌آید.",
+            "exam": "نمونهٔ کادر: فقط با برچسب صریح خود منبع.",
+        }
+        samples = "".join(
+            f'<aside class="callout callout--{k} guide-sample"><div class="callout__head">'
+            f'{icon(k)}<span>{KIND_LABELS[k]}</span></div><p>{guide_texts[k]}</p></aside>'
+            for k in KIND_ORDER if k in used and k in guide_texts)
         return f"""
 <div class="guide avoid-break">
   <h2>چطور این جزوه را بخوانیم؟</h2>
   <p>کنار هر مطلب، برچسب <span class="src"><b>منبع:</b> جزوهٔ درس، ص ۹</span> می‌بینید؛ یعنی آن
   جمله دقیقاً از کجای جزوهٔ درس، اسنل یا گری آمده است. اصطلاح‌ها در نخستین ورودشان به صورت
   <span class="term">فارسی <bdi class="en">(English)</bdi></span> می‌آیند. کادرها هم هر کدام معنای ثابتی دارند:</p>
-  <div class="guide__grid">{rows}</div>
+  <div class="guide__samples">{samples}</div>
 </div>"""
 
     # -------------------------------------------------------------- مبحث
@@ -211,6 +270,17 @@ class Typesetter:
             + "</span>"
             for term in t.key_terms)
         objs = "".join(f"<li>{inline(o)}</li>" for o in t.objectives)
+        # نوار پیشرفت: جایگاه این مبحث در نقشهٔ جلسه (از دادهٔ خود جلسه؛ متن تازه‌ای نیست)
+        smap = self.session.session_map or []
+        strip = ""
+        if smap:
+            cells = []
+            for m in smap:
+                n = int(m["number"])
+                st = "cur" if n == t.number else ("done" if n < t.number else "todo")
+                cells.append(f'<span class="pstrip__c pstrip__c--{st}"><b>{fa_num(n)}</b>'
+                             f'{escape(str(m["title"]))}</span>')
+            strip = (f'<div class="pstrip" aria-hidden="true">{"".join(cells)}</div>')
         pre = "".join(f'<span class="chip chip--pre">{inline(p)}</span>' for p in t.prereq_required)
         pre_s = "".join(f'<span class="chip">{inline(p)}</span>' for p in t.prereq_suggested)
         head = f"""
@@ -220,11 +290,11 @@ class Typesetter:
       <div class="topic-num">مبحث<b>{fa_num(t.number)}</b></div>
       <h2>{escape(t.title)}</h2>
       <span class="topic-head__pages">جزوهٔ مادر: ص {escape(t.mother_pages)}</span>
-    </div>
+    </div>{strip}
     <div class="topic-card">
       <p class="why"><b>چرا مهم است؟</b> {inline(t.why)}</p>
       <div class="topic-card__grid">
-        <div><h3>پس از این مبحث می‌توانید:</h3><ul>{objs}</ul></div>
+        <div><h3>در این مبحث یاد می‌گیرید:</h3><ul class="objlist">{objs}</ul></div>
         <div><h3>پیش‌نیاز ضروری</h3><div class="chips">{pre}</div>
              <h3 style="margin-top:4pt">پیش‌نیاز پیشنهادی</h3><div class="chips">{pre_s}</div></div>
       </div>
@@ -252,6 +322,124 @@ class Typesetter:
         return (f'<p class="body" data-bid="{escape(b.id)}">{inline(b.data["text"])}'
                 f'{src_chips(b.sources, self.show_sources)}</p>')
 
+    # ---------------------------------------------------------- مادهٔ پایانی
+    def glossary(self) -> str:
+        """واژه‌نامهٔ فارسی–انگلیسی: فقط معادل‌هایی که در خود جلسه آمده‌اند + صفحهٔ نخستین کاربرد."""
+        terms: dict[str, dict[str, str]] = {}
+        order: list[str] = []
+
+        def add(fa: str, en: str, anchor: str) -> None:
+            fa = str(fa).strip()
+            if not fa or fa in terms:
+                return
+            terms[fa] = {"en": str(en or "").strip(), "anchor": anchor}
+            order.append(fa)
+
+        def scan(blocks: list[Block], anchor: str) -> None:
+            for b in blocks:
+                if b.type == "section":
+                    anchor = b.id
+                if b.type == "figure":
+                    for lb in b.data.get("labels", []) or []:
+                        if isinstance(lb, dict):
+                            add(str(lb.get("fa", "")), str(lb.get("en", "")), anchor)
+                for frag in b.text_fragments():
+                    for m in re.finditer(r"\[\[term:(.+?)\|(.+?)\]\]", str(frag)):
+                        add(m.group(1), m.group(2), anchor)
+
+        for t in self.session.topics:
+            for kt in t.key_terms:
+                if isinstance(kt, dict):
+                    add(str(kt.get("fa", "")), str(kt.get("en", "")), t.id)
+            scan(t.blocks, t.id)
+        scan(self.session.closing, self.session.topics[-1].id if self.session.topics else "")
+        if len(order) < 4:
+            return ""
+        items = []
+        for fa in order:
+            en = terms[fa]["en"]
+            pg = self.toc_pages.get(terms[fa]["anchor"])
+            pg_txt = f"ص {fa_num(pg)}" if pg else "…"
+            en_html = f' <bdi class="en">({escape(en)})</bdi>' if en else ""
+            items.append(f'<div class="gloss__it"><span class="gloss__fa">{escape(fa)}{en_html}</span>'
+                         f'<span class="dots"></span><span class="gloss__pg">{pg_txt}</span></div>')
+        return (f'<div class="glossary"><h2>واژه‌نامهٔ فارسی–انگلیسی همین جلسه</h2>'
+                f'<p class="gloss__note">فقط اصطلاح‌هایی که در متن همین جلسه آمده‌اند؛ '
+                f'شمارهٔ صفحه، نخستین کاربرد هر اصطلاح است.</p>'
+                f'<div class="gloss__grid">{"".join(items)}</div></div>')
+
+    def answer_key(self) -> str:
+        """پاسخ‌نامهٔ خودآزمایی‌های سریع — پاسخ‌ها عین عبارت‌های متن جلسه‌اند."""
+        if not self._qc_items:
+            return ""
+        rows = "".join(
+            f'<div class="ak__it"><b>{fa_num(n)}.</b> {inline(a)}</div>'
+            for n, a in self._qc_items)
+        return (f'<div class="answerkey"><h2>پاسخ‌نامهٔ خودآزمایی سریع</h2>'
+                f'<p class="gloss__note">اول خودتان پاسخ دهید، بعد با این صفحه چک کنید؛ '
+                f'پاسخ درست، همان عبارتی است که در متن بخش آمده بود.</p>{rows}</div>')
+
+    def colophon(self) -> str:
+        """شناسنامهٔ نسخه — همهٔ سطرها از دادهٔ خود جلسه؛ نام/نشانی ساخته نمی‌شود."""
+        s = self.session
+        books: list[str] = []
+        for b in s.all_blocks():
+            for src in b.sources:
+                if src.book and src.book not in books:
+                    books.append(src.book)
+        needs = any(b.status == "needs_review" for b in s.all_blocks())
+        topics_txt = "؛ ".join(f"مبحث {fa_num(t.number)}: {t.title}" for t in s.topics)
+        rows = [
+            ("درس و جلسه", f"{s.course} — جلسهٔ {fa_num(s.session_number)}: {s.title}"),
+            ("مباحث این نسخه", topics_txt),
+            ("نسخهٔ جزوه", s.version),
+            ("منابع به‌کاررفته", "؛ ".join(books) if books else "—"),
+            ("وضعیت بازبینی علمی",
+             "پیش‌نویسِ نیازمند بازبینی تیم علمی" if needs else "بازبینی‌شده"),
+            ("گزارش خطا",
+             "اگر جایی خطا یا ناهماهنگی دیدید، شمارهٔ صفحه و عنوان بخش را یادداشت کنید و به تیم علمی برسانید."),
+            ("یادداشت",
+             "این جزوه ابزار کمکیِ مطالعه است و جایگزین منابع اصلی و نظر استاد نیست؛ "
+             "مرجع نهایی هر مطلب، برچسب منبع کنار همان مطلب است."),
+        ]
+        rows_html = "".join(
+            f'<div class="col__row"><b>{escape(k)}</b><span>{escape(v)}</span></div>'
+            for k, v in rows)
+        return (f'<div class="colophon"><h2>شناسنامهٔ این نسخه</h2>{rows_html}'
+                f'<div class="col__brand">{escape(self.brand["fa"])} · '
+                f'<bdi class="en">{escape(self.brand["en"])}</bdi></div></div>')
+
+    # ---------------------------------------------------------- بلوک‌های یادگیری
+    def _prov_ribbon(self, b: Block) -> str:
+        if b.data.get("provisional"):
+            return '<div class="prov-ribbon">پیشنهاد برای تأیید تیم علمی</div>'
+        return ""
+
+    def b_tldr(self, b: Block) -> str:
+        return f"""
+<aside class="tldr" data-bid="{escape(b.id)}">{self._prov_ribbon(b)}
+  <div class="tldr__head"><span class="tldr__tag">در یک نگاه</span></div>
+  <p>{inline(b.data["text"])}</p>
+  <div class="srcrow">{src_chips(b.sources, self.show_sources)}</div>
+</aside>"""
+
+    def b_quick_check(self, b: Block) -> str:
+        items_html = []
+        for it in b.data.get("items", []):
+            n = len(self._qc_items) + 1
+            self._qc_items.append((n, str(it.get("a", ""))))
+            items_html.append(
+                f'<div class="qc__it"><span class="qc__n">{fa_num(n)}</span>'
+                f'<div class="qc__body"><p>{inline(str(it.get("q", "")))}</p>'
+                f'<div class="qc__line"></div></div></div>')
+        return f"""
+<aside class="qcheck" data-bid="{escape(b.id)}">{self._prov_ribbon(b)}
+  <div class="qcheck__head"><span class="qc__tag">خودآزمایی سریع</span>
+  <span class="qc__hint">بدون نگاه‌کردن به متن پاسخ دهید؛ پاسخ‌نامه در پایان جلسه است.</span></div>
+  {"".join(items_html)}
+  <div class="srcrow">{src_chips(b.sources, self.show_sources)}</div>
+</aside>"""
+
     def b_callout(self, b: Block) -> str:
         kind = b.data["kind"]
         return f"""
@@ -276,12 +464,28 @@ class Typesetter:
     def b_table(self, b: Block) -> str:
         d = b.data
         label = escape(self.plan.labels.get(b.id, "جدول"))
-        head = "".join(f"<th>{inline(h)}</th>" for h in d["headers"])
+        def _th(h):
+            raw = re.sub(r"\[en:([^\]]+)\]", r"\1", str(h))
+            raw = re.sub(r"\[\[term:(.+?)\|(.+?)\]\]", r"\1", raw).strip()
+            cands = [raw, raw.split("(")[0].strip(),
+                     raw.rstrip(")").split("(")[-1].strip()]
+            col = next((c for c in (entity_color(c) for c in cands) if c), None)
+            sty = f' style="--th-ent:{col}"' if col else ""
+            cls = ' class="th-ent"' if col else ""
+            return f"<th{cls}{sty}>{inline(h)}</th>"
+        head = "".join(_th(h) for h in d["headers"])
         colgroup = ""
         if d.get("col_widths"):
             colgroup = "<colgroup>" + "".join(
                 f'<col style="width:{float(w)}%">' for w in d["col_widths"]) + "</colgroup>"
         dense = " tbl--dense" if len(d.get("rows", [])) > 10 else ""
+        # سبک متناسب با نقش جدول: مقایسه‌ای (۳ ستونه) یا مرجع راه‌راه (بلند)
+        style_cls = str(d.get("style", ""))
+        if not style_cls and len(d["headers"]) == 3:
+            style_cls = "compare"
+        elif not style_cls and len(d.get("rows", [])) > 6:
+            style_cls = "zebra"
+        dense += f" tbl--{style_cls}" if style_cls in ("compare", "zebra") else ""
         chunks = d.get("_chunks") or [list(range(len(d["rows"])))]
         parts = []
         for ci, idxs in enumerate(chunks):
@@ -304,6 +508,9 @@ class Typesetter:
   {cap}
   <table class="tbl{dense}">{colgroup}<thead><tr>{head}</tr></thead><tbody>{self._tbl_rows_html(d, idxs)}</tbody></table>
 </div>""")
+        if d.get("takeaway"):
+            parts.append(f'<p class="tbl__takeaway"><b>برداشت کلیدی:</b> '
+                         f'{inline(str(d["takeaway"]))}</p>')
         return "".join(parts)
 
     def _caption_inner(self, b: Block) -> str:
@@ -381,13 +588,42 @@ class Typesetter:
     def b_dual_process(self, b: Block) -> str:
         d = b.data
         fwd, bwd = d["forward"], d["backward"]
+        cf = entity_color("Anterograde") or "#0284C7"
+        cb = entity_color("Retrograde") or "#EA580C"
+        # برچسب‌های نمودار فقط از متن خود بلوک: عنوان دو مسیر + سوما/پایانه اگر در داده هست
+        titles = str(fwd.get("title", "")) + str(bwd.get("title", ""))
+        node_r = "سوما" if "سوما" in titles else ""
+        node_l = "پایانه" if "پایانه" in titles else ""
+        rail_svg = f"""
+<svg class="dualrail" viewBox="0 0 182 31" dir="ltr" role="img"
+     aria-label="{escape(str(d["title"]))}">
+  <circle cx="169" cy="13" r="6.2" fill="#0B3050"/>
+  <circle cx="167.4" cy="11.4" r="1.7" fill="#FFFFFF" opacity=".85"/>
+  <g fill="#0B7A6E"><circle cx="9" cy="8.5" r="2.6"/><circle cx="7" cy="14.5" r="2.6"/>
+  <circle cx="10" cy="20" r="2.6"/></g>
+  <g stroke="#9FB4C6" stroke-width=".55">
+    <line x1="16" y1="11.6" x2="162" y2="11.6"/><line x1="16" y1="14.4" x2="162" y2="14.4"/></g>
+  <line x1="158" y1="7.6" x2="24" y2="7.6" stroke="{cf}" stroke-width="1.15"/>
+  <polygon points="24,7.6 29.5,5.4 29.5,9.8" fill="{cf}"/>
+  <circle cx="95" cy="7.6" r="2.1" fill="{cf}"/>
+  <line x1="24" y1="18.4" x2="158" y2="18.4" stroke="{cb}" stroke-width="1.15"/>
+  <polygon points="158,18.4 152.5,16.2 152.5,20.6" fill="{cb}"/>
+  <circle cx="80" cy="18.4" r="2.1" fill="{cb}"/>
+  <text x="91" y="4.6" font-size="3.1" font-weight="700" fill="{cf}" text-anchor="middle"
+        font-family="Vazirmatn">{escape(str(fwd.get("title", "")))}</text>
+  <text x="91" y="26.6" font-size="3.1" font-weight="700" fill="{cb}" text-anchor="middle"
+        font-family="Vazirmatn">{escape(str(bwd.get("title", "")))}</text>
+  {f'<text x="169" y="23.6" font-size="2.6" fill="#0B3050" text-anchor="middle" font-family="Vazirmatn">{node_r}</text>' if node_r else ""}
+  {f'<text x="9" y="26.6" font-size="2.6" fill="#0B7A6E" text-anchor="middle" font-family="Vazirmatn">{node_l}</text>' if node_l else ""}
+</svg>"""
         return f"""
 <div class="dual" data-bid="{escape(b.id)}">
   <div class="process__title"><span class="pno">{escape(self.plan.labels.get(b.id, "مسیر"))}</span>
   <span>{inline(d["title"])}</span>{src_chips(b.sources, self.show_sources)}</div>
+  {rail_svg}
   <div class="dual__lanes">
-    <div class="lane lane--fwd"><div class="lane__head">◀ {inline(fwd["title"])}</div>{self._steps(fwd["steps"])}</div>
-    <div class="lane lane--bwd"><div class="lane__head">{inline(bwd["title"])} ▶</div>{self._steps(bwd["steps"])}</div>
+    <div class="lane lane--fwd"><div class="lane__head" style="--lane:{cf}">◀ {inline(fwd["title"])}</div>{self._steps(fwd["steps"])}</div>
+    <div class="lane lane--bwd"><div class="lane__head" style="--lane:{cb}">{inline(bwd["title"])} ▶</div>{self._steps(bwd["steps"])}</div>
   </div>
   <div class="dual__rail">{inline(d.get("rail_note", ""))}</div>
 </div>"""
@@ -397,7 +633,7 @@ class Typesetter:
 <figure class="tree" data-bid="{escape(b.id)}">
   <div class="process__title"><span class="pno">نمودار</span>
   <span>{inline(b.data["title"])}</span>{src_chips(b.sources, self.show_sources)}</div>
-  {tree_svg(b.data["root"])}
+  {tree_svg(b.data["root"], color_for=lambda n: _tree_color(n))}
 </figure>"""
 
     def b_checklist(self, b: Block) -> str:

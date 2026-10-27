@@ -1,0 +1,63 @@
+# نگاشت ثابت «موجودیت ← رنگ معنایی» برای کل مجموعهٔ هامزیار (HumsYar).
+# اصل طراحی: رنگ = معنا. هر سلول/ساختار/فرایندِ اصلی در همهٔ جزوه‌ها یک رنگ ثابت دارد
+# تا مغز خواننده رنگ را به مفهوم گره بزند. رنگ‌ها هرگز به‌تنهایی حامل معنا نیستند —
+# کنارشان همیشه برچسب متنی هست (چاپ سیاه‌وسفید امن می‌ماند).
+# تطبیق فقط با نام دقیق (fa یا en) انجام می‌شود؛ حدس و تطبیق فازی ممنوع.
+entities:
+  # --- سلول‌های گلیال CNS ---
+  - id: astrocyte
+    fa: ["آستروسیت", "آستروسیت‌ها"]
+    en: ["Astrocyte", "Astrocytes"]
+    color: "#B45309"   # کهربایی تیره
+  - id: oligodendrocyte
+    fa: ["الیگودندروسیت", "الیگودندروسیت‌ها"]
+    en: ["Oligodendrocyte", "Oligodendrocytes"]
+    color: "#2563EB"   # آبی (هم‌خانوادهٔ CNS)
+  - id: microglia
+    fa: ["میکروگلیا", "میکروگلیاها"]
+    en: ["Microglia", "Microglial cell"]
+    color: "#7C3AED"   # بنفش
+  - id: ependymal
+    fa: ["سلول اپندیمال", "سلول‌های اپندیمال", "اپندیمال"]
+    en: ["Ependymal cell", "Ependymal cells"]
+    color: "#0891B2"   # فیروزه‌ای تیره
+  # --- سلول‌های گلیال PNS (خانوادهٔ سبز = PNS) ---
+  - id: schwann
+    fa: ["سلول شوان", "سلول‌های شوان", "شوان"]
+    en: ["Schwann cell", "Schwann cells"]
+    color: "#059669"   # سبز زمردی
+  - id: satellite
+    fa: ["سلول ماهواره‌ای", "سلول‌های ماهواره‌ای", "ماهواره‌ای"]
+    en: ["Satellite cell", "Satellite cells"]
+    color: "#65A30D"   # سبز لایم تیره
+  # --- ساختارها ---
+  - id: axon
+    fa: ["آکسون"]
+    en: ["Axon"]
+    color: "#0B3050"   # سرمه‌ای برند
+  - id: dendrite
+    fa: ["دندریت", "دندریت‌ها"]
+    en: ["Dendrite", "Dendrites"]
+    color: "#0B7A6E"   # سبزآبی برند
+  - id: myelin
+    fa: ["میلین", "غلاف میلین"]
+    en: ["Myelin", "Myelin sheath"]
+    color: "#D97706"   # طلایی
+  # --- سامانه‌ها ---
+  - id: cns
+    fa: ["سیستم عصبی مرکزی"]
+    en: ["CNS", "Central nervous system"]
+    color: "#1D4ED8"
+  - id: pns
+    fa: ["سیستم عصبی محیطی"]
+    en: ["PNS", "Peripheral nervous system"]
+    color: "#059669"
+  # --- جهت‌های انتقال آکسونی (جفت متضاد ثابت) ---
+  - id: anterograde
+    fa: ["آنتروگرید", "انتقال آنتروگرید", "رو به جلو"]
+    en: ["Anterograde", "Anterograde transport"]
+    color: "#0284C7"   # آبی آسمانی
+  - id: retrograde
+    fa: ["رتروگرید", "انتقال رتروگرید", "بازگشتی", "رو به عقب"]
+    en: ["Retrograde", "Retrograde transport"]
+    color: "#EA580C"   # نارنجی
