@@ -15,7 +15,10 @@ title: "بافت‌شناسی سیستم عصبی: از نورون تا میلی
 session_number: 1
 session_total: 13
 subtitle: نورون، نوروگلیا و غلاف میلین
-version: "۰٫۱ (پایلوت موتور)"
+version: "۰٫۲"
+draft: true            # برچسب «پایلوت موتور» روی کاور فقط در حالت پیش‌نویس
+cover_motif: histology-neuron-glia
+frame_theme: anatomy-nervous
 note: >-
   پایلوت موتور جزوه‌ساز هامزیار: در این نسخه، دو مبحث ۴ و ۶ جلسهٔ ۱ با همان محتوای
   جزوهٔ مادر — بدون هیچ حذف یا تغییر علمی — با صفحه‌آرایی نهایی ساخته شده‌اند تا طراحی
@@ -94,7 +97,8 @@ topics:
         type: figure
         status: needs_review
         file: assets/figures/session01/p24_x98.png
-        layout: full
+        layout: auto
+        min_width_mm: 118   # اسلاید با نوشتهٔ لاتین درشت؛ کوچک‌تر از این بولت‌هایش ریز می‌شود
         quality_flags:
           - "وضوح مؤثر پایین در جزوهٔ مادر (حدود ۹۰ DPI)"
           - "اسکرین‌شات اسلاید: نوار گرادیان تیره در پایین تصویر و نقاط رابط کاربری در گوشهٔ بالا"
@@ -168,7 +172,7 @@ topics:
         type: figure
         status: needs_review
         file: assets/figures/session01/p26_x103.png
-        layout: full
+        layout: auto
         title_fa: انتقال آنتروگراد و رتروگراد روی ریل میکروتوبول
         explain_fa: >-
           تصویر، جدول کوچک پایین خودش را هم باید خواند: کینزین مسئول انتقال آنتروگراد و داینین مسئول
@@ -299,7 +303,10 @@ topics:
         type: figure
         status: needs_review
         file: assets/figures/session01/p39_x138.png
-        layout: full
+        layout: auto
+        min_width_mm: 140   # شش سلول با برچسب‌های داخل تصویر
+        quality_flags:
+          - "نوار تیره در لبهٔ پایین اسلاید (در فایل اصلی جزوهٔ مادر) — نسخهٔ تمیزتر از منبع لازم است؛ برش داده نشد"
         title_fa: شش سلول گلیال در یک قاب
         explain_fa: >-
           این قاب همان فهرست شش‌تایی متن است: آستروسیت، الیگودندروسیت، میکروگلیا، اپندیم، سلول شوان و
@@ -317,7 +324,7 @@ topics:
         type: figure
         status: needs_review
         file: assets/figures/session01/p40_x141.png
-        layout: full
+        layout: auto
         title_fa: آرایش چهار نوع سلول نوروگلیال مرکزی در بافت
         explain_fa: >-
           شکل ۲-۲۸ اسنل چهار نوع گلیال مرکزی را در کنار نورون و مویرگ می‌چیند؛ دو نوع محیطی (شوان و
@@ -367,7 +374,7 @@ topics:
         type: figure
         status: needs_review
         file: assets/figures/session01/p41_x144.png
-        layout: full
+        layout: auto
         title_fa: آستروسیت پروتوپلاسمیک و فیبروز
         explain_fa: >-
           دو سلول این قاب را با هم مقایسه کنید: یکی با زوائد کوتاه، ضخیم و پرانشعاب (پروتوپلاسمیک) و
@@ -404,7 +411,7 @@ topics:
         type: figure
         status: needs_review
         file: assets/figures/session01/p42_x147.png
-        layout: full
+        layout: auto
         quality_flags:
           - "وضوح مؤثر پایین در جزوهٔ مادر (حدود ۹۰ DPI)"
         title_fa: پای عروقی آستروسیت روی مویرگ
@@ -516,7 +523,7 @@ topics:
         type: figure
         status: needs_review
         file: assets/figures/session01/p45_x155.png
-        layout: full
+        layout: auto
         title_fa: "الیگودندروسیت‌ها: گروهی در بافت و دو سلول در بزرگنمایی"
         explain_fa: >-
           این شکل همان سلولی را نشان می‌دهد که در متن نام «عایق‌کار» گرفت. اسنل در همین صفحه اضافه
@@ -563,7 +570,7 @@ topics:
         type: figure
         status: needs_review
         file: assets/figures/session01/p47_x161.png
-        layout: full
+        layout: auto
         quality_flags:
           - "وضوح مؤثر بسیار پایین در جزوهٔ مادر (حدود ۶۵ DPI) — اولویت جایگزینی با نسخهٔ باکیفیت‌تر"
         title_fa: سلول اقماری و سلول شوان در یک گانگلیون محیطی
