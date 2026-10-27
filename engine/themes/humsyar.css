@@ -1,0 +1,295 @@
+/* ============================================================
+   HamsYar Design System — سیستم طراحی جزوات علوم پایهٔ پزشکی
+   مبنا: توکن‌محور. تغییر تم = تغییر توکن‌ها، نه بازنویسی بلوک‌ها.
+   هر رنگ یک نقش معنایی دارد؛ تمایز بلوک‌ها در چاپ سیاه‌وسفید هم
+   با برچسب متنی + سبک حاشیه حفظ می‌شود (فقط رنگ نیست).
+   ============================================================ */
+@page { size: A4; }
+
+:root{
+  /* ——— توکن‌های برند (تم A: تیل بالینی هام‌یار) ——— */
+  --brand:#0b6e6b; --brand-deep:#074f5c; --brand-ink:#0a3d47;
+  --accent:#1d5fa8;
+  --ink:#182630; --muted:#5d707e; --faint:#8496a3;
+  --line:#d7e3e8; --line-soft:#e7eff2;
+  --paper:#ffffff; --tint:#eef6f5; --tint-blue:#edf3fa;
+  /* نقش‌های معنایی کادرها */
+  --c-key:#0b6e6b;       --bg-key:#e9f4f3;
+  --c-clinical:#1e7a4f;  --bg-clinical:#eaf5ee;
+  --c-warning:#a86a08;   --bg-warning:#fdf4e0;
+  --c-bridge:#1d5fa8;    --bg-bridge:#edf3fa;
+  --c-conflict:#b3382e;  --bg-conflict:#fbeeec;
+  --c-exam:#5b4bc4;      --bg-exam:#f0eefa;
+  /* تایپ */
+  --fs-body:10pt; --lh:1.88;
+  --fs-h-topic:16.5pt; --fs-h-section:12pt; --fs-h-sub:10.5pt;
+  --fs-small:8.6pt; --fs-caption:8.4pt; --fs-chip:7.4pt;
+  --r:8px; --r-sm:6px;
+}
+/* تم B: سرمه‌ای تحریریه‌ای (گزینهٔ جایگزین برای انتخاب) */
+[data-theme="b"]{
+  --brand:#274690; --brand-deep:#1b2a52; --brand-ink:#16233f;
+  --accent:#0b6e6b; --tint:#edf1f9; --tint-blue:#eef6f5;
+  --c-key:#274690; --bg-key:#ebeff8;
+  --c-bridge:#0b6e6b; --bg-bridge:#e9f4f3;
+}
+
+*{box-sizing:border-box; margin:0; padding:0;}
+html{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+body{
+  font-family:"Vazirmatn","DejaVu Sans",sans-serif;
+  font-size:var(--fs-body); line-height:var(--lh); color:var(--ink);
+  background:var(--paper);
+}
+bdi,.en{ direction:ltr; unicode-bidi:isolate; font-family:"DejaVu Sans","Vazirmatn",sans-serif; }
+strong{ font-weight:700; }
+.term{ font-weight:700; color:var(--brand-ink); }
+.term .en{ font-weight:600; color:var(--accent); font-size:.94em; }
+p.body{ margin:0 0 6pt; text-align:justify; orphans:2; widows:2; }
+p.body .src{ margin-inline-start:4pt; }
+
+/* ——— برچسب منبع (قابلیت متمایز هام‌یار: ردیابی علمی فشرده) ——— */
+.src{
+  display:inline-block; font-size:var(--fs-chip); line-height:1.5; color:var(--muted);
+  border:1px solid var(--line); border-radius:20px; padding:0 6px; vertical-align:2px;
+  background:#fbfdfd; white-space:nowrap;
+}
+.src b{ color:var(--brand); font-weight:700; }
+
+/* ============================================================= کاور جلسه (کم‌حجم) */
+.cover{
+  border:1.6px solid var(--brand-deep); border-radius:12px; overflow:hidden;
+  margin-bottom:12pt; break-inside:avoid;
+}
+.cover__band{
+  background:linear-gradient(135deg,var(--brand-deep),var(--brand) 70%);
+  color:#fff; padding:16pt 18pt 13pt;
+}
+.cover__brand{ font-size:9pt; letter-spacing:.4px; opacity:.92; display:flex; justify-content:space-between;}
+.cover__brand .en{ font-weight:700; letter-spacing:1.2px; }
+.cover h1{ font-size:21pt; line-height:1.5; margin-top:5pt; font-weight:700;}
+.cover h1 .sess{ font-size:13pt; font-weight:500; opacity:.95; display:block; margin-top:2pt;}
+.cover__sub{ font-size:10.5pt; opacity:.93; margin-top:3pt;}
+.cover__meta{ display:flex; gap:6pt; flex-wrap:wrap; margin-top:9pt;}
+.cover__meta span{
+  font-size:8.2pt; border:1px solid rgba(255,255,255,.55); border-radius:20px; padding:1px 9px; line-height:1.7;
+}
+.cover__note{ padding:8pt 18pt 10pt; font-size:8.8pt; color:var(--muted); background:var(--tint); line-height:1.9; }
+
+/* نقشهٔ جلسه: همهٔ مباحث در یک نگاه */
+.session-map{ margin:2pt 0 12pt; break-inside:avoid; }
+.session-map h2,.toc h2{ font-size:11pt; color:var(--brand-deep); margin-bottom:5pt; font-weight:700;}
+.session-map ol{ list-style:none; display:grid; grid-template-columns:1fr 1fr; gap:4pt 8pt;}
+.session-map li{
+  display:flex; gap:7pt; align-items:baseline; border:1px solid var(--line-soft);
+  border-radius:var(--r-sm); padding:3pt 8pt; font-size:8.8pt; line-height:1.7; color:var(--muted);
+}
+.session-map li .n{
+  flex:0 0 auto; width:15pt; height:15pt; border-radius:50%; text-align:center; line-height:15.5pt;
+  background:var(--line-soft); color:var(--muted); font-weight:700; font-size:8pt;
+}
+.session-map li.in{ color:var(--ink); border-color:var(--brand); background:var(--tint);}
+.session-map li.in .n{ background:var(--brand); color:#fff;}
+.session-map li .pg{ margin-inline-start:auto; color:var(--faint); font-size:7.6pt; white-space:nowrap;}
+
+/* فهرست مطالب */
+.toc{ margin-bottom:6pt; break-inside:avoid; }
+.toc ol{ list-style:none; }
+.toc li{ display:flex; align-items:baseline; gap:6pt; font-size:9.4pt; line-height:2; }
+.toc li.lvl2{ font-size:8.7pt; color:var(--muted); margin-inline-start:16pt; line-height:1.85;}
+.toc .dots{ flex:1; border-bottom:1.2px dotted var(--line); transform:translateY(-3px);}
+.toc .pno{ font-weight:700; color:var(--brand-deep); min-width:14pt; text-align:center;}
+
+/* ============================================================= سربرگ مبحث (شناسنامهٔ فشرده) */
+.topic{ margin-top:10pt; }
+.topic-head{ break-inside:avoid; margin-bottom:8pt; }
+.topic-head__row{ display:flex; align-items:center; gap:9pt; border-bottom:2.2px solid var(--brand); padding-bottom:5pt;}
+.topic-num{
+  flex:0 0 auto; background:var(--brand-deep); color:#fff; border-radius:9px;
+  font-weight:700; font-size:9pt; line-height:1.55; text-align:center; padding:3pt 9pt;
+}
+.topic-num b{ display:block; font-size:15pt; line-height:1.25; }
+.topic-head h2{ font-size:var(--fs-h-topic); color:var(--brand-ink); line-height:1.6; font-weight:700;}
+.topic-head__pages{ margin-inline-start:auto; font-size:7.8pt; color:var(--faint); white-space:nowrap;}
+.topic-card{
+  margin-top:6pt; border:1px solid var(--line); border-radius:var(--r); background:#fcfefe;
+  padding:7pt 11pt 5pt; font-size:8.9pt; line-height:1.9;
+}
+.topic-card .why b{ color:var(--brand); }
+.topic-card__grid{ display:grid; grid-template-columns:1.25fr 1fr; gap:2pt 14pt; margin-top:4pt;}
+.topic-card h3{ font-size:8.6pt; color:var(--brand-deep); font-weight:700; margin-bottom:1pt;}
+.topic-card ul{ list-style:none; }
+.topic-card li::before{ content:"▸ "; color:var(--brand); font-weight:700;}
+.chips{ display:flex; flex-wrap:wrap; gap:3.5pt; margin-top:2pt;}
+.chip{
+  font-size:7.9pt; line-height:1.65; border:1px solid var(--line); border-radius:20px;
+  padding:0 7px; background:#fff; color:var(--ink);
+}
+.chip .en{ color:var(--accent); font-weight:600; }
+.chip--pre{ background:var(--tint-blue); border-color:#cfdff2; }
+.topic-card__foot{ margin-top:4pt; padding-top:3pt; border-top:1px dashed var(--line); color:var(--muted); font-size:8pt;}
+
+/* تیتر بخش */
+.section{
+  display:flex; align-items:baseline; gap:7pt; margin:11pt 0 5pt;
+  break-after:avoid; break-inside:avoid;
+}
+.section::before{ content:""; width:8pt; height:8pt; border-radius:2.5px; background:var(--brand); flex:0 0 auto; transform:translateY(1px) rotate(45deg);}
+.section h3{ font-size:var(--fs-h-section); color:var(--brand-ink); font-weight:700; line-height:1.6;}
+.section .sno{ color:var(--faint); font-size:9pt; font-weight:500;}
+
+/* ============================================================= کادرهای آموزشی */
+.callout{
+  margin:7pt 0; border-radius:var(--r); padding:7pt 11pt 5pt;
+  border:1.2px solid; border-inline-start-width:3.4px; break-inside:avoid;
+  font-size:9.6pt; line-height:1.92;
+}
+.callout__head{ display:flex; align-items:center; gap:6pt; font-weight:700; font-size:9.6pt; margin-bottom:2pt;}
+.callout__head svg{ flex:0 0 auto; }
+.callout__head .kind{ font-size:7.4pt; font-weight:700; border:1px solid currentColor; border-radius:20px; padding:0 7px; line-height:1.6;}
+.callout p{ text-align:justify; }
+.callout .srcrow{ margin-top:3pt; }
+.callout--key{ color:var(--ink); border-color:var(--c-key); background:var(--bg-key); }
+.callout--key .callout__head{ color:var(--c-key); }
+.callout--clinical{ border-color:var(--c-clinical); background:var(--bg-clinical); }
+.callout--clinical .callout__head{ color:var(--c-clinical); }
+.callout--warning{ border-color:var(--c-warning); background:var(--bg-warning); border-inline-start-style:double; border-inline-start-width:5px;}
+.callout--warning .callout__head{ color:var(--c-warning); }
+.callout--bridge{ border-color:var(--c-bridge); background:var(--bg-bridge); }
+.callout--bridge .callout__head{ color:var(--c-bridge); }
+.callout--conflict{ border-color:var(--c-conflict); background:var(--bg-conflict); border-style:dashed; border-inline-start-style:solid;}
+.callout--conflict .callout__head{ color:var(--c-conflict); }
+.callout--exam{ border-color:var(--c-exam); background:var(--bg-exam); }
+.callout--exam .callout__head{ color:var(--c-exam); }
+
+/* ============================================================= جدول */
+.tblwrap{ margin:8pt 0; }
+.tblwrap__cap{ display:flex; align-items:baseline; gap:7pt; margin-bottom:4pt; break-after:avoid;}
+.tblwrap__cap .tno{
+  background:var(--brand-deep); color:#fff; font-size:8pt; font-weight:700;
+  border-radius:5px; padding:0 7px; line-height:1.8; white-space:nowrap;
+}
+.tblwrap__cap .tt{ font-weight:700; font-size:10pt; color:var(--brand-ink);}
+.tblwrap__cap .src{ margin-inline-start:auto; }
+table.tbl{ width:100%; border-collapse:collapse; font-size:9.2pt; line-height:1.8; }
+table.tbl th{
+  background:var(--brand); color:#fff; font-weight:700; padding:4pt 7pt;
+  border:1px solid var(--brand); text-align:right; font-size:9.2pt;
+}
+table.tbl td{ border:1px solid var(--line); padding:3.5pt 7pt; vertical-align:top; }
+table.tbl tbody tr:nth-child(even){ background:#f6fafb; }
+table.tbl td.rowh{ font-weight:700; color:var(--brand-ink); background:var(--tint); white-space:nowrap;}
+table.tbl .hl{ font-weight:700; color:var(--c-conflict); }
+
+/* ============================================================= قاب تصویر */
+.fig{ margin:8pt 0; break-inside:avoid; }
+.fig__frame{ border:1px solid var(--line); border-radius:var(--r); overflow:hidden; background:#fff;}
+.fig img{ display:block; width:100%; height:auto; }
+.fig__cap{ padding:6pt 10pt 7pt; font-size:var(--fs-caption); line-height:1.85; border-top:1px solid var(--line-soft); background:#fcfefe;}
+.fig__cap .fno{
+  display:inline-block; background:var(--brand-deep); color:#fff; font-weight:700; font-size:7.8pt;
+  border-radius:5px; padding:0 7px; line-height:1.8; margin-inline-end:5pt; vertical-align:1px;
+}
+.fig__cap .ft{ font-weight:700; color:var(--brand-ink); font-size:9.2pt;}
+.fig__cap .fsrc{ color:var(--muted); font-size:7.8pt; }
+.fig__cap .fexpl{ margin-top:2pt; text-align:justify;}
+.fig__encap{
+  direction:ltr; text-align:left; font-family:"DejaVu Sans",sans-serif; font-style:italic;
+  color:var(--muted); font-size:7.9pt; line-height:1.6; margin-top:4pt;
+  border-top:1px dashed var(--line); padding-top:4pt;
+}
+.fig__encap::before{ content:"Original caption — "; font-style:normal; font-weight:700; font-size:7.2pt; color:var(--faint);}
+.fig__labels{ margin-top:5pt; display:flex; flex-wrap:wrap; gap:3pt; }
+.fig__labels .chip{ font-size:7.6pt; }
+/* چیدمان کنار متن: تصویر + متن لنگر در دو ستون */
+.figside{ display:grid; grid-template-columns:1fr 1fr; gap:11pt; margin:8pt 0; break-inside:avoid; align-items:start;}
+.figside .fig{ margin:0; }
+.figside__txt p.body{ margin-bottom:5pt; }
+.figside--wide{ grid-template-columns:1.25fr 1fr; }
+
+/* ============================================================= فرایند مرحله‌ای */
+.process{ margin:8pt 0; break-inside:avoid; }
+.process__title{ font-weight:700; color:var(--brand-ink); font-size:10pt; margin-bottom:5pt; display:flex; gap:7pt; align-items:baseline;}
+.process__title .pno{ background:var(--brand-deep); color:#fff; font-size:8pt; border-radius:5px; padding:0 7px; line-height:1.8;}
+.steps{ list-style:none; position:relative; margin-inline-start:11pt; }
+.steps::before{
+  content:""; position:absolute; top:8pt; bottom:8pt; inset-inline-start:0;
+  border-inline-start:2px solid var(--line);
+}
+.step{ position:relative; padding:0 0 7pt; padding-inline-start:20pt; font-size:9.6pt; line-height:1.9; break-inside:avoid;}
+.step:last-child{ padding-bottom:0; }
+.step .n{
+  position:absolute; inset-inline-start:-11pt; top:2pt; width:16.5pt; height:16.5pt; border-radius:50%;
+  background:var(--brand); color:#fff; font-weight:700; font-size:8.6pt; text-align:center; line-height:17.5pt;
+}
+.step b.st{ color:var(--brand-ink); }
+/* دو مسیر روبه‌رو (مثل آنتروگراد ↔ رتروگراد) */
+.dual{ margin:8pt 0; break-inside:avoid; }
+.dual__lanes{ display:grid; grid-template-columns:1fr 1fr; gap:9pt; }
+.lane{ border:1px solid var(--line); border-radius:var(--r); padding:7pt 10pt 4pt; background:#fcfefe;}
+.lane__head{ display:flex; align-items:center; gap:6pt; font-weight:700; font-size:9.8pt; margin-bottom:4pt;}
+.lane--fwd .lane__head{ color:var(--brand); }
+.lane--bwd .lane__head{ color:var(--accent); }
+.lane .steps::before{ border-color:var(--line); }
+.lane--bwd .step .n{ background:var(--accent); }
+.dual__rail{ text-align:center; color:var(--faint); font-size:8pt; margin-top:4pt;}
+
+/* ============================================================= نمودار درختی */
+.tree{ margin:8pt 0; break-inside:avoid; }
+.tree-svg{ width:100%; height:auto; }
+.tree-link{ fill:none; stroke:#b9cfda; stroke-width:1.6; }
+.tree-node rect{ fill:#fff; stroke:var(--brand); stroke-width:1.3; }
+.tree-node--root rect{ fill:var(--brand-deep); stroke:var(--brand-deep); }
+.tree-node--root .tree-label{ fill:#fff; }
+.tree-node--root .tree-note{ fill:#cfe6e9; }
+.tree-node--alert rect{ stroke:var(--c-conflict); stroke-dasharray:4 3; fill:var(--bg-conflict); }
+.tree-label{ font-family:"Vazirmatn"; font-size:12.5px; font-weight:700; fill:var(--brand-ink); text-anchor:middle; }
+.tree-note{ font-family:"Vazirmatn"; font-size:10.5px; fill:var(--muted); text-anchor:middle; }
+
+/* چک‌لیست خودآزمایی + جمع‌بندی */
+.checklist{ margin:8pt 0; break-inside:avoid; border:1.2px solid var(--brand); border-radius:var(--r); padding:8pt 12pt 6pt; background:var(--tint);}
+.checklist h3{ font-size:10.5pt; color:var(--brand-ink); margin-bottom:4pt; font-weight:700;}
+.checklist ul{ list-style:none; font-size:9.5pt; line-height:2.05;}
+.checklist li::before{ content:"☐  "; color:var(--brand); font-weight:700;}
+.summarybox{
+  margin:8pt 0; break-inside:avoid; border-radius:var(--r); padding:8pt 12pt 6pt;
+  background:linear-gradient(180deg,var(--tint),#fff); border:1.2px solid var(--brand);
+  font-size:9.7pt; line-height:1.95;
+}
+.summarybox h3{ font-size:10.5pt; color:var(--brand-ink); margin-bottom:3pt; font-weight:700;}
+.summarybox p{ text-align:justify; }
+
+/* کادر یادداشت تیم — فقط در نسخهٔ workbook */
+.teamnote{
+  margin:8pt 0; border:1.4px dashed #b9cfda; border-radius:var(--r); padding:7pt 11pt;
+  color:var(--muted); font-size:8.8pt; min-height:52pt; break-inside:avoid;
+}
+.teamnote .tn-t{ font-weight:700; font-size:8.6pt; }
+
+/* صفحه‌بندی */
+.pagebreak{ break-before:page; }
+.avoid-break{ break-inside:avoid; }
+.doc-end{ margin-top:14pt; border-top:1.6px solid var(--brand); padding-top:6pt; text-align:center; color:var(--muted); font-size:8.6pt;}
+.doc-end .en{ font-weight:700; letter-spacing:1px; color:var(--brand-deep);}
+
+/* راهنمای خواندن */
+.guide{ margin:4pt 0 6pt; }
+.guide h2{ font-size:11pt; color:var(--brand-deep); margin-bottom:4pt; font-weight:700;}
+.guide p{ font-size:9.2pt; line-height:1.95; text-align:justify; }
+.guide__grid{ display:grid; grid-template-columns:1fr 1fr; gap:4pt 8pt; margin-top:5pt;}
+.guide__item{
+  display:flex; gap:6pt; align-items:flex-start; font-size:8.6pt; line-height:1.75;
+  border:1px solid var(--line); border-inline-start-width:3px; border-radius:var(--r-sm); padding:4pt 8pt;
+}
+.guide__item svg{ margin-top:3pt; flex:0 0 auto; }
+.guide__item--key{ border-inline-start-color:var(--c-key); color:inherit } .guide__item--key svg{ color:var(--c-key) }
+.guide__item--clinical{ border-inline-start-color:var(--c-clinical) } .guide__item--clinical svg{ color:var(--c-clinical) }
+.guide__item--warning{ border-inline-start-color:var(--c-warning) } .guide__item--warning svg{ color:var(--c-warning) }
+.guide__item--bridge{ border-inline-start-color:var(--c-bridge) } .guide__item--bridge svg{ color:var(--c-bridge) }
+.guide__item--conflict{ border-inline-start-color:var(--c-conflict) } .guide__item--conflict svg{ color:var(--c-conflict) }
+.guide__item--exam{ border-inline-start-color:var(--c-exam) } .guide__item--exam svg{ color:var(--c-exam) }
+
+/* تصویر عمودی با کپشن کناری */
+.fig--sidecap .fig__frame{ display:grid; grid-template-columns:1.08fr 1fr; align-items:stretch; }
+.fig--sidecap img{ height:100%; object-fit:contain; background:#fff; }
+.fig--sidecap .fig__cap{ border-top:none; border-inline-start:1px solid var(--line-soft); }
