@@ -1,0 +1,125 @@
+"""تست‌های راند ۶ — کتابخانهٔ آیکون SVG، کادرهای معنایی گسترش‌یافته، قاب
+یکپارچهٔ جدول، نوار پیشرفت راست‌به‌چپِ چاپ‌امن و حس نسخهٔ نهایی."""
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "engine"))
+
+from humsyar.icons import CALLOUT_ICONS, ICONS, icon_svg
+from humsyar.model import CALLOUT_KINDS, load_session, validate
+from humsyar.planner import plan_session
+from humsyar.typeset import KIND_LABELS, Typesetter
+
+ROOT = Path(__file__).resolve().parents[1]
+PILOT = ROOT / "content" / "session01_pilot.yaml"
+CSS = (ROOT / "engine" / "themes" / "humsyar.css").read_text(encoding="utf-8")
+
+
+def _plan():
+    s = load_session(str(PILOT))
+    return s, plan_session(s, "final", ROOT)
+
+
+# ------------------------------------------------------------------ آیکون‌ها
+def test_icon_registry_integrity():
+    assert len(ICONS) >= 24
+    for name, (meaning, inner) in ICONS.items():
+        assert meaning.strip(), name           # هر آیکون معنای ثبت‌شده دارد
+        assert "<path" in inner or "<circle" in inner or "<rect" in inner
+        assert "http" not in inner            # بدون منبع خارجی
+    for kind, ic in CALLOUT_ICONS.items():
+        assert ic in ICONS, kind
+        svg = icon_svg(ic)
+        assert svg.startswith("<svg") and 'stroke="currentColor"' in svg
+    # شناسهٔ ناشناس هرگز خروجی خالی نمی‌دهد
+    assert icon_svg("no-such-icon").startswith("<svg")
+
+
+def test_callout_kinds_expanded_and_labeled():
+    for kind in ("mnemonic", "exception", "formula", "terminology", "unresolved"):
+        assert kind in CALLOUT_KINDS
+        assert kind in KIND_LABELS
+        assert kind in CALLOUT_ICONS
+        assert f"--c-{kind}:" in CSS and f".callout--{kind}" in CSS
+    # همهٔ گونه‌های مدل برچسب و آیکون دارند
+    for kind in CALLOUT_KINDS:
+        assert kind in KIND_LABELS, kind
+        assert kind in CALLOUT_ICONS, kind
+
+
+def test_new_kinds_validate_and_render(tmp_path):
+    import yaml
+    raw = yaml.safe_load(PILOT.read_text(encoding="utf-8"))
+    for i, kind in enumerate(("mnemonic", "exception", "formula", "terminology", "unresolved")):
+        raw["topics"][0]["blocks"].append({
+            "id": f"x-ck{i}", "type": "callout", "kind": kind,
+            "title": "عنوان آزمایشی", "text": "متن آزمایشی برای رندر گونهٔ تازه.",
+            "status": "needs_review",
+            "sources": [{"book": "جزوهٔ درس", "pages": "۱"}],
+        })
+    p = tmp_path / "kinds.yaml"
+    p.write_text(yaml.dump(raw, allow_unicode=True), encoding="utf-8")
+    s = load_session(str(p))
+    assert validate(s) == []
+    html = Typesetter(plan_session(s, "final", ROOT)).document("")
+    for kind in ("mnemonic", "exception", "formula", "terminology", "unresolved"):
+        assert f"callout--{kind}" in html
+    assert 'class="ic ic--mnemonic"' in html
+
+
+# ------------------------------------------------------------- قاب جدول
+def test_table_frame_single_owner_css():
+    assert "border:1pt solid #C4D6E4; border-radius:9pt" in CSS  # قاب واحد روی wrapper
+    assert "overflow:hidden" in CSS
+    # خط زیر سربرگ در همهٔ ستون‌ها هم‌وزن است (۲pt) — بدون پلهٔ ۲٫۲
+    assert "border-bottom:2.2pt" not in CSS
+    assert ".tbl th.th-ent" in CSS and "border-bottom:2pt solid var(--th-ent)" in CSS
+    # سایه‌زنی راه‌راه سراسری حذف شده؛ فقط سبک مرجع
+    assert "table.tbl tbody tr:nth-child(even){ background:" not in CSS
+    assert ".tbl--zebra tbody tr:nth-child(even) td" in CSS
+
+
+# --------------------------------------------------------- حس نسخهٔ نهایی
+def test_pilot_declared_final():
+    s, plan = _plan()
+    assert s.draft is False
+    assert s.version == "۱٫۰"
+    from humsyar.brand import load_brand
+    from humsyar.cover import cover_html
+    cover = cover_html(s, load_brand(ROOT), "")
+    assert "پایلوت موتور" not in cover  # نشان پیش‌نویس روی کاور نیست
+    col = Typesetter(plan).colophon()
+    assert "نسخهٔ نهایی" in col and "پیش‌نویس" not in col
+
+
+# ------------------------------------------------- راهنمای رنگ و نقطه‌ها
+def test_entity_legend_and_dots():
+    s, plan = _plan()
+    html = Typesetter(plan).document("")
+    assert "رنگ ثابت مفاهیم این جلسه" in html
+    assert "chip--ent" in html            # چیپ برچسب شکل با رنگ موجودیت
+    assert 'class="edot"' in html         # نقطهٔ رنگی در واژه‌نامه/چیپ‌ها
+    # راهنما فقط موجودیت‌های به‌کاررفته را نشان می‌دهد (نمونه: شوان هست)
+    guide = Typesetter(plan)._entity_legend()
+    assert "سلول شوان" in guide and "#059669" in guide
+
+
+# --------------------------------------------------- نوار پیشرفت در PDF واقعی
+def test_progress_bar_rtl_and_dark_in_built_pdf():
+    pdf = ROOT / "output" / "neuroanat_s01_pilot_final.pdf"
+    if not pdf.exists():
+        return  # در محیط بدون خروجی ساخته‌شده رد می‌شود
+    import pymupdf
+    doc = pymupdf.open(str(pdf))
+    page = doc[min(8, doc.page_count - 1)]
+    MM = 72 / 25.4
+    dark = []
+    for dr in page.get_drawings():
+        r = dr["rect"]
+        fill = dr.get("fill")
+        if fill and r.y0 > 286 * MM and r.width > 10 * MM and r.height < 3 * MM:
+            if sum(fill) < 1.2:  # پُری تیره (در سیاه‌وسفید نزدیک مشکی چاپ می‌شود)
+                dark.append(r)
+    assert dark, "پُری تیرهٔ نوار پیشرفت پیدا نشد"
+    # لنگر از راست: لبهٔ راست پُری تقریباً روی انتهای راست شیار (۱۵۴mm) است
+    assert abs(max(r.x1 for r in dark) - 154 * MM) < 2 * MM

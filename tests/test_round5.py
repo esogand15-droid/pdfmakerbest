@@ -106,41 +106,61 @@ def test_tldr_text_is_verbatim_sentence_of_its_section():
     tldrs = [b for b in s.all_blocks() if b.type == "tldr"]
     assert tldrs, "پایلوت باید دست‌کم یک TL;DR داشته باشد"
     for tb in tldrs:
-        assert tb.data.get("provisional") is True
-        assert tb.status == "needs_review"
+        assert "پیشنهاد" not in str(tb.data)  # راند ۶: بدون برچسب موقت؛ نسخهٔ نهایی
         sec = _section_of(s, tb.id)
         sents = [normalize_text(x) for p in _section_paragraphs(s, sec)
                  for x in _sentences(p.data["text"])]
         assert normalize_text(tb.data["text"]) in sents, tb.id
 
 
-def test_quick_check_items_are_cloze_of_verbatim_sentences():
-    s = load_session(str(PILOT))
-    qcs = [b for b in s.all_blocks() if b.type == "quick_check"]
-    assert qcs
-    for qb in qcs:
-        assert qb.data.get("provisional") is True
-        assert qb.status == "needs_review"
-        sec = _section_of(s, qb.id)
-        sents = [x for p in _section_paragraphs(s, sec) for x in _sentences(p.data["text"])]
-        for item in qb.data["items"]:
-            q, a = str(item["q"]), str(item["a"])
-            assert BLANK in q
-            # جای‌گذاری پاسخ (با نشانه‌گذاری خودش) در جای خالی باید عین جملهٔ
-            # اصلیِ متن شود — نرمال‌سازی، نشانه‌گذاری دو طرف را هم‌شکل می‌کند.
-            filled = normalize_text(q.replace(BLANK, a))
-            ok = any(filled == normalize_text(sent) for sent in sents)
-            assert ok, (qb.id, q[:60])
+def _synthetic_session(tmp_path):
+    import yaml
+    doc = {
+        "id": "syn_qc", "course": "درس آزمایشی", "session_number": 1, "session_total": 1,
+        "title": "جلسهٔ آزمایشی", "version": "۱٫۰",
+        "frame_theme": "none",
+        "topics": [{
+            "id": "t1", "number": 1, "title": "مبحث آزمایشی", "mother_pages": "۱",
+            "why": "برای آزمون موتور.", "objectives": ["بدانید."],
+            "prereq_required": [], "prereq_suggested": [], "key_terms": [],
+            "blocks": [
+                {"id": "s1", "type": "section", "title": "بخش یک"},
+                {"id": "p1", "type": "paragraph", "status": "approved",
+                 "sources": [{"book": "منبع", "pages": "۱"}],
+                 "text": "سلول عصبی از [[term:جسم سلولی|Cell body]] منشأ می‌گیرد و پیام را منتقل می‌کند."},
+                {"id": "qc1", "type": "quick_check", "status": "approved",
+                 "sources": [{"book": "منبع", "pages": "۱"}],
+                 "items": [{"q": "سلول عصبی از …… منشأ می‌گیرد و پیام را منتقل می‌کند.",
+                            "a": "جسم سلولی ([en:Cell body])"}]},
+            ],
+        }],
+    }
+    p = tmp_path / "syn.yaml"
+    p.write_text(yaml.dump(doc, allow_unicode=True), encoding="utf-8")
+    return load_session(str(p))
 
 
-def test_provisional_ribbon_and_answer_key_render():
-    s, plan = _plan()
+def test_quick_check_engine_cloze_and_answer_key(tmp_path):
+    """موتور خودآزمایی را پشتیبانی می‌کند (اختیاری)؛ در پایلوت نهایی استفاده نشده است."""
+    s = _synthetic_session(tmp_path)
+    assert validate(s) == []
+    qb = [b for b in s.all_blocks() if b.type == "quick_check"][0]
+    item = qb.data["items"][0]
+    sent = _sentences([b for b in s.all_blocks() if b.id == "p1"][0].data["text"])[0]
+    assert normalize_text(item["q"].replace(BLANK, item["a"])) == normalize_text(sent)
+    plan = plan_session(s, "final", ROOT)
     ts = Typesetter(plan)
     html = ts.document("")
-    assert html.count("پیشنهاد برای تأیید تیم علمی") >= 4  # ۲ TLDR + ۲ خودآزمایی
     assert "پاسخ‌نامهٔ خودآزمایی سریع" in html
-    assert "تپهٔ آکسونی" in html.split("پاسخ‌نامهٔ خودآزمایی سریع")[1]
-    assert len(ts._qc_items) == 4
+    assert ts._qc_items and ts._qc_items[0][1] == item["a"]
+
+
+def test_pilot_is_final_without_quickcheck_or_provisional_labels():
+    s, plan = _plan()
+    assert not [b for b in s.all_blocks() if b.type == "quick_check"]
+    html = Typesetter(plan).document("")
+    assert "پیشنهاد برای تأیید تیم علمی" not in html
+    assert "پاسخ‌نامهٔ خودآزمایی" not in html
 
 
 # ---------------------------------------------------------- مادهٔ پایانی
@@ -166,7 +186,7 @@ def test_colophon_from_session_data():
     c = Typesetter(plan).colophon()
     assert "شناسنامهٔ این نسخه" in c
     assert s.version in c
-    assert "پیش‌نویسِ نیازمند بازبینی تیم علمی" in c  # پایلوت needs_review است
+    assert "نسخهٔ نهایی" in c and "پیش‌نویس" not in c  # سند draft نیست
     assert "HumsYar" in c and "هامزیار" in c
 
 
@@ -225,4 +245,4 @@ def test_new_block_types_validate():
     s = load_session(str(PILOT))
     assert validate(s) == []
     types = {b.type for b in s.all_blocks()}
-    assert {"tldr", "quick_check"} <= types
+    assert "tldr" in types and "quick_check" not in types

@@ -4,7 +4,7 @@
  "edition": "final",
  "theme": "a",
  "pdf": "/home/user/pdfmakerbest/output/neuroanat_s01_pilot_final.pdf",
- "build_seconds": 22.9,
+ "build_seconds": 23.9,
  "toc_pages_found": {
   "s01-t04": 3,
   "s01t4-s1": 3,
@@ -13,10 +13,10 @@
   "s01-t06": 7,
   "s01t6-s1": 7,
   "s01t6-s2": 9,
-  "s01t6-s3": 11,
+  "s01t6-s3": 10,
   "s01t6-s4": 11,
-  "s01t6-s5": 12,
-  "s01t6-s6": 14
+  "s01t6-s5": 11,
+  "s01t6-s6": 13
  },
  "toc_links": 11,
  "planner_decisions": [
@@ -34,13 +34,11 @@
   "s01t6-f7: چیدمان تصویر «side» — درخواست صریح در داده؛ عرض چاپ ≈64mm، ارتفاع تصویر ≈102mm، وضوح مؤثر ≈186 DPI",
   "s01t6-f8: چیدمان تصویر «full» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.86؛ عرض چاپ ≈84mm، ارتفاع تصویر ≈53mm، وضوح مؤثر ≈135 DPI",
   "s01t6-f9: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «summary» و بالاترین امتیاز 0.83؛ رقیب بعدی: full با 0.70؛ عرض چاپ ≈80mm، ارتفاع تصویر ≈118mm، وضوح مؤثر ≈349 DPI",
-  "[بسته‌بندی] s01t4-tb1: جدول در باقیماندهٔ صفحه جا نشد و کامل به صفحهٔ بعد منتقل شد (Keep Together؛ تقسیم نشد)",
+  "[بسته‌بندی] s01t4-f1: بلوک «s01t4-p4» از پنجرهٔ بعدی جلو کشیده شد تا جای خالی انتهای صفحه پر شود (همان بخش، بدون ارجاع پیش‌رو به شکل)",
   "[بسته‌بندی] s01t6-tb1: جدول در باقیماندهٔ صفحه جا نشد و کامل به صفحهٔ بعد منتقل شد (Keep Together؛ تقسیم نشد)",
-  "[بسته‌بندی] s01t6-f4: تصویر برای جا شدن در صفحهٔ جاری تا عرض 33٪ کوچک شد (خوانایی حفظ شده)",
-  "[بسته‌بندی] s01t6-tb2: جدول در باقیماندهٔ صفحه جا نشد و کامل به صفحهٔ بعد منتقل شد (Keep Together؛ تقسیم نشد)",
-  "[بسته‌بندی] s01t6-f7: بلوک «s01t6-p11» از پنجرهٔ بعدی جلو کشیده شد تا جای خالی انتهای صفحه پر شود (همان بخش، بدون ارجاع پیش‌رو به شکل)",
-  "[بسته‌بندی] s01t6-f7: بلوک «s01t6-p12» از پنجرهٔ بعدی جلو کشیده شد تا جای خالی انتهای صفحه پر شود (همان بخش، بدون ارجاع پیش‌رو به شکل)",
-  "[بسته‌بندی] شبیه‌سازی بسته‌بندی: ≈13 صفحهٔ بدنه"
+  "[بسته‌بندی] s01t6-f3: تصویر برای جا شدن در صفحهٔ جاری تا عرض 57٪ کوچک شد (خوانایی حفظ شده)",
+  "[بسته‌بندی] s01t6-f9: تصویر کپشن‌کناری برای جا شدن در صفحهٔ جاری کوچک شد",
+  "[بسته‌بندی] شبیه‌سازی بسته‌بندی: ≈12 صفحهٔ بدنه"
  ],
  "planner_warnings": [
   "s01t4-f1: پرچم کیفی تصویر از استخراج: وضوح مؤثر پایین در جزوهٔ مادر (حدود ۹۰ DPI)",
@@ -61,19 +59,17 @@
     "s01t4-p2",
     "s01t4-p3",
     "s01t4-f1",
-    "s01t4-p4",
-    "s01t4-qc1"
+    "s01t4-p4"
    ],
    "counts": {
     "section": 1,
     "tldr": 1,
     "paragraph": 4,
-    "figure": 1,
-    "quick_check": 1
+    "figure": 1
    },
    "text_chars": 1362,
    "numeric_tokens": 0,
-   "en_tokens": 35,
+   "en_tokens": 29,
    "figures": [
     {
      "id": "s01t4-f1",
@@ -191,16 +187,14 @@
     "s01t6-p2",
     "s01t6-f1",
     "s01t6-f2",
-    "s01t6-tb1",
-    "s01t6-qc1"
+    "s01t6-tb1"
    ],
    "counts": {
     "section": 1,
     "tldr": 1,
     "paragraph": 2,
     "figure": 2,
-    "table": 1,
-    "quick_check": 1
+    "table": 1
    },
    "text_chars": 623,
    "numeric_tokens": 7,
@@ -838,29 +832,29 @@
    "figures": 0,
    "process_tree": 0,
    "callouts": 0,
-   "height": 130.8,
-   "density": "low",
-   "signature": "TFalseFFalsePFalseCFalseDlow"
+   "height": 152.9,
+   "density": "mid",
+   "signature": "TFalseFFalsePFalseCFalseDmid"
   },
   {
    "page": 2,
-   "tables": 0,
-   "figures": 1,
-   "process_tree": 0,
-   "callouts": 0,
-   "height": 256.9,
-   "density": "high",
-   "signature": "TFalseFTruePFalseCFalseDhigh"
-  },
-  {
-   "page": 3,
    "tables": 1,
    "figures": 1,
    "process_tree": 0,
    "callouts": 0,
-   "height": 230.1,
+   "height": 252.1,
    "density": "high",
    "signature": "TTrueFTruePFalseCFalseDhigh"
+  },
+  {
+   "page": 3,
+   "tables": 0,
+   "figures": 1,
+   "process_tree": 0,
+   "callouts": 0,
+   "height": 148.7,
+   "density": "mid",
+   "signature": "TFalseFTruePFalseCFalseDmid"
   },
   {
    "page": 4,
@@ -868,7 +862,7 @@
    "figures": 0,
    "process_tree": 1,
    "callouts": 1,
-   "height": 249.8,
+   "height": 252.1,
    "density": "high",
    "signature": "TTrueFFalsePTrueCFalseDhigh"
   },
@@ -878,7 +872,7 @@
    "figures": 0,
    "process_tree": 0,
    "callouts": 1,
-   "height": 137.4,
+   "height": 129.2,
    "density": "low",
    "signature": "TFalseFFalsePFalseCFalseDlow"
   },
@@ -895,42 +889,42 @@
   {
    "page": 7,
    "tables": 1,
-   "figures": 0,
+   "figures": 1,
    "process_tree": 0,
    "callouts": 0,
-   "height": 238.8,
+   "height": 282.8,
    "density": "high",
-   "signature": "TTrueFFalsePFalseCFalseDhigh"
+   "signature": "TTrueFTruePFalseCFalseDhigh"
   },
   {
    "page": 8,
    "tables": 0,
-   "figures": 2,
+   "figures": 1,
    "process_tree": 0,
    "callouts": 1,
-   "height": 296.2,
+   "height": 252.3,
    "density": "high",
    "signature": "TFalseFTruePFalseCFalseDhigh"
   },
   {
    "page": 9,
-   "tables": 0,
-   "figures": 1,
-   "process_tree": 0,
-   "callouts": 0,
-   "height": 252.1,
-   "density": "high",
-   "signature": "TFalseFTruePFalseCFalseDhigh"
-  },
-  {
-   "page": 10,
    "tables": 1,
    "figures": 1,
    "process_tree": 0,
    "callouts": 0,
-   "height": 254.7,
+   "height": 246.5,
    "density": "high",
    "signature": "TTrueFTruePFalseCFalseDhigh"
+  },
+  {
+   "page": 10,
+   "tables": 0,
+   "figures": 2,
+   "process_tree": 0,
+   "callouts": 0,
+   "height": 257.8,
+   "density": "high",
+   "signature": "TFalseFTruePFalseCFalseDhigh"
   },
   {
    "page": 11,
@@ -938,27 +932,17 @@
    "figures": 2,
    "process_tree": 0,
    "callouts": 0,
-   "height": 238.8,
+   "height": 295.7,
    "density": "high",
    "signature": "TFalseFTruePFalseCFalseDhigh"
   },
   {
    "page": 12,
    "tables": 0,
-   "figures": 1,
-   "process_tree": 0,
-   "callouts": 0,
-   "height": 178.5,
-   "density": "mid",
-   "signature": "TFalseFTruePFalseCFalseDmid"
-  },
-  {
-   "page": 13,
-   "tables": 0,
    "figures": 0,
    "process_tree": 1,
    "callouts": 0,
-   "height": 149.0,
+   "height": 206.2,
    "density": "mid",
    "signature": "TFalseFFalsePTrueCFalseDmid"
   }
@@ -969,26 +953,26 @@
     "round": 1,
     "findings": [
      {
+      "page": 2,
+      "type": "overfull",
+      "severity": "info",
+      "detail": "تراکم نویسه 2683 در برابر میانهٔ 1802",
+      "cause": "تراکم بالای محتوای همان بخش",
+      "block": null
+     },
+     {
+      "page": 5,
+      "type": "low_fill",
+      "severity": "warn",
+      "detail": "پُری صفحه 61% است",
+      "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
+      "block": null
+     },
+     {
       "page": 10,
-      "type": "overfull",
-      "severity": "info",
-      "detail": "تراکم نویسه 2457 در برابر میانهٔ 1694",
-      "cause": "تراکم بالای محتوای همان بخش",
-      "block": null
-     },
-     {
-      "page": 11,
-      "type": "overfull",
-      "severity": "info",
-      "detail": "تراکم نویسه 2599 در برابر میانهٔ 1694",
-      "cause": "تراکم بالای محتوای همان بخش",
-      "block": null
-     },
-     {
-      "page": 11,
       "type": "monotony",
       "severity": "info",
-      "detail": "4 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
+      "detail": "5 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
       "cause": "تکرار قالب در بخش‌های هم‌ساختار",
       "block": null
      }
@@ -998,26 +982,26 @@
   ],
   "final_findings": [
    {
+    "page": 2,
+    "type": "overfull",
+    "severity": "info",
+    "detail": "تراکم نویسه 2683 در برابر میانهٔ 1802",
+    "cause": "تراکم بالای محتوای همان بخش",
+    "block": null
+   },
+   {
+    "page": 5,
+    "type": "low_fill",
+    "severity": "warn",
+    "detail": "پُری صفحه 61% است",
+    "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
+    "block": null
+   },
+   {
     "page": 10,
-    "type": "overfull",
-    "severity": "info",
-    "detail": "تراکم نویسه 2457 در برابر میانهٔ 1694",
-    "cause": "تراکم بالای محتوای همان بخش",
-    "block": null
-   },
-   {
-    "page": 11,
-    "type": "overfull",
-    "severity": "info",
-    "detail": "تراکم نویسه 2599 در برابر میانهٔ 1694",
-    "cause": "تراکم بالای محتوای همان بخش",
-    "block": null
-   },
-   {
-    "page": 11,
     "type": "monotony",
     "severity": "info",
-    "detail": "4 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
+    "detail": "5 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
     "cause": "تکرار قالب در بخش‌های هم‌ساختار",
     "block": null
    }
@@ -1027,10 +1011,11 @@
   "ok": true,
   "errors": [],
   "warnings": [
-   "صفحات با پُری زیر ۷۰٪ (نیازمند توضیح/اصلاح): [14]"
+   "صفحات با پُری زیر ۷۰٪ (نیازمند توضیح/اصلاح): [6]",
+   "بازرسی بصری: صفحهٔ 6 — پُری صفحه 61% است (علت محتمل: بلوک نشکن بعدی در باقیمانده جا نشده)"
   ],
-  "pages": 16,
-  "checked_fragments": 245,
+  "pages": 15,
+  "checked_fragments": 239,
   "figures_model": 11,
   "figures_pdf": 11,
   "fonts": [
@@ -1048,44 +1033,42 @@
   ],
   "min_font_pt": 7.2,
   "chars_per_page": [
-   264,
-   2006,
-   2434,
-   1751,
-   1646,
-   2250,
-   2454,
-   1398,
-   1951,
-   1814,
-   2577,
-   2719,
-   1331,
-   1248,
-   1768,
-   1831
+   235,
+   2323,
+   2805,
+   1509,
+   2012,
+   1859,
+   2020,
+   1399,
+   1921,
+   2610,
+   2407,
+   1941,
+   1890,
+   1733,
+   1956
   ],
-  "avg_chars_per_page": 1945,
+  "avg_chars_per_page": 2028,
   "cover_full_bleed": true,
   "fill_per_page": [
    null,
    null,
-   88,
    94,
-   84,
-   90,
    91,
-   79,
-   88,
-   95,
-   92,
-   93,
-   83,
-   64,
    99,
-   88
+   61,
+   71,
+   79,
+   96,
+   98,
+   100,
+   93,
+   84,
+   99,
+   73
   ],
-  "fill_avg_pct": 88,
+  "fill_avg_pct": 89,
   "tables_checked": 4,
   "tables_split_badly": [],
   "review_items": [
@@ -1094,9 +1077,8 @@
    "s01t4-p1 [needs_review] (paragraph)",
    "s01t4-p2 [needs_review] (paragraph)",
    "s01t4-p3 [needs_review] (paragraph)",
-   "s01t4-f1 [needs_review] (figure)",
    "s01t4-p4 [needs_review] (paragraph)",
-   "s01t4-qc1 [needs_review] (quick_check)",
+   "s01t4-f1 [needs_review] (figure)",
    "s01t4-s2 [needs_review] (section)",
    "s01t4-p5 [needs_review] (paragraph)",
    "s01t4-tb1 [needs_review] (table)",
@@ -1115,7 +1097,6 @@
    "s01t6-f1 [needs_review] (figure)",
    "s01t6-f2 [needs_review] (figure)",
    "s01t6-tb1 [needs_review] (table)",
-   "s01t6-qc1 [needs_review] (quick_check)",
    "s01t6-s2 [needs_review] (section)",
    "s01t6-p3 [needs_review] (paragraph)",
    "s01t6-f3 [needs_review] (figure)",
@@ -1134,10 +1115,10 @@
    "s01t6-s5 [needs_review] (section)",
    "s01t6-p10 [needs_review] (paragraph)",
    "s01t6-f6 [needs_review] (figure)",
-   "s01t6-p11 [needs_review] (paragraph)",
-   "s01t6-p12 [needs_review] (paragraph)",
    "s01t6-f7 [needs_review] (figure)",
+   "s01t6-p11 [needs_review] (paragraph)",
    "s01t6-f8 [needs_review] (figure)",
+   "s01t6-p12 [needs_review] (paragraph)",
    "s01t6-s6 [needs_review] (section)",
    "s01t6-f9 [needs_review] (figure)",
    "s01t6-sb1 [needs_review] (summary_box)",
@@ -1150,26 +1131,26 @@
   ],
   "inspection_findings": [
    {
+    "page": 2,
+    "type": "overfull",
+    "severity": "info",
+    "detail": "تراکم نویسه 2683 در برابر میانهٔ 1802",
+    "cause": "تراکم بالای محتوای همان بخش",
+    "block": null
+   },
+   {
+    "page": 5,
+    "type": "low_fill",
+    "severity": "warn",
+    "detail": "پُری صفحه 61% است",
+    "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
+    "block": null
+   },
+   {
     "page": 10,
-    "type": "overfull",
-    "severity": "info",
-    "detail": "تراکم نویسه 2457 در برابر میانهٔ 1694",
-    "cause": "تراکم بالای محتوای همان بخش",
-    "block": null
-   },
-   {
-    "page": 11,
-    "type": "overfull",
-    "severity": "info",
-    "detail": "تراکم نویسه 2599 در برابر میانهٔ 1694",
-    "cause": "تراکم بالای محتوای همان بخش",
-    "block": null
-   },
-   {
-    "page": 11,
     "type": "monotony",
     "severity": "info",
-    "detail": "4 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
+    "detail": "5 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
     "cause": "تکرار قالب در بخش‌های هم‌ساختار",
     "block": null
    }
@@ -1192,7 +1173,6 @@
   "/home/user/pdfmakerbest/output/pages/page_12.png",
   "/home/user/pdfmakerbest/output/pages/page_13.png",
   "/home/user/pdfmakerbest/output/pages/page_14.png",
-  "/home/user/pdfmakerbest/output/pages/page_15.png",
-  "/home/user/pdfmakerbest/output/pages/page_16.png"
+  "/home/user/pdfmakerbest/output/pages/page_15.png"
  ]
 }
