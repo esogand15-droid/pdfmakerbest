@@ -140,6 +140,7 @@ def pack(session: Session, plan: Plan, heights: dict[str, float],
     used = 0.0
     page = 1
     i = 0
+    page_of: dict[str, int] = {}
     deferred: dict[str, int] = {}
     while i < len(items):
         it = items[i]
@@ -149,6 +150,7 @@ def pack(session: Session, plan: Plan, heights: dict[str, float],
             chunks = it.block.data["_chunks"]
             if used > 0:
                 page += 1
+            page_of[it.bid] = page
             page += len(chunks) - 1
             used = _chunk_height(meta, chunks[-1], first=False)
             note(f"{it.bid}: جدول بلندتر از یک صفحه؛ تقسیم کنترل‌شده در {len(chunks)} قطعه "
@@ -161,6 +163,7 @@ def pack(session: Session, plan: Plan, heights: dict[str, float],
             need += min(items[i + 1].h, 14.0)
         residual = PAGE_H_MM - used
         if need <= residual or used == 0:
+            page_of[it.bid] = page
             used += it.h
             if used >= PAGE_H_MM:  # بلوکِ قابل‌شکست صفحه را پر کرد
                 used = max(0.0, used - PAGE_H_MM)
@@ -185,6 +188,7 @@ def pack(session: Session, plan: Plan, heights: dict[str, float],
                     b.data["_img_h_mm"] = round(target_img_h, 1)
                     note(f"{b.id}: تصویر برای جا شدن در صفحهٔ جاری تا عرض "
                          f"{b.data['_width_pct']}٪ کوچک شد (خوانایی حفظ شده)")
+                    page_of[it.bid] = page
                     used += residual  # صفحه عملاً پر شد
                     used, page = 0.0, page + 1
                     i += 1
@@ -202,6 +206,7 @@ def pack(session: Session, plan: Plan, heights: dict[str, float],
                     b.data["_width_pct"] = max(35, round(w_new / SIDECAP_COL_MM * 100))
                     b.data["_img_h_mm"] = round(residual - 3.0, 1)
                     note(f"{b.id}: تصویر کپشن‌کناری برای جا شدن در صفحهٔ جاری کوچک شد")
+                    page_of[it.bid] = page
                     used, page = 0.0, page + 1
                     i += 1
                     continue
@@ -245,8 +250,94 @@ def pack(session: Session, plan: Plan, heights: dict[str, float],
     for t in session.topics:
         t.blocks = order[t.id]
     session.closing = order["closing"]
+    plan.page_map = page_of
+    _diversify(session, plan, items, page_of, note)
     note(f"شبیه‌سازی بسته‌بندی: ≈{page} صفحهٔ بدنه")
     return logs
+
+
+def _page_signatures(items: list[_Item], page_of: dict[str, int]) -> list[dict]:
+    """امضای بصری هر صفحه از روی ترکیب بلوک‌ها: مبنای حافظهٔ چیدمان و تشخیص تکرار."""
+    pages: dict[int, dict] = {}
+    for it in items:
+        pg = page_of.get(it.bid)
+        if pg is None or it.block is None:
+            continue
+        sig = pages.setdefault(pg, {"page": pg, "tables": 0, "figures": 0,
+                                     "process_tree": 0, "callouts": 0, "height": 0.0,
+                                     "blocks": []})
+        sig["blocks"].append(it.bid)
+        sig["height"] += it.h
+        t = it.block.type
+        if t == "table":
+            sig["tables"] += 1
+        elif t == "figure":
+            sig["figures"] += 1
+        elif t in ("process", "dual_process", "tree"):
+            sig["process_tree"] += 1
+        elif t == "callout":
+            sig["callouts"] += 1
+    out = []
+    for pg in sorted(pages):
+        sig = pages[pg]
+        ratio = sig["height"] / PAGE_H_MM
+        sig["density"] = "low" if ratio < 0.55 else ("mid" if ratio < 0.8 else "high")
+        sig["signature"] = (f"T{sig['tables'] > 0}F{sig['figures'] > 0}"
+                            f"P{sig['process_tree'] > 0}C{sig['callouts'] >= 2}D{sig['density']}")
+        sig["height"] = round(sig["height"], 1)
+        out.append(sig)
+    return out
+
+
+def _diversify(session: Session, plan: Plan, items: list[_Item],
+               page_of: dict[str, int], note) -> None:
+    """کنترلر تنوع: اگر ≥۳ صفحهٔ متوالی امضای یکسان دارند و برای شکلی در صفحهٔ
+    میانی کاندید تقریباً هم‌امتیاز با چیدمان دیگر هست، همان تعویض می‌شود.
+    تنوع هرگز بر کیفیت غلبه نمی‌کند: اختلاف امتیاز باید ≤ اپسیلون کانفیگ باشد."""
+    sigs = _page_signatures(items, page_of)
+    plan.page_signatures = sigs
+    eps = float(plan.layout_cfg.get("preferences", {}).get("diversity_epsilon", 0.06))
+    by_bid = {b.id: b for b in session.all_blocks()}
+    swaps = 0
+    i = 0
+    while i + 2 < len(sigs) and swaps < 2:
+        run = [sigs[i]["signature"], sigs[i + 1]["signature"], sigs[i + 2]["signature"]]
+        if not (run[0] == run[1] == run[2]):
+            i += 1
+            continue
+        mid = sigs[i + 1]
+        swapped = False
+        for bid in mid["blocks"]:
+            b = by_bid.get(bid)
+            if b is None or b.type != "figure":
+                continue
+            cands = b.data.get("_candidates") or []
+            if len(cands) < 2:
+                continue
+            cur, alt = cands[0], cands[1]
+            if alt["layout"] == cur["layout"]:
+                continue
+            if cur["score"]["total"] - alt["score"]["total"] > eps:
+                continue
+            if abs(alt["img_h_mm"] - cur["img_h_mm"]) > 25:
+                continue  # رانش صفحه‌بندی محدود بماند؛ بازرسی بعدی هم هست
+            b.data["_layout"] = alt["layout"]
+            b.data["_width_pct"] = alt["width_pct"]
+            b.data["_img_h_mm"] = alt["img_h_mm"]
+            b.data["_eff_dpi"] = alt["eff_dpi"]
+            b.data["_candidates"] = [alt, cur] + cands[2:]
+            plan.layout_decisions.append({
+                "block": b.id, "kind": "diversity_swap", "page": mid["page"],
+                "from": cur["layout"], "to": alt["layout"],
+                "score_from": cur["score"]["total"], "score_to": alt["score"]["total"],
+                "run_signature": run[0]})
+            note(f"{b.id}: کنترل تنوع — سه صفحهٔ متوالی با امضای یکسان ({run[0]})؛ "
+                 f"چیدمان «{cur['layout']}» به «{alt['layout']}» عوض شد (اختلاف امتیاز "
+                 f"{cur['score']['total'] - alt['score']['total']:.2f} ≤ اپسیلون)")
+            swapped = True
+            swaps += 1
+            break
+        i += 1 if not swapped else 3
 
 
 # ————————————————————————————————————————————————————————————————

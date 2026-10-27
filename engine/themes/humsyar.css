@@ -324,3 +324,15 @@ table.tbl .hl{ font-weight:700; color:var(--c-conflict); }
 .figside__grid{ display:grid; grid-template-columns:1fr 1fr; gap:11pt; align-items:start; }
 .fig__cap--below{ border:1.2px solid var(--line); border-radius:var(--r); padding:6pt 9pt 5pt; margin-top:5pt; background:#fff; }
 .figside .fig{ margin:0; }
+
+/* ── راند ۴: بازهٔ بخش و ریتم تنفسی + نوار افقی فرایند ─────────────────── */
+.secpan{ }
+.secpan--airy p.body{ margin-bottom:8.5pt; line-height:2.02; }
+.process--strip .ssteps{ display:flex; gap:6pt; list-style:none; margin-top:5pt; }
+.process--strip .sstep{ position:relative; flex:1; border:1.1px solid var(--line); border-top:2.6px solid var(--teal);
+  border-radius:var(--r-sm); padding:7pt 8pt 5pt; font-size:9.2pt; line-height:1.75; background:var(--soft); break-inside:avoid; }
+.process--strip .sstep .n{ position:absolute; top:-8pt; inset-inline-start:7pt; width:15pt; height:15pt;
+  border-radius:50%; background:var(--brand-deep); color:#fff; font-size:8.6pt; font-weight:700;
+  display:flex; align-items:center; justify-content:center; }
+.process--strip .sstep .st{ display:block; margin-top:5pt; color:var(--brand-ink); }
+.process--strip .sstep span{ display:block; color:var(--ink); }

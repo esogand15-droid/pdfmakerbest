@@ -15,7 +15,9 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from .analyze import analyze_session, archetype_of_block
 from .model import Block, Session, Topic
+from .scoring import load_layout_config, score_figure_candidate, score_process_variant
 
 PLAIN_REPLACEMENTS = None  # پر می‌شود پایین‌تر (از وابستگی چرخه‌ای جلوگیری)
 
@@ -57,6 +59,12 @@ class Plan:
     labels: dict[str, str] = field(default_factory=dict)
     # سرفصل‌ها برای فهرست مطالب: (سطح، متن، شناسهٔ لنگر)
     headings: list[tuple[int, str, str]] = field(default_factory=list)
+    # راند ۴: تحلیل معنایی بخش‌ها + تصمیم‌های ساختاریافتهٔ چیدمان (حافظهٔ طراحی)
+    analysis: list = field(default_factory=list)
+    layout_decisions: list[dict] = field(default_factory=list)
+    page_map: dict[str, int] = field(default_factory=dict)   # از شبیه‌سازی بسته‌بندی پر می‌شود
+    page_signatures: list = field(default_factory=list)      # امضای بصری هر صفحه (حافظهٔ چیدمان)
+    layout_cfg: dict = field(default_factory=dict)
 
     def log(self, msg: str) -> None:
         self.decisions.append(msg)
@@ -75,11 +83,16 @@ def _image_size(path: Path) -> tuple[int, int] | None:
 
 
 def plan_session(session: Session, edition: str,
-                 assets_root: Path) -> Plan:
+                 assets_root: Path, layout_cfg: dict | None = None) -> Plan:
     plan = Plan(session=session, edition=edition)
+    plan.layout_cfg = layout_cfg if layout_cfg is not None else load_layout_config(assets_root)
+    # تحلیل معنایی پیش از هر تصمیم چیدمان (Content-First)
+    plan.analysis = analyze_session(session)
+    cfg = plan.layout_cfg
 
     def process_blocks(blocks: list[Block], topic_no: int | None, plan: Plan) -> list[Block]:
         counters = {"section": 0, "table": 0, "figure": 0, "process": 0}
+        ctx: dict = {"prev_fig_layout": None, "prev_variant": None}
         kept: list[Block] = []
         for b in blocks:
             if b.type == "team_note" and edition == "final":
@@ -91,16 +104,24 @@ def plan_session(session: Session, edition: str,
                 lbl = f"{prefix}-{fa_num(counters['section'])}"
                 plan.labels[b.id] = lbl
                 plan.headings.append((2, plain_title(str(b.data['title'])), b.id))
+                # ریتم تنفسی برای بخش توضیحیِ آرام (ترجیح طراحی، نه تزئین)
+                if (archetype_of_block(plan.analysis, b.id) == "explanatory"
+                        and cfg["preferences"].get("prefer_calm_text_pages", True)):
+                    b.data["_rhythm"] = "airy"
+                    plan.log(f"{b.id}: بخش توضیحی بلند؛ ریتم صفحه «آرام/تنفسی» انتخاب شد")
             elif b.type == "table":
                 counters["table"] += 1
                 plan.labels[b.id] = f"جدول {prefix}-{fa_num(counters['table'])}"
+                _plan_table_columns(b, plan)
             elif b.type in ("process", "dual_process"):
                 counters["process"] += 1
                 plan.labels[b.id] = f"مسیر {prefix}-{fa_num(counters['process'])}"
+                if b.type == "process":
+                    _plan_process_variant(b, plan, ctx)
             elif b.type == "figure":
                 counters["figure"] += 1
                 plan.labels[b.id] = f"شکل {prefix}-{fa_num(counters['figure'])}"
-                _plan_figure(b, plan, assets_root)
+                _plan_figure(b, plan, assets_root, ctx)
             kept.append(b)
         return kept
 
@@ -118,12 +139,38 @@ def plan_session(session: Session, edition: str,
     return plan
 
 
-def _plan_figure(b: Block, plan: Plan, assets_root: Path) -> None:
-    """تصمیم چیدمان + اندازهٔ چاپ تصویر با سقف ارتفاع و کف خوانایی؛ دلیل ثبت می‌شود.
+def _size_for(layout: str, w: int, h: int, min_w: float) -> dict:
+    """اندازهٔ چاپ یک گونهٔ چیدمان (همان سقف‌ها و کف‌های سخت راند ۲/۳)."""
+    aspect_wh = w / h
+    h_over_w = h / w
+    honest_mm = w / (135 / 25.4)  # بزرگ‌نمایی صادقانه بر اساس وضوح بومی
+    if layout == "side":
+        img_h = SIDE_WIDTH_MM * h_over_w
+        width_pct = 100 if img_h <= 102 else max(45, round(102 / img_h * 100))
+        disp_mm = SIDE_WIDTH_MM * width_pct / 100
+    elif layout == "sidecap":
+        img_h = SIDECAP_COL_MM * h_over_w
+        width_pct = 100 if img_h <= MAX_H_SIDECAP else max(42, round(MAX_H_SIDECAP / img_h * 100))
+        disp_mm = SIDECAP_COL_MM * width_pct / 100
+    else:  # full
+        max_h = MAX_H_WIDE if aspect_wh >= 1.3 else MAX_H_PORTRAIT
+        width_mm = min(TEXT_WIDTH_MM, max_h * aspect_wh, DEFAULT_WIDTH_CAP_MM, honest_mm)
+        if min_w:
+            width_mm = max(width_mm, min(min_w, MAX_H_HARD * aspect_wh, TEXT_WIDTH_MM))
+        width_mm = max(width_mm, 52.0)
+        width_pct = round(width_mm / TEXT_WIDTH_MM * 100)
+        disp_mm = width_mm
+    return {"layout": layout, "width_pct": int(width_pct), "disp_mm": round(disp_mm, 1),
+            "img_h_mm": round(disp_mm * h_over_w, 1),
+            "eff_dpi": round(w / (disp_mm / 25.4))}
 
-    قواعد راند ۲: ارتفاع تصویر عریض ≤ ≈۳۲٪ و عمودی/مربعی ≤ ≈۴۲٪ ارتفاع مفید صفحه؛
-    عرض تک‌ستونه معمولاً ≤ ۷۵٪ مگر `min_width_mm` (کف خوانایی برچسب‌های داخل تصویر)
-    در داده آمده باشد. تصویر اصلی هرگز دستکاری نمی‌شود؛ فقط اندازهٔ چاپ تعیین می‌شود.
+
+def _plan_figure(b: Block, plan: Plan, assets_root: Path, ctx: dict) -> None:
+    """تصمیم چیدمان تصویر به‌روش کاندید + امتیاز (راند ۴).
+
+    فیلترهای سخت اول اعمال می‌شوند (درخواست صریح داده، نیاز side به متن لنگر،
+    کف خوانایی برچسب، سقف‌های ارتفاع در _size_for)؛ بعد کاندیدهای باقی‌مانده با
+    تابع امتیاز قابل‌تنظیم سنجیده می‌شوند و همهٔ امتیازها در حافظهٔ طراحی ثبت می‌گردند.
     """
     fpath = assets_root / str(b.data["file"])
     size = _image_size(fpath) if fpath.exists() else None
@@ -135,58 +182,119 @@ def _plan_figure(b: Block, plan: Plan, assets_root: Path) -> None:
         b.data["_layout"] = "full"
         return
     w, h = size
-    aspect_wh = w / h            # عرض/ارتفاع
+    aspect_wh = w / h
     h_over_w = h / w
-    portraitish = h_over_w >= 0.8  # عمودی یا مربعی
+    portraitish = h_over_w >= 0.8
 
+    # ——— فیلتر سخت: مجموعهٔ کاندیدهای مجاز ———
+    feasible: list[str] = []
+    forced = None
     if want == "side" and has_side_text:
-        layout, why = "side", "درخواست صریح در داده + متن لنگر موجود است"
+        forced = "side"
     elif want == "full":
-        layout, why = "full", "درخواست صریح در داده (سقف‌های اندازه همچنان اعمال می‌شوند)"
-    elif portraitish and has_side_text:
-        layout, why = "side", "تصویر عمودی/مربعی با متن لنگر؛ دو ستونه کنار متن"
-    elif portraitish:
-        layout, why = "sidecap", "تصویر عمودی/مربعی؛ کپشن در ستون کناری (پیش‌فرض راند ۲)"
-    else:
-        layout, why = "full", "تصویر عریض؛ تک‌ستونه با سقف ارتفاع"
+        forced = "full"
+    elif want == "sidecap" and h_over_w >= 0.7 and min_w <= SIDECAP_COL_MM:
+        forced = "sidecap"
     if want == "side" and not has_side_text:
-        plan.warn(f"{b.id}: چیدمان side خواسته شده ولی side_text نیست؛ به sidecap/full برگشت")
-        layout, why = ("sidecap", "نبود متن لنگر") if portraitish else ("full", "نبود متن لنگر")
-    if layout == "sidecap" and min_w > SIDECAP_COL_MM:
-        layout, why = "full", f"کف خوانایی برچسب ({min_w:.0f}mm) از ستون کناری بزرگ‌تر است"
-    b.data["_layout"] = layout
+        plan.warn(f"{b.id}: چیدمان side خواسته شده ولی side_text نیست؛ کاندیدها از نو ساخته شدند")
+    if forced:
+        feasible = [forced]
+    else:
+        feasible = ["full"]
+        if h_over_w >= 0.7 and min_w <= SIDECAP_COL_MM:
+            feasible.append("sidecap")
+        if has_side_text and min_w <= SIDE_WIDTH_MM:
+            feasible.append("side")
 
-    honest_mm = w / (135 / 25.4)  # بزرگ‌نمایی صادقانه بر اساس وضوح بومی
-    if layout == "side":
-        disp_mm = SIDE_WIDTH_MM
-        img_h = disp_mm * h_over_w
-        # تصویر خیلی بلند در ستون کناری کل صفحه را می‌بلعد؛ عرضش را کم می‌کنیم
-        b.data["_width_pct"] = 100 if img_h <= 102 else max(45, round(102 / img_h * 100))
-        disp_mm = SIDE_WIDTH_MM * b.data["_width_pct"] / 100
-    elif layout == "sidecap":
-        disp_mm = SIDECAP_COL_MM
-        img_h = disp_mm * h_over_w
-        b.data["_width_pct"] = 100 if img_h <= MAX_H_SIDECAP else max(42, round(MAX_H_SIDECAP / img_h * 100))
-        disp_mm = SIDECAP_COL_MM * b.data["_width_pct"] / 100
-    else:  # full
-        max_h = MAX_H_WIDE if aspect_wh >= 1.3 else MAX_H_PORTRAIT
-        width_mm = min(TEXT_WIDTH_MM, max_h * aspect_wh, DEFAULT_WIDTH_CAP_MM, honest_mm)
-        if min_w:
-            width_mm = max(width_mm, min(min_w, MAX_H_HARD * aspect_wh, TEXT_WIDTH_MM))
-        width_mm = max(width_mm, 52.0)
-        b.data["_width_pct"] = round(width_mm / TEXT_WIDTH_MM * 100)
-        disp_mm = width_mm
-    b.data["_img_h_mm"] = round(disp_mm * h_over_w, 1)
-    eff_dpi = w / (disp_mm / 25.4)
-    b.data["_eff_dpi"] = round(eff_dpi)
-    plan.log(f"{b.id}: چیدمان تصویر «{layout}» — {why}؛ عرض چاپ ≈{disp_mm:.0f}mm، "
-             f"ارتفاع تصویر ≈{b.data['_img_h_mm']:.0f}mm، وضوح مؤثر ≈{round(eff_dpi)} DPI")
-    if eff_dpi < MIN_FIG_DPI:
+    archetype = archetype_of_block(plan.analysis, b.id)
+    candidates = []
+    for lay in feasible:
+        cand = _size_for(lay, w, h, min_w)
+        cand["score"] = score_figure_candidate(
+            cand, archetype=archetype, aspect_wh=aspect_wh, h_over_w=h_over_w,
+            prev_layout=ctx.get("prev_fig_layout"), cfg=plan.layout_cfg)
+        cand["forced"] = bool(forced)
+        candidates.append(cand)
+    candidates.sort(key=lambda c: c["score"]["total"], reverse=True)
+    best = candidates[0]
+    layout = best["layout"]
+    b.data["_layout"] = layout
+    b.data["_width_pct"] = best["width_pct"]
+    b.data["_img_h_mm"] = best["img_h_mm"]
+    b.data["_eff_dpi"] = best["eff_dpi"]
+    b.data["_candidates"] = candidates
+    ctx["prev_fig_layout"] = layout
+
+    alt = (f"؛ رقیب بعدی: {candidates[1]['layout']} با {candidates[1]['score']['total']:.2f}"
+           if len(candidates) > 1 else "")
+    why = ("درخواست صریح در داده" if forced else
+           f"کهن‌الگوی بخش «{archetype}» و بالاترین امتیاز {best['score']['total']:.2f}{alt}")
+    plan.layout_decisions.append({
+        "block": b.id, "kind": "figure", "archetype": archetype, "chosen": layout,
+        "candidates": [{"layout": c["layout"], "width_pct": c["width_pct"],
+                        "img_h_mm": c["img_h_mm"], "score": c["score"]} for c in candidates],
+    })
+    plan.log(f"{b.id}: چیدمان تصویر «{layout}» — {why}؛ عرض چاپ ≈{best['disp_mm']:.0f}mm، "
+             f"ارتفاع تصویر ≈{best['img_h_mm']:.0f}mm، وضوح مؤثر ≈{best['eff_dpi']} DPI")
+    if best["eff_dpi"] < MIN_FIG_DPI:
         plan.warn(
-            f"{b.id}: وضوح مؤثر تصویر پایین است (≈{round(eff_dpi)} DPI در عرض {disp_mm:.0f}mm)؛ "
+            f"{b.id}: وضوح مؤثر تصویر پایین است (≈{best['eff_dpi']} DPI در عرض {best['disp_mm']:.0f}mm)؛ "
             "نیازمند بازبینی/جایگزینی انسانی — موتور تصویر را دستکاری نمی‌کند")
     for flag in b.data.get("quality_flags", []):
         plan.warn(f"{b.id}: پرچم کیفی تصویر از استخراج: {flag}")
+
+
+def _plan_process_variant(b: Block, plan: Plan, ctx: dict) -> None:
+    """گونهٔ نمایش فرایند: گام عمودی یا نوار افقی (فقط وقتی گام‌ها کوتاه و کم‌اند)."""
+    steps = b.data.get("steps", [])
+
+    def step_len(st) -> int:
+        if isinstance(st, dict):
+            return len(str(st.get("head", ""))) + len(str(st.get("text", "")))
+        return len(str(st))
+
+    strip_ok = 2 <= len(steps) <= 4 and all(step_len(st) <= 72 for st in steps)
+    cands = ["vertical"] + (["strip"] if strip_ok else [])
+    scored = []
+    for v in cands:
+        sc = score_process_variant(v, steps=len(steps),
+                                   prev_variant=ctx.get("prev_variant"), cfg=plan.layout_cfg)
+        scored.append({"variant": v, "score": sc})
+    scored.sort(key=lambda c: c["score"]["total"], reverse=True)
+    best = scored[0]
+    b.data["_variant"] = best["variant"]
+    ctx["prev_variant"] = best["variant"]
+    plan.layout_decisions.append({
+        "block": b.id, "kind": "process", "chosen": best["variant"], "candidates": scored})
+    if best["variant"] == "strip":
+        plan.log(f"{b.id}: فرایند {len(steps)}گامهٔ کوتاه؛ نمایش «نوار افقی» "
+                 f"(امتیاز {best['score']['total']:.2f}) به‌جای گام عمودی")
+
+
+def _plan_table_columns(b: Block, plan: Plan) -> None:
+    """راهبرد عرض ستون‌ها از آمار طول سلول‌ها (فقط وقتی نامتوازنی واقعی هست)."""
+    import math
+    if b.data.get("col_widths"):
+        return
+    headers = [str(h) for h in b.data.get("headers", [])]
+    rows = b.data.get("rows", [])
+    if len(headers) < 3 or not rows:
+        return
+    avgs = []
+    for ci in range(len(headers)):
+        lens = [len(headers[ci])] + [len(str(r[ci])) for r in rows if ci < len(r)]
+        avgs.append(sum(lens) / max(1, len(lens)))
+    if max(avgs) / max(1.0, min(avgs)) < 1.8:
+        return  # ستون‌ها هم‌وزن‌اند؛ عرض خودکار مرورگر بهتر است
+    raw = [math.sqrt(a) for a in avgs]
+    tot = sum(raw)
+    widths = [min(45, max(10, round(x / tot * 100))) for x in raw]
+    widths[widths.index(max(widths))] += 100 - sum(widths)
+    b.data["col_widths"] = widths
+    plan.layout_decisions.append({
+        "block": b.id, "kind": "table_columns", "chosen": "proportional",
+        "col_widths": widths, "avg_cell_chars": [round(a, 1) for a in avgs]})
+    plan.log(f"{b.id}: عرض ستون‌ها متناسب با طول محتوای سلول‌ها تنظیم شد: {widths}")
 
 
 def _plan_pairs(topic_blocks: list[Block], plan: Plan, topic_id: str) -> None:

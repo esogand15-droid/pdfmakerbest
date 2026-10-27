@@ -231,14 +231,22 @@ def build(content_path: str, *, edition: str = "final", theme: str = "a",
     ts_b = Typesetter(plan, show_sources=show_sources, assets_uri=assets_uri, brand=brand)
     _render_pdf(ts_b.document(css, theme), body_pdf, work, session,
                 margin=BODY_MARGIN, tag="body1")
-    # گذر بازخورد: اصلاح رانش شبیه‌سازی با شواهد PDF واقعی (حداکثر دو دور)
+    # حلقهٔ بازرسی بصری: Render → Inspect → Repair → Render Again (حداکثر دو دور)؛
+    # اصلاح رانش شبیه‌سازی (feedback) یکی از خانواده‌های اصلاح همین حلقه است.
+    from .inspect import inspect_body, repair_body
     from .packing import feedback_adjust
+    inspection_rounds: list[dict] = []
     for fb_round in (1, 2):
-        if not feedback_adjust(session, body_pdf, plan, heights):
+        findings = inspect_body(body_pdf, session, plan)
+        actions = repair_body(findings, session, plan, body_pdf)
+        actions += feedback_adjust(session, body_pdf, plan, heights)
+        inspection_rounds.append({"round": fb_round, "findings": findings, "repairs": actions})
+        if not actions:
             break
         ts_fb = Typesetter(plan, show_sources=show_sources, assets_uri=assets_uri, brand=brand)
         _render_pdf(ts_fb.document(css, theme), body_pdf, work, session,
                     margin=BODY_MARGIN, tag=f"body1fb{fb_round}")
+    inspection_final = inspect_body(body_pdf, session, plan)
     toc_pages = {k: v + 1 for k, v in _find_heading_pages(body_pdf, plan).items()}
 
     ts_c = Typesetter(plan, show_sources=show_sources, toc_pages=toc_pages,
@@ -275,6 +283,13 @@ def build(content_path: str, *, edition: str = "final", theme: str = "a",
         plan.log(f"[بازبینی فهرست] ناهمخوانی شمارهٔ صفحه در فهرست: {toc_mismatch}")
 
     qa = run_qa(session, pdf_path, control_facts)
+    # یافته‌های بازرسی بصری که خودکار اصلاح نشدند به QA می‌روند (بدنه +۱ = نهایی با کاور)
+    qa["inspection_findings"] = inspection_final
+    leftover = [f for f in inspection_final if f["severity"] == "warn"]
+    if leftover:
+        qa["warnings"] = list(qa.get("warnings", [])) + [
+            f"بازرسی بصری: صفحهٔ {f['page'] + 1} — {f['detail']} (علت محتمل: {f['cause']})"
+            for f in leftover]
     qa["toc_verified"] = not toc_mismatch
     if toc_mismatch:
         qa["warnings"] = list(qa.get("warnings", [])) + [
@@ -287,6 +302,11 @@ def build(content_path: str, *, edition: str = "final", theme: str = "a",
         "pdf": str(pdf_path), "build_seconds": round(time.time() - t0, 1),
         "toc_pages_found": toc_pages, "toc_links": toc_links,
         "planner_decisions": plan.decisions, "planner_warnings": plan.warnings,
+        "content_analysis": [p.to_dict() for p in plan.analysis],
+        "layout_decisions": plan.layout_decisions,
+        "page_signatures": [{k: v for k, v in s.items() if k != "blocks"}
+                             for s in plan.page_signatures],
+        "inspection": {"rounds": inspection_rounds, "final_findings": inspection_final},
         "qa": qa, "renders": [str(r) for r in renders],
     }
     (out / "build_report.json").write_text(

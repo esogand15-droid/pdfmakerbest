@@ -108,20 +108,42 @@ class Typesetter:
                 f'{self.reading_guide()}</div>')
 
     def render_blocks(self, blocks: list[Block]) -> str:
-        """رندر ترتیبی بلوک‌ها با پشتیبانی جفت‌تصویر (دو شکل هم‌ردیف)."""
+        """رندر ترتیبی بلوک‌ها در بازه‌های بخشی (secpan) با پشتیبانی جفت‌تصویر.
+
+        بازهٔ هر بخش یک wrapper می‌گیرد تا ریتم صفحه (مثلاً تنفسی برای بخش توضیحی)
+        در سطح بخش اعمال شود؛ شکست صفحه داخل بازه آزاد است و ترتیب عوض نمی‌شود.
+        """
+        groups: list[tuple[str, list[Block]]] = []
+        cur: list[Block] = []
+        rhythm = ""
+        for b in blocks:
+            if b.type == "section" and cur:
+                groups.append((rhythm, cur))
+                cur, rhythm = [], ""
+            if b.type == "section":
+                rhythm = str(b.data.get("_rhythm", ""))
+            cur.append(b)
+        if cur:
+            groups.append((rhythm, cur))
+
         out: list[str] = []
-        i = 0
-        while i < len(blocks):
-            b = blocks[i]
-            if b.data.get("_pair_first") and i + 1 < len(blocks) \
-                    and blocks[i + 1].id == b.data["_pair_first"]:
-                out.append(f'<div class="figpair" data-bid="{escape(b.id)}">'
-                           f'{self._figure_frame(b, with_bid=False)}'
-                           f'{self._figure_frame(blocks[i + 1], with_bid=False)}</div>')
-                i += 2
-                continue
-            out.append(self.block(b))
-            i += 1
+        for rhythm, grp in groups:
+            inner: list[str] = []
+            i = 0
+            while i < len(grp):
+                b = grp[i]
+                if b.data.get("_pair_first") and i + 1 < len(grp) \
+                        and grp[i + 1].id == b.data["_pair_first"]:
+                    sty = ' style="break-before:page"' if b.data.get("_break_before") else ""
+                    inner.append(f'<div class="figpair" data-bid="{escape(b.id)}"{sty}>'
+                                 f'{self._figure_frame(b, with_bid=False)}'
+                                 f'{self._figure_frame(grp[i + 1], with_bid=False)}</div>')
+                    i += 2
+                    continue
+                inner.append(self.block(b))
+                i += 1
+            cls = "secpan secpan--airy" if rhythm == "airy" else "secpan"
+            out.append(f'<div class="{cls}">{"".join(inner)}</div>')
         return "".join(out)
 
     def session_map(self) -> str:
@@ -222,7 +244,8 @@ class Typesetter:
 
     def b_section(self, b: Block) -> str:
         lbl = self.plan.labels.get(b.id, "")
-        return (f'<div class="section" id="{escape(b.id)}" data-bid="{escape(b.id)}">'
+        sty = ' style="break-before:page"' if b.data.get("_break_before") else ""
+        return (f'<div class="section" id="{escape(b.id)}" data-bid="{escape(b.id)}"{sty}>'
                 f'<h3>{inline(b.data["title"])}</h3><span class="sno">{escape(lbl)}</span></div>')
 
     def b_paragraph(self, b: Block) -> str:
@@ -306,8 +329,9 @@ class Typesetter:
         pct = d.get("_width_pct", 100)
         img_w = f' style="width:{pct}%"' if pct < 100 else ""
         cap = f'<figcaption class="fig__cap">{self._caption_inner(b)}</figcaption>' if caption else ""
+        sty = ' style="break-before:page"' if d.get("_break_before") and with_bid else ""
         return f"""
-<figure class="fig{sidecap}"{' data-bid="' + escape(b.id) + '"' if with_bid else ''}><div class="fig__frame">
+<figure class="fig{sidecap}"{' data-bid="' + escape(b.id) + '"' if with_bid else ''}{sty}><div class="fig__frame">
   <img src="{self.assets_uri}{escape(str(d.get("_opt_file", d["file"])))}" alt="{escape(str(d["title_fa"]))}"{img_w}>
   {cap}
 </div></figure>"""
@@ -315,7 +339,8 @@ class Typesetter:
     def b_figure(self, b: Block) -> str:
         if b.data.get("_layout") == "side" and b.data.get("side_text"):
             # کپشن زیر کل گرید تمام‌عرض می‌نشیند (نه زیر تصویر) تا ارتفاع بلوک باد نکند
-            return (f'<div class="figside" data-bid="{escape(b.id)}">'
+            sty = ' style="break-before:page"' if b.data.get("_break_before") else ""
+            return (f'<div class="figside" data-bid="{escape(b.id)}"{sty}>'
                     f'<div class="figside__grid">{self._figure_frame(b, with_bid=False, caption=False)}'
                     f'<div class="figside__txt"><p class="body">{inline(b.data["side_text"])}'
                     f'{src_chips(b.sources, self.show_sources)}</p></div></div>'
@@ -332,12 +357,25 @@ class Typesetter:
             items.append(f'<li class="step"><span class="n">{fa_num(i)}</span>{txt}</li>')
         return f'<ol class="steps">{"".join(items)}</ol>'
 
+    def _steps_strip(self, steps: list) -> str:
+        cells = []
+        for i, st in enumerate(steps, 1):
+            if isinstance(st, dict):
+                txt = (f'<b class="st">{inline(st.get("head", ""))}</b>'
+                       + (f'<span>{inline(st.get("text", ""))}</span>' if st.get("text") else ""))
+            else:
+                txt = inline(str(st))
+            cells.append(f'<li class="sstep"><span class="n">{fa_num(i)}</span>{txt}</li>')
+        return f'<ol class="ssteps">{"".join(cells)}</ol>'
+
     def b_process(self, b: Block) -> str:
+        strip = b.data.get("_variant") == "strip"
+        body = self._steps_strip(b.data["steps"]) if strip else self._steps(b.data["steps"])
         return f"""
-<div class="process" data-bid="{escape(b.id)}">
+<div class="process{' process--strip' if strip else ''}" data-bid="{escape(b.id)}">
   <div class="process__title"><span class="pno">{escape(self.plan.labels.get(b.id, "مسیر"))}</span>
   <span>{inline(b.data["title"])}</span>{src_chips(b.sources, self.show_sources)}</div>
-  {self._steps(b.data["steps"])}
+  {body}
 </div>"""
 
     def b_dual_process(self, b: Block) -> str:

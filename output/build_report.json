@@ -4,7 +4,7 @@
  "edition": "final",
  "theme": "a",
  "pdf": "/home/user/pdfmakerbest/output/neuroanat_s01_pilot_final.pdf",
- "build_seconds": 14.4,
+ "build_seconds": 13.5,
  "toc_pages_found": {
   "s01-t04": 3,
   "s01t4-s1": 3,
@@ -20,24 +20,26 @@
  },
  "toc_links": 11,
  "planner_decisions": [
-  "s01t4-f1: چیدمان تصویر «full» — تصویر عریض؛ تک‌ستونه با سقف ارتفاع؛ عرض چاپ ≈118mm، ارتفاع تصویر ≈88mm، وضوح مؤثر ≈133 DPI",
-  "s01t4-f2: چیدمان تصویر «full» — تصویر عریض؛ تک‌ستونه با سقف ارتفاع؛ عرض چاپ ≈136mm، ارتفاع تصویر ≈67mm، وضوح مؤثر ≈255 DPI",
-  "s01t6-f1: چیدمان تصویر «full» — تصویر عریض؛ تک‌ستونه با سقف ارتفاع؛ عرض چاپ ≈140mm، ارتفاع تصویر ≈57mm، وضوح مؤثر ≈250 DPI",
-  "s01t6-f2: چیدمان تصویر «sidecap» — تصویر عمودی/مربعی؛ کپشن در ستون کناری (پیش‌فرض راند ۲)؛ عرض چاپ ≈93mm، ارتفاع تصویر ≈118mm، وضوح مؤثر ≈183 DPI",
-  "s01t6-f3: چیدمان تصویر «full» — تصویر عریض؛ تک‌ستونه با سقف ارتفاع؛ عرض چاپ ≈136mm، ارتفاع تصویر ≈82mm، وضوح مؤثر ≈180 DPI",
-  "s01t6-f4: چیدمان تصویر «full» — تصویر عریض؛ تک‌ستونه با سقف ارتفاع؛ عرض چاپ ≈116mm، ارتفاع تصویر ≈68mm، وضوح مؤثر ≈135 DPI",
-  "s01t6-f5: چیدمان تصویر «sidecap» — تصویر عمودی/مربعی؛ کپشن در ستون کناری (پیش‌فرض راند ۲)؛ عرض چاپ ≈65mm، ارتفاع تصویر ≈118mm، وضوح مؤثر ≈258 DPI",
-  "s01t6-f6: چیدمان تصویر «sidecap» — تصویر عمودی/مربعی؛ کپشن در ستون کناری (پیش‌فرض راند ۲)؛ عرض چاپ ≈95mm، ارتفاع تصویر ≈77mm، وضوح مؤثر ≈205 DPI",
-  "s01t6-f7: چیدمان تصویر «side» — درخواست صریح در داده + متن لنگر موجود است؛ عرض چاپ ≈64mm، ارتفاع تصویر ≈102mm، وضوح مؤثر ≈186 DPI",
-  "s01t6-f8: چیدمان تصویر «full» — تصویر عریض؛ تک‌ستونه با سقف ارتفاع؛ عرض چاپ ≈84mm، ارتفاع تصویر ≈53mm، وضوح مؤثر ≈135 DPI",
-  "s01t6-f9: چیدمان تصویر «sidecap» — تصویر عمودی/مربعی؛ کپشن در ستون کناری (پیش‌فرض راند ۲)؛ عرض چاپ ≈79mm، ارتفاع تصویر ≈118mm، وضوح مؤثر ≈349 DPI",
+  "s01t4-f1: چیدمان تصویر «full» — کهن‌الگوی بخش «mixed» و بالاترین امتیاز 0.83؛ عرض چاپ ≈118mm، ارتفاع تصویر ≈88mm، وضوح مؤثر ≈133 DPI",
+  "s01t4-tb1: عرض ستون‌ها متناسب با طول محتوای سلول‌ها تنظیم شد: [25, 37, 38]",
+  "s01t4-f2: چیدمان تصویر «full» — کهن‌الگوی بخش «process» و بالاترین امتیاز 0.86؛ عرض چاپ ≈136mm، ارتفاع تصویر ≈67mm، وضوح مؤثر ≈255 DPI",
+  "s01t4-tb2: عرض ستون‌ها متناسب با طول محتوای سلول‌ها تنظیم شد: [23, 35, 42]",
+  "s01t6-f1: چیدمان تصویر «full» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.90؛ عرض چاپ ≈140mm، ارتفاع تصویر ≈57mm، وضوح مؤثر ≈250 DPI",
+  "s01t6-f2: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.81؛ رقیب بعدی: full با 0.72؛ عرض چاپ ≈93mm، ارتفاع تصویر ≈118mm، وضوح مؤثر ≈183 DPI",
+  "s01t6-tb1: عرض ستون‌ها متناسب با طول محتوای سلول‌ها تنظیم شد: [19, 21, 25, 35]",
+  "s01t6-f3: چیدمان تصویر «full» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.91؛ عرض چاپ ≈136mm، ارتفاع تصویر ≈82mm، وضوح مؤثر ≈180 DPI",
+  "s01t6-f4: چیدمان تصویر «full» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.83؛ عرض چاپ ≈116mm، ارتفاع تصویر ≈68mm، وضوح مؤثر ≈135 DPI",
+  "s01t6-f5: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.84؛ رقیب بعدی: full با 0.72؛ عرض چاپ ≈65mm، ارتفاع تصویر ≈118mm، وضوح مؤثر ≈258 DPI",
+  "s01t6-f6: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.84؛ رقیب بعدی: full با 0.78؛ عرض چاپ ≈95mm، ارتفاع تصویر ≈77mm، وضوح مؤثر ≈205 DPI",
+  "s01t6-f7: چیدمان تصویر «side» — درخواست صریح در داده؛ عرض چاپ ≈64mm، ارتفاع تصویر ≈102mm، وضوح مؤثر ≈186 DPI",
+  "s01t6-f8: چیدمان تصویر «full» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.86؛ عرض چاپ ≈84mm، ارتفاع تصویر ≈53mm، وضوح مؤثر ≈135 DPI",
+  "s01t6-f9: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «summary» و بالاترین امتیاز 0.83؛ رقیب بعدی: full با 0.70؛ عرض چاپ ≈80mm، ارتفاع تصویر ≈118mm، وضوح مؤثر ≈349 DPI",
   "[بسته‌بندی] s01t4-f1: بلوک «s01t4-p4» از پنجرهٔ بعدی جلو کشیده شد تا جای خالی انتهای صفحه پر شود (همان بخش، بدون ارجاع پیش‌رو به شکل)",
   "[بسته‌بندی] s01t4-tb2: جدول در باقیماندهٔ صفحه جا نشد و کامل به صفحهٔ بعد منتقل شد (Keep Together؛ تقسیم نشد)",
-  "[بسته‌بندی] s01t6-f4: بلوک «s01t6-p5» از پنجرهٔ بعدی جلو کشیده شد تا جای خالی انتهای صفحه پر شود (همان بخش، بدون ارجاع پیش‌رو به شکل)",
-  "[بسته‌بندی] s01t6-f5: تصویر کپشن‌کناری برای جا شدن در صفحهٔ جاری کوچک شد",
-  "[بسته‌بندی] s01t6-f7: بلوک «s01t6-p11» از پنجرهٔ بعدی جلو کشیده شد تا جای خالی انتهای صفحه پر شود (همان بخش، بدون ارجاع پیش‌رو به شکل)",
-  "[بسته‌بندی] شبیه‌سازی بسته‌بندی: ≈12 صفحهٔ بدنه",
-  "[بسته‌بندی] s01t6-f3: [بازخورد PDF واقعی] صفحهٔ قبل 106mm فضای خالی داشت؛ تصویر تا عرض 62٪ کوچک شد تا در همان صفحه جا شود"
+  "[بسته‌بندی] s01t6-f2: تصویر کپشن‌کناری برای جا شدن در صفحهٔ جاری کوچک شد",
+  "[بسته‌بندی] s01t6-f3: تصویر برای جا شدن در صفحهٔ جاری تا عرض 59٪ کوچک شد (خوانایی حفظ شده)",
+  "[بسته‌بندی] s01t6-f9: تصویر کپشن‌کناری برای جا شدن در صفحهٔ جاری کوچک شد",
+  "[بسته‌بندی] شبیه‌سازی بسته‌بندی: ≈11 صفحهٔ بدنه"
  ],
  "planner_warnings": [
   "s01t4-f1: پرچم کیفی تصویر از استخراج: وضوح مؤثر پایین در جزوهٔ مادر (حدود ۹۰ DPI)",
@@ -46,6 +48,936 @@
   "s01t6-f4: پرچم کیفی تصویر از استخراج: وضوح مؤثر پایین در جزوهٔ مادر (حدود ۹۰ DPI)",
   "s01t6-f8: پرچم کیفی تصویر از استخراج: وضوح مؤثر بسیار پایین در جزوهٔ مادر (حدود ۶۵ DPI) — اولویت جایگزینی با نسخهٔ باکیفیت‌تر"
  ],
+ "content_analysis": [
+  {
+   "topic": "s01-t04",
+   "section": "s01t4-s1",
+   "title": "آکسون و منشأ آن: تپهٔ آکسونی و قطعهٔ اولیه",
+   "blocks": [
+    "s01t4-s1",
+    "s01t4-p1",
+    "s01t4-p2",
+    "s01t4-p3",
+    "s01t4-f1",
+    "s01t4-p4"
+   ],
+   "counts": {
+    "section": 1,
+    "paragraph": 4,
+    "figure": 1
+   },
+   "text_chars": 1362,
+   "numeric_tokens": 0,
+   "en_tokens": 29,
+   "figures": [
+    {
+     "id": "s01t4-f1",
+     "labels": 7,
+     "has_side_text": false,
+     "explicit_layout": "auto"
+    }
+   ],
+   "tables": [],
+   "callout_kinds": [],
+   "has_process": false,
+   "has_tree": false,
+   "archetype": "mixed",
+   "complexity": 0.43,
+   "reasons": [
+    "ترکیب متنوع بلوک‌ها بدون محور غالب"
+   ]
+  },
+  {
+   "topic": "s01-t04",
+   "section": "s01t4-s2",
+   "title": "آکسوپلاسم و مقایسهٔ آکسون و دندریت",
+   "blocks": [
+    "s01t4-s2",
+    "s01t4-p5",
+    "s01t4-tb1"
+   ],
+   "counts": {
+    "section": 1,
+    "paragraph": 1,
+    "table": 1
+   },
+   "text_chars": 362,
+   "numeric_tokens": 0,
+   "en_tokens": 0,
+   "figures": [],
+   "tables": [
+    {
+     "id": "s01t4-tb1",
+     "rows": 7,
+     "cols": 3,
+     "row_header": true
+    }
+   ],
+   "callout_kinds": [],
+   "has_process": false,
+   "has_tree": false,
+   "archetype": "comparison",
+   "complexity": 0.13,
+   "reasons": [
+    "جدول مقایسه‌ای چندستونه با ردیف کافی"
+   ]
+  },
+  {
+   "topic": "s01-t04",
+   "section": "s01t4-s3",
+   "title": "انتقال آکسونی: وقتی آکسون خودش پروتئین نمی‌سازد",
+   "blocks": [
+    "s01t4-s3",
+    "s01t4-p6",
+    "s01t4-f2",
+    "s01t4-pr1",
+    "s01t4-tb2",
+    "s01t4-p7",
+    "s01t4-c1",
+    "s01t4-c2"
+   ],
+   "counts": {
+    "section": 1,
+    "paragraph": 2,
+    "figure": 1,
+    "dual_process": 1,
+    "table": 1,
+    "callout": 2
+   },
+   "text_chars": 1699,
+   "numeric_tokens": 5,
+   "en_tokens": 32,
+   "figures": [
+    {
+     "id": "s01t4-f2",
+     "labels": 6,
+     "has_side_text": false,
+     "explicit_layout": "auto"
+    }
+   ],
+   "tables": [
+    {
+     "id": "s01t4-tb2",
+     "rows": 3,
+     "cols": 3,
+     "row_header": true
+    }
+   ],
+   "callout_kinds": [
+    "conflict",
+    "clinical"
+   ],
+   "has_process": true,
+   "has_tree": false,
+   "archetype": "process",
+   "complexity": 0.63,
+   "reasons": [
+    "بلوک فرایند/مسیر مرحله‌ای در بخش هست"
+   ]
+  },
+  {
+   "topic": "s01-t06",
+   "section": "s01t6-s1",
+   "title": "شش سلول گلیال در یک نگاه: منشأ، محل، وظیفه",
+   "blocks": [
+    "s01t6-s1",
+    "s01t6-p1",
+    "s01t6-p2",
+    "s01t6-f1",
+    "s01t6-f2",
+    "s01t6-tb1"
+   ],
+   "counts": {
+    "section": 1,
+    "paragraph": 2,
+    "figure": 2,
+    "table": 1
+   },
+   "text_chars": 619,
+   "numeric_tokens": 7,
+   "en_tokens": 77,
+   "figures": [
+    {
+     "id": "s01t6-f1",
+     "labels": 6,
+     "has_side_text": false,
+     "explicit_layout": "auto"
+    },
+    {
+     "id": "s01t6-f2",
+     "labels": 6,
+     "has_side_text": false,
+     "explicit_layout": "auto"
+    }
+   ],
+   "tables": [
+    {
+     "id": "s01t6-tb1",
+     "rows": 7,
+     "cols": 4,
+     "row_header": true
+    }
+   ],
+   "callout_kinds": [],
+   "has_process": false,
+   "has_tree": false,
+   "archetype": "comparison",
+   "complexity": 0.49,
+   "reasons": [
+    "جدول مقایسه‌ای چندستونه با ردیف کافی"
+   ]
+  },
+  {
+   "topic": "s01-t06",
+   "section": "s01t6-s2",
+   "title": "آستروسیت: پرتعدادترین گلیال",
+   "blocks": [
+    "s01t6-s2",
+    "s01t6-p3",
+    "s01t6-f3",
+    "s01t6-p4",
+    "s01t6-c1",
+    "s01t6-f4",
+    "s01t6-p5"
+   ],
+   "counts": {
+    "section": 1,
+    "paragraph": 3,
+    "figure": 2,
+    "callout": 1
+   },
+   "text_chars": 1843,
+   "numeric_tokens": 0,
+   "en_tokens": 37,
+   "figures": [
+    {
+     "id": "s01t6-f3",
+     "labels": 3,
+     "has_side_text": false,
+     "explicit_layout": "auto"
+    },
+    {
+     "id": "s01t6-f4",
+     "labels": 3,
+     "has_side_text": false,
+     "explicit_layout": "auto"
+    }
+   ],
+   "tables": [],
+   "callout_kinds": [
+    "clinical"
+   ],
+   "has_process": false,
+   "has_tree": false,
+   "archetype": "figure_centric",
+   "complexity": 0.55,
+   "reasons": [
+    "2 شکل در برابر 1843 نویسه متن؛ ارائه شکل‌محور"
+   ]
+  },
+  {
+   "topic": "s01-t06",
+   "section": "s01t6-s3",
+   "title": "سلول‌های اپندیمال: فرش‌کننده‌های حفره‌های [en:CNS]",
+   "blocks": [
+    "s01t6-s3",
+    "s01t6-p6",
+    "s01t6-p7",
+    "s01t6-f5"
+   ],
+   "counts": {
+    "section": 1,
+    "paragraph": 2,
+    "figure": 1
+   },
+   "text_chars": 720,
+   "numeric_tokens": 2,
+   "en_tokens": 46,
+   "figures": [
+    {
+     "id": "s01t6-f5",
+     "labels": 3,
+     "has_side_text": false,
+     "explicit_layout": "auto"
+    }
+   ],
+   "tables": [],
+   "callout_kinds": [],
+   "has_process": false,
+   "has_tree": false,
+   "archetype": "figure_centric",
+   "complexity": 0.35,
+   "reasons": [
+    "1 شکل در برابر 720 نویسه متن؛ ارائه شکل‌محور"
+   ]
+  },
+  {
+   "topic": "s01-t06",
+   "section": "s01t6-s4",
+   "title": "میکروگلیا: پلیس ضدشورش [en:CNS]",
+   "blocks": [
+    "s01t6-s4",
+    "s01t6-p8",
+    "s01t6-tb2",
+    "s01t6-p9"
+   ],
+   "counts": {
+    "section": 1,
+    "paragraph": 2,
+    "table": 1
+   },
+   "text_chars": 783,
+   "numeric_tokens": 0,
+   "en_tokens": 6,
+   "figures": [],
+   "tables": [
+    {
+     "id": "s01t6-tb2",
+     "rows": 2,
+     "cols": 2,
+     "row_header": true
+    }
+   ],
+   "callout_kinds": [],
+   "has_process": false,
+   "has_tree": false,
+   "archetype": "mixed",
+   "complexity": 0.22,
+   "reasons": [
+    "ترکیب متنوع بلوک‌ها بدون محور غالب"
+   ]
+  },
+  {
+   "topic": "s01-t06",
+   "section": "s01t6-s5",
+   "title": "غلاف میلین: الیگودندروسیت در [en:CNS]، سلول شوان در [en:PNS]",
+   "blocks": [
+    "s01t6-s5",
+    "s01t6-p10",
+    "s01t6-f6",
+    "s01t6-f7",
+    "s01t6-p11",
+    "s01t6-f8",
+    "s01t6-p12"
+   ],
+   "counts": {
+    "section": 1,
+    "paragraph": 3,
+    "figure": 3
+   },
+   "text_chars": 1349,
+   "numeric_tokens": 4,
+   "en_tokens": 70,
+   "figures": [
+    {
+     "id": "s01t6-f6",
+     "labels": 3,
+     "has_side_text": false,
+     "explicit_layout": "auto"
+    },
+    {
+     "id": "s01t6-f7",
+     "labels": 4,
+     "has_side_text": true,
+     "explicit_layout": "side"
+    },
+    {
+     "id": "s01t6-f8",
+     "labels": 4,
+     "has_side_text": false,
+     "explicit_layout": "auto"
+    }
+   ],
+   "tables": [],
+   "callout_kinds": [],
+   "has_process": false,
+   "has_tree": false,
+   "archetype": "figure_centric",
+   "complexity": 0.56,
+   "reasons": [
+    "3 شکل در برابر 1349 نویسه متن؛ ارائه شکل‌محور"
+   ]
+  },
+  {
+   "topic": "s01-t06",
+   "section": "s01t6-s6",
+   "title": "بازگشت به نقشهٔ کل بدن: [en:CNS]، [en:PNS] و نخاع",
+   "blocks": [
+    "s01t6-s6",
+    "s01t6-f9",
+    "s01t6-sb1"
+   ],
+   "counts": {
+    "section": 1,
+    "figure": 1,
+    "summary_box": 1
+   },
+   "text_chars": 0,
+   "numeric_tokens": 3,
+   "en_tokens": 72,
+   "figures": [
+    {
+     "id": "s01t6-f9",
+     "labels": 4,
+     "has_side_text": false,
+     "explicit_layout": "auto"
+    }
+   ],
+   "tables": [],
+   "callout_kinds": [],
+   "has_process": false,
+   "has_tree": false,
+   "archetype": "summary",
+   "complexity": 0.27,
+   "reasons": [
+    "بخش حول جمع‌بندی می‌چرخد"
+   ]
+  },
+  {
+   "topic": "closing",
+   "section": "intro",
+   "title": "پیش‌درآمد مبحث",
+   "blocks": [
+    "s01-tree-glia",
+    "s01-checklist"
+   ],
+   "counts": {
+    "tree": 1,
+    "checklist": 1
+   },
+   "text_chars": 0,
+   "numeric_tokens": 3,
+   "en_tokens": 4,
+   "figures": [],
+   "tables": [],
+   "callout_kinds": [],
+   "has_process": false,
+   "has_tree": true,
+   "archetype": "classification",
+   "complexity": 0.12,
+   "reasons": [
+    "نمودار درختی/طبقه‌بندی در بخش هست"
+   ]
+  }
+ ],
+ "layout_decisions": [
+  {
+   "block": "s01t4-f1",
+   "kind": "figure",
+   "archetype": "mixed",
+   "chosen": "full",
+   "candidates": [
+    {
+     "layout": "full",
+     "width_pct": 65,
+     "img_h_mm": 88.1,
+     "score": {
+      "total": 0.8345,
+      "content_fit": 0.75,
+      "aspect_fit": 1.0,
+      "readability": 0.806,
+      "density": 0.633,
+      "diversity": 1.0,
+      "continuity": 0.7,
+      "print_safety": 1.0
+     }
+    }
+   ]
+  },
+  {
+   "block": "s01t4-tb1",
+   "kind": "table_columns",
+   "chosen": "proportional",
+   "col_widths": [
+    25,
+    37,
+    38
+   ],
+   "avg_cell_chars": [
+    7.9,
+    17.5,
+    19.2
+   ]
+  },
+  {
+   "block": "s01t4-f2",
+   "kind": "figure",
+   "archetype": "process",
+   "chosen": "full",
+   "candidates": [
+    {
+     "layout": "full",
+     "width_pct": 75,
+     "img_h_mm": 67.0,
+     "score": {
+      "total": 0.8586,
+      "content_fit": 0.8,
+      "aspect_fit": 1.0,
+      "readability": 1.0,
+      "density": 0.721,
+      "diversity": 0.615,
+      "continuity": 0.7,
+      "print_safety": 1.0
+     }
+    }
+   ]
+  },
+  {
+   "block": "s01t4-tb2",
+   "kind": "table_columns",
+   "chosen": "proportional",
+   "col_widths": [
+    23,
+    35,
+    42
+   ],
+   "avg_cell_chars": [
+    15.5,
+    35.5,
+    50.5
+   ]
+  },
+  {
+   "block": "s01t6-f1",
+   "kind": "figure",
+   "archetype": "comparison",
+   "chosen": "full",
+   "candidates": [
+    {
+     "layout": "full",
+     "width_pct": 77,
+     "img_h_mm": 56.9,
+     "score": {
+      "total": 0.9013,
+      "content_fit": 0.8,
+      "aspect_fit": 1.0,
+      "readability": 1.0,
+      "density": 0.763,
+      "diversity": 1.0,
+      "continuity": 0.7,
+      "print_safety": 1.0
+     }
+    }
+   ]
+  },
+  {
+   "block": "s01t6-f2",
+   "kind": "figure",
+   "archetype": "comparison",
+   "chosen": "sidecap",
+   "candidates": [
+    {
+     "layout": "sidecap",
+     "width_pct": 98,
+     "img_h_mm": 117.8,
+     "score": {
+      "total": 0.8125,
+      "content_fit": 0.65,
+      "aspect_fit": 1.0,
+      "readability": 0.885,
+      "density": 0.509,
+      "diversity": 1.0,
+      "continuity": 0.85,
+      "print_safety": 0.941
+     }
+    },
+    {
+     "layout": "full",
+     "width_pct": 49,
+     "img_h_mm": 113.4,
+     "score": {
+      "total": 0.7219,
+      "content_fit": 0.8,
+      "aspect_fit": 0.55,
+      "readability": 0.875,
+      "density": 0.527,
+      "diversity": 0.615,
+      "continuity": 0.7,
+      "print_safety": 0.955
+     }
+    }
+   ]
+  },
+  {
+   "block": "s01t6-tb1",
+   "kind": "table_columns",
+   "chosen": "proportional",
+   "col_widths": [
+    19,
+    21,
+    25,
+    35
+   ],
+   "avg_cell_chars": [
+    11.9,
+    15.0,
+    22.1,
+    42.2
+   ]
+  },
+  {
+   "block": "s01t6-f3",
+   "kind": "figure",
+   "archetype": "figure_centric",
+   "chosen": "full",
+   "candidates": [
+    {
+     "layout": "full",
+     "width_pct": 75,
+     "img_h_mm": 81.6,
+     "score": {
+      "total": 0.906,
+      "content_fit": 0.85,
+      "aspect_fit": 1.0,
+      "readability": 1.0,
+      "density": 0.66,
+      "diversity": 1.0,
+      "continuity": 0.7,
+      "print_safety": 1.0
+     }
+    }
+   ]
+  },
+  {
+   "block": "s01t6-f4",
+   "kind": "figure",
+   "archetype": "figure_centric",
+   "chosen": "full",
+   "candidates": [
+    {
+     "layout": "full",
+     "width_pct": 64,
+     "img_h_mm": 68.3,
+     "score": {
+      "total": 0.8346,
+      "content_fit": 0.85,
+      "aspect_fit": 1.0,
+      "readability": 0.808,
+      "density": 0.715,
+      "diversity": 0.615,
+      "continuity": 0.7,
+      "print_safety": 1.0
+     }
+    }
+   ]
+  },
+  {
+   "block": "s01t6-f5",
+   "kind": "figure",
+   "archetype": "figure_centric",
+   "chosen": "sidecap",
+   "candidates": [
+    {
+     "layout": "sidecap",
+     "width_pct": 69,
+     "img_h_mm": 118.0,
+     "score": {
+      "total": 0.8405,
+      "content_fit": 0.8,
+      "aspect_fit": 1.0,
+      "readability": 0.801,
+      "density": 0.508,
+      "diversity": 1.0,
+      "continuity": 0.85,
+      "print_safety": 0.94
+     }
+    },
+    {
+     "layout": "full",
+     "width_pct": 34,
+     "img_h_mm": 113.4,
+     "score": {
+      "total": 0.7206,
+      "content_fit": 0.85,
+      "aspect_fit": 0.55,
+      "readability": 0.793,
+      "density": 0.527,
+      "diversity": 0.615,
+      "continuity": 0.7,
+      "print_safety": 0.955
+     }
+    }
+   ]
+  },
+  {
+   "block": "s01t6-f6",
+   "kind": "figure",
+   "archetype": "figure_centric",
+   "chosen": "sidecap",
+   "candidates": [
+    {
+     "layout": "sidecap",
+     "width_pct": 100,
+     "img_h_mm": 77.2,
+     "score": {
+      "total": 0.84,
+      "content_fit": 0.8,
+      "aspect_fit": 1.0,
+      "readability": 0.891,
+      "density": 0.678,
+      "diversity": 0.615,
+      "continuity": 0.85,
+      "print_safety": 1.0
+     }
+    },
+    {
+     "layout": "full",
+     "width_pct": 75,
+     "img_h_mm": 111.5,
+     "score": {
+      "total": 0.7762,
+      "content_fit": 0.85,
+      "aspect_fit": 0.55,
+      "readability": 0.873,
+      "density": 0.535,
+      "diversity": 1.0,
+      "continuity": 0.7,
+      "print_safety": 0.962
+     }
+    }
+   ]
+  },
+  {
+   "block": "s01t6-f7",
+   "kind": "figure",
+   "archetype": "figure_centric",
+   "chosen": "side",
+   "candidates": [
+    {
+     "layout": "side",
+     "width_pct": 74,
+     "img_h_mm": 101.9,
+     "score": {
+      "total": 0.8164,
+      "content_fit": 0.7,
+      "aspect_fit": 0.95,
+      "readability": 0.796,
+      "density": 0.575,
+      "diversity": 1.0,
+      "continuity": 1.0,
+      "print_safety": 0.994
+     }
+    }
+   ]
+  },
+  {
+   "block": "s01t6-f8",
+   "kind": "figure",
+   "archetype": "figure_centric",
+   "chosen": "full",
+   "candidates": [
+    {
+     "layout": "full",
+     "width_pct": 46,
+     "img_h_mm": 53.1,
+     "score": {
+      "total": 0.8597,
+      "content_fit": 0.85,
+      "aspect_fit": 1.0,
+      "readability": 0.709,
+      "density": 0.779,
+      "diversity": 1.0,
+      "continuity": 0.7,
+      "print_safety": 1.0
+     }
+    }
+   ]
+  },
+  {
+   "block": "s01t6-f9",
+   "kind": "figure",
+   "archetype": "summary",
+   "chosen": "sidecap",
+   "candidates": [
+    {
+     "layout": "sidecap",
+     "width_pct": 84,
+     "img_h_mm": 118.3,
+     "score": {
+      "total": 0.8341,
+      "content_fit": 0.75,
+      "aspect_fit": 1.0,
+      "readability": 0.845,
+      "density": 0.507,
+      "diversity": 1.0,
+      "continuity": 0.85,
+      "print_safety": 0.939
+     }
+    },
+    {
+     "layout": "full",
+     "width_pct": 42,
+     "img_h_mm": 113.4,
+     "score": {
+      "total": 0.6987,
+      "content_fit": 0.75,
+      "aspect_fit": 0.55,
+      "readability": 0.834,
+      "density": 0.527,
+      "diversity": 0.615,
+      "continuity": 0.7,
+      "print_safety": 0.955
+     }
+    }
+   ]
+  }
+ ],
+ "page_signatures": [
+  {
+   "page": 1,
+   "tables": 0,
+   "figures": 0,
+   "process_tree": 0,
+   "callouts": 0,
+   "height": 112.5,
+   "density": "low",
+   "signature": "TFalseFFalsePFalseCFalseDlow"
+  },
+  {
+   "page": 2,
+   "tables": 1,
+   "figures": 1,
+   "process_tree": 0,
+   "callouts": 0,
+   "height": 249.8,
+   "density": "high",
+   "signature": "TTrueFTruePFalseCFalseDhigh"
+  },
+  {
+   "page": 3,
+   "tables": 0,
+   "figures": 1,
+   "process_tree": 1,
+   "callouts": 0,
+   "height": 238.3,
+   "density": "high",
+   "signature": "TFalseFTruePTrueCFalseDhigh"
+  },
+  {
+   "page": 4,
+   "tables": 1,
+   "figures": 0,
+   "process_tree": 0,
+   "callouts": 2,
+   "height": 171.0,
+   "density": "mid",
+   "signature": "TTrueFFalsePFalseCTrueDmid"
+  },
+  {
+   "page": 5,
+   "tables": 0,
+   "figures": 2,
+   "process_tree": 0,
+   "callouts": 0,
+   "height": 268.7,
+   "density": "high",
+   "signature": "TFalseFTruePFalseCFalseDhigh"
+  },
+  {
+   "page": 6,
+   "tables": 1,
+   "figures": 1,
+   "process_tree": 0,
+   "callouts": 0,
+   "height": 280.5,
+   "density": "high",
+   "signature": "TTrueFTruePFalseCFalseDhigh"
+  },
+  {
+   "page": 7,
+   "tables": 0,
+   "figures": 1,
+   "process_tree": 0,
+   "callouts": 1,
+   "height": 252.3,
+   "density": "high",
+   "signature": "TFalseFTruePFalseCFalseDhigh"
+  },
+  {
+   "page": 8,
+   "tables": 1,
+   "figures": 1,
+   "process_tree": 0,
+   "callouts": 0,
+   "height": 244.2,
+   "density": "high",
+   "signature": "TTrueFTruePFalseCFalseDhigh"
+  },
+  {
+   "page": 9,
+   "tables": 0,
+   "figures": 2,
+   "process_tree": 0,
+   "callouts": 0,
+   "height": 257.8,
+   "density": "high",
+   "signature": "TFalseFTruePFalseCFalseDhigh"
+  },
+  {
+   "page": 10,
+   "tables": 0,
+   "figures": 2,
+   "process_tree": 0,
+   "callouts": 0,
+   "height": 295.7,
+   "density": "high",
+   "signature": "TFalseFTruePFalseCFalseDhigh"
+  },
+  {
+   "page": 11,
+   "tables": 0,
+   "figures": 0,
+   "process_tree": 1,
+   "callouts": 0,
+   "height": 206.2,
+   "density": "mid",
+   "signature": "TFalseFFalsePTrueCFalseDmid"
+  }
+ ],
+ "inspection": {
+  "rounds": [
+   {
+    "round": 1,
+    "findings": [
+     {
+      "page": 5,
+      "type": "overfull",
+      "severity": "info",
+      "detail": "تراکم نویسه 2651 در برابر میانهٔ 1824",
+      "cause": "تراکم بالای محتوای همان بخش",
+      "block": null
+     },
+     {
+      "page": 9,
+      "type": "monotony",
+      "severity": "info",
+      "detail": "6 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
+      "cause": "تکرار قالب در بخش‌های هم‌ساختار",
+      "block": null
+     }
+    ],
+    "repairs": []
+   }
+  ],
+  "final_findings": [
+   {
+    "page": 5,
+    "type": "overfull",
+    "severity": "info",
+    "detail": "تراکم نویسه 2651 در برابر میانهٔ 1824",
+    "cause": "تراکم بالای محتوای همان بخش",
+    "block": null
+   },
+   {
+    "page": 9,
+    "type": "monotony",
+    "severity": "info",
+    "detail": "6 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
+    "cause": "تکرار قالب در بخش‌های هم‌ساختار",
+    "block": null
+   }
+  ]
+ },
  "qa": {
   "ok": true,
   "errors": [],
@@ -76,14 +1008,14 @@
    1906,
    2736,
    2051,
-   1891,
+   1887,
    2575,
    2373,
    1910,
    1856,
    1351
   ],
-  "avg_chars_per_page": 1981,
+  "avg_chars_per_page": 1980,
   "cover_full_bleed": true,
   "fill_per_page": [
    null,
@@ -92,15 +1024,15 @@
    91,
    87,
    96,
-   98,
-   96,
-   98,
-   91,
-   92,
+   97,
    95,
+   98,
+   99,
+   93,
+   84,
    83
   ],
-  "fill_avg_pct": 92,
+  "fill_avg_pct": 91,
   "tables_checked": 4,
   "tables_split_badly": [],
   "review_items": [
@@ -132,8 +1064,8 @@
    "s01t6-f3 [needs_review] (figure)",
    "s01t6-p4 [needs_review] (paragraph)",
    "s01t6-c1 [needs_review] (callout)",
-   "s01t6-p5 [needs_review] (paragraph)",
    "s01t6-f4 [needs_review] (figure)",
+   "s01t6-p5 [needs_review] (paragraph)",
    "s01t6-s3 [needs_review] (section)",
    "s01t6-p6 [needs_review] (paragraph)",
    "s01t6-p7 [needs_review] (paragraph)",
@@ -145,8 +1077,8 @@
    "s01t6-s5 [needs_review] (section)",
    "s01t6-p10 [needs_review] (paragraph)",
    "s01t6-f6 [needs_review] (figure)",
-   "s01t6-p11 [needs_review] (paragraph)",
    "s01t6-f7 [needs_review] (figure)",
+   "s01t6-p11 [needs_review] (paragraph)",
    "s01t6-f8 [needs_review] (figure)",
    "s01t6-p12 [needs_review] (paragraph)",
    "s01t6-s6 [needs_review] (section)",
@@ -158,6 +1090,24 @@
   "needs_review_topics": [
    "s01-t04",
    "s01-t06"
+  ],
+  "inspection_findings": [
+   {
+    "page": 5,
+    "type": "overfull",
+    "severity": "info",
+    "detail": "تراکم نویسه 2651 در برابر میانهٔ 1824",
+    "cause": "تراکم بالای محتوای همان بخش",
+    "block": null
+   },
+   {
+    "page": 9,
+    "type": "monotony",
+    "severity": "info",
+    "detail": "6 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
+    "cause": "تکرار قالب در بخش‌های هم‌ساختار",
+    "block": null
+   }
   ],
   "toc_verified": true,
   "toc_links": 11
