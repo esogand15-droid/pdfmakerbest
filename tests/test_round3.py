@@ -44,7 +44,14 @@ def _pages_with(pdf_path: str, probe: str) -> list[int]:
     doc = pymupdf.open(pdf_path)
     n = normalize_text(probe)[:30]
     # صفحات ۱–۲ (کاور و فهرست‌ها) شمرده نمی‌شوند؛ عنوان جدول در «فهرست جدول‌ها» هم می‌آید
-    return [i + 1 for i, p in enumerate(doc) if i >= 2 and n in normalize_text(p.get_text())]
+    # نقشهٔ جامع مرور (Round 7) متن ردیف‌ها را عیناً تکرار می‌کند؛ آن صفحات کنار گذاشته می‌شوند
+    rev_start = next((i + 1 for i, p in enumerate(doc)
+                      if normalize_text("نقشهٔ جامع مرور") in normalize_text(p.get_text())),
+                     doc.page_count + 1)
+    # صفحهٔ آغاز نقشهٔ مرور خودش شمرده می‌شود (بدنه و نقشه می‌توانند هم‌صفحه باشند)؛
+    # صفحات بعد از آن فقط تکرار نقشه‌اند. صفحات ۱–۲ کاور/فهرست‌اند.
+    return [i + 1 for i, p in enumerate(doc)
+            if 3 <= i + 1 <= rev_start and n in normalize_text(p.get_text())]
 
 
 # سناریو ۱ و ۶: جدول کوتاه با فارسی/انگلیسی/عدد، سالم و یکپارچه

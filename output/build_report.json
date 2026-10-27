@@ -4,7 +4,7 @@
  "edition": "final",
  "theme": "a",
  "pdf": "/home/user/pdfmakerbest/output/neuroanat_s01_pilot_final.pdf",
- "build_seconds": 23.9,
+ "build_seconds": 27.3,
  "toc_pages_found": {
   "s01-t04": 3,
   "s01t4-s1": 3,
@@ -463,6 +463,88 @@
    ]
   }
  ],
+ "coverage": {
+  "total_items": 187,
+  "by_status": {
+   "covered": 176,
+   "unresolved": 11
+  },
+  "by_kind": {
+   "terminology": 65,
+   "detail": 74,
+   "exception": 2,
+   "figure_visual": 11,
+   "table_row": 19,
+   "process": 8,
+   "source_conflict": 1,
+   "clinical": 2,
+   "summary": 5
+  },
+  "unresolved": [
+   {
+    "id": "s01t4-f1#9",
+    "block": "s01t4-f1",
+    "reason": "جزئیات درون تصویر؛ مرور سرِ خود شکل"
+   },
+   {
+    "id": "s01t4-f2#9",
+    "block": "s01t4-f2",
+    "reason": "جزئیات درون تصویر؛ مرور سرِ خود شکل"
+   },
+   {
+    "id": "s01t6-f1#8",
+    "block": "s01t6-f1",
+    "reason": "جزئیات درون تصویر؛ مرور سرِ خود شکل"
+   },
+   {
+    "id": "s01t6-f2#9",
+    "block": "s01t6-f2",
+    "reason": "جزئیات درون تصویر؛ مرور سرِ خود شکل"
+   },
+   {
+    "id": "s01t6-f3#5",
+    "block": "s01t6-f3",
+    "reason": "جزئیات درون تصویر؛ مرور سرِ خود شکل"
+   },
+   {
+    "id": "s01t6-f4#5",
+    "block": "s01t6-f4",
+    "reason": "جزئیات درون تصویر؛ مرور سرِ خود شکل"
+   },
+   {
+    "id": "s01t6-f5#6",
+    "block": "s01t6-f5",
+    "reason": "جزئیات درون تصویر؛ مرور سرِ خود شکل"
+   },
+   {
+    "id": "s01t6-f6#6",
+    "block": "s01t6-f6",
+    "reason": "جزئیات درون تصویر؛ مرور سرِ خود شکل"
+   },
+   {
+    "id": "s01t6-f7#6",
+    "block": "s01t6-f7",
+    "reason": "جزئیات درون تصویر؛ مرور سرِ خود شکل"
+   },
+   {
+    "id": "s01t6-f8#6",
+    "block": "s01t6-f8",
+    "reason": "جزئیات درون تصویر؛ مرور سرِ خود شکل"
+   },
+   {
+    "id": "s01t6-f9#7",
+    "block": "s01t6-f9",
+    "reason": "جزئیات درون تصویر؛ مرور سرِ خود شکل"
+   }
+  ],
+  "unassigned": [],
+  "excluded_derived_blocks": [
+   "s01t4-tl1",
+   "s01t6-tl1",
+   "s01-tree-glia"
+  ],
+  "complete": true
+ },
  "layout_decisions": [
   {
    "block": "s01t4-f1",
@@ -956,7 +1038,7 @@
       "page": 2,
       "type": "overfull",
       "severity": "info",
-      "detail": "تراکم نویسه 2683 در برابر میانهٔ 1802",
+      "detail": "تراکم نویسه 2683 در برابر میانهٔ 1901",
       "cause": "تراکم بالای محتوای همان بخش",
       "block": null
      },
@@ -969,10 +1051,58 @@
       "block": null
      },
      {
+      "page": 14,
+      "type": "overfull",
+      "severity": "info",
+      "detail": "تراکم نویسه 3696 در برابر میانهٔ 1901",
+      "cause": "تراکم بالای محتوای همان بخش",
+      "block": null
+     },
+     {
+      "page": 15,
+      "type": "overfull",
+      "severity": "info",
+      "detail": "تراکم نویسه 3700 در برابر میانهٔ 1901",
+      "cause": "تراکم بالای محتوای همان بخش",
+      "block": null
+     },
+     {
+      "page": 16,
+      "type": "overfull",
+      "severity": "info",
+      "detail": "تراکم نویسه 4256 در برابر میانهٔ 1901",
+      "cause": "تراکم بالای محتوای همان بخش",
+      "block": null
+     },
+     {
+      "page": 17,
+      "type": "overfull",
+      "severity": "info",
+      "detail": "تراکم نویسه 3670 در برابر میانهٔ 1901",
+      "cause": "تراکم بالای محتوای همان بخش",
+      "block": null
+     },
+     {
+      "page": 18,
+      "type": "overfull",
+      "severity": "info",
+      "detail": "تراکم نویسه 3297 در برابر میانهٔ 1901",
+      "cause": "تراکم بالای محتوای همان بخش",
+      "block": null
+     },
+     {
       "page": 10,
       "type": "monotony",
       "severity": "info",
       "detail": "5 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
+      "cause": "تکرار قالب در بخش‌های هم‌ساختار",
+      "block": null
+     },
+     {
+      "page": 15,
+      "type": "monotony",
+      "severity": "info",
+      "detail": "5 صفحهٔ متوالی با امضای بصری یکسان (IFalseTFalseDhigh)",
       "cause": "تکرار قالب در بخش‌های هم‌ساختار",
       "block": null
      }
@@ -985,7 +1115,7 @@
     "page": 2,
     "type": "overfull",
     "severity": "info",
-    "detail": "تراکم نویسه 2683 در برابر میانهٔ 1802",
+    "detail": "تراکم نویسه 2683 در برابر میانهٔ 1901",
     "cause": "تراکم بالای محتوای همان بخش",
     "block": null
    },
@@ -998,10 +1128,58 @@
     "block": null
    },
    {
+    "page": 14,
+    "type": "overfull",
+    "severity": "info",
+    "detail": "تراکم نویسه 3696 در برابر میانهٔ 1901",
+    "cause": "تراکم بالای محتوای همان بخش",
+    "block": null
+   },
+   {
+    "page": 15,
+    "type": "overfull",
+    "severity": "info",
+    "detail": "تراکم نویسه 3700 در برابر میانهٔ 1901",
+    "cause": "تراکم بالای محتوای همان بخش",
+    "block": null
+   },
+   {
+    "page": 16,
+    "type": "overfull",
+    "severity": "info",
+    "detail": "تراکم نویسه 4256 در برابر میانهٔ 1901",
+    "cause": "تراکم بالای محتوای همان بخش",
+    "block": null
+   },
+   {
+    "page": 17,
+    "type": "overfull",
+    "severity": "info",
+    "detail": "تراکم نویسه 3670 در برابر میانهٔ 1901",
+    "cause": "تراکم بالای محتوای همان بخش",
+    "block": null
+   },
+   {
+    "page": 18,
+    "type": "overfull",
+    "severity": "info",
+    "detail": "تراکم نویسه 3297 در برابر میانهٔ 1901",
+    "cause": "تراکم بالای محتوای همان بخش",
+    "block": null
+   },
+   {
     "page": 10,
     "type": "monotony",
     "severity": "info",
     "detail": "5 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
+    "cause": "تکرار قالب در بخش‌های هم‌ساختار",
+    "block": null
+   },
+   {
+    "page": 15,
+    "type": "monotony",
+    "severity": "info",
+    "detail": "5 صفحهٔ متوالی با امضای بصری یکسان (IFalseTFalseDhigh)",
     "cause": "تکرار قالب در بخش‌های هم‌ساختار",
     "block": null
    }
@@ -1009,12 +1187,95 @@
  },
  "qa": {
   "ok": true,
+  "coverage": {
+   "total_items": 187,
+   "by_status": {
+    "covered": 176,
+    "unresolved": 11
+   },
+   "by_kind": {
+    "terminology": 65,
+    "detail": 74,
+    "exception": 2,
+    "figure_visual": 11,
+    "table_row": 19,
+    "process": 8,
+    "source_conflict": 1,
+    "clinical": 2,
+    "summary": 5
+   },
+   "unresolved": [
+    {
+     "id": "s01t4-f1#9",
+     "block": "s01t4-f1",
+     "reason": "جزئیات درون تصویر؛ مرور سرِ خود شکل"
+    },
+    {
+     "id": "s01t4-f2#9",
+     "block": "s01t4-f2",
+     "reason": "جزئیات درون تصویر؛ مرور سرِ خود شکل"
+    },
+    {
+     "id": "s01t6-f1#8",
+     "block": "s01t6-f1",
+     "reason": "جزئیات درون تصویر؛ مرور سرِ خود شکل"
+    },
+    {
+     "id": "s01t6-f2#9",
+     "block": "s01t6-f2",
+     "reason": "جزئیات درون تصویر؛ مرور سرِ خود شکل"
+    },
+    {
+     "id": "s01t6-f3#5",
+     "block": "s01t6-f3",
+     "reason": "جزئیات درون تصویر؛ مرور سرِ خود شکل"
+    },
+    {
+     "id": "s01t6-f4#5",
+     "block": "s01t6-f4",
+     "reason": "جزئیات درون تصویر؛ مرور سرِ خود شکل"
+    },
+    {
+     "id": "s01t6-f5#6",
+     "block": "s01t6-f5",
+     "reason": "جزئیات درون تصویر؛ مرور سرِ خود شکل"
+    },
+    {
+     "id": "s01t6-f6#6",
+     "block": "s01t6-f6",
+     "reason": "جزئیات درون تصویر؛ مرور سرِ خود شکل"
+    },
+    {
+     "id": "s01t6-f7#6",
+     "block": "s01t6-f7",
+     "reason": "جزئیات درون تصویر؛ مرور سرِ خود شکل"
+    },
+    {
+     "id": "s01t6-f8#6",
+     "block": "s01t6-f8",
+     "reason": "جزئیات درون تصویر؛ مرور سرِ خود شکل"
+    },
+    {
+     "id": "s01t6-f9#7",
+     "block": "s01t6-f9",
+     "reason": "جزئیات درون تصویر؛ مرور سرِ خود شکل"
+    }
+   ],
+   "unassigned": [],
+   "excluded_derived_blocks": [
+    "s01t4-tl1",
+    "s01t6-tl1",
+    "s01-tree-glia"
+   ],
+   "complete": true
+  },
   "errors": [],
   "warnings": [
+   "ماتریس پوشش: 11 مورد جزئیات درون‌تصویر ماشینی قابل استخراج نیست و به خود شکل ارجاع داده شده است",
    "صفحات با پُری زیر ۷۰٪ (نیازمند توضیح/اصلاح): [6]",
    "بازرسی بصری: صفحهٔ 6 — پُری صفحه 61% است (علت محتمل: بلوک نشکن بعدی در باقیمانده جا نشده)"
   ],
-  "pages": 15,
+  "pages": 20,
   "checked_fragments": 239,
   "figures_model": 11,
   "figures_pdf": 11,
@@ -1046,10 +1307,15 @@
    2407,
    1941,
    1890,
-   1733,
+   1583,
+   3827,
+   3825,
+   4388,
+   3808,
+   3431,
    1956
   ],
-  "avg_chars_per_page": 2028,
+  "avg_chars_per_page": 2501,
   "cover_full_bleed": true,
   "fill_per_page": [
    null,
@@ -1065,10 +1331,15 @@
    100,
    93,
    84,
+   92,
    99,
+   98,
+   92,
+   98,
+   98,
    73
   ],
-  "fill_avg_pct": 89,
+  "fill_avg_pct": 91,
   "tables_checked": 4,
   "tables_split_badly": [],
   "review_items": [
@@ -1134,7 +1405,7 @@
     "page": 2,
     "type": "overfull",
     "severity": "info",
-    "detail": "تراکم نویسه 2683 در برابر میانهٔ 1802",
+    "detail": "تراکم نویسه 2683 در برابر میانهٔ 1901",
     "cause": "تراکم بالای محتوای همان بخش",
     "block": null
    },
@@ -1147,10 +1418,58 @@
     "block": null
    },
    {
+    "page": 14,
+    "type": "overfull",
+    "severity": "info",
+    "detail": "تراکم نویسه 3696 در برابر میانهٔ 1901",
+    "cause": "تراکم بالای محتوای همان بخش",
+    "block": null
+   },
+   {
+    "page": 15,
+    "type": "overfull",
+    "severity": "info",
+    "detail": "تراکم نویسه 3700 در برابر میانهٔ 1901",
+    "cause": "تراکم بالای محتوای همان بخش",
+    "block": null
+   },
+   {
+    "page": 16,
+    "type": "overfull",
+    "severity": "info",
+    "detail": "تراکم نویسه 4256 در برابر میانهٔ 1901",
+    "cause": "تراکم بالای محتوای همان بخش",
+    "block": null
+   },
+   {
+    "page": 17,
+    "type": "overfull",
+    "severity": "info",
+    "detail": "تراکم نویسه 3670 در برابر میانهٔ 1901",
+    "cause": "تراکم بالای محتوای همان بخش",
+    "block": null
+   },
+   {
+    "page": 18,
+    "type": "overfull",
+    "severity": "info",
+    "detail": "تراکم نویسه 3297 در برابر میانهٔ 1901",
+    "cause": "تراکم بالای محتوای همان بخش",
+    "block": null
+   },
+   {
     "page": 10,
     "type": "monotony",
     "severity": "info",
     "detail": "5 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
+    "cause": "تکرار قالب در بخش‌های هم‌ساختار",
+    "block": null
+   },
+   {
+    "page": 15,
+    "type": "monotony",
+    "severity": "info",
+    "detail": "5 صفحهٔ متوالی با امضای بصری یکسان (IFalseTFalseDhigh)",
     "cause": "تکرار قالب در بخش‌های هم‌ساختار",
     "block": null
    }
@@ -1173,6 +1492,11 @@
   "/home/user/pdfmakerbest/output/pages/page_12.png",
   "/home/user/pdfmakerbest/output/pages/page_13.png",
   "/home/user/pdfmakerbest/output/pages/page_14.png",
-  "/home/user/pdfmakerbest/output/pages/page_15.png"
+  "/home/user/pdfmakerbest/output/pages/page_15.png",
+  "/home/user/pdfmakerbest/output/pages/page_16.png",
+  "/home/user/pdfmakerbest/output/pages/page_17.png",
+  "/home/user/pdfmakerbest/output/pages/page_18.png",
+  "/home/user/pdfmakerbest/output/pages/page_19.png",
+  "/home/user/pdfmakerbest/output/pages/page_20.png"
  ]
 }
