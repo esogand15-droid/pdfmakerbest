@@ -110,7 +110,12 @@ def bidi_lint(session: Session) -> list[str]:
 
 
 def run_qa(session: Session, pdf_path: Path,
-           control_facts: list[str] | None = None) -> dict[str, Any]:
+           control_facts: list[str] | None = None,
+           sheet_pages: set[int] | None = None,
+           light_cover: bool = False) -> dict[str, Any]:
+    # sheet_pages: صفحات برگهٔ جمع‌بندی فوق‌فشرده (۱-مبنا) — طراحی تمام‌صفحهٔ
+    # خودشان را دارند و قابی رویشان مهر نمی‌شود؛ پس از چک ناحیهٔ امن قاب معاف‌اند.
+    sheet_pages = sheet_pages or set()
     import pymupdf
     doc = pymupdf.open(str(pdf_path))
     errors: list[str] = []
@@ -273,8 +278,10 @@ def run_qa(session: Session, pdf_path: Path,
                (pix.width // 2, 2), (pix.width // 2, pix.height - 3),
                (2, pix.height // 2), (pix.width - 3, pix.height // 2)]
         whites = [pt for pt in pts if all(c > 240 for c in pix.pixel(*pt)[:3])]
-        cover_ok = not whites
-        if whites:
+        # کاور روشن چاپی از طراحی لبه‌های سفید/کرم دارد؛ آنجا «تمام‌صفحه بودن»
+        # یعنی لبه‌ها یکدست رنگ کاور روشن‌اند، نه اینکه تیره باشند.
+        cover_ok = True if light_cover else not whites
+        if whites and not light_cover:
             errors.append(f"کاور تمام‌صفحه نیست؛ نقاط سفید در لبه‌ها: {whites}")
 
     # —— پُری صفحات محتوایی + ناحیهٔ امن قاب
@@ -298,11 +305,15 @@ def run_qa(session: Session, pdf_path: Path,
                     sp["text"].strip() for ln in bl["lines"] for sp in ln["spans"]):
                 continue
             ys.append(bb[3])
+            if (i + 1) in sheet_pages:
+                continue
             if bb[0] < 12 * _MM - 2 or bb[2] > 198 * _MM + 2:
                 bbox_violations.append(f"صفحهٔ {i + 1}: محتوا بیرون از ناحیهٔ امن قاب (x={bb[0]:.0f}..{bb[2]:.0f})")
         for img in page.get_images(full=True):
             for r in page.get_image_rects(img[0]):
                 ys.append(r.y1)
+                if (i + 1) in sheet_pages:
+                    continue
                 if r.x0 < 12 * _MM - 2 or r.x1 > 198 * _MM + 2:
                     bbox_violations.append(f"صفحهٔ {i + 1}: تصویر بیرون از ناحیهٔ امن قاب")
         if i == 1 or not ys:

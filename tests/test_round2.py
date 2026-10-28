@@ -119,8 +119,13 @@ def test_page_number_capsule_has_persian_digit(pdf):
 def test_content_inside_frame_safe_area(pdf):
     """هیچ بلوک متن بدنه‌ای بیرون از ناحیهٔ امن قاب (۱۲ تا ۱۹۸ و ۱۲ تا ۲۸۵ میلی‌متر) نیست."""
     x0, y0, x1, y1 = 12 * MM, 12 * MM, 198 * MM, 285 * MM
+    import json
+    _rep = json.loads((ROOT / "output" / "build_report.json").read_text(encoding="utf-8"))
+    _sheet = set((_rep.get("ultra_sheet") or {}).get("pages_in_book") or [])
     bad = []
-    for i in range(1, pdf.page_count):  # کاور معاف است
+    for i in range(1, pdf.page_count):  # کاور و صفحات برگهٔ تمام‌صفحه معاف‌اند
+        if i + 1 in _sheet:
+            continue
         for bl in pdf[i].get_text("dict")["blocks"]:
             if bl.get("type") != 0:
                 continue

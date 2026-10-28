@@ -49,13 +49,18 @@ def test_back_matter_order_on_built_pdf():
         n = normalize_text(probe)
         return next((i + 1 for i in range(start, len(pages)) if n in pages[i]), None)
 
-    rev = first("نقشهٔ جامع مرور")
+    # راند ۱۴ (چرخش مستند): «مرور جامع» حذف و برگهٔ فوق‌فشردهٔ ادغام‌شده
+    # جایش را گرفت: درخت ← جمع‌بندی تألیفی ← برگهٔ دوصفحه‌ای ← واژه‌نامه.
+    assert not first("نقشهٔ جامع مرور")
     tree = first("نمودار درختی جامع جلسه")
     closing = max(i + 1 for i, t in enumerate(pages)
                   if normalize_text("جمع‌بندی و مرور جلسه") in t)
+    _n = normalize_text("مرور فوق‌فشرده")  # بعد از درخت؛ راهنمای صفحهٔ ۲ هم این عبارت را دارد
+    ultra = next((i + 1 for i, t in enumerate(pages)
+                  if tree and i + 1 > tree and _n in t), None)
     gloss = first("واژه‌نامهٔ فارسی–انگلیسی")
-    assert rev and tree and gloss
-    assert rev < tree < closing <= gloss
+    assert tree and ultra and gloss
+    assert tree < closing < ultra < gloss
     assert gloss == len(pages)  # واژه‌نامه در صفحهٔ پایانی است
 
 

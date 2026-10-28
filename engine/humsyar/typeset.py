@@ -237,7 +237,7 @@ class Typesetter:
         for name, label in (("target", "هدف‌های یادگیری"),
                             ("terminology", "اصطلاحات کلیدی"), ("process", "فرایند گام‌به‌گام"),
                             ("compare", "مقایسه"), ("branch", "نمودار درختی/طبقه‌بندی"),
-                            ("compass", "نقشهٔ جامع مرور"), ("microscope", "جزئیات درون شکل"),
+                            ("compass", "مرور فوق‌فشرده"), ("microscope", "جزئیات درون شکل"),
                             ("book", "واژه‌نامه"), ("reference", "منبع مطلب")):
             add(name, label)
 
@@ -371,7 +371,7 @@ class Typesetter:
         return f"""
 <div class="treepage">
   <h2 class="h-ic">{icon_svg("branch", 15)}نمودار درختی جامع جلسه</h2>
-  <p class="treepage__sub">اسکلت طبقه‌بندی همین جلسه در یک صفحه؛ برای مرور سریع. جزئیات کامل هر شاخه در متن و نقشهٔ جامع مرور آمده است.</p>
+  <p class="treepage__sub">اسکلت طبقه‌بندی همین جلسه در یک صفحه؛ برای مرور سریع. جزئیات کامل هر شاخه در متن آمده و جمع‌بندی دوصفحه‌ای پایان جزوه آن‌ها را یکجا مرور می‌کند.</p>
   {svg}
   {term_rows}
 </div>"""
@@ -383,7 +383,7 @@ class Typesetter:
         چیزی خلاصه یا بازنویسی نمی‌شود؛ جزئیات درون تصویرها با ارجاع به خود شکل می‌آیند.
         """
         cfg = (self.plan.layout_cfg or {}).get("revision_map", {})
-        if not cfg.get("enabled", True):
+        if not cfg.get("enabled", False):  # راند ۱۴: پیش‌فرض خاموش (جایگزین: برگهٔ فوق‌فشرده)
             return ""
         items = extract_items(self.session)
         if len(items) < 8:

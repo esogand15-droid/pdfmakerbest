@@ -1,9 +1,10 @@
-"""مرور فوق‌فشردهٔ دوصفحه‌ای (Ultra-Compact Revision Sheet) — خروجی سوم هامزیار.
+"""مرور فوق‌فشردهٔ دوصفحه‌ای (Ultra-Compact Revision Sheet).
 
-سه خروجی مستقل موتور:
-  ۱) جزوهٔ کامل (build) — آموزش و جزئیات کامل؛
-  ۲) نقشهٔ جامع مرور/درخت (داخل جزوه) — پوشش بی‌اتلاف همهٔ گزاره‌ها؛
-  ۳) این برگه — حداکثر ۲ صفحهٔ A4 برای «بازیابی سریع»، مکمل جزوه نه جایگزین آن.
+راند ۱۴: این برگه بخش پایانیِ همان PDF نهایی جزوه است (پیش از واژه‌نامه) و
+جای «مرور جامع» قدیمی را گرفته است؛ build آن را می‌سازد و ادغام می‌کند و
+کاربر همیشه دقیقاً یک PDF نهایی تحویل می‌گیرد. فرمان `ultra` فقط ابزار
+داخلی/آزمایشی است. حداکثر ۲ صفحهٔ A4 برای «بازیابی سریع»؛ مکمل متن کامل
+جزوه، نه جایگزین آن.
 
 اصول (طبق سند راند ۱۱):
   - خلاصه‌سازی مفهومی با «انتخاب + قالب» انجام می‌شود، نه بازنویسی: متن هر نکته
@@ -299,7 +300,9 @@ def _comp_html(c: Comp, session: Session, trimmed_ids: set[str] | None = None) -
             lanes.setdefault(str(u.item.meta.get("lane_title") or ""), []).append(u)
         parts = []
         for lane, steps in lanes.items():
-            flow = ' <span class="uarr">◀</span> '.join(
+            _arr = (' <svg class="uarr" viewBox="0 0 10 10" aria-hidden="true">'
+                    '<polygon points="10,1 10,9 2,5"/></svg> ')
+            flow = _arr.join(
                 f'<span class="ustep"><b>{u.item.meta.get("step_no", "")}.</b> '
                 f'{inline(u.item.text)}</span>' for u in steps)
             parts.append((f'<div class="ulane">{f"<b>{inline(lane)}</b>" if lane else ""}'
@@ -358,7 +361,7 @@ body{ font-family:Vazirmatn,sans-serif; color:var(--ink); margin:0;
 .uchain{ margin:1mm 0; line-height:2 }
 .ustep{ background:var(--surface); border:1pt solid var(--line-chip); border-radius:10pt;
   padding:0 6pt; white-space:nowrap }
-.uarr{ color:var(--session-deep,var(--royal-600)); font-weight:800 }
+.uarr{ width:7pt; height:7pt; fill:var(--session-deep,var(--royal-600)); vertical-align:-1pt }
 .uchip{ display:inline-block; border:1pt solid var(--line-chip); background:var(--surface);
   border-radius:10pt; padding:0 5pt; margin:.6mm 0 .6mm 1.2mm; font-size:.9em }
 .uvs{ color:var(--slate-deep); font-size:.85em }
@@ -376,7 +379,8 @@ body{ font-family:Vazirmatn,sans-serif; color:var(--ink); margin:0;
 def render_html(session: Session, comps: list[Comp], *, base_pt: float,
                 tight: bool, brand_css: str, font_css: str,
                 trimmed_ids: set[str] | None = None, single: bool = False,
-                brand_fa: str = "هامزیار", brand_en: str = "HumsYar") -> str:
+                brand_fa: str = "هامزیار", brand_en: str = "HumsYar",
+                extra_css: str = "") -> str:
     pages = []
     titles = {1: "اسکلت مفهومی مبحث", 2: "جزئیات تعیین‌کننده و مرور نهایی"}
     for pool in ((1,) if single else (1, 2)):
@@ -394,7 +398,7 @@ def render_html(session: Session, comps: list[Comp], *, base_pt: float,
                 f'<span>{escape(brand_fa)}</span></div>')
         pages.append(f'<div class="upage">{head}<div class="ucols">{body}</div>{foot}</div>')
     return (f'<!DOCTYPE html><html lang="fa" dir="rtl"><head><meta charset="utf-8">'
-            f'<style>{font_css}\n{brand_css}\n:root{{--u-base:{base_pt}pt}}\n{ULTRA_CSS}</style>'
+            f'<style>{font_css}\n{brand_css}\n:root{{--u-base:{base_pt}pt}}\n{ULTRA_CSS}{extra_css}</style>'
             f'</head><body style="{session_style(session.session_number)}" class="{"tight" if tight else ""}">{"".join(pages)}</body></html>')
 
 
@@ -410,7 +414,7 @@ def _cfg() -> dict[str, Any]:
 
 def build_ultra(content_path: str, *, out_dir: str = "output",
                 topic_ids: list[str] | None = None,
-                stem_suffix: str = "") -> dict[str, Any]:
+                stem_suffix: str = "", extra_css: str = "") -> dict[str, Any]:
     """ساخت برگهٔ مرور فوق‌فشرده + گزارش پوشش/حذف شفاف."""
     from .build import _render_pdf, _font_css
     from .palette import brand_css_text
@@ -467,7 +471,8 @@ def build_ultra(content_path: str, *, out_dir: str = "output",
     def render_now() -> tuple[int, int | None, float, float]:
         html = render_html(session, comps, base_pt=base, tight=tight,
                            brand_css=brand_css_text(), font_css=_font_css(),
-                           trimmed_ids=trimmed_ids(), single=single_mode)
+                           trimmed_ids=trimmed_ids(), single=single_mode,
+                           extra_css=extra_css)
         _render_pdf(html, pdf_path, work, session,
                     margin={"top": "8mm", "bottom": "8mm",
                             "left": "9mm", "right": "9mm"}, tag="ultra")
@@ -679,7 +684,7 @@ def build_ultra(content_path: str, *, out_dir: str = "output",
         (out / f"{stem}_overflow.md").write_text(
             "# نکات ضروریِ جامانده از برگهٔ دوصفحه‌ای (مکمل شفافیت)\n\n"
             "این نکات اولویت A در بودجهٔ دو صفحه با کف خوانایی جا نشدند؛ "
-            "در جزوهٔ کامل و نقشهٔ جامع مرور حاضرند:\n\n"
+            "در متن کامل همین جزوه حاضرند:\n\n"
             + "".join(f"- [{u.item.id}] {u.item.text}\n" for u in overflow_a),
             encoding="utf-8")
 
@@ -720,7 +725,7 @@ def build_ultra(content_path: str, *, out_dir: str = "output",
         "missing_numbers_check": missing_numbers,
         "text_chars": {"source_items": total_chars, "in_sheet": kept_chars,
                        "reduction_pct": round(100 * (1 - kept_chars / max(total_chars, 1)), 1)},
-        "note": "پوشش A یعنی پوشش نکات ضروریِ مرور؛ این برگه ادعای پوشش همهٔ جزئیات منبع را ندارد (آن پوشش در نقشهٔ جامع مرورِ جزوه است).",
+        "note": "پوشش A یعنی پوشش نکات ضروریِ مرور؛ این برگه ادعای پوشش همهٔ جزئیات منبع را ندارد (جزئیات کامل در متن خود جزوه است).",
         "fit_trace": trace,
     }
     (out / f"{stem}_report.json").write_text(

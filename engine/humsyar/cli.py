@@ -25,7 +25,7 @@ def main(argv: list[str] | None = None) -> int:
     b.add_argument("--print-theme", action="store_true", help="نسخهٔ کم‌جوهر چاپی (پسوند _print)")
     b.add_argument("--bw", action="store_true", help="پروفایل چاپ سیاه‌وسفید: بدون پس‌زمینهٔ رنگی، با نوار/الگو/برچسب (پسوند _bw)")
 
-    u = sub.add_parser("ultra", help="برگهٔ مرور فوق‌فشردهٔ حداکثر دوصفحه‌ای (خروجی مستقل)")
+    u = sub.add_parser("ultra", help="برگهٔ مرور فوق‌فشرده (ابزار داخلی؛ در build داخل PDF نهایی ادغام می‌شود)")
     u.add_argument("content")
     u.add_argument("--out", default="output")
     u.add_argument("--topics", default="", help="شناسهٔ مباحث با کاما (پیش‌فرض: همه)")
@@ -43,6 +43,8 @@ def main(argv: list[str] | None = None) -> int:
                        show_sources=not args.no_sources, out_dir=args.out)
         qa = report["qa"]
         print(f"PDF: {report['pdf']} ({qa['pages']} صفحه، {report['build_seconds']}s)")
+        if report.get("final_pdf"):
+            print(f"Final: {report['final_pdf']}  ← تنها فایل قابل تحویل")
         print(f"QA: {'✅ قبول' if qa['ok'] else '❌ خطا'} · هشدار چیدمان: {len(report['planner_warnings'])}")
         for e_ in qa["errors"]:
             print(f"  ❌ {e_}")

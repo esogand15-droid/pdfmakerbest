@@ -96,6 +96,9 @@ def test_kind_rules_are_conservative():
 def test_revision_map_renders_verbatim_items():
     s = _session()
     plan = plan_session(s, "final", ROOT)
+    # راند ۱۴: نقشهٔ مرور پیش‌فرض خاموش است؛ این تست رندر را صریح فعال می‌کند
+    plan.layout_cfg = dict(plan.layout_cfg or {})
+    plan.layout_cfg["revision_map"] = {"enabled": True}
     ts = Typesetter(plan, toc_pages={}, fig_pages={})
     html = ts.revision_map()
     assert "نقشهٔ جامع مرور" in html
@@ -112,6 +115,8 @@ def test_revision_map_renders_verbatim_items():
 def test_revision_map_config_gate():
     s = _session()
     plan = plan_session(s, "final", ROOT)
+    # پیش‌فرض محصول (راند ۱۴): بدون هیچ تنظیمی هم نقشه رندر نمی‌شود
+    assert Typesetter(plan).revision_map() == ""
     plan.layout_cfg = dict(plan.layout_cfg or {})
     plan.layout_cfg["revision_map"] = {"enabled": False}
     assert Typesetter(plan).revision_map() == ""

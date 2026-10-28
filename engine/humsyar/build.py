@@ -35,6 +35,11 @@ MM = 72 / 25.4
 
 def _font_css() -> str:
     fdir = REPO_ROOT / "assets" / "fonts"
+    # فونت‌های ضروری: نبودنشان یعنی توقف فوری، نه رندر با فونت پیش‌فرض مرورگر
+    for req in ("Vazirmatn-Regular.ttf", "Vazirmatn-Bold.ttf", "Inter-Regular.woff2"):
+        if not (fdir / req).exists():
+            raise FileNotFoundError(
+                f"فونت ضروری پیدا نشد: {fdir / req} — ساخت متوقف شد تا خروجی با فونت اشتباه تولید نشود")
     faces = []
     for name, weight in [("Vazirmatn-Regular", 400), ("Vazirmatn-Medium", 500),
                          ("Vazirmatn-Bold", 700), ("Vazirmatn-Light", 300)]:
@@ -102,10 +107,14 @@ def _find_heading_pages(pdf_path: Path, plan: Plan, start: int = 1) -> dict[str,
                  normalize_text(parts[0]) if len(parts) > 1 and len(normalize_text(parts[0])) >= 12 else "",
                  normalize_text(" ".join(seg.split()[:3])),
                  normalize_text(max(fa_words, key=len)) if fa_words else ""]
+        # صفحات پسامطلب (از end به بعد) از جست‌وجو بیرون‌اند: عنوان بخش‌ها روی
+        # صفحهٔ درخت و برگهٔ جمع‌بندی عیناً تکرار می‌شوند و کاندید قوی ممکن است
+        # به‌علت ترتیب استخراج دوزبانه فقط آنجا بخورد و سرفصل به صفحهٔ اشتباه
+        # نسبت داده شود (باگ راند ۱۴). کاندیدها به ترتیب قدرت آزموده می‌شوند.
         for key_n in cands:
             if not key_n:
                 continue
-            hit = next((i for i in range(start, min(end + 1, len(pages_norm)))
+            hit = next((i for i in range(start, min(end, len(pages_norm)))
                         if key_n in pages_norm[i]), None)
             if hit is not None:
                 found[anchor] = hit + 1
@@ -130,10 +139,10 @@ def _find_block_pages(pdf_path: Path, session: Session, plan: Plan) -> dict[str,
             continue
         cands = [normalize_text(title)[:40],
                  normalize_text(" ".join(title.split()[:3]))]
-        for key_n in cands:
+        for key_n in cands:  # بازهٔ جست‌وجو فقط بدنه است (پسامطلب کنار است)
             if not key_n:
                 continue
-            hit = next((i for i in range(start, min(end + 1, len(pages_norm)))
+            hit = next((i for i in range(start, min(end, len(pages_norm)))
                         if key_n in pages_norm[i]), None)
             if hit is not None:
                 found[b.id] = hit + 1
@@ -191,7 +200,8 @@ def _optimize_figures(session: Session, work: Path) -> None:
 
 
 def _stamp_furniture(doc, frame_pdfs, page_topics: dict | None = None,
-                     session_number: int = 1) -> None:
+                     session_number: int = 1,
+                     skip_pages: set[int] | None = None) -> None:
     """مهر قاب روی همهٔ صفحات جز کاور + کپسول شمارهٔ صفحه با ارقام فارسی.
 
     انتخاب طراحی (راند ۲): کپسول فقط عدد صفحه را دارد — تمیزتر از «صفحهٔ X از Y»
@@ -205,39 +215,43 @@ def _stamp_furniture(doc, frame_pdfs, page_topics: dict | None = None,
         overlays = {"_single": pymupdf.open(str(frame_pdfs))}
     font = pymupdf.Font(fontfile=str(REPO_ROOT / "assets" / "fonts" / "Vazirmatn-Bold.ttf"))
     total = doc.page_count
+    skip_pages = skip_pages or set()
     for i in range(1, total):
         page = doc[i]
         pg_no = i + 1
+        if pg_no in skip_pages:
+            continue  # صفحات برگهٔ فوق‌فشرده: طراحی تمام‌صفحهٔ خودشان را دارند
         info = (page_topics or {}).get(pg_no, {})
         # زبانه همیشه سمت راست است (لبه‌ای که دانشجو جزوهٔ چاپی را از آن ورق می‌زند)
         key = info.get("number")
         overlay = overlays.get(key) or overlays.get("_single")
+        # شماره‌گذاری و نوار پیشرفت حتی بدون قاب هم انجام می‌شود (قاب فقط تزئین است)
         if overlay is not None:
             page.show_pdf_page(page.rect, overlay, 0)
-            # نوار پیشرفت مطالعه: از راست پر می‌شود (جهت خواندن فارسی) و در چاپ
-            # سیاه‌وسفید هم با قاب تیره + پُری تیره + شیار سفید قابل تشخیص است.
-            # فوتر دو ردیفه (راند ۱۳): ردیف ۱ نوار پیشرفت تمام‌عرض محتوا با
-            # رنگ جلسه (از راست پر می‌شود)؛ ردیف ۲ روی خط پایین قاب است:
-            # راست برند، چپ عنوان مجموعه، وسط دقیقاً کپسول (در قاب/همین‌جا).
-            _sv = session_vars(int(session_number))
-            _acc = rgb_of_hex(_sv["--session-accent"])
-            _acc_h = rgb_of_hex(_sv["--session-header"])
-            frac = i / max(1, total - 1)
-            tx0, tx1, ty, th = 14 * MM, 196 * MM, 286.6 * MM, 1.0 * MM
-            page.draw_rect(pymupdf.Rect(tx0, ty, tx1, ty + th),
-                           color=None, fill=rgb_of("line-warm"), radius=0.5)
-            fw = (tx1 - tx0) * frac
-            if fw > 0.6 * MM:
-                page.draw_rect(pymupdf.Rect(tx1 - fw, ty, tx1, ty + th),
-                               color=None, fill=_acc, radius=0.5)
-            cx, cy = 105 * MM, CAPSULE_CY_MM * MM
-            r = pymupdf.Rect(cx - 8 * MM, cy - 2.6 * MM, cx + 8 * MM, cy + 2.6 * MM)
-            page.draw_rect(r, color=_acc_h, fill=_acc_h, width=0.7, radius=0.5)
-            txt = fa_num(i + 1)
-            tw = pymupdf.TextWriter(page.rect)
-            tw.append((cx - font.text_length(txt, fontsize=9) / 2, cy + 3.2),
-                      txt, font=font, fontsize=9)
-            tw.write_text(page, color=(1, 1, 1))
+        # نوار پیشرفت مطالعه: از راست پر می‌شود (جهت خواندن فارسی) و در چاپ
+        # سیاه‌وسفید هم با قاب تیره + پُری تیره + شیار سفید قابل تشخیص است.
+        # فوتر دو ردیفه (راند ۱۳): ردیف ۱ نوار پیشرفت تمام‌عرض محتوا با
+        # رنگ جلسه (از راست پر می‌شود)؛ ردیف ۲ روی خط پایین قاب است:
+        # راست برند، چپ عنوان مجموعه، وسط دقیقاً کپسول (در قاب/همین‌جا).
+        _sv = session_vars(int(session_number))
+        _acc = rgb_of_hex(_sv["--session-accent"])
+        _acc_h = rgb_of_hex(_sv["--session-header"])
+        frac = i / max(1, total - 1)
+        tx0, tx1, ty, th = 14 * MM, 196 * MM, 286.6 * MM, 1.0 * MM
+        page.draw_rect(pymupdf.Rect(tx0, ty, tx1, ty + th),
+                       color=None, fill=rgb_of("line-warm"), radius=0.5)
+        fw = (tx1 - tx0) * frac
+        if fw > 0.6 * MM:
+            page.draw_rect(pymupdf.Rect(tx1 - fw, ty, tx1, ty + th),
+                           color=None, fill=_acc, radius=0.5)
+        cx, cy = 105 * MM, CAPSULE_CY_MM * MM
+        r = pymupdf.Rect(cx - 8 * MM, cy - 2.6 * MM, cx + 8 * MM, cy + 2.6 * MM)
+        page.draw_rect(r, color=_acc_h, fill=_acc_h, width=0.7, radius=0.5)
+        txt = fa_num(i + 1)
+        tw = pymupdf.TextWriter(page.rect)
+        tw.append((cx - font.text_length(txt, fontsize=9) / 2, cy + 3.2),
+                  txt, font=font, fontsize=9)
+        tw.write_text(page, color=(1, 1, 1))
 
 
 def _stamp_toc_links(doc, toc_pages: dict[str, int],
@@ -251,7 +265,7 @@ def _stamp_toc_links(doc, toc_pages: dict[str, int],
         try:
             page.delete_link(link)
         except Exception:
-            break
+            continue
     made = 0
     for lr in toc_link_rects:
         anchor = str(lr.get("href", "")).lstrip("#")
@@ -268,7 +282,8 @@ def _stamp_toc_links(doc, toc_pages: dict[str, int],
 
 
 def _add_bookmarks(pdf_path: Path, plan: Plan, toc_pages: dict[str, int],
-                   brand: dict[str, str], toc_link_rects: list[dict]) -> int:
+                   brand: dict[str, str], toc_link_rects: list[dict],
+                   extra: list[tuple[str, int]] | None = None) -> int:
     import pymupdf
     doc = pymupdf.open(str(pdf_path))
     toc = []
@@ -279,6 +294,10 @@ def _add_bookmarks(pdf_path: Path, plan: Plan, toc_pages: dict[str, int],
         lvl = max(1, min(lvl, prev + 1))
         toc.append([lvl, display, toc_pages[anchor]])
         prev = lvl
+    # نشانک‌های مادهٔ پایانی (درخت، جمع‌بندی فوق‌فشرده، واژه‌نامه) — سطح ۱
+    for title, pg in sorted(extra or [], key=lambda x: x[1]):
+        if 1 <= pg <= doc.page_count:
+            toc.append([1, title, pg])
     if toc:
         doc.set_toc(toc)
     s = plan.session
@@ -296,7 +315,84 @@ def _add_bookmarks(pdf_path: Path, plan: Plan, toc_pages: dict[str, int],
     return links
 
 
-def build(content_path: str, *, edition: str = "final", theme: str = "a",
+def _find_page_probe(doc, probe: str, *, start: int = 1, default=None):
+    """نخستین اندیس صفحه‌ای که متن نرمال‌شدهٔ پروب را دارد (جست‌وجوی پسامطلب)."""
+    pn = normalize_text(probe)
+    for i in range(start, doc.page_count):
+        if pn in normalize_text(doc[i].get_text()):
+            return i
+    return default
+
+
+def _build_ultra_sheet(content_path: str, session: Session, work: Path,
+                       *, white_paper: bool, plan: Plan) -> dict | None:
+    """برگهٔ مرور فوق‌فشردهٔ درون‌جزوه (راند ۱۴): ساخته می‌شود تا در همان PDF
+    نهایی ادغام شود. اگر در بودجهٔ دو صفحه جا نشود، ساخت با خطای صریح متوقف
+    می‌شود — خروجی ناقص هرگز بی‌صدا تحویل داده نمی‌شود."""
+    cfg = (plan.layout_cfg or {}).get("ultra_revision", {}) or {}
+    if not cfg.get("enabled", True) or not cfg.get("in_booklet", True):
+        return None
+    from .revision import extract_items
+    if len(extract_items(session)) < 8:
+        plan.log("برگهٔ فوق‌فشرده: جلسه خیلی کوتاه است (کمتر از ۸ گزاره)؛ برگه ساخته نشد")
+        return None
+    from .ultra import build_ultra
+    rep = build_ultra(
+        content_path, out_dir=str(work),
+        extra_css=("@page{background:#FFFFFF}:root{--paper:#FFFFFF}"
+                   if white_paper else ""))
+    if not rep.get("fits_two_pages"):
+        raise RuntimeError(
+            "برگهٔ جمع‌بندی فوق‌فشرده در بودجهٔ دو صفحه جا نشد "
+            f"(وضعیت: {rep.get('status')})؛ ساخت متوقف شد تا PDF ناقص تحویل داده نشود. "
+            "گزارش جاگیری برگه را در پوشهٔ کاری ببینید.")
+    plan.log(f"برگهٔ فوق‌فشرده: {rep['pages']} صفحه، پوشش A "
+             f"{rep['coverage']['A']['in_sheet']}/{rep['coverage']['A']['total']}")
+    return {"pdf": rep["pdf"], "pages": int(rep["pages"]),
+            "status": rep.get("status"), "coverage_a": rep["coverage"]["A"]}
+
+
+def _check_back_matter(pdf_path: Path, *, ultra_first_page: int | None,
+                       revmap_enabled: bool) -> dict:
+    """کنترل ترتیب مادهٔ پایانی روی PDF نهایی: درخت ← جمع‌بندی ← برگهٔ
+    فوق‌فشرده ← واژه‌نامه (صفحهٔ آخر) + نبودن «مرور جامع» وقتی خاموش است."""
+    import pymupdf
+    doc = pymupdf.open(str(pdf_path))
+    errors: list[str] = []
+    tree_i = _find_page_probe(doc, "نمودار درختی جامع جلسه")
+    gloss_i = _find_page_probe(doc, "واژه‌نامهٔ فارسی–انگلیسی")
+    rev_i = _find_page_probe(doc, "نقشهٔ جامع مرور")
+    if rev_i is not None and not revmap_enabled:
+        errors.append("«مرور جامع» قدیمی در خروجی دیده شد درحالی‌که غیرفعال است")
+    if ultra_first_page is not None:
+        ui = ultra_first_page - 1
+        if normalize_text("مرور فوق‌فشرده") not in normalize_text(doc[ui].get_text()):
+            errors.append("برگهٔ جمع‌بندی در جایگاه ادغام‌شده پیدا نشد")
+        if tree_i is not None and not tree_i < ui:
+            errors.append("ترتیب پسامطلب: برگهٔ جمع‌بندی باید بعد از صفحهٔ درخت باشد")
+        if gloss_i is not None and not ui < gloss_i:
+            errors.append("ترتیب پسامطلب: برگهٔ جمع‌بندی باید پیش از واژه‌نامه باشد")
+    if gloss_i is not None and gloss_i != doc.page_count - 1:
+        errors.append("واژه‌نامه باید تک‌صفحهٔ پایانی جزوه باشد")
+    out = {"tree_page": (tree_i + 1) if tree_i is not None else None,
+           "ultra_first_page": ultra_first_page,
+           "glossary_page": (gloss_i + 1) if gloss_i is not None else None,
+           "revmap_present": rev_i is not None, "errors": errors}
+    doc.close()
+    return out
+
+
+def _publish_final(src: Path, dst: Path) -> Path:
+    """انتشار اتمی تنها فایل قابل تحویل؛ نسخهٔ قبلی فقط به‌صورت .prev نگه داشته می‌شود."""
+    if dst.exists() and dst.read_bytes() != src.read_bytes():
+        dst.replace(dst.with_name(dst.stem + ".prev.pdf"))
+    tmp = dst.with_suffix(".tmp.pdf")
+    tmp.write_bytes(src.read_bytes())
+    tmp.replace(dst)
+    return dst
+
+
+def _build_inner(content_path: str, *, edition: str = "final", theme: str = "a",
           show_sources: bool = True, print_theme: bool = False,
           bw_theme: bool = False, out_dir: str = "output",
           control_facts: list[str] | None = None) -> dict:
@@ -372,12 +468,25 @@ def build(content_path: str, *, edition: str = "final", theme: str = "a",
     (out / f"{session.id}_{edition}.html").write_text(html_final, encoding="utf-8")
     _render_pdf(html_final, body_pdf, work, session, margin=BODY_MARGIN, tag="body2")
 
+    # برگهٔ جمع‌بندی فوق‌فشردهٔ درون‌جزوه (راند ۱۴) — جایگزین «مرور جامع»
+    ultra_info = _build_ultra_sheet(
+        content_path, session, work,
+        white_paper=print_theme or bw_theme
+        or ((plan.layout_cfg or {}).get("color_system", {}) or {}).get("paper") == "white",
+        plan=plan)
+
     # کاور تمام‌صفحه + قاب موضوعی
     cover_pdf = work / "cover.pdf"
     _cover_light = print_theme or _os.environ.get("BRAND_COVER", "").lower() == "light"
     _render_pdf(cover_html(session, brand, font_css + "\n" + brand_css, light=_cover_light),
                 cover_pdf, work, session,
                 margin=ZERO_MARGIN, tag="cover")
+    import pymupdf as _cpm
+    _cd = _cpm.open(str(cover_pdf))
+    if _cd.page_count != 1:
+        raise RuntimeError(f"کاور باید دقیقاً یک صفحه باشد، {_cd.page_count} صفحه رندر شد؛ "
+                           "شماره‌گذاری صفحات به‌هم می‌ریزد، ساخت متوقف شد")
+    _cd.close()
     # واریانت قاب به‌ازای (مبحث جاری، زوج/فرد) برای زبانهٔ انگشت‌نما + نوار پیشرفت
     import pymupdf as _pm
     _bd = _pm.open(str(body_pdf))
@@ -403,16 +512,42 @@ def build(content_path: str, *, edition: str = "final", theme: str = "a",
                     omit_background=True)
         frame_pdfs[tnum] = fp
 
-    # ادغام: کاور + بدنه، مهر قاب و شماره‌ها
+    # ادغام: کاور + بدنه + برگهٔ فوق‌فشرده (پیش از واژه‌نامه)، مهر قاب و شماره‌ها
     import pymupdf
     final = pymupdf.open(str(cover_pdf))
     final.insert_pdf(pymupdf.open(str(body_pdf)))
+    ultra_skip: set[int] = set()
+    ultra_first_page: int | None = None
+    if ultra_info:
+        gloss_idx = _find_page_probe(final, "واژه‌نامهٔ فارسی–انگلیسی",
+                                     default=final.page_count)
+        _udoc = pymupdf.open(ultra_info["pdf"])
+        final.insert_pdf(_udoc, start_at=gloss_idx)
+        ultra_first_page = gloss_idx + 1
+        ultra_skip = set(range(gloss_idx + 1, gloss_idx + 1 + _udoc.page_count))
+        ultra_info["pages_in_book"] = sorted(ultra_skip)
+        _udoc.close()
     _stamp_furniture(final, frame_pdfs, page_topics,
-                     session_number=session.session_number)
+                     session_number=session.session_number,
+                     skip_pages=ultra_skip)
     # garbage=4 جریان‌های فونت تکراریِ واریانت‌های قاب را یکی می‌کند (۵٫۳→۲٫۵MB)
-    final.save(str(pdf_path), garbage=4, deflate=True)
+    _tmp_pdf = pdf_path.with_suffix(".tmp.pdf")
+    final.save(str(_tmp_pdf), garbage=4, deflate=True)
     final.close()
-    toc_links = _add_bookmarks(pdf_path, plan, toc_pages, brand, toc_link_rects)
+    _tmp_pdf.replace(pdf_path)  # ذخیرهٔ اتمی: فایل قبلی تا لحظهٔ موفقیت دست‌نخورده می‌ماند
+    _extra_bm: list[tuple[str, int]] = []
+    _fd = pymupdf.open(str(pdf_path))
+    _tp = _find_page_probe(_fd, "نمودار درختی جامع جلسه")
+    if _tp is not None:
+        _extra_bm.append(("نمودار درختی جامع جلسه", _tp + 1))
+    if ultra_first_page:
+        _extra_bm.append(("جمع‌بندی فوق‌فشردهٔ دوصفحه‌ای", ultra_first_page))
+    _gp = _find_page_probe(_fd, "واژه‌نامهٔ فارسی–انگلیسی")
+    if _gp is not None:
+        _extra_bm.append(("واژه‌نامهٔ فارسی–انگلیسی", _gp + 1))
+    _fd.close()
+    toc_links = _add_bookmarks(pdf_path, plan, toc_pages, brand, toc_link_rects,
+                               extra=_extra_bm)
 
     # بازبینی نهایی شماره‌های فهرست روی خود PDF نهایی (پس از ادغام کاور)
     verify = _find_heading_pages(pdf_path, plan, start=2)
@@ -421,7 +556,8 @@ def build(content_path: str, *, edition: str = "final", theme: str = "a",
     if toc_mismatch:
         plan.log(f"[بازبینی فهرست] ناهمخوانی شمارهٔ صفحه در فهرست: {toc_mismatch}")
 
-    qa = run_qa(session, pdf_path, control_facts)
+    qa = run_qa(session, pdf_path, control_facts, sheet_pages=ultra_skip,
+                light_cover=_cover_light)
     # یافته‌های بازرسی بصری که خودکار اصلاح نشدند به QA می‌روند (بدنه +۱ = نهایی با کاور)
     qa["inspection_findings"] = inspection_final
     leftover = [f for f in inspection_final if f["severity"] == "warn"]
@@ -434,11 +570,28 @@ def build(content_path: str, *, edition: str = "final", theme: str = "a",
         qa["warnings"] = list(qa.get("warnings", [])) + [
             f"شمارهٔ صفحهٔ فهرست با PDF نهایی نمی‌خواند: {toc_mismatch}"]
     qa["toc_links"] = toc_links
+    _bm = _check_back_matter(
+        pdf_path, ultra_first_page=ultra_first_page,
+        revmap_enabled=bool(((plan.layout_cfg or {}).get("revision_map", {})
+                             or {}).get("enabled", False)))
+    qa["back_matter"] = _bm
+    if _bm["errors"]:
+        qa["errors"] = list(qa.get("errors", [])) + _bm["errors"]
+        qa["ok"] = False
+    # قرارداد خروجی (راند ۱۴): فقط ساخت موفقِ نسخهٔ نهایی، فایل قابل تحویل را منتشر می‌کند
+    final_pdf: Path | None = None
+    if qa["ok"] and edition == "final" and not print_theme and not bw_theme:
+        _fname = (((plan.layout_cfg or {}).get("output", {}) or {})
+                  .get("final_name", "HumsYar_Final.pdf"))
+        final_pdf = _publish_final(pdf_path, out / _fname)
     renders = render_pages_png(pdf_path, out / "pages")
 
     report = {
         "engine": __version__, "session": session.id, "edition": edition, "theme": theme,
-        "pdf": str(pdf_path), "build_seconds": round(time.time() - t0, 1),
+        "pdf": str(pdf_path),
+        "final_pdf": str(final_pdf) if final_pdf else None,
+        "ultra_sheet": ultra_info,
+        "build_seconds": round(time.time() - t0, 1),
         "toc_pages_found": toc_pages, "toc_links": toc_links,
         "planner_decisions": plan.decisions, "planner_warnings": plan.warnings,
         "content_analysis": [p.to_dict() for p in plan.analysis],
@@ -483,3 +636,30 @@ def _review_md(session: Session, plan: Plan, qa: dict) -> str:
     lines += ["", "## تصمیم‌های چیدمان و بسته‌بندی (خلاصه)"]
     lines += [f"- {d}" for d in plan.decisions]
     return "\n".join(lines) + "\n"
+
+
+
+def build(content_path: str, **kw) -> dict:
+    """نقطهٔ ورود عمومی ساخت — با قفل ضد اجرای هم‌زمان روی پوشهٔ خروجی.
+
+    دو ساخت موازی روی یک پوشهٔ خروجی فایل‌های میانی (body/frame/…) هم را
+    خراب می‌کنند؛ قفل با پیام روشن جلوی دومی را می‌گیرد و در پایان (موفق یا
+    ناموفق) آزاد می‌شود. اگر ساخت قبلی با kill سخت مرده باشد، حذف دستی
+    فایل قفل کافی است و در پیام آمده است.
+    """
+    import os
+    out = Path(kw.get("out_dir", "output")).resolve()
+    out.mkdir(parents=True, exist_ok=True)
+    lock = out / ".humsyar-build.lock"
+    try:
+        fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+    except FileExistsError:
+        raise RuntimeError(
+            f"ساخت دیگری روی پوشهٔ خروجی در حال اجراست (قفل: {lock}). "
+            "اگر ساخت قبلی قطع شده است، این فایل قفل را دستی حذف کنید.") from None
+    try:
+        os.write(fd, f"{os.getpid()}".encode())
+        os.close(fd)
+        return _build_inner(content_path, **kw)
+    finally:
+        lock.unlink(missing_ok=True)

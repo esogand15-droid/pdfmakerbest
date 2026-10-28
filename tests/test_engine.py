@@ -78,8 +78,11 @@ def test_typeset_is_deterministic(session):
 
 @pytest.mark.skipif(not PILOT_PDF.exists(), reason="PDF پایلوت هنوز ساخته نشده؛ اول build بزنید")
 def test_built_pdf_qa_and_facts(session):
+    import json
     from humsyar.qa import run_qa
-    qa = run_qa(session, PILOT_PDF, CONTROL_FACTS)
+    _rep = json.loads((ROOT / "output" / "build_report.json").read_text(encoding="utf-8"))
+    _sheet = set((_rep.get("ultra_sheet") or {}).get("pages_in_book") or [])
+    qa = run_qa(session, PILOT_PDF, CONTROL_FACTS, sheet_pages=_sheet)
     assert qa["ok"], qa["errors"]
     assert qa["figures_pdf"] == qa["figures_model"] == 11
     assert qa["min_font_pt"] >= 7.0
