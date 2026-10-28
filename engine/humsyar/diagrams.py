@@ -157,10 +157,7 @@ def tree_svg(root: dict[str, Any], color_for=None,
             cls += " tree-node--branch"  # رنگ نقشی: شاخهٔ اصلی (نه رنگ مفهوم علمی)
         _nc = color_for(n) if color_for else None
         _rs = f' style="stroke:{_nc}"' if _nc else ""
-        _tn = ""
-        if n.get("chapter_num"):
-            from .palette import chapter_vars
-            _tn = f' style="--tn:{chapter_vars(int(n["chapter_num"]))["--chapter-header"]}"'
+        _tn = ""  # رنگ شاخه‌ها از رنگ جلسهٔ سند می‌آید (CSS)، نه از شمارهٔ مبحث
         parts.append(
             f'<g class="{cls}"{_tn}><rect x="{nx:.0f}" y="{ny:.0f}" width="{n["w"]:.0f}" '
             f'height="{n["h"]:.0f}" rx="8"{_rs}/>'

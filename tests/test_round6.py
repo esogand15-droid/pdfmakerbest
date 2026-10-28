@@ -74,8 +74,8 @@ def test_table_frame_single_owner_css():
     # خط زیر سربرگ در همهٔ ستون‌ها هم‌وزن و یکدست است — بدون پله و بدون رنگ واژه
     assert "border-bottom:2.2pt" not in CSS
     assert "th-ent" not in CSS
-    # راند ۱۰ (بند ۸): راه‌راه ظریف سراسری با حذف ستون rowh از سایه
-    assert "table.tbl tbody tr:nth-child(even) td:not(.rowh){ background:var(--ice-50)" in CSS
+    # راند ۱۳: راه‌راه گرم با توکن اختصاصی --zebra (ستون rowh همچنان مستثناست)
+    assert "table.tbl tbody tr:nth-child(even) td:not(.rowh){ background:var(--zebra)" in CSS
 
 
 # --------------------------------------------------------- حس نسخهٔ نهایی
@@ -106,17 +106,17 @@ def test_no_word_coloring_or_legend():
 
 # --------------------------------------------------- نوار پیشرفت در PDF واقعی
 def test_progress_bar_rtl_and_dark_in_built_pdf():
-    """راند ۱۲: پُری نوار پیشرفت رنگ مبحث همان صفحه است (نقش)، و همچنان
-    از راست لنگر می‌گیرد و حول مرکز متقارن است."""
+    """راند ۱۳: پُری نوار پیشرفت رنگ «جلسه» است؛ شیار تمام‌عرض محتواست
+    (۱۴ تا ۱۹۶mm) و پُری همچنان از راست لنگر می‌گیرد."""
     pdf = ROOT / "output" / "neuroanat_s01_pilot_final.pdf"
     if not pdf.exists():
         return  # در محیط بدون خروجی ساخته‌شده رد می‌شود
     import pymupdf
-    from humsyar.palette import chapter_accent
+    from humsyar.palette import session_accent
     doc = pymupdf.open(str(pdf))
     page = doc[min(8, doc.page_count - 1)]  # صفحهٔ ۹: داخل مبحث ۶
     MM = 72 / 25.4
-    expect = tuple(int(chapter_accent(6)[i:i + 2], 16) / 255 for i in (1, 3, 5))
+    expect = tuple(int(session_accent(1)[i:i + 2], 16) / 255 for i in (1, 3, 5))
     dark = []
     for dr in page.get_drawings():
         r = dr["rect"]
@@ -124,9 +124,9 @@ def test_progress_bar_rtl_and_dark_in_built_pdf():
         if fill and r.y0 > 286 * MM and r.width > 10 * MM and r.height < 3 * MM:
             if all(abs(fill[i] - expect[i]) < 0.03 for i in range(3)):
                 dark.append(r)
-    assert dark, "پُری نوار پیشرفت با رنگ مبحث صفحه پیدا نشد"
-    # لنگر از راست: لبهٔ راست پُری تقریباً روی انتهای راست شیار (۱۴۷mm) است
-    assert abs(max(r.x1 for r in dark) - 147 * MM) < 2 * MM
+    assert dark, "پُری نوار پیشرفت با رنگ جلسه پیدا نشد"
+    # لنگر از راست: لبهٔ راست پُری روی انتهای راست شیار تمام‌عرض (۱۹۶mm) است
+    assert abs(max(r.x1 for r in dark) - 196 * MM) < 2 * MM
     # شیار حول مرکز صفحه (۱۰۵mm) متقارن است
     tracks = [dr["rect"] for dr in page.get_drawings()
               if dr["rect"].y0 > 286 * MM and dr["rect"].width > 50 * MM

@@ -67,6 +67,7 @@ try {
     path: outputPdf,
     format: "A4",
     printBackground: true,
+    omitBackground: Boolean(cfg.omitBackground),
     displayHeaderFooter: Boolean(cfg.headerFooter),
     tagged: true,
     margin: m,

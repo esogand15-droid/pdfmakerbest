@@ -13,7 +13,7 @@ import re
 from html import escape
 
 from .diagrams import PAGE_STYLE as TREE_PAGE_STYLE, measure_tree, session_tree, tree_svg
-from .palette import chapter_style, chapter_vars, hex_of
+from .palette import chapter_vars, hex_of, session_style, session_vars
 from .icons import (CALLOUT_ICONS, FAMILY_LABELS, ICON_FAMILY, family_of_kind,
                     icon_svg)
 from .revision import extract_items
@@ -111,12 +111,16 @@ class Typesetter:
         body.append(self.glossary())
         favicon = (f'<link rel="icon" type="image/png" href="{self.brand["favicon_uri"]}">'
                    if self.brand.get("favicon_uri") else "")
+        _paper_white = (self.print_theme or self.bw_theme
+                        or ((self.plan.layout_cfg or {}).get("color_system", {})
+                            or {}).get("paper") == "white")
+        _paper_css = "@page{background:#FFFFFF}:root{--paper:#FFFFFF}" if _paper_white else ""
         return (
             '<!DOCTYPE html><html lang="fa" dir="rtl"'
             + (f' data-theme="{theme}"' if theme != "a" else "") + '><head><meta charset="utf-8">'
             f'<title>{escape(s.course)} — جلسهٔ {fa_num(s.session_number)}: {escape(s.title)}</title>{favicon}'
-            f'<style>{css}{icon_color_css()}</style></head>'
-            f'<body class="{"print-theme" if self.print_theme else ""}{" bw-theme" if self.bw_theme else ""}">{"".join(body)}</body></html>'
+            f'<style>{css}{icon_color_css()}{_paper_css}</style></head>'
+            f'<body style="{session_style(s.session_number)}" class="{"print-theme" if self.print_theme else ""}{" bw-theme" if self.bw_theme else ""}">{"".join(body)}</body></html>'
         )
 
     def toc_page(self) -> str:
@@ -175,7 +179,7 @@ class Typesetter:
             pg_txt = f'ص {fa_num(pg)}' if pg else str(m.get("tag", ""))
             items.append(
                 f'<li class="{"in" if n in included else ""}" '
-                f'style="{chapter_style(n)};--topic-c:{chapter_vars(n)["--chapter-header"]}">'
+                f'style="--topic-c:{session_vars(s.session_number)["--session-header"]}">'
                 f'<span class="n">{fa_num(n)}</span><span>{escape(str(m["title"]))}</span>'
                 f'<span class="pg">{escape(pg_txt)}</span></li>')
         return f'<nav class="session-map"><h2>نقشهٔ جلسه</h2><ol>{"".join(items)}</ol></nav>'
@@ -244,12 +248,6 @@ class Typesetter:
             key = "fam4" if fam.startswith("fam4") else fam
             groups.setdefault(key, []).append((n, l))
         fam_order = ["fam1", "fam2", "fam3", "fam4", "fam5", "fam6"]
-        # نمونهٔ کوچک هر خانواده: نخستین گونهٔ کادر همان خانواده (فقط برچسب، بدون متن ساختگی)
-        sample_kind = {}
-        for k in KIND_ORDER:
-            fam = family_of_kind(k)
-            key = "fam4" if fam.startswith("fam4") else fam
-            sample_kind.setdefault(key, (k, fam))
         cards = []
         for key in fam_order:
             entries = groups.get(key, [])
@@ -258,13 +256,7 @@ class Typesetter:
             items = "".join(
                 f'<span class="fguide__it">{icon_badge(n, 11)}<span>{escape(l)}</span></span>'
                 for n, l in entries)
-            sk = sample_kind.get(key)
-            sample = ""
-            if sk:
-                k, fam = sk
-                sample = (f'<div class="fguide__sample fam {fam}">'
-                          f'<span class="icb fam {fam}">{icon(k)}</span>'
-                          f'<span class="fguide__sample-t">{escape(KIND_LABELS[k])}</span></div>')
+            sample = ""  # نوار نمونه حذف شد (راند ۱۳): کارت تمیز با ارتفاع برابر
             cards.append(
                 f'<div class="fguide__card fcard--{key}">'
                 f'<div class="fguide__h"><span class="fguide__dot"></span>{escape(FAMILY_LABELS[key])}</div>'
@@ -273,7 +265,7 @@ class Typesetter:
 <div class="guide avoid-break">
   <h2>چطور این جزوه را بخوانیم؟</h2>
   <p class="guide__line">کنار هر مطلب، منبعش آمده است: <span class="src">{icon_svg("reference", 9)}<b>منبع:</b> جزوهٔ درس، ص ۹</span>
-  و اصطلاح‌ها در نخستین ورود با معادل <bdi class="en">(English)</bdi> می‌آیند. رنگ هر نشانه از خانواده‌اش می‌آید و در کل جزوه ثابت است؛ رنگ هر مبحث هم از شماره‌اش (تب کناری و سربرگ جدول‌ها).</p>
+  و اصطلاح‌ها در نخستین ورود با معادل <bdi class="en">(English)</bdi> می‌آیند. رنگ هر نشانه از خانواده‌اش می‌آید و در کل جزوه ثابت است؛ رنگ جلسه از شمارهٔ جلسه می‌آید و روی تب کناری و سربرگ جدول‌ها دیده می‌شود.</p>
   <div class="fguide">{"".join(cards)}</div>
 </div>"""
 
@@ -294,13 +286,13 @@ class Typesetter:
                 n = int(m["number"])
                 st = "cur" if n == t.number else ("done" if n < t.number else "todo")
                 cells.append(f'<span class="pstrip__c pstrip__c--{st}" '
-                             f'style="{chapter_style(n)};--topic-c:{chapter_vars(n)["--chapter-header"]}"><b>{fa_num(n)}</b>'
+                             f'style="--topic-c:{session_vars(self.session.session_number)["--session-header"]}"><b>{fa_num(n)}</b>'
                              f'{escape(str(m["title"]))}</span>')
             strip = (f'<div class="pstrip" aria-hidden="true">{"".join(cells)}</div>')
         pre = "".join(f'<span class="chip chip--pre">{inline(p)}</span>' for p in t.prereq_required)
         pre_s = "".join(f'<span class="chip">{inline(p)}</span>' for p in t.prereq_suggested)
         head = f"""
-<section class="topic" id="{escape(t.id)}" style="{chapter_style(t.number)}">
+<section class="topic" id="{escape(t.id)}">
   <div class="topic-head" data-bid="topichead:{escape(t.id)}">
     <div class="topic-head__row">
       <div class="topic-num">مبحث<b>{fa_num(t.number)}</b></div>

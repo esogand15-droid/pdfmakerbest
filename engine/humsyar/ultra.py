@@ -28,6 +28,7 @@ from pathlib import Path
 from typing import Any
 
 from .model import Session, load_session, normalize_text
+from .palette import session_style
 from .revision import Item, extract_items
 from .typeset import inline
 
@@ -331,44 +332,44 @@ body{ font-family:Vazirmatn,sans-serif; color:var(--ink); margin:0;
 .upage{ padding:2mm 1mm 0 }
 .upage+.upage{ break-before:page }
 .uhead{ display:flex; justify-content:space-between; align-items:center;
-  border-bottom:2pt solid var(--royal-600); padding-bottom:2mm; margin-bottom:3mm }
-.uhead .ut{ font-weight:800; color:var(--navy-900); font-size:1.5em }
-.uhead .ub{ color:var(--royal-600); font-weight:700 }
-.uhead .ubadge{ background:var(--royal-600); color:#fff; border-radius:20pt;
+  border-bottom:2pt solid var(--session-header,var(--royal-600)); padding-bottom:2mm; margin-bottom:3mm }
+.uhead .ut{ font-weight:800; color:var(--session-deep,var(--navy-900)); font-size:1.5em }
+.uhead .ub{ color:var(--session-deep,var(--royal-600)); font-weight:700 }
+.uhead .ubadge{ background:var(--session-header,var(--royal-600)); color:#fff; border-radius:20pt;
   padding:1pt 7pt; font-weight:700; font-size:.82em }
 .ucols{ columns:2; column-gap:5mm }
 .uc{ break-inside:avoid; border:1pt solid var(--hairline); border-radius:5pt;
   padding:1.9mm 2.3mm; margin:0 0 2.4mm; background:#fff }
 .uc--skeleton,.uc--table,.uc--proc{ column-span:all }
-.uc h3{ margin:0 0 1.6mm; color:var(--royal-600); font-size:1.06em }
-.uc--alerts{ border-color:var(--c-warning); background:var(--bg-warning) }
+.uc h3{ margin:0 0 1.6mm; color:var(--session-deep,var(--royal-600)); font-size:1.06em }
+.uc--alerts{ border-color:var(--line-warm); border-inline-start:3pt solid var(--fam4w); background:var(--surface) }
 .uc--alerts h3{ color:var(--c-warning) }
-.uc--numbers{ background:var(--ice-50) }
+.uc--numbers{ background:var(--surface) }
 .up{ margin:0; padding-inline-start:4.2mm }
 .up li{ margin:.4mm 0 }
-.usk b{ color:var(--navy-900); display:block; margin-top:1mm }
-.usk span{ display:inline-block; background:var(--ice-100); border-radius:10pt;
+.usk b{ color:var(--session-deep,var(--navy-900)); display:block; margin-top:1mm }
+.usk span{ display:inline-block; background:var(--surface-warm); border-radius:10pt;
   padding:0 5pt; margin:.6mm 0 .6mm 1.2mm; font-size:.86em }
 .utbl{ width:100%; border-collapse:collapse; font-size:.92em }
-.utbl th{ background:var(--royal-600); color:#fff; padding:1.2mm 1.6mm; text-align:start }
+.utbl th{ background:var(--session-header,var(--royal-600)); color:#fff; padding:1.2mm 1.6mm; text-align:start }
 .utbl td{ border-bottom:.5pt solid var(--hairline); padding:.7mm 1.4mm; vertical-align:top }
-.utbl td.rowh{ background:var(--ice-100); font-weight:700; color:var(--navy-900) }
-.utbl tbody tr:nth-child(even) td:not(.rowh){ background:var(--ice-50) }
+.utbl td.rowh{ background:var(--session-soft,var(--ice-100)); font-weight:700; color:var(--session-deep,var(--navy-900)) }
+.utbl tbody tr:nth-child(even) td:not(.rowh){ background:var(--zebra) }
 .uchain{ margin:1mm 0; line-height:2 }
-.ustep{ background:var(--ice-100); border:1pt solid var(--sky-400); border-radius:10pt;
+.ustep{ background:var(--surface); border:1pt solid var(--line-chip); border-radius:10pt;
   padding:0 6pt; white-space:nowrap }
-.uarr{ color:var(--royal-600); font-weight:800 }
-.uchip{ display:inline-block; border:1pt solid var(--hairline); background:var(--ice-50);
+.uarr{ color:var(--session-deep,var(--royal-600)); font-weight:800 }
+.uchip{ display:inline-block; border:1pt solid var(--line-chip); background:var(--surface);
   border-radius:10pt; padding:0 5pt; margin:.6mm 0 .6mm 1.2mm; font-size:.9em }
-.un{ color:var(--navy-900); background:var(--ice-100); border-radius:3pt; padding:0 2pt }
 .uvs{ color:var(--slate-deep); font-size:.85em }
 .ufoot{ border-top:1pt solid var(--hairline); margin-top:2mm; padding-top:1.6mm;
   color:var(--slate-deep); font-size:.8em; display:flex; justify-content:space-between }
 .tight .uc{ margin-bottom:2mm; padding:1.8mm 2.2mm }
 .tight .up li{ margin:.2mm 0 }
-.term{ font-weight:700; color:var(--brand-ink) }
+.term,.numbadge,.un{ background-color:var(--hl); color:inherit; border:0; padding:0 .2em;
+  border-radius:.2em; display:inline; line-height:inherit; box-decoration-break:clone;
+  -webkit-box-decoration-break:clone; box-shadow:none; text-shadow:none }
 .en, bdi.en{ font-family:Inter,Vazirmatn,sans-serif; direction:ltr; color:var(--ink) }
-.numbadge{ font-weight:800; color:var(--navy-900) }
 """
 
 
@@ -394,7 +395,7 @@ def render_html(session: Session, comps: list[Comp], *, base_pt: float,
         pages.append(f'<div class="upage">{head}<div class="ucols">{body}</div>{foot}</div>')
     return (f'<!DOCTYPE html><html lang="fa" dir="rtl"><head><meta charset="utf-8">'
             f'<style>{font_css}\n{brand_css}\n:root{{--u-base:{base_pt}pt}}\n{ULTRA_CSS}</style>'
-            f'</head><body class="{"tight" if tight else ""}">{"".join(pages)}</body></html>')
+            f'</head><body style="{session_style(session.session_number)}" class="{"tight" if tight else ""}">{"".join(pages)}</body></html>')
 
 
 # ---------------------------------------------------------------- حلقهٔ جاگیری

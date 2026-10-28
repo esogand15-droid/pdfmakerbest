@@ -22,7 +22,7 @@ CSS = (ROOT / "engine" / "themes" / "humsyar.css").read_text(encoding="utf-8")
 
 
 def test_warm_tokens_present():
-    assert hex_of("paper") == "#FFFBF5"
+    assert hex_of("paper") == "#FFFBF3"  # راند ۱۳: کرم صفحه روشن‌تر شد
     assert hex_of("ink") == "#26324B"
     assert hex_of("primary") == "#139A8E"
     assert hex_of("primary-deep") == "#0F5E63"
@@ -74,13 +74,16 @@ def _pilot_html(**kw):
 
 
 def test_topics_carry_distinct_chapter_vars():
+    """راند ۱۳ (چرخش مستند): رنگ مبحث حذف شد؛ کل جزوه یک رنگ جلسه دارد.
+    نام تست برای ردیابی تاریخچه نگه داشته شده است."""
+    from humsyar.palette import session_vars
     html = _pilot_html()
-    v4, v6 = chapter_vars(4), chapter_vars(6)
-    assert v4["--chapter-accent"] in html and v6["--chapter-accent"] in html
-    assert v4["--chapter-header"] != v6["--chapter-header"]
-    # سربرگ جدول از رنگ مبحث می‌آید، نه رنگ ثابت
-    assert "var(--chapter-header" in CSS
-    # بج آیکون و کلاس خانواده روی کال‌اوت‌ها
+    sv = session_vars(1)
+    assert sv["--session-accent"] in html
+    assert "--chapter-accent" not in html and "--chapter-header" not in html
+    # سربرگ جدول از رنگ جلسه می‌آید که یک‌بار روی body سوار شده است
+    assert "var(--session-header" in CSS
+    # بج آیکون و کلاس خانواده روی کال‌اوت‌ها (بدون تغییر)
     assert 'class="icb fam ' in html
     assert "callout--" in html and " fam fam" in html
 
@@ -92,7 +95,7 @@ def test_legend_six_family_cards():
     for lbl in ("دانش پایه", "تأکید و یادگیری", "کاربرد و دنیای واقعی",
                 "دقت و احتیاط", "حافظه و آزمون", "ساختار و ناوبری"):
         assert lbl in g
-    assert "fguide__sample" in g  # نمونهٔ کوچک کادر هر خانواده
+    assert "fguide__sample" not in g  # راند ۱۳: نوار نمونهٔ بزرگ حذف شد
 
 
 def test_no_content_based_color_conditions_in_engine():
@@ -115,8 +118,8 @@ def test_no_content_based_color_conditions_in_engine():
 
 
 def test_synthetic_session_renders_with_chapter_colors(tmp_path):
-    """جلسهٔ ساختگی با مباحث ۳، ۷ و ۹ (محتوای نامرتبط): رندر بی‌خطا و
-    رنگ هر مبحث مطابق فرمول شماره — بدون هیچ تنظیم دستی."""
+    """جلسهٔ ساختگی (شمارهٔ جلسهٔ ۳) با مباحث ۳، ۷ و ۹: رندر بی‌خطا؛
+    راند ۱۳: رنگ فقط از شمارهٔ «جلسه» می‌آید و برای همهٔ مباحث یکی است."""
     import yaml
     doc = {
         "id": "syn_warm", "course": "درس آزمایشی", "session_number": 3,
@@ -146,8 +149,9 @@ def test_synthetic_session_renders_with_chapter_colors(tmp_path):
     s = load_session(str(p))
     assert validate(s) == []
     html = Typesetter(plan_session(s, "final", ROOT)).document("")
-    for n in (3, 7, 9):
-        assert chapter_vars(n)["--chapter-accent"] in html, n
+    from humsyar.palette import session_accent
+    assert session_accent(3) in html  # رنگ جلسهٔ ۳ روی کل سند
+    assert "--chapter-accent" not in html
     assert "fam4w" in html  # کادر هشدار خانوادهٔ خودش را گرفته است
     assert html.count("fguide__card") == 6
 

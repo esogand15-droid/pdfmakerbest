@@ -235,9 +235,13 @@ def cover_svg(session: Session, light: bool = False) -> str:
 def cover_html(session: Session, brand: dict[str, str], font_css: str,
                light: bool = False) -> str:
     C = _c(light)
-    from .palette import chapter_vars, mix_hex
-    _sess_deep = chapter_vars(int(session.session_number))["--chapter-header"]
+    from .palette import mix_hex, session_vars
+    _sess_deep = session_vars(int(session.session_number))["--session-header"]
     _cover_to = mix_hex(_hx("cover-deep"), _sess_deep, 0.55)
+
+    def _a(hexv: str, pct: float) -> str:  # هگز ۸رقمی نهایی؛ بدون color-mix/rgba
+        return f"{hexv}{round(pct * 255):02X}"
+    _navy = _hx("navy-950")
     """سند HTML مستقل کاور؛ با حاشیهٔ صفر رندر و به ابتدای PDF چسبانده می‌شود."""
     draft_badge = ('<span class="cv-draft">پایلوت موتور — نسخهٔ آزمایشی</span>'
                    if session.draft else "")
@@ -255,36 +259,36 @@ def cover_html(session: Session, brand: dict[str, str], font_css: str,
 body {{ font-family:"Vazirmatn",sans-serif; }}
 .cover {{ position:relative; width:210mm; height:297mm; overflow:hidden; background:linear-gradient(180deg, var(--cover-deep) 0%, {_cover_to} 100%); }}
 .cv-bokeh {{ position:absolute; border-radius:50%; pointer-events:none; }}
-.cv-bokeh.b1 {{ width:95mm; height:95mm; top:-28mm; left:-24mm; background:radial-gradient(circle, color-mix(in srgb, var(--sun) 30%, transparent), transparent 68%); }}
-.cv-bokeh.b2 {{ width:80mm; height:80mm; bottom:8mm; right:-22mm; background:radial-gradient(circle, color-mix(in srgb, var(--secondary) 26%, transparent), transparent 68%); }}
+.cv-bokeh.b1 {{ width:95mm; height:95mm; top:-28mm; left:-24mm; background:radial-gradient(circle, {_a(_hx('sun'), .30)}, transparent 68%); }}
+.cv-bokeh.b2 {{ width:80mm; height:80mm; bottom:8mm; right:-22mm; background:radial-gradient(circle, {_a(_hx('secondary'), .26)}, transparent 68%); }}
 .cover-art {{ position:absolute; inset:0; width:210mm; height:297mm; }}
 .cv-scrim {{ position:absolute; top:0; left:0; right:0; height:118mm;
-  background:linear-gradient(180deg, color-mix(in srgb, var(--navy-950) 62%, transparent), color-mix(in srgb, var(--navy-950) 28%, transparent) 62%, transparent); }}
+  background:linear-gradient(180deg, {_a(_navy, .62)}, {_a(_navy, .28)} 62%, transparent); }}
 .cv-top {{ position:absolute; top:17mm; left:0; right:0; text-align:center; color:{C['pale']}; }}
 .cv-course {{ font-size:12.5pt; font-weight:500; letter-spacing:.4px; }}
 .cv-course::before,.cv-course::after {{ content:""; display:inline-block; width:16mm; height:1px;
   background:{C['cyan']}; opacity:.65; vertical-align:middle; margin:0 4mm; }}
 .cv-center {{ position:absolute; top:30mm; left:14mm; right:14mm; text-align:center; color:#fff;
-  padding:6mm 4mm 7mm; background:radial-gradient(ellipse 62% 58% at 50% 44%, color-mix(in srgb, var(--navy-950) 62%, transparent), color-mix(in srgb, var(--navy-950) 32%, transparent) 55%, transparent 74%); }}
+  padding:6mm 4mm 7mm; background:radial-gradient(ellipse 62% 58% at 50% 44%, {_a(_navy, .62)}, {_a(_navy, .32)} 55%, transparent 74%); }}
 .cv-sess {{ display:inline-block; border:1.2px solid {C['cyan']}; color:{C['cyan']};
-  border-radius:20px; padding:1.2mm 6mm; font-size:11pt; font-weight:700; background:color-mix(in srgb, var(--navy-950) 45%, transparent); }}
+  border-radius:20px; padding:1.2mm 6mm; font-size:11pt; font-weight:700; background:{_a(_navy, .45)}; }}
 .cv-sess b {{ font-size:14pt; color:#fff; }}
 .cv-title {{ margin-top:5.5mm; font-size:27pt; font-weight:700; line-height:1.55;
-  text-shadow:0 1px 14px rgba(0,0,0,.45); }}
+  text-shadow:0 1px 14px #00000073; }}
 .cv-title .t2 {{ display:block; font-size:19pt; font-weight:500; color:{C['mint']}; margin-top:1.5mm; }}
 .cv-sub {{ margin-top:4mm; font-size:11.5pt; color:{C['pale']}; }}
 .cv-brand {{ position:relative; margin-top:5mm; color:#fff; padding:3mm 0 2mm; }}
 .cv-brand::before {{ content:""; position:absolute; inset:-6mm -22mm -4mm; z-index:-1;
-  background:radial-gradient(ellipse 58% 62% at 50% 50%, color-mix(in srgb, var(--navy-950) 94%, transparent), color-mix(in srgb, var(--navy-950) 78%, transparent) 55%, transparent 78%); }}
-.cv-brand .fa, .cv-brand .en {{ text-shadow:0 1px 10px rgba(0,0,0,.9), 0 0 3px rgba(0,0,0,.9); }}
+  background:radial-gradient(ellipse 58% 62% at 50% 50%, {_a(_navy, .94)}, {_a(_navy, .78)} 55%, transparent 78%); }}
+.cv-brand .fa, .cv-brand .en {{ text-shadow:0 1px 10px #000000E6, 0 0 3px #000000E6; }}
 .cv-logo {{ display:block; width:28mm; height:auto; margin:0 auto 2.5mm;
-  filter:drop-shadow(0 1.5mm 5mm color-mix(in srgb, var(--cyan-400) 28%, transparent)); }}
+  filter:drop-shadow(0 1.5mm 5mm {_a(_hx('sun'), .30)}); }}
 .cv-brand .fa {{ font-size:17pt; font-weight:700; }}
 .cv-brand .en {{ display:block; margin-top:1mm; font-family:"Inter",sans-serif;
   font-size:10.5pt; font-weight:700; letter-spacing:3.5px; color:{C['cyan']}; direction:ltr; }}
 .cv-bottom {{ position:absolute; bottom:10mm; left:12mm; right:12mm; display:flex;
   justify-content:space-between; align-items:center; color:{C['pale']}; font-size:9pt;
-  border-top:0.6px solid color-mix(in srgb, var(--aqua-300) 40%, transparent); padding-top:3mm; }}
+  border-top:0.6px solid {_a(_hx('aqua-300'), .40)}; padding-top:3mm; }}
 .cv-draft {{ border:1px dashed var(--sky-400); color:var(--sky-400); border-radius:20px; padding:.6mm 4mm; font-size:8.4pt; }}
 .cover--light {{ background:var(--ice-50); }}
 .cover--light .cv-scrim, .cover--light .cv-center, .cover--light .cv-brand {{ background:none; }}

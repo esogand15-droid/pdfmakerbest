@@ -18,7 +18,7 @@ from .brand import load_brand
 from .cover import cover_html
 from .frame import CAPSULE_CY_MM, frame_html
 import os as _os
-from .palette import brand_css_text, chapter_vars, rgb_of, rgb_of_hex
+from .palette import brand_css_text, hex_of, rgb_of, rgb_of_hex, session_vars
 from .model import Session, load_session, normalize_text, validate
 from .packing import measure_blocks, pack
 from .planner import Plan, fa_num, plan_session
@@ -55,17 +55,18 @@ def _font_css() -> str:
 
 
 def _render_pdf(html: str, out_pdf: Path, work: Path, session: Session,
-                *, margin: dict, tag: str) -> None:
+                *, margin: dict, tag: str, omit_background: bool = False) -> None:
     html_path = work / f"{tag}.html"
     html_path.write_text(html, encoding="utf-8")
     cfg = {
-        "margin": margin, "headerFooter": False,
+        "margin": margin, "headerFooter": False, "omitBackground": omit_background,
         "fontFile": str(REPO_ROOT / "assets" / "fonts" / "Vazirmatn-Regular.ttf"),
     }
     cfg_path = work / f"render_config_{tag}.json"
     cfg_path.write_text(json.dumps(cfg, ensure_ascii=False), encoding="utf-8")
     proc = subprocess.run(
-        ["node", str(ENGINE_DIR / "render.mjs"), str(html_path), str(out_pdf), str(cfg_path)],
+        ["node", str(ENGINE_DIR / "render.mjs"), str(html_path.resolve()),
+         str(Path(out_pdf).resolve()), str(cfg_path.resolve())],
         cwd=ENGINE_DIR, capture_output=True, text=True, timeout=600)
     if proc.returncode != 0 or "RENDER_OK" not in proc.stdout:
         raise RuntimeError(f"رندر PDF ({tag}) ناموفق بود:\n{proc.stdout}\n{proc.stderr}")
@@ -189,7 +190,8 @@ def _optimize_figures(session: Session, work: Path) -> None:
         b.data["_opt_file"] = str(dst.relative_to(REPO_ROOT))
 
 
-def _stamp_furniture(doc, frame_pdfs, page_topics: dict | None = None) -> None:
+def _stamp_furniture(doc, frame_pdfs, page_topics: dict | None = None,
+                     session_number: int = 1) -> None:
     """مهر قاب روی همهٔ صفحات جز کاور + کپسول شمارهٔ صفحه با ارقام فارسی.
 
     انتخاب طراحی (راند ۲): کپسول فقط عدد صفحه را دارد — تمیزتر از «صفحهٔ X از Y»
@@ -214,15 +216,16 @@ def _stamp_furniture(doc, frame_pdfs, page_topics: dict | None = None) -> None:
             page.show_pdf_page(page.rect, overlay, 0)
             # نوار پیشرفت مطالعه: از راست پر می‌شود (جهت خواندن فارسی) و در چاپ
             # سیاه‌وسفید هم با قاب تیره + پُری تیره + شیار سفید قابل تشخیص است.
-            # رنگ پیشرفت/کپسول از مبحث همان صفحه می‌آید (شمارهٔ مبحث ← نقش)
-            _cv = (chapter_vars(int(key)) if key else None)
-            _acc = rgb_of_hex(_cv["--chapter-accent"]) if _cv else rgb_of("primary")
-            _acc_h = rgb_of_hex(_cv["--chapter-header"]) if _cv else rgb_of("primary-deep")
+            # فوتر دو ردیفه (راند ۱۳): ردیف ۱ نوار پیشرفت تمام‌عرض محتوا با
+            # رنگ جلسه (از راست پر می‌شود)؛ ردیف ۲ روی خط پایین قاب است:
+            # راست برند، چپ عنوان مجموعه، وسط دقیقاً کپسول (در قاب/همین‌جا).
+            _sv = session_vars(int(session_number))
+            _acc = rgb_of_hex(_sv["--session-accent"])
+            _acc_h = rgb_of_hex(_sv["--session-header"])
             frac = i / max(1, total - 1)
-            tx0, tx1, ty, th = 63 * MM, 147 * MM, 288.2 * MM, 1.15 * MM  # متقارن دور مرکز ۱۰۵
+            tx0, tx1, ty, th = 14 * MM, 196 * MM, 286.6 * MM, 1.0 * MM
             page.draw_rect(pymupdf.Rect(tx0, ty, tx1, ty + th),
-                           color=rgb_of("ink"), fill=rgb_of("line-warm"),
-                           width=0.8, radius=0.5)
+                           color=None, fill=rgb_of("line-warm"), radius=0.5)
             fw = (tx1 - tx0) * frac
             if fw > 0.6 * MM:
                 page.draw_rect(pymupdf.Rect(tx1 - fw, ty, tx1, ty + th),
@@ -383,23 +386,29 @@ def build(content_path: str, *, edition: str = "final", theme: str = "a",
     frame_pdfs: dict = {}
     needed = {page_topics.get(pg, {}).get("number"): page_topics.get(pg, {})
               for pg in range(2, max(page_topics, default=2) + 1)}
+    _color_cfg = (plan.layout_cfg or {}).get("color_system", {}) or {}
+    _paper_hex = "#FFFFFF" if (print_theme or _color_cfg.get("paper") == "white") else hex_of("paper")
     for tnum, info in needed.items():
         fdoc = frame_html(session, brand, font_css + "\n" + brand_css,
                           topic_number=tnum, topic_short=info.get("short", ""),
                           topic_order=info.get("order", 0),
+                          accent_mode=str(_color_cfg.get("chapter_accent_mode", "off")),
+                          paper_hex=_paper_hex,
                           side="right")  # همیشه لبهٔ راست: سمت ورق‌زدن دانشجو
         if fdoc is None:
             frame_pdfs = {}
             break
         fp = work / f"frame_{tnum}.pdf"
-        _render_pdf(fdoc, fp, work, session, margin=ZERO_MARGIN, tag=f"frame_{tnum}")
+        _render_pdf(fdoc, fp, work, session, margin=ZERO_MARGIN, tag=f"frame_{tnum}",
+                    omit_background=True)
         frame_pdfs[tnum] = fp
 
     # ادغام: کاور + بدنه، مهر قاب و شماره‌ها
     import pymupdf
     final = pymupdf.open(str(cover_pdf))
     final.insert_pdf(pymupdf.open(str(body_pdf)))
-    _stamp_furniture(final, frame_pdfs, page_topics)
+    _stamp_furniture(final, frame_pdfs, page_topics,
+                     session_number=session.session_number)
     # garbage=4 جریان‌های فونت تکراریِ واریانت‌های قاب را یکی می‌کند (۵٫۳→۲٫۵MB)
     final.save(str(pdf_path), garbage=4, deflate=True)
     final.close()

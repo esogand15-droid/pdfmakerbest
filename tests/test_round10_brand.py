@@ -157,8 +157,9 @@ def test_glossary_two_columns_on_last_page():
 def test_frame_and_progress_use_palette():
     import humsyar.build as build_mod
     import humsyar.frame as frame_mod
-    assert frame_mod._BRAND == hex_of("primary-deep")
     assert frame_mod._DEEP == hex_of("ink")
+    assert frame_mod._HAIR == hex_of("line-warm")
     src = Path(build_mod.__file__).read_text(encoding="utf-8")
-    # پیشرفت و کپسول از رنگ مبحث همان صفحه می‌آیند (راند ۱۲)
-    assert "chapter_vars(int(key))" in src and "rgb_of_hex" in src
+    # راند ۱۳ (چرخش مستند از راند ۱۲): پیشرفت و کپسول از رنگ «جلسه» می‌آیند،
+    # نه رنگ مبحث؛ منبع هر دو همچنان پالت مرکزی است.
+    assert "session_vars(int(session_number))" in src and "rgb_of_hex" in src

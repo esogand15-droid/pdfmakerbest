@@ -1,33 +1,56 @@
 /* ============================================================
    HumsYar — Brand Design Tokens (منبع واحد رنگ‌های برند)
    ------------------------------------------------------------
-   راند ۱۲: پالت «گرم و پزشکی» (Warm Medical) + رنگ مبحث خودکار
-   + شش خانوادهٔ معنایی آیکون/کادر. رنگ فقط از «نقش» می‌آید
-   (نوع کادر، خانوادهٔ نشانه، شمارهٔ مبحث) — هرگز از محتوای علمی.
-   تنها فایلی که مجاز است مقدار HEX داشته باشد.
-   - سند بدنه، کاور و قاب این فایل را پیش از استایل‌های خودشان می‌خوانند.
-   - کد پایتون (کاور/قاب/نوار پیشرفت/SVG) از راه humsyar/palette.py همین
-     فایل را می‌خواند؛ مشتقات کنتراست‌امن مبحث‌ها آنجا با HSL ساخته می‌شوند.
-   - رنگ داخل تصاویر اصلی کتاب‌ها مشمول این پالت نیست.
-   نسبت هدف: ۷۰٪ کرم/سفید، ۱۵٪ متن و Primary، ۱۰٪ رنگ مبحث، ۵٪ معنایی.
+   راند ۱۳ (پولیش): یک رنگ جلسه برای کل جزوه، کاغذ یکدست، کارت سفید.
+   - رنگ فقط از «نقش» می‌آید: خانوادهٔ معنایی نشانه/کادر و شمارهٔ جلسه؛
+     رنگ مبحث به‌صورت پیش‌فرض خاموش است (chapter_accent_mode در layout.yaml).
+   - همهٔ مقدارها hex نهایی و از پیش محاسبه‌شده‌اند؛ در این فایل و CSS
+     کامپوننت‌ها color-mix/rgba/زنجیرهٔ var برای ساخت رنگ به کار نمی‌رود.
+     مشتقات کنتراست‌امن جلسه در humsyar/palette.py با HSL ساخته و به‌صورت
+     hex به سند تزریق می‌شوند.
+   - تنها فایلی که مجاز است مقدار HEX داشته باشد. رنگ تصاویر اصلی
+     کتاب‌ها مشمول این پالت نیست.
+   قانون هر صفحه: حداکثر سه خانوادهٔ رنگ — رنگ جلسه، کرم/خنثی، و در
+   صورت وجود کادر، رنگ معنایی همان کادر. زرد فقط هایلایت است.
    ============================================================ */
+/* رنگ کاغذ روی خودِ صفحه است (نه روی ظرف‌ها) تا هیچ مرز سفیدی نماند.
+   این خط باید با --paper هم‌مقدار بماند (تست خودکار بررسی می‌کند). */
+@page { background: #FFFBF3; }
 :root {
   /* --- هستهٔ گرم برند --- */
-  --paper: #FFFBF5;            /* پس‌زمینهٔ صفحه: کرم گرم */
-  --surface: #FFFFFF;          /* سطح کادرها */
-  --surface-warm: #FFF6EA;     /* سطح گرم ملایم */
-  --ink: #26324B;              /* متن اصلی */
-  --ink-soft: #6B7488;         /* متن فرعی/کپشن/منبع */
-  --line-warm: #EADFCF;        /* خطوط و حاشیه‌ها: بژ ملایم */
-  --primary: #139A8E;          /* برند اصلی: فیروزهٔ زنده */
-  --primary-deep: #0F5E63;     /* تیتر و عناصر مهم */
-  --secondary: #FF6B5B;        /* تأکید گرم */
-  --sun: #FFB627;              /* نقطهٔ شاد/هایلایت */
-  --sun-soft: #FFE3A6;
-  --cover-deep: #1B2440;       /* سرمه‌ای گرم جلد */
+  --paper: #FFFBF3;            /* پس‌زمینهٔ صفحه: کرم بسیار ملایم */
+  --surface: #FFFFFF;          /* کارت‌ها سفیدند */
+  --surface-warm: #FFF6EA;
+  --zebra: #FFF8EC;            /* ردیف زوج جدول */
+  --ink: #26324B;
+  --ink-soft: #6B7488;
+  --line-warm: #EADFCF;
+  --line-chip: #E2D6C3;
+  --primary: #139A8E;          /* رنگ پایهٔ برند (رنگ جلسهٔ ۱) */
+  --primary-deep: #0F5E63;
+  --secondary: #FF6B5B;
+  --sun: #FFB627;
+  --hl: #FFE9A8;               /* تنها سبک هایلایت کل جزوه */
+  --sun-soft: #FFE9A8;
+  --cover-deep: #1B2440;
   --white: #FFFFFF;
 
-  /* --- رنگ مبحث (Chapter Accent): accent[(number-1) mod 8] --- */
+  /* --- رنگ جلسه: session[(number-1) mod 13] — هر ۱۳ جلسه از همین‌جا --- */
+  --session-1: #139A8E;
+  --session-2: #2F80ED;
+  --session-3: #7C5CFA;
+  --session-4: #E8508B;
+  --session-5: #FF7A45;
+  --session-6: #2EAD6B;
+  --session-7: #F2A100;
+  --session-8: #E5484D;
+  --session-9: #4F46E5;
+  --session-10: #0E7490;
+  --session-11: #C2410C;
+  --session-12: #15803D;
+  --session-13: #B45309;
+
+  /* --- رنگ مبحث (فقط برای حالت tab_only؛ پیش‌فرض خاموش) --- */
   --chapter-1: #139A8E;
   --chapter-2: #FF7A45;
   --chapter-3: #7C5CFA;
@@ -37,87 +60,86 @@
   --chapter-7: #F2A100;
   --chapter-8: #E5484D;
 
-  /* --- شش خانوادهٔ معنایی (deepها با اسکریپت کنتراست ≥۴٫۶ روی soft ساخته شده‌اند) --- */
-  --fam1: #139A8E;  --fam1-deep: #0F766D;   /* دانش پایه/تعریف */
-  --fam2: #F59E0B;  --fam2-deep: #996206;   /* تأکید و یادگیری */
-  --fam3: #2EAD6B;  --fam3-deep: #20794B;   /* کاربرد/بالینی */
-  --fam4w: #FF6B5B; --fam4w-deep: #D51500;  /* هشدار */
-  --fam4c: #F97316; --fam4c-deep: #B44C05;  /* اختلاف منابع */
-  --fam4e: #D9A400; --fam4e-deep: #876600;  /* استثنا */
-  --fam4u: #8B7FB8; --fam4u-deep: #7061A8;  /* نیازمند بررسی */
-  --fam5: #E8508B;  --fam5-deep: #CC1B5F;   /* حافظه و آزمون */
-  --fam6: #6D5BD0;  --fam6-deep: #6957CF;   /* ساختار و ناوبری */
+  /* --- شش خانوادهٔ معنایی: base/deep/soft همگی hex نهایی ---
+     softها با HSL ساخته شده‌اند: Hue خانواده، S≈۵۵-۷۰٪، L≈۹۵٫۵٪ */
+  --fam1: #139A8E;  --fam1-deep: #0F766D;  --fam1-soft: #EBFCFA;
+  --fam2: #F59E0B;  --fam2-deep: #996206;  --fam2-soft: #FCF6EB;
+  --fam3: #2EAD6B;  --fam3-deep: #20794B;  --fam3-soft: #EDFAF3;
+  --fam4w: #FF6B5B; --fam4w-deep: #D51500; --fam4w-soft: #FCEDEB;
+  --fam4c: #F97316; --fam4c-deep: #B44C05; --fam4c-soft: #FCF2EB;
+  --fam4e: #D9A400; --fam4e-deep: #876600; --fam4e-soft: #FCF8EB;
+  --fam4u: #8B7FB8; --fam4u-deep: #7061A8; --fam4u-soft: #F0EDFA;
+  --fam5: #E8508B;  --fam5-deep: #CC1B5F;  --fam5-soft: #FCEBF2;
+  --fam6: #6D5BD0;  --fam6-deep: #6957CF;  --fam6-soft: #EFEDFA;
 
-  /* --- گرادیان‌ها و سایه‌ها --- */
+  /* --- گرادیان جلد و سایهٔ گرم (رنگ سایه جامد و گرم است) --- */
   --brand-grad: linear-gradient(135deg, #1B2440 0%, #0F5E63 55%, #139A8E 100%);
   --brand-grad-h: linear-gradient(90deg, #0F5E63 0%, #139A8E 100%);
   --cover-bg: linear-gradient(180deg, #1B2440 0%, #0F5E63 100%);
-  --shadow-sm: 0 1px 2px rgba(80, 50, 20, 0.08);
-  --shadow-md: 0 2px 8px rgba(80, 50, 20, 0.10);
+  --shadow-sm: 0 1px 2px #EFE5D3;
+  --shadow-md: 0 2px 8px #EDE1CC;
 
   /* ==========================================================
-     لایهٔ معنایی موتور — نام‌هایی که کامپوننت‌ها مصرف می‌کنند.
+     لایهٔ معنایی موتور (همه hex نهایی؛ بدون زنجیرهٔ var)
      ========================================================== */
-  --brand: var(--primary-deep);
-  --brand-deep: var(--primary-deep);
-  --brand-ink: var(--primary-deep);
-  --brand-soft: var(--surface-warm);
-  --accent: var(--primary);
-  --muted: var(--ink-soft);
-  --faint: color-mix(in srgb, var(--ink-soft) 72%, var(--white));
-  --line: var(--line-warm);
-  --line-soft: var(--surface-warm);
-  --soft: var(--surface-warm);
-  --tint: #E7F4F1;
-  --tint-blue: var(--surface-warm);
-  --slate: var(--ink-soft);
-  --slate-deep: color-mix(in srgb, var(--ink-soft) 55%, var(--ink));
-  --slate-soft: color-mix(in srgb, var(--ink-soft) 55%, var(--white));
-  --hairline: var(--line-warm);
+  --brand: #0F5E63;
+  --brand-deep: #0F5E63;
+  --brand-ink: #0F5E63;
+  --brand-soft: #FFF6EA;
+  --accent: #139A8E;
+  --muted: #6B7488;
+  --faint: #949BA9;
+  --line: #EADFCF;
+  --line-soft: #FFF6EA;
+  --soft: #FFF6EA;
+  --tint: #EBFCFA;
+  --tint-blue: #FFF6EA;
+  --slate: #6B7488;
+  --slate-deep: #4C566D;
+  --slate-soft: #AEB3BE;
+  --hairline: #EADFCF;
 
-  /* رنگ نقش کادرها از خانوادهٔ معنایی‌شان (معنا با آیکون+برچسب+الگو هم هست) */
-  --c-key: var(--fam2-deep);          --bg-key: #FEF3E0;
-  --c-clinical: var(--fam3-deep);     --bg-clinical: #ECF4E9;
-  --c-warning: var(--fam4w-deep);     --bg-warning: #FFEEE7;
-  --c-bridge: var(--fam3-deep);       --bg-bridge: #ECF4E9;
-  --c-conflict: var(--fam4c-deep);    --bg-conflict: #FEEFE1;
-  --c-exam: var(--fam5-deep);         --bg-exam: #FDECEB;
-  --c-definition: var(--fam1-deep);   --bg-definition: #EAF2EC;
-  --c-example: var(--fam3-deep);      --bg-example: #ECF4E9;
-  --c-summary: var(--fam2-deep);      --bg-summary: #FEF3E0;
-  --c-exception: var(--fam4e-deep);   --bg-exception: #FCF3DF;
-  --c-mnemonic: var(--fam5-deep);     --bg-mnemonic: #FDECEB;
-  --c-formula: var(--fam5-deep);      --bg-formula: #FDECEB;
-  --c-terminology: var(--fam1-deep);  --bg-terminology: #EAF2EC;
-  --c-unresolved: var(--fam4u-deep);  --bg-unresolved: #F5F0F0;
+  /* نقش کادرها از خانواده‌شان — پس‌زمینهٔ کادر سفید است و --bg-* فقط
+     برای بج‌ها/نوارهای کوچکِ نیازمند سطح رنگی نگه داشته شده‌اند */
+  --c-key: #996206;          --bg-key: #FCF6EB;
+  --c-clinical: #20794B;     --bg-clinical: #EDFAF3;
+  --c-warning: #D51500;      --bg-warning: #FCEDEB;
+  --c-bridge: #20794B;       --bg-bridge: #EDFAF3;
+  --c-conflict: #B44C05;     --bg-conflict: #FCF2EB;
+  --c-exam: #CC1B5F;         --bg-exam: #FCEBF2;
+  --c-definition: #0F766D;   --bg-definition: #EBFCFA;
+  --c-example: #20794B;      --bg-example: #EDFAF3;
+  --c-summary: #996206;      --bg-summary: #FCF6EB;
+  --c-exception: #876600;    --bg-exception: #FCF8EB;
+  --c-mnemonic: #CC1B5F;     --bg-mnemonic: #FCEBF2;
+  --c-formula: #CC1B5F;      --bg-formula: #FCEBF2;
+  --c-terminology: #0F766D;  --bg-terminology: #EBFCFA;
+  --c-unresolved: #7061A8;   --bg-unresolved: #F0EDFA;
 
-  /* ==========================================================
-     نام‌های قدیمی (لایهٔ سازگاری) — مقدارها به پالت گرم نگاشت شده‌اند
-     تا مصرف‌کننده‌های موجود (کاور، درخت، ریل، برگهٔ مرور) یکدست گرم شوند.
-     ========================================================== */
-  --navy-950: var(--cover-deep);
-  --navy-900: var(--primary-deep);
-  --navy-800: var(--primary-deep);
-  --navy-700: var(--primary);
-  --royal-600: var(--primary-deep);
-  --azure-500: var(--primary);
-  --sky-400: #8CCFC5;
-  --cyan-400: var(--sun);
+  /* نام‌های قدیمی مصرف‌کننده‌ها (کاور، درخت، ریل، برگهٔ مرور) */
+  --navy-950: #1B2440;
+  --navy-900: #0F5E63;
+  --navy-800: #0F5E63;
+  --navy-700: #139A8E;
+  --royal-600: #0F5E63;
+  --azure-500: #139A8E;
+  --sky-400: #89CCC6;
+  --cyan-400: #FFB627;
   --aqua-300: #FFD9A0;
-  --tealcyan-500: #FF7A45;   /* جهت دوم نمودارها: گرم، در برابر فیروزهٔ Primary */
-  --teal-ink: #CF3B00;       /* متن امنِ جهت دوم روی روشن */
-  --ice-50: var(--surface-warm);
+  --tealcyan-500: #FF7A45;
+  --teal-ink: #CF3B00;
+  --ice-50: #FFF6EA;
   --ice-100: #FDEFDC;
-  --ice-teal: #E7F4F1;
-  --warn: var(--fam4e);
-  --warn-bg: #FCF3DF;
-  --conflict: var(--fam4c);
-  --conflict-bg: #FEEFE1;
-  --conflict-ink: var(--fam4c-deep);
-  --topic-1: var(--chapter-1);
-  --topic-2: var(--chapter-2);
-  --topic-3: var(--chapter-3);
-  --topic-4: var(--chapter-4);
-  --topic-5: var(--chapter-5);
-  --topic-6: var(--chapter-6);
+  --ice-teal: #EBFCFA;
+  --warn: #D9A400;
+  --warn-bg: #FCF8EB;
+  --conflict: #F97316;
+  --conflict-bg: #FCF2EB;
+  --conflict-ink: #B44C05;
+  --topic-1: #139A8E;
+  --topic-2: #FF7A45;
+  --topic-3: #7C5CFA;
+  --topic-4: #2F80ED;
+  --topic-5: #E8508B;
+  --topic-6: #2EAD6B;
 }

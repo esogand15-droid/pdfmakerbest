@@ -131,3 +131,28 @@ def chapter_vars(number: int) -> dict[str, str]:
 def chapter_style(number: int) -> str:
     """رشتهٔ style آماده برای wrapper مبحث."""
     return ";".join(f"{k}:{v}" for k, v in chapter_vars(number).items())
+
+
+# ---------------------------------------------------------------- رنگ جلسه
+SESSION_COUNT = 13
+
+
+def session_accent(number: int) -> str:
+    """رنگ جلسه فقط از شمارهٔ جلسه: session[(number-1) mod 13]."""
+    return hex_of(f"session-{((int(number) - 1) % SESSION_COUNT) + 1}")
+
+
+def session_vars(number: int) -> dict[str, str]:
+    """متغیرهای CSS رنگ جلسه (hex نهایی): پایه، متن امن، هدر، سطح روشن ردیف."""
+    base = session_accent(number)
+    paper = hex_of("paper")
+    return {
+        "--session-accent": base,
+        "--session-deep": derive_deep(base, paper, 4.6),
+        "--session-header": derive_deep(base, "#FFFFFF", 4.55),
+        "--session-soft": mix_hex(base, paper, 0.07),
+    }
+
+
+def session_style(number: int) -> str:
+    return ";".join(f"{k}:{v}" for k, v in session_vars(number).items())

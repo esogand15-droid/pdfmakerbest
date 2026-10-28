@@ -1,5 +1,5 @@
 {
- "pdf": "../output/session01_pilot_ultra.pdf",
+ "pdf": "output/session01_pilot_ultra.pdf",
  "pages": 2,
  "fits_two_pages": true,
  "single_page": false,

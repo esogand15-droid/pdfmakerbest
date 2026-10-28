@@ -24,11 +24,9 @@ FRAME_INSET_MM = 6.0
 SAFE_RECT_MM = (12.0, 12.0, 198.0, 285.0)
 CAPSULE_CY_MM = 291.0  # مرکز کپسول شماره روی خط پایین قاب
 
-from .palette import chapter_vars, hex_of
+from .palette import chapter_vars, hex_of, session_vars
 
-_BRAND = hex_of("primary-deep")
 _DEEP = hex_of("ink")
-_SOFT = hex_of("sky-400")
 _HAIR = hex_of("line-warm")
 
 
@@ -36,9 +34,9 @@ def _corner_dendrite(seed: int, color: str | None = None) -> str:
     """نقش دندریتی یک گوشه در مختصات محلی (مبدأ گوشه، جهت رشد به داخل: پایین-چپ).
 
     با transform برای چهار گوشه آینه می‌شود. برد کل نقش ≤ ۱۱mm.
-    رنگ نقش از رنگ مبحث همان صفحه می‌آید (نقش، نه محتوا).
+    رنگ نقش از رنگ جلسه می‌آید (نقش، نه محتوا).
     """
-    _c = color or _BRAND
+    _c = color or hex_of("primary-deep")
     rng = random.Random(seed)
     parts: list[str] = []
 
@@ -70,9 +68,12 @@ def _est_text_w(text: str, size_mm: float) -> float:
 
 def frame_anatomy_nervous(session: Session, brand: dict[str, str], *,
                           topic_number: int | None = None, topic_short: str = "",
-                          topic_order: int = 0, side: str = "left") -> str:
-    _accent = (chapter_vars(int(topic_number))["--chapter-accent"]
-               if topic_number is not None else _BRAND)
+                          topic_order: int = 0, side: str = "left",
+                          accent_mode: str = "off", paper_hex: str | None = None) -> str:
+    _sv = session_vars(int(session.session_number))
+    _accent = _sv["--session-accent"]
+    _deep = _sv["--session-deep"]
+    _paper = paper_hex or hex_of("paper")
     corner = _corner_dendrite(seed=session.session_number * 7 + 1, color=_accent)
     # چهار گوشه با آینه‌کردن نقش پایه (مبدأ روی گوشهٔ قاب)
     corners = (
@@ -81,15 +82,24 @@ def frame_anatomy_nervous(session: Session, brand: dict[str, str], *,
         f'<g transform="translate(204 291) scale(1 -1)">{corner}</g>'
         f'<g transform="translate(6 291) scale(-1 -1)">{corner}</g>'
     )
-    # قطعات میلین روی خط بالا (سمت چپ زبانهٔ سربرگ) + گره‌های رانویه
-    myelin = []
-    x = 47.0
-    for _ in range(5):
-        myelin.append(f'<rect x="{x:.1f}" y="5.72" width="7" height="1.75" rx="0.87" '
-                      f'fill="{_SOFT}" opacity="0.55"/>')
-        x += 7
-        myelin.append(f'<circle cx="{x + 1.1:.1f}" cy="6.6" r="0.55" fill="{_BRAND}" opacity="0.6"/>')
-        x += 2.2 + 3.4
+    # نقطه‌های پیشرفت مباحث: وسط‌چین، فاصلهٔ یکسان، زیر خط بالا و بدون خط پشتشان.
+    # پر = مباحث گذرانده‌شده، حلقه = مبحث جاری، خنثی = باقی‌مانده (از نقشهٔ جلسه).
+    _map_numbers = [int(m.get("number", 0)) for m in (session.session_map or [])]
+    dots = []
+    if _map_numbers:
+        _gap = 5.2
+        _total_w = _gap * (len(_map_numbers) - 1)
+        for i, n in enumerate(_map_numbers):
+            cx = 105 + _total_w / 2 - i * _gap  # مبحث نخست سمت راست (جهت خواندن فارسی)
+            if topic_number is not None and n == int(topic_number):
+                dots.append(f'<circle cx="{cx:.1f}" cy="10.3" r="1.15" fill="{_paper}" '
+                            f'stroke="{_deep}" stroke-width="0.5"/>'
+                            f'<circle cx="{cx:.1f}" cy="10.3" r="0.45" fill="{_deep}"/>')
+            elif topic_number is not None and n < int(topic_number):
+                dots.append(f'<circle cx="{cx:.1f}" cy="10.3" r="0.8" fill="{_accent}"/>')
+            else:
+                dots.append(f'<circle cx="{cx:.1f}" cy="10.3" r="0.8" fill="{_HAIR}"/>')
+    myelin = dots
     tab_text = f"{session.course} — جلسهٔ {fa_num(session.session_number)}"
     tab_w = _est_text_w(tab_text, 3.1) + 7
     tab_x2 = 192.0
@@ -106,8 +116,9 @@ def frame_anatomy_nervous(session: Session, brand: dict[str, str], *,
         py = min(297 - 16 - ph, 38.0 + topic_order * 30.0)
         px, rot = (210 - 1.1 - pw, 90) if side == "right" else (1.1, -90)
         cx, cy = px + pw / 2, py + ph / 2
-        # رنگ تب از شمارهٔ مبحث می‌آید: chapter[(number-1) mod 8]، نسخهٔ کنتراست‌امن برای متن سفید
-        _tab_fill = chapter_vars(int(topic_number))["--chapter-header"]
+        # تب فعال با رنگ جلسه پر می‌شود؛ رنگ مبحث فقط در حالت tab_only
+        _tab_fill = (chapter_vars(int(topic_number))["--chapter-header"]
+                     if accent_mode == "tab_only" else _sv["--session-header"])
         tab = (
             f'<g><rect x="{px:.1f}" y="{py:.1f}" width="{pw}" height="{ph:.1f}" rx="2.2" '
             f'fill="{_tab_fill}"/>'
@@ -119,24 +130,24 @@ def frame_anatomy_nervous(session: Session, brand: dict[str, str], *,
     foot_l_w = _est_text_w(foot_l, 2.9) + 6
     return f'''<svg class="frame-art" viewBox="0 0 210 297" preserveAspectRatio="none"
   xmlns="http://www.w3.org/2000/svg">
-  <rect x="6" y="6" width="198" height="285" rx="3.5" fill="none" stroke="{_BRAND}" stroke-width="0.22"/>
+  <rect x="6" y="6" width="198" height="285" rx="3.5" fill="none" stroke="{_deep}" stroke-width="0.22"/>
   <rect x="7.2" y="7.2" width="195.6" height="282.6" rx="2.8" fill="none" stroke="{_HAIR}" stroke-width="0.11"/>
   {corners}
   {"".join(myelin)}
   <!-- زبانهٔ سربرگ روی خط بالا (راست) -->
-  <rect x="{tab_x1:.1f}" y="3.9" width="{tab_w:.1f}" height="4.6" fill="white"/>
+  <rect x="{tab_x1:.1f}" y="3.9" width="{tab_w:.1f}" height="4.6" fill="{_paper}"/>
   <text x="{(tab_x1 + tab_x2) / 2:.1f}" y="7.55" font-size="3.1" font-weight="700"
         fill="{_DEEP}" text-anchor="middle" font-family="Vazirmatn">{escape(tab_text)}</text>
   <!-- برند لاتین سمت مقابل + نشان تک‌رنگ کوچک (اگر دارایی موجود باشد) -->
-  <rect x="13" y="3.9" width="34" height="4.6" fill="white"/>
+  <rect x="13" y="3.9" width="34" height="4.6" fill="{_paper}"/>
   {f'<image href="{brand["logo_mono_uri"]}" x="13.4" y="3.8" width="5.2" height="5.2" preserveAspectRatio="xMidYMid meet"/>' if brand.get("logo_mono_uri") else ""}
   <text x="{32 if brand.get("logo_mono_uri") else 30}" y="7.5" font-size="2.7" font-weight="700" letter-spacing="0.7"
         fill="{_DEEP}" text-anchor="middle" font-family="Inter">{escape(brand['en'])}</text>
   <!-- فوتر روی خط پایین: راست برند، چپ عنوان مجموعه؛ وسط جای کپسول شماره می‌ماند -->
-  <rect x="{192 - foot_r_w:.1f}" y="288.9" width="{foot_r_w:.1f}" height="4.4" fill="white"/>
+  <rect x="{192 - foot_r_w:.1f}" y="288.9" width="{foot_r_w:.1f}" height="4.4" fill="{_paper}"/>
   <text x="{192 - foot_r_w / 2:.1f}" y="292.35" font-size="2.9" font-weight="700"
         fill="{_DEEP}" text-anchor="middle" font-family="Vazirmatn">{escape(foot_r)}</text>
-  <rect x="18" y="288.9" width="{foot_l_w:.1f}" height="4.4" fill="white"/>
+  <rect x="18" y="288.9" width="{foot_l_w:.1f}" height="4.4" fill="{_paper}"/>
   <text x="{18 + foot_l_w / 2:.1f}" y="292.35" font-size="2.9"
         fill="{_DEEP}" text-anchor="middle" font-family="Vazirmatn">{escape(foot_l)}</text>
 {tab}
@@ -157,7 +168,7 @@ def frame_html(session: Session, brand: dict[str, str], font_css: str, **kw) -> 
     return f"""<!DOCTYPE html><html lang="fa" dir="rtl"><head><meta charset="utf-8">
 <style>
 {font_css}
-@page {{ size: A4; margin: 0; }}
+@page {{ size: A4; margin: 0; background: transparent; }}
 * {{ margin:0; padding:0; }}
 .frame-art {{ width:210mm; height:297mm; display:block; }}
 </style></head><body>{fn(session, brand, **kw)}</body></html>"""
