@@ -1,0 +1,155 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><style>@font-face{font-family:Vazirmatn;src:url(file:///home/user/pdfmakerbest/assets/fonts/Vazirmatn-Regular.ttf);font-weight:400}
+@font-face{font-family:Vazirmatn;src:url(file:///home/user/pdfmakerbest/assets/fonts/Vazirmatn-Medium.ttf);font-weight:500}
+@font-face{font-family:Vazirmatn;src:url(file:///home/user/pdfmakerbest/assets/fonts/Vazirmatn-Bold.ttf);font-weight:700}
+@font-face{font-family:Vazirmatn;src:url(file:///home/user/pdfmakerbest/assets/fonts/Vazirmatn-Light.ttf);font-weight:300}
+@font-face{font-family:Inter;src:url(file:///home/user/pdfmakerbest/assets/fonts/Inter-Regular.woff2) format("woff2");font-weight:400;font-style:normal}
+@font-face{font-family:Inter;src:url(file:///home/user/pdfmakerbest/assets/fonts/Inter-Italic.woff2) format("woff2");font-weight:400;font-style:italic}
+@font-face{font-family:Inter;src:url(file:///home/user/pdfmakerbest/assets/fonts/Inter-Medium.woff2) format("woff2");font-weight:500;font-style:normal}
+@font-face{font-family:Inter;src:url(file:///home/user/pdfmakerbest/assets/fonts/Inter-SemiBold.woff2) format("woff2");font-weight:600;font-style:normal}
+@font-face{font-family:Inter;src:url(file:///home/user/pdfmakerbest/assets/fonts/Inter-Bold.woff2) format("woff2");font-weight:700;font-style:normal}
+/* ============================================================
+   HumsYar — Brand Design Tokens (منبع واحد رنگ‌های برند)
+   ------------------------------------------------------------
+   تنها فایلی که مجاز است مقدار HEX داشته باشد.
+   - سند بدنه، کاور و قاب این فایل را پیش از استایل‌های خودشان می‌خوانند.
+   - کد پایتون (کاور/قاب/نوار پیشرفت/SVG) از راه humsyar/palette.py همین
+     فایل را می‌خواند؛ فهرست دومی از رنگ‌ها ساخته نمی‌شود.
+   - رنگ داخل تصاویر اصلی کتاب‌ها مشمول این پالت نیست.
+   ============================================================ */
+:root {
+  /* --- هستهٔ برند --- */
+  --navy-950: #050D18;
+  --navy-900: #061E4E;
+  --navy-800: #0F2A52;
+  --navy-700: #0A2A7E;
+  --royal-600: #0636AE;
+  --azure-500: #0666F6;
+  --sky-400: #5FB3F1;
+  --cyan-400: #06D2DE;
+  --aqua-300: #6FE6EE;
+  --tealcyan-500: #04B9D3;
+  --teal-ink: #0A6E85;
+
+  /* --- سطوح روشن --- */
+  --white: #FFFFFF;
+  --ice-50: #F3F9FE;
+  --ice-100: #E8F4FD;
+  --ice-teal: #E6F8FB;
+  --hairline: #D3E2F2;
+
+  /* --- متن --- */
+  --ink: #0B1B3A;
+  --slate: #5B6B88;
+
+  /* --- رنگ‌های کارکردی (فقط هشدار/اختلاف واقعی) --- */
+  --warn: #E8A33D;
+  --warn-bg: #FFF4E0;
+  --conflict: #C75B3A;
+  --conflict-bg: #FBEDE8;
+  --conflict-ink: #8A3418;
+
+  /* --- گرادیان‌های برند --- */
+  --brand-grad: linear-gradient(135deg, #061E4E 0%, #0636AE 45%, #06D2DE 100%);
+  --brand-grad-h: linear-gradient(90deg, #0636AE 0%, #04B9D3 100%);
+  --cover-bg: linear-gradient(180deg, #050D18 0%, #0F2A52 100%);
+
+  /* --- فقط ناوبری مباحث (تب کناری، کارت فعال نقشهٔ جلسه) --- */
+  --topic-1: #061E4E;
+  --topic-2: #0A2A7E;
+  --topic-3: #0636AE;
+  --topic-4: #0666F6;
+  --topic-5: #0A6E85;
+  --topic-6: #4B5BD6;
+
+  /* --- سایه‌ها --- */
+  --shadow-sm: 0 1px 2px rgba(6, 30, 78, 0.08);
+  --shadow-md: 0 2px 8px rgba(6, 30, 78, 0.10);
+
+  /* ==========================================================
+     لایهٔ معنایی موتور — نام‌هایی که کامپوننت‌ها مصرف می‌کنند.
+     همه به توکن‌های بالا اشاره می‌کنند؛ این‌جا HEX تازه‌ای نیست.
+     ========================================================== */
+  --brand: var(--royal-600);            /* ساختار و تأکید اصلی بدنه */
+  --brand-deep: var(--navy-900);        /* عنوان‌ها و سطوح تیرهٔ محدود */
+  --brand-ink: var(--navy-800);         /* متن برجسته روی زمینهٔ روشن */
+  --accent: var(--azure-500);           /* ارجاع‌ها و تأکید فرعی */
+  --muted: var(--slate);                /* کپشن، منبع، توضیح ثانویه */
+  --faint: color-mix(in srgb, var(--slate) 72%, var(--white));
+  --line: var(--hairline);
+  --line-soft: var(--ice-100);
+  --paper: var(--white);
+  --soft: var(--ice-50);
+  --tint: var(--ice-teal);
+  --tint-blue: var(--ice-100);
+
+  /* رنگ نقشِ کادرهای آموزشی — معنا با آیکون+برچسب هم منتقل می‌شود، نه فقط رنگ */
+  --c-key: var(--royal-600);            --bg-key: var(--ice-100);
+  --c-clinical: var(--teal-ink);        --bg-clinical: var(--ice-teal);
+  --c-warning: color-mix(in srgb, var(--warn) 50%, var(--ink));
+  --bg-warning: var(--warn-bg);
+  --c-bridge: var(--royal-600);         --bg-bridge: var(--ice-100);
+  --c-conflict: var(--conflict);        --bg-conflict: var(--conflict-bg);
+  --c-exam: var(--navy-700);            --bg-exam: var(--ice-100);
+  --c-definition: var(--navy-700);      --bg-definition: var(--ice-50);
+  --c-example: var(--teal-ink);         --bg-example: var(--ice-teal);
+  --c-summary: var(--navy-900);         --bg-summary: var(--ice-100);
+  --c-exception: color-mix(in srgb, var(--warn) 30%, var(--conflict-ink));  /* کننتراست متن ≥۴٫۵ روی warn-bg */
+  --bg-exception: var(--warn-bg);
+  --c-mnemonic: color-mix(in srgb, var(--azure-500) 78%, var(--ink));
+  --bg-mnemonic: var(--ice-100);
+  --c-formula: var(--teal-ink);         --bg-formula: var(--ice-teal);
+  --slate-deep: color-mix(in srgb, var(--slate) 74%, var(--ink));
+  --slate-soft: color-mix(in srgb, var(--slate) 55%, var(--white));
+  --c-terminology: var(--slate-deep);
+  --bg-terminology: var(--ice-50);
+  --c-unresolved: var(--slate);         --bg-unresolved: var(--ice-50);
+}
+
+:root{--u-base:8.8pt}
+
+@page{ size:A4; margin:0 }
+*{ box-sizing:border-box }
+body{ font-family:Vazirmatn,sans-serif; color:var(--ink); margin:0;
+      font-size:var(--u-base,8.8pt); line-height:1.47 }
+.upage{ padding:2mm 1mm 0 }
+.upage+.upage{ break-before:page }
+.uhead{ display:flex; justify-content:space-between; align-items:center;
+  border-bottom:2pt solid var(--royal-600); padding-bottom:2mm; margin-bottom:3mm }
+.uhead .ut{ font-weight:800; color:var(--navy-900); font-size:1.5em }
+.uhead .ub{ color:var(--royal-600); font-weight:700 }
+.uhead .ubadge{ background:var(--royal-600); color:#fff; border-radius:20pt;
+  padding:1pt 7pt; font-weight:700; font-size:.82em }
+.ucols{ columns:2; column-gap:5mm }
+.uc{ break-inside:avoid; border:1pt solid var(--hairline); border-radius:5pt;
+  padding:1.9mm 2.3mm; margin:0 0 2.4mm; background:#fff }
+.uc--skeleton,.uc--table,.uc--proc{ column-span:all }
+.uc h3{ margin:0 0 1.6mm; color:var(--royal-600); font-size:1.06em }
+.uc--alerts{ border-color:var(--c-warning); background:var(--bg-warning) }
+.uc--alerts h3{ color:var(--c-warning) }
+.uc--numbers{ background:var(--ice-50) }
+.up{ margin:0; padding-inline-start:4.2mm }
+.up li{ margin:.4mm 0 }
+.usk b{ color:var(--navy-900); display:block; margin-top:1mm }
+.usk span{ display:inline-block; background:var(--ice-100); border-radius:10pt;
+  padding:0 5pt; margin:.6mm 0 .6mm 1.2mm; font-size:.86em }
+.utbl{ width:100%; border-collapse:collapse; font-size:.92em }
+.utbl th{ background:var(--royal-600); color:#fff; padding:1.2mm 1.6mm; text-align:start }
+.utbl td{ border-bottom:.5pt solid var(--hairline); padding:.7mm 1.4mm; vertical-align:top }
+.utbl td.rowh{ background:var(--ice-100); font-weight:700; color:var(--navy-900) }
+.utbl tbody tr:nth-child(even) td:not(.rowh){ background:var(--ice-50) }
+.uchain{ margin:1mm 0; line-height:2 }
+.ustep{ background:var(--ice-100); border:1pt solid var(--sky-400); border-radius:10pt;
+  padding:0 6pt; white-space:nowrap }
+.uarr{ color:var(--royal-600); font-weight:800 }
+.uchip{ display:inline-block; border:1pt solid var(--hairline); background:var(--ice-50);
+  border-radius:10pt; padding:0 5pt; margin:.6mm 0 .6mm 1.2mm; font-size:.9em }
+.un{ color:var(--navy-900); background:var(--ice-100); border-radius:3pt; padding:0 2pt }
+.uvs{ color:var(--slate-deep); font-size:.85em }
+.ufoot{ border-top:1pt solid var(--hairline); margin-top:2mm; padding-top:1.6mm;
+  color:var(--slate-deep); font-size:.8em; display:flex; justify-content:space-between }
+.tight .uc{ margin-bottom:2mm; padding:1.8mm 2.2mm }
+.tight .up li{ margin:.2mm 0 }
+.term{ font-weight:700; color:var(--brand-ink) }
+.en, bdi.en{ font-family:Inter,Vazirmatn,sans-serif; direction:ltr; color:var(--ink) }
+.numbadge{ font-weight:800; color:var(--navy-900) }
+</style></head><body class=""><div class="upage"><div class="uhead"><span class="ut">آناتومی دستگاه اعصاب — بافت‌شناسی سیستم عصبی: از نورون تا میلین</span><span class="ubadge">اسکلت مفهومی مبحث · صفحهٔ ۱ از ۲</span><span class="ub">هامزیار · HumsYar</span></div><div class="ucols"><section class="uc uc--skeleton"><h3>اسکلت مبحث</h3><div class="usk"><b>نوروگلیاها و غلاف میلین</b><span>شش سلول گلیال در یک نگاه: منشأ، محل، وظیفه</span><span>آستروسیت: پرتعدادترین گلیال</span><span>سلول‌های اپندیمال: فرش‌کننده‌های حفره‌های <bdi class="en">CNS</bdi></span><span>میکروگلیا: پلیس ضدشورش <bdi class="en">CNS</bdi></span><span>غلاف میلین: الیگودندروسیت در <bdi class="en">CNS</bdi>، سلول شوان در <bdi class="en">PNS</bdi></span><span>بازگشت به نقشهٔ کل بدن: <bdi class="en">CNS</bdi>، <bdi class="en">PNS</bdi> و نخاع</span></div></section><section class="uc uc--table"><h3>شش سلول گلیال: منشأ جنینی، محل و وظیفهٔ کلیدی</h3><table class="utbl"><thead><tr><th>سلول</th><th>منشأ جنینی</th><th>محل</th><th>وظیفهٔ کلیدی</th></tr></thead><tbody><tr><td class="rowh">آستروسیت پروتوپلاسمیک</td><td class="">اکتودرم عصبی (لوله)</td><td class="">مادهٔ خاکستری</td><td class="">پای عروقی، تغذیه، تنظیم یونی، غشای محدودکنندهٔ گلیال</td></tr><tr><td class="rowh">آستروسیت فیبروز</td><td class="">اکتودرم عصبی (لوله)</td><td class="">مادهٔ سفید</td><td class="">زوائد کمتر و طویل‌تر، پشتیبانی ساختاری، <bdi class="en">GFAP</bdi></td></tr><tr><td class="rowh">الیگودندروسیت</td><td class="">اکتودرم عصبی (لوله)</td><td class="">مادهٔ سفید، ردیف روی آکسون‌های میلین‌دار</td><td class="">ساخت میلین <bdi class="en">CNS</bdi>؛ یک سلول برای چند آکسون</td></tr><tr><td class="rowh">میکروگلیا</td><td class="">مونوسیت (مزودرم)</td><td class="">پراکنده در کل <bdi class="en">CNS</bdi></td><td class="">دفاع: بیگانه‌خواری، معرفی آنتی‌ژن، ترشح سایتوکاین</td></tr><tr><td class="rowh">سلول اپندیمال</td><td class="">اکتودرم عصبی (لوله)</td><td class="">بطن‌های مغز و کانال مرکزی نخاع</td><td class="">پوشش حفره‌ها، جریان و جذب <bdi class="en">CSF</bdi></td></tr><tr><td class="rowh">سلول شوان</td><td class="">ستیغ عصبی</td><td class=""><bdi class="en">PNS</bdi>، روی آکسون‌های عصبی</td><td class="">ساخت میلین <bdi class="en">PNS</bdi>؛ یک سلول برای یک قطعه از یک آکسون</td></tr><tr><td class="rowh">سلول اقماری</td><td class="">ستیغ عصبی</td><td class=""><bdi class="en">PNS</bdi>، گانگلیون‌های حسی عصبی</td><td class="">ایزوله‌کردن و تغذیهٔ جسم سلولی نورون گانگلیونی</td></tr></tbody></table></section><section class="uc uc--table"><h3>میکروگلیا در دو حالت استراحت و فعال</h3><table class="utbl"><thead><tr><th>حالت</th><th>رفتار سلول</th></tr></thead><tbody><tr><td class="rowh">استراحت</td><td class="">زوائد متعددی دارد و محیط را اسکن می‌کند</td></tr><tr><td class="rowh">فعال</td><td class="">با دیدن آنتی‌ژن یا بافت آسیب‌دیده پاهایش را جمع می‌کند، گرد می‌شود، سریع تقسیم می‌شود و تعدادش زیاد می‌شود</td></tr></tbody></table></section><section class="uc uc--defs"><h3>تعریف‌ها و اصول پایه</h3><ul class="up"><li>زوائدی از نوروگلیا در بخش‌هایی با زوائد نورون‌ها در ارتباطند؛ به مجموع زوائد متصل‌به‌هم نوروگلیاها و نورون‌ها <strong>نوروپیل</strong> گفته می‌شود.</li></ul></section><section class="uc uc--numbers"><h3>اعداد و مقادیر کلیدی</h3><ul class="up"><li>شکل <b class="un">۲</b>-<b class="un">۲۸</b> اسنل چهار نوع گلیال مرکزی را در کنار نورون و مویرگ می‌چیند؛ دو نوع محیطی (شوان و اقماری) در این شکل نیستند، چون در <bdi class="en">CNS</bdi> جایی ندارند.</li></ul></section><section class="uc uc--chips"><h3>اصطلاحات کلیدی</h3><span class="uchip">آستروسیت <bdi class="en">(Astrocyte)</bdi></span><span class="uchip">الیگودندروسیت <bdi class="en">(Oligodendrocyte)</bdi></span><span class="uchip">میکروگلیا <bdi class="en">(Microglia)</bdi></span><span class="uchip">اپندیم <bdi class="en">(Ependymal cell)</bdi></span><span class="uchip">سلول شوان <bdi class="en">(Schwann cell)</bdi></span><span class="uchip">سلول اقماری <bdi class="en">(Satellite cell)</bdi></span><span class="uchip">پروتئین اسیدی رشتهٔ گلیال (GFAP) <bdi class="en">(Glial fibrillary acid protein)</bdi></span><span class="uchip">نوروپیل</span><span class="uchip">غشای محدودکنندهٔ گلیال <bdi class="en">(Glial Limitans)</bdi></span><span class="uchip">نورون <bdi class="en">(Neuron)</bdi></span><span class="uchip">مویرگ <bdi class="en">(Capillary)</bdi></span><span class="uchip">پروتوپلاسمیک <bdi class="en">(Protoplasmic)</bdi></span><span class="uchip">فیبروز <bdi class="en">(Fibrous)</bdi></span><span class="uchip">پروتئین اسیدی رشتهٔ گلیال <bdi class="en">(Glial fibrillary acid protein (GFAP))</bdi></span><span class="uchip">سلول‌های اپندیمال <bdi class="en">(Ependymal cells)</bdi></span><span class="uchip">کانال مرکزی نخاع <bdi class="en">(Central canal of spinal cord)</bdi></span><span class="uchip">بطن سوم <bdi class="en">(Third ventricle)</bdi></span><span class="uchip">هسته <bdi class="en">(Nucleus)</bdi></span><span class="uchip">بافت عصبی اطراف <bdi class="en">(Surrounding nervous tissue)</bdi></span><span class="uchip">سلول میلین‌ساز <bdi class="en">(Myelinating cell)</bdi></span><span class="uchip">آکسون <bdi class="en">(Axon)</bdi></span><span class="uchip">غلاف میلین <bdi class="en">(Myelin sheath)</bdi></span><span class="uchip">جسم سلولی نورون گانگلیونی <bdi class="en">(Peripheral ganglionic neuron cell body)</bdi></span><span class="uchip">سلول‌های اقماری <bdi class="en">(Satellite cells)</bdi></span><span class="uchip">سلول‌های شوان <bdi class="en">(Schwann cells)</bdi></span><span class="uchip">مغز <bdi class="en">(Brain)</bdi></span><span class="uchip">عصب جمجمه‌ای <bdi class="en">(Cranial nerve)</bdi></span><span class="uchip">نخاع <bdi class="en">(Spinal cord)</bdi></span><span class="uchip">عصب نخاعی <bdi class="en">(Spinal nerve)</bdi></span></section></div><div class="ufoot"><span>مرور فوق‌فشرده — مکمل جزوهٔ کامل است، نه جایگزین آن؛ جزئیات کامل در متن اصلی جزوه آمده است.</span><span>هامزیار</span></div></div><div class="upage"><div class="uhead"><span class="ut">آناتومی دستگاه اعصاب — بافت‌شناسی سیستم عصبی: از نورون تا میلین</span><span class="ubadge">جزئیات تعیین‌کننده و مرور نهایی · صفحهٔ ۲ از ۲</span><span class="ub">هامزیار · HumsYar</span></div><div class="ucols"><section class="uc uc--alerts"><h3>استثناها و اختلاف منابع</h3><ul class="up"><li class="ual">نکتهٔ مهم جنینی: بقیهٔ گلیال‌های مغز (آستروسیت، الیگودندروسیت و اپندیم) منشأ اکتودرمی دارند، اما میکروگلیا استثناست و همان ماکروفاژ سیستم عصبی است؛ منشأش از مونوسیت‌های خون و در نهایت از مغز استخوان و لایهٔ مزودرم جنینی است.</li></ul></section><section class="uc uc--points"><h3>نکات متمایزکننده</h3><ul class="up"><li>تفاوت مهم دو آستروسیت: فیبروزها زوائد کمتر اما طویل‌تر دارند و در مادهٔ سفید دیده می‌شوند، در حالی که پروتوپلاسمیک‌ها را می‌توان در مادهٔ خاکستری یافت؛ فیبروزها را بین عروق خونی هم می‌بینیم.</li><li>علاوه بر این، در زوائد بلند آستروسیت‌ها دسته‌جات فیلامنت‌های حد واسط، تحت عنوان پروتئین اسیدی رشتهٔ گلیال (<bdi class="en">Glial fibrillary acid protein, GFAP</bdi>)، وجود دارد که باعث تقویت زوائد می‌شود و به‌عنوان مارکر اختصاصی شناسایی آستروسیت‌ها به کار می‌رود.</li><li>آستروسیت‌ها شایع‌ترین منشأ تومور در مغز هستند و این تومورها آستروسیتوما نامیده می‌شوند. منطق تشخیص در جزوه اینگونه است: تومور یعنی سلول زیاد، سلول زیاد یعنی زوائد زیاد، زوائد بیش از اندازه زیاد یعنی <bdi class="en">GFAP</bdi> زیاد؛ پس با مارکر اختصاصی <bdi class="en">GFAP</bdi> می‌توان سلول‌ها را شناسایی کرد و به اطلاعاتی دست یافت که نوع سرطان از نوع آستروسیتوما است. آستروسیت‌ها علاوه بر تنظیم غلظت یونی، حمایت فیزیکی از نورون، تنظیم ارتباط عروق، تغذیه و ترمیم را هم بر عهده دارند.</li><li>در قطب اپیکال (سمت فضای خالی) بسیاری از آنها مژک دارند و زنش مژک‌ها باعث می‌شود مایع مغزی‌نخاعی راکد نماند و به جریان بیفتد؛ بعضی‌ها (مخصوصاً در بطن سوم) میکروویلی دارند که احتمالاً موادی را از <bdi class="en">CSF</bdi> جذب می‌کند.</li><li>برخلاف بقیهٔ گلیال‌ها که یکجا ثابت‌اند، میکروگلیا متحرک است و در لابه‌لای بافت گشت می‌زند.</li><li>غشای میلین (<bdi class="en">Myelin sheath</bdi>) عایق‌کاری آکسون‌هاست و طبق ارجاع جزوه به فیزیولوژی گایتون، باعث می‌شود سرعت هدایت پیام عصبی به‌شدت بالا برود (هدایت جهشی).</li><li>تفاوت ساختاری بسیار مهم: برخلاف الیگودندروسیت که چند آکسون را همزمان عایق می‌کند، هر سلول شوان فقط و فقط می‌تواند یک قطعهٔ کوچک از یک آکسون را میلین‌دار کند — <strong>نسبت یک به یک</strong> — و کل هیکلش را دور همان یک قطعه می‌پیچد.</li></ul></section><section class="uc uc--points"><h3>نکات تکمیلی</h3><ul class="up"><li>نوروگلیاها سلول‌هایی هستند که فعالیت حیاتی و درونی نورون‌ها را حمایت می‌کنند.</li><li>در دستگاه عصبی مرکزی (<bdi class="en">CNS</bdi>) بافت همبند وجود ندارد — جز در اطراف عروق بزرگی که وارد <bdi class="en">CNS</bdi> می‌شوند.</li><li>این قاب همان فهرست شش‌تایی متن است: آستروسیت، الیگودندروسیت، میکروگلیا، اپندیم، سلول شوان و سلول اقماری.</li><li>سلول‌ها را با محلشان تطبیق بدهید؛ چون در ادامهٔ همین مبحث هر سلول جداگانه باز می‌شود و این تصویر نقش نقشهٔ مرجع را دارد.</li><li>در پایین تصویر هم به <bdi class="en">GFAP</bdi> اشاره شده است؛ همان مارکر اختصاصی که در ادامه می‌آید.</li><li>اسنل همین ساختار را دوگانه می‌بیند: غشای محدودکنندهٔ گلیال خارجی زیر نرم‌شامه و غشای محدودکنندهٔ گلیال داخلی زیر اپندیم.</li><li>سلول‌های اپندیمال فضاهای توخالی داخل <bdi class="en">CNS</bdi> — یعنی بطن‌های مغزی و کانال مرکزی نخاع — را مفروش می‌کنند.</li><li>شکلشان معمولاً مکعبی یا استوانه‌ای است.</li><li>در قسمت رأس با اتصالات محکم به هم چفت شده‌اند.</li><li>اسنل همین را با جملهٔ کوتاه‌تری می‌گوید: پایهٔ سلول‌های اپندیمال روی غشای محدودکنندهٔ گلیال داخلی قرار دارد.</li><li>بخش <bdi class="en">A</bdi> همان تصویر نوری است که در آن یک لایه سلول مکعبی/استوانه‌ای کانال مرکزی نخاع را می‌پوشاند.</li><li>بخش <bdi class="en">B</bdi> جزئیات الکترونی همان سلول‌ها را در بطن سوم می‌دهد؛ همان‌جایی که متن جزوه از میکروویلی و اتصالات محکم صحبت می‌کند.</li><li>در رنگ‌آمیزی معمولی فقط هستهٔ کوچک، متراکم و کشیده‌اش دیده می‌شود، نه زوائدش.</li><li>ساختن این غشا در <bdi class="en">CNS</bdi> وظیفهٔ الیگودندروسیت‌ها و در <bdi class="en">PNS</bdi> وظیفهٔ شوان است.</li><li>این شکل همان سلولی را نشان می‌دهد که در متن نام «عایق‌کار» گرفت.</li><li>Figure 2-32 (A) Photomicrograph of a group of oligodendrocytes. (B) Electron micrograph of 2 oligodendrocytes. (Courtesy of Dr. J. M. Kerns.)</li><li>همان تصویری است که در جزوه برای تفهیم «میلین چطور ساخته می‌شود» آمده و در بحث سلول شوان به آن برمی‌گردیم.</li><li>سلول‌های شوان دقیقاً همکار الیگودندروسیت‌ها هستند، اما در <bdi class="en">PNS</bdi> کار می‌کنند.</li><li>همین تصویر تفاوت «پوشش جسم سلولی» و «پوشش آکسون» را در <bdi class="en">PNS</bdi> روشن می‌کند.</li><li>این قاب پایانی جلسه همان نقشهٔ مبحث ۱ است، اما این بار با یک برش عرضی نخاع در کنارش.</li></ul></section></div><div class="ufoot"><span>مرور فوق‌فشرده — مکمل جزوهٔ کامل است، نه جایگزین آن؛ جزئیات کامل در متن اصلی جزوه آمده است.</span><span>هامزیار</span></div></div></body></html>

@@ -24,6 +24,11 @@ def main(argv: list[str] | None = None) -> int:
     b.add_argument("--no-sources", action="store_true", help="پنهان‌کردن برچسب‌های منبع")
     b.add_argument("--print-theme", action="store_true", help="نسخهٔ کم‌جوهر چاپی (پسوند _print)")
 
+    u = sub.add_parser("ultra", help="برگهٔ مرور فوق‌فشردهٔ حداکثر دوصفحه‌ای (خروجی مستقل)")
+    u.add_argument("content")
+    u.add_argument("--out", default="output")
+    u.add_argument("--topics", default="", help="شناسهٔ مباحث با کاما (پیش‌فرض: همه)")
+
     e = sub.add_parser("extract", help="استخراج متن/تصویر از جزوهٔ مادر PDF")
     e.add_argument("pdf")
     e.add_argument("--out", required=True)
@@ -41,6 +46,15 @@ def main(argv: list[str] | None = None) -> int:
         for e_ in qa["errors"]:
             print(f"  ❌ {e_}")
         return 0 if qa["ok"] else 2
+
+    if args.cmd == "ultra":
+        from .ultra import build_ultra
+        topics = [t.strip() for t in args.topics.split(",") if t.strip()] or None
+        rep = build_ultra(args.content, out_dir=args.out, topic_ids=topics)
+        cov = rep["coverage"]["A"]
+        print(f"Ultra: {rep['pdf']} ({rep['pages']} صفحه) · وضعیت: {rep['status']}")
+        print(f"پوشش A: {cov['in_sheet']}/{cov['total']} · کاهش حجم متن: {rep['text_chars']['reduction_pct']}٪")
+        return 0 if rep["fits_two_pages"] else 2
 
     if args.cmd == "extract":
         from .extract import extract_mother

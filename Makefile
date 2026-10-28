@@ -16,3 +16,7 @@ test-brand:
 # تصاویر نمونهٔ رنگی و خاکستری از PDF ساخته‌شده
 samples:
 	$(PY) scripts/brand_samples.py
+
+# برگهٔ مرور فوق‌فشردهٔ دوصفحه‌ای (خروجی مستقل از جزوهٔ کامل)
+ultra:
+	cd engine && ../$(PY) -m humsyar.cli ultra ../content/session01_pilot.yaml --out ../output
