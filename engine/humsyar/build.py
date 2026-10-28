@@ -40,6 +40,15 @@ def _font_css() -> str:
         if p.exists():
             faces.append(
                 f'@font-face{{font-family:Vazirmatn;src:url(file://{p});font-weight:{weight}}}')
+    # فونت لاتین Inter (جفت وزیرمتن): برای اصطلاحات و متن انگلیسی
+    for name, weight, style in [("Inter-Regular", 400, "normal"), ("Inter-Italic", 400, "italic"),
+                                ("Inter-Medium", 500, "normal"), ("Inter-SemiBold", 600, "normal"),
+                                ("Inter-Bold", 700, "normal")]:
+        p = fdir / f"{name}.woff2"
+        if p.exists():
+            faces.append(
+                f'@font-face{{font-family:Inter;src:url(file://{p}) format("woff2");'
+                f'font-weight:{weight};font-style:{style}}}')
     return "\n".join(faces)
 
 
@@ -179,14 +188,15 @@ def _stamp_furniture(doc, frame_pdfs, page_topics: dict | None = None) -> None:
         page = doc[i]
         pg_no = i + 1
         info = (page_topics or {}).get(pg_no, {})
-        key = (info.get("number"), pg_no % 2)
+        # زبانه همیشه سمت راست است (لبه‌ای که دانشجو جزوهٔ چاپی را از آن ورق می‌زند)
+        key = info.get("number")
         overlay = overlays.get(key) or overlays.get("_single")
         if overlay is not None:
             page.show_pdf_page(page.rect, overlay, 0)
             # نوار پیشرفت مطالعه: از راست پر می‌شود (جهت خواندن فارسی) و در چاپ
             # سیاه‌وسفید هم با قاب تیره + پُری تیره + شیار سفید قابل تشخیص است.
             frac = i / max(1, total - 1)
-            tx0, tx1, ty, th = 56 * MM, 154 * MM, 288.2 * MM, 1.15 * MM
+            tx0, tx1, ty, th = 63 * MM, 147 * MM, 288.2 * MM, 1.15 * MM  # متقارن دور مرکز ۱۰۵
             page.draw_rect(pymupdf.Rect(tx0, ty, tx1, ty + th),
                            color=(0.13, 0.23, 0.33), fill=(1, 1, 1), width=0.8, radius=0.5)
             fw = (tx1 - tx0) * frac
@@ -343,19 +353,19 @@ def build(content_path: str, *, edition: str = "final", theme: str = "a",
     page_topics = _page_topics(session, plan, toc_pages, _bd.page_count + 1)
     _bd.close()
     frame_pdfs: dict = {}
-    needed = {(page_topics.get(pg, {}).get("number"), pg % 2): page_topics.get(pg, {})
+    needed = {page_topics.get(pg, {}).get("number"): page_topics.get(pg, {})
               for pg in range(2, max(page_topics, default=2) + 1)}
-    for (tnum, par), info in needed.items():
+    for tnum, info in needed.items():
         fdoc = frame_html(session, brand, font_css,
                           topic_number=tnum, topic_short=info.get("short", ""),
                           topic_order=info.get("order", 0),
-                          side=("left" if par == 1 else "right"))
+                          side="right")  # همیشه لبهٔ راست: سمت ورق‌زدن دانشجو
         if fdoc is None:
             frame_pdfs = {}
             break
-        fp = work / f"frame_{tnum}_{par}.pdf"
-        _render_pdf(fdoc, fp, work, session, margin=ZERO_MARGIN, tag=f"frame_{tnum}_{par}")
-        frame_pdfs[(tnum, par)] = fp
+        fp = work / f"frame_{tnum}.pdf"
+        _render_pdf(fdoc, fp, work, session, margin=ZERO_MARGIN, tag=f"frame_{tnum}")
+        frame_pdfs[tnum] = fp
 
     # ادغام: کاور + بدنه، مهر قاب و شماره‌ها
     import pymupdf

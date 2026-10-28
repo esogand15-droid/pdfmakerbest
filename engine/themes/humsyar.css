@@ -48,14 +48,15 @@
 *{box-sizing:border-box; margin:0; padding:0;}
 html{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
 body{
-  font-family:"Vazirmatn","DejaVu Sans",sans-serif;
+  font-family:"Vazirmatn","Inter",sans-serif;
   font-size:var(--fs-body); line-height:var(--lh); color:var(--ink);
   background:var(--paper);
 }
-bdi,.en{ direction:ltr; unicode-bidi:isolate; font-family:"DejaVu Sans","Vazirmatn",sans-serif; }
+bdi,.en{ direction:ltr; unicode-bidi:isolate; font-family:"Inter","Vazirmatn",sans-serif;
+  color:#22384F; letter-spacing:.01em; }
 strong{ font-weight:700; }
 .term{ font-weight:700; color:var(--brand-ink); }
-.term .en{ font-weight:600; color:var(--accent); font-size:.94em; }
+.term .en{ font-weight:600; font-size:.93em; }
 p.body{ margin:0 0 6pt; text-align:justify; orphans:2; widows:2; }
 p.body .src{ margin-inline-start:4pt; }
 
@@ -139,7 +140,7 @@ p.body .src{ margin-inline-start:4pt; }
   font-size:7.9pt; line-height:1.65; border:1px solid var(--line); border-radius:20px;
   padding:0 7px; background:#fff; color:var(--ink);
 }
-.chip .en{ color:var(--accent); font-weight:600; }
+.chip .en{ font-weight:600; }
 .chip--pre{ background:var(--tint-blue); border-color:#cfdff2; }
 .topic-card__foot{ margin-top:4pt; padding-top:3pt; border-top:1px dashed var(--line); color:var(--muted); font-size:8pt;}
 
@@ -235,7 +236,7 @@ table.tbl .hl{ font-weight:700; color:var(--c-conflict); }
 .fig__cap .fsrc{ color:var(--muted); font-size:7.8pt; }
 .fig__cap .fexpl{ margin-top:2pt; text-align:justify;}
 .fig__encap{
-  direction:ltr; text-align:left; font-family:"DejaVu Sans",sans-serif; font-style:italic;
+  direction:ltr; text-align:left; font-family:"Inter",sans-serif; font-style:italic; color:#43586C;
   color:var(--muted); font-size:7.5pt; line-height:1.55; margin-top:3.5pt;
   border-top:1px dashed var(--line); padding-top:4pt;
 }
@@ -293,7 +294,9 @@ table.tbl .hl{ font-weight:700; color:var(--c-conflict); }
 .checklist{ margin:8pt 0; break-inside:avoid; border:1.2px solid var(--brand); border-radius:var(--r); padding:8pt 12pt 6pt; background:var(--tint);}
 .checklist h3{ font-size:10.5pt; color:var(--brand-ink); margin-bottom:4pt; font-weight:700;}
 .checklist ul{ list-style:none; font-size:9.5pt; line-height:2.05;}
-.checklist li::before{ content:"☐  "; color:var(--brand); font-weight:700;}
+.checklist li::before{ content:""; display:inline-block; width:7.5pt; height:7.5pt;
+  border:1pt solid var(--brand); border-radius:1.5pt; margin-inline-end:5pt; vertical-align:-1pt; }
+.lane__tri{ width:7pt; height:7pt; fill:var(--lane, var(--brand)); vertical-align:-1pt; }
 .summarybox{
   margin:8pt 0; break-inside:avoid; border-radius:var(--r); padding:8pt 12pt 6pt;
   background:linear-gradient(180deg,var(--tint),#fff); border:1.2px solid var(--brand);
@@ -364,8 +367,6 @@ table.tbl .hl{ font-weight:700; color:var(--c-conflict); }
   color:var(--brand-deep); font-weight:700; border:.4pt solid var(--brand); line-height:1.5; }
 /* جدول مقایسه‌ای: ستون نخست چسبانِ بصری + سربرگ موجودیتی */
 .tbl--compare td:first-child{ font-weight:700; color:var(--brand-deep); background:#F7FAFC; }
-.tbl th.th-ent{ background:color-mix(in srgb, var(--th-ent) 16%, white); color:var(--th-ent);
-  border-bottom:2pt solid var(--th-ent); }
 .tbl--zebra tbody tr:nth-child(even) td{ background:#F4F9FB; }
 /* نوار پیشرفت نقشهٔ جلسه در سرآغاز مبحث */
 .pstrip{ display:flex; gap:3pt; margin:4pt 0 1pt; flex-wrap:wrap; }
@@ -424,8 +425,8 @@ body.print-theme .numbadge{ background:#FFF; }
 .qc__line{ border-bottom:1pt dotted #9FB4C6; height:13pt; }
 /* نمودار ریلی دوجهته */
 .dualrail{ width:100%; height:auto; display:block; margin:4pt 0 2pt; }
-.lane__head{ border-inline-start:3pt solid var(--lane, var(--brand)); padding-inline-start:5pt;
-  color:var(--lane, var(--brand-deep)); }
+.lane__head{ border-inline-start:3.5pt solid var(--lane, var(--brand)); padding-inline-start:5pt;
+  color:var(--brand-deep); }
 /* برداشت کلیدی زیر جدول */
 .tbl__takeaway{ margin:4pt 2pt 8pt; font-size:9.3pt; color:var(--brand-deep);
   border-inline-start:3pt solid var(--brand); padding:2pt 7pt; background:#F7FAFC; border-radius:6pt; }
@@ -449,12 +450,6 @@ body.print-theme .numbadge{ background:#FFF; }
 
 /* ===== راند ۶: کتابخانهٔ آیکون و نقطهٔ رنگی موجودیت ===== */
 .ic{ vertical-align:-2.5pt; flex:none; }
-.edot{ display:inline-block; width:6.5pt; height:6.5pt; border-radius:50%; margin-inline-end:3.5pt;
-  background:var(--ed, var(--chip-ent, #9FB4C6)); border:.5pt solid rgba(11,48,80,.35);
-  vertical-align:-.5pt; }
-.chip--ent{ border-color:var(--chip-ent) !important; color:var(--chip-ent); font-weight:700; }
-.guide__ents{ margin-top:5pt; font-size:7.9pt; line-height:1.95; color:var(--brand-deep); }
-.guide__ents .chip{ margin:1pt 0 1pt 4pt; white-space:nowrap; display:inline-block; }
 
 /* ===== راند ۷: نقشهٔ جامع مرور (Master Revision Map) ===== */
 .revmap{ margin-top:14pt; border-top:1.6pt solid var(--brand); padding-top:8pt; }

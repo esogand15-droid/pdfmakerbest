@@ -250,7 +250,7 @@ body {{ font-family:"Vazirmatn",sans-serif; }}
 .cv-logo {{ display:block; width:28mm; height:auto; margin:0 auto 2.5mm;
   filter:drop-shadow(0 1.5mm 5mm rgba(45,212,191,.28)); }}
 .cv-brand .fa {{ font-size:17pt; font-weight:700; }}
-.cv-brand .en {{ display:block; margin-top:1mm; font-family:"DejaVu Sans",sans-serif;
+.cv-brand .en {{ display:block; margin-top:1mm; font-family:"Inter",sans-serif;
   font-size:10.5pt; font-weight:700; letter-spacing:3.5px; color:{C['cyan']}; direction:ltr; }}
 .cv-bottom {{ position:absolute; bottom:10mm; left:12mm; right:12mm; display:flex;
   justify-content:space-between; align-items:center; color:{C['pale']}; font-size:9pt;

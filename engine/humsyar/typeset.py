@@ -251,35 +251,7 @@ class Typesetter:
   جمله دقیقاً از کجای جزوهٔ درس، اسنل یا گری آمده است. اصطلاح‌ها در نخستین ورودشان به صورت
   <span class="term">فارسی <bdi class="en">(English)</bdi></span> می‌آیند. کادرها هم هر کدام معنای ثابتی دارند:</p>
   <div class="guide__samples">{samples}</div>
-  {self._entity_legend()}
 </div>"""
-
-    def _entity_legend(self) -> str:
-        """راهنمای رنگ ثابت مفاهیم: فقط موجودیت‌هایی که واقعاً در همین جلسه به کار رفته‌اند."""
-        from .entities import _load as _ent_load, CONFIG_PATH as _ENT_PATH
-        _by_name, by_id = _ent_load(str(_ENT_PATH))
-        haystacks: list[str] = []
-        for b in self.session.all_blocks():
-            haystacks += [str(f) for f in b.text_fragments()]
-            if b.type == "figure":
-                for lb in b.data.get("labels", []) or []:
-                    if isinstance(lb, dict):
-                        haystacks += [str(lb.get("fa", "")), str(lb.get("en", ""))]
-        hay = " ".join(haystacks)
-        chips = []
-        for eid, ent in by_id.items():
-            names = list(ent.get("fa", [])) + list(ent.get("en", []))
-            if not any(n and n in hay for n in names):
-                continue
-            fa = (ent.get("fa") or [""])[0]
-            en = (ent.get("en") or [""])[0]
-            en_html = f' · <bdi class="en">{escape(en)}</bdi>' if en else ""
-            chips.append(f'<span class="chip chip--ent" style="--chip-ent:{ent["color"]}">'
-                         f'<i class="edot"></i>{escape(fa)}{en_html}</span>')
-        if not chips:
-            return ""
-        return ('<div class="guide__ents"><b>رنگ ثابت مفاهیم این جلسه:</b> '
-                + "".join(chips) + "</div>")
 
     # -------------------------------------------------------------- مبحث
     def topic(self, t: Topic) -> str:
@@ -382,12 +354,8 @@ class Typesetter:
                         f'({pg_txt})</span></div>')
             if it.kind == "terminology":
                 en = it.meta.get("en", "")
-                col = entity_color(it.text) or entity_color(en)
-                sty = f' style="--chip-ent:{col}"' if col else ""
-                dot = '<i class="edot"></i>' if col else ""
                 en_h = f' · <bdi class="en">{escape(en)}</bdi>' if en else ""
-                return (f'<span class="chip rev__term{" chip--ent" if col else ""}"{sty}>'
-                        f'{dot}{escape(it.text)}{en_h}</span>')
+                return f'<span class="chip rev__term">{escape(it.text)}{en_h}</span>'
             pre = ""
             if it.meta.get("table_title"):
                 pre = (f'<div class="rev__sub">{icon_svg("compare", 11)}'
@@ -482,9 +450,7 @@ class Typesetter:
             pg = self.toc_pages.get(terms[fa]["anchor"])
             pg_txt = f"ص {fa_num(pg)}" if pg else "…"
             en_html = f' <bdi class="en">({escape(en)})</bdi>' if en else ""
-            col = entity_color(fa) or entity_color(en)
-            dot = f'<i class="edot" style="--ed:{col}"></i>' if col else ""
-            items.append(f'<div class="gloss__it"><span class="gloss__fa">{dot}{escape(fa)}{en_html}</span>'
+            items.append(f'<div class="gloss__it"><span class="gloss__fa">{escape(fa)}{en_html}</span>'
                          f'<span class="dots"></span><span class="gloss__pg">{pg_txt}</span></div>')
         return (f'<div class="glossary"><h2>واژه‌نامهٔ فارسی–انگلیسی همین جلسه</h2>'
                 f'<p class="gloss__note">فقط اصطلاح‌هایی که در متن همین جلسه آمده‌اند؛ '
@@ -582,16 +548,7 @@ class Typesetter:
     def b_table(self, b: Block) -> str:
         d = b.data
         label = escape(self.plan.labels.get(b.id, "جدول"))
-        def _th(h):
-            raw = re.sub(r"\[en:([^\]]+)\]", r"\1", str(h))
-            raw = re.sub(r"\[\[term:(.+?)\|(.+?)\]\]", r"\1", raw).strip()
-            cands = [raw, raw.split("(")[0].strip(),
-                     raw.rstrip(")").split("(")[-1].strip()]
-            col = next((c for c in (entity_color(c) for c in cands) if c), None)
-            sty = f' style="--th-ent:{col}"' if col else ""
-            cls = ' class="th-ent"' if col else ""
-            return f"<th{cls}{sty}>{inline(h)}</th>"
-        head = "".join(_th(h) for h in d["headers"])
+        head = "".join(f"<th>{inline(h)}</th>" for h in d["headers"])
         colgroup = ""
         if d.get("col_widths"):
             colgroup = "<colgroup>" + "".join(
@@ -635,14 +592,10 @@ class Typesetter:
         d = b.data
         labels = ""
         if d.get("labels"):
-            def _lchip(l):
-                col = entity_color(str(l.get("fa", ""))) or entity_color(str(l.get("en", "")))
-                sty = f' style="--chip-ent:{col}"' if col else ""
-                dot = '<i class="edot"></i>' if col else ""
-                cls = " chip--ent" if col else ""
-                return (f'<span class="chip{cls}"{sty}>{dot}{escape(str(l["fa"]))} · '
-                        f'<bdi class="en">{escape(str(l["en"]))}</bdi></span>')
-            labels = '<div class="fig__labels">' + "".join(_lchip(l) for l in d["labels"]) + "</div>"
+            labels = '<div class="fig__labels">' + "".join(
+                f'<span class="chip">{escape(str(l["fa"]))} · '
+                f'<bdi class="en">{escape(str(l["en"]))}</bdi></span>'
+                for l in d["labels"]) + "</div>"
         encap = (f'<div class="fig__encap">{escape(d["caption_en"])}</div>'
                  if d.get("caption_en") else "")
         srcs = " · ".join(s.label() for s in b.sources)
@@ -745,8 +698,8 @@ class Typesetter:
   <span>{inline(d["title"])}</span>{src_chips(b.sources, self.show_sources)}</div>
   {rail_svg}
   <div class="dual__lanes">
-    <div class="lane lane--fwd"><div class="lane__head" style="--lane:{cf}">◀ {inline(fwd["title"])}</div>{self._steps(fwd["steps"])}</div>
-    <div class="lane lane--bwd"><div class="lane__head" style="--lane:{cb}">{inline(bwd["title"])} ▶</div>{self._steps(bwd["steps"])}</div>
+    <div class="lane lane--fwd"><div class="lane__head" style="--lane:{cf}"><svg class="lane__tri" viewBox="0 0 10 10"><polygon points="10,1 10,9 2,5"/></svg> {inline(fwd["title"])}</div>{self._steps(fwd["steps"])}</div>
+    <div class="lane lane--bwd"><div class="lane__head" style="--lane:{cb}">{inline(bwd["title"])} <svg class="lane__tri" viewBox="0 0 10 10"><polygon points="0,1 0,9 8,5"/></svg></div>{self._steps(bwd["steps"])}</div>
   </div>
   <div class="dual__rail">{inline(d.get("rail_note", ""))}</div>
 </div>"""

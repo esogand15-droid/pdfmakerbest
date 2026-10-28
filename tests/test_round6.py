@@ -71,9 +71,9 @@ def test_new_kinds_validate_and_render(tmp_path):
 def test_table_frame_single_owner_css():
     assert "border:1pt solid #C4D6E4; border-radius:9pt" in CSS  # قاب واحد روی wrapper
     assert "overflow:hidden" in CSS
-    # خط زیر سربرگ در همهٔ ستون‌ها هم‌وزن است (۲pt) — بدون پلهٔ ۲٫۲
+    # خط زیر سربرگ در همهٔ ستون‌ها هم‌وزن و یکدست است — بدون پله و بدون رنگ واژه
     assert "border-bottom:2.2pt" not in CSS
-    assert ".tbl th.th-ent" in CSS and "border-bottom:2pt solid var(--th-ent)" in CSS
+    assert "th-ent" not in CSS
     # سایه‌زنی راه‌راه سراسری حذف شده؛ فقط سبک مرجع
     assert "table.tbl tbody tr:nth-child(even){ background:" not in CSS
     assert ".tbl--zebra tbody tr:nth-child(even) td" in CSS
@@ -93,15 +93,16 @@ def test_pilot_declared_final():
 
 
 # ------------------------------------------------- راهنمای رنگ و نقطه‌ها
-def test_entity_legend_and_dots():
+def test_no_word_coloring_or_legend():
+    """راند ۸: راهنمای رنگ و نقطه/قاب رنگیِ واژه‌ها حذف شده‌اند؛ رنگ فقط در
+    اجزای ساختاری (شاخهٔ درخت، پیکان‌های ریل) می‌ماند."""
     s, plan = _plan()
     html = Typesetter(plan).document("")
-    assert "رنگ ثابت مفاهیم این جلسه" in html
-    assert "chip--ent" in html            # چیپ برچسب شکل با رنگ موجودیت
-    assert 'class="edot"' in html         # نقطهٔ رنگی در واژه‌نامه/چیپ‌ها
-    # راهنما فقط موجودیت‌های به‌کاررفته را نشان می‌دهد (نمونه: شوان هست)
-    guide = Typesetter(plan)._entity_legend()
-    assert "سلول شوان" in guide and "#059669" in guide
+    assert "رنگ ثابت مفاهیم این جلسه" not in html
+    assert "chip--ent" not in html
+    assert 'class="edot"' not in html
+    # رنگ ساختاری ریل دوجهته همچنان از رجیستری موجودیت می‌آید
+    assert "#0284C7" in html and "#EA580C" in html
 
 
 # --------------------------------------------------- نوار پیشرفت در PDF واقعی
@@ -121,5 +122,12 @@ def test_progress_bar_rtl_and_dark_in_built_pdf():
             if sum(fill) < 1.2:  # پُری تیره (در سیاه‌وسفید نزدیک مشکی چاپ می‌شود)
                 dark.append(r)
     assert dark, "پُری تیرهٔ نوار پیشرفت پیدا نشد"
-    # لنگر از راست: لبهٔ راست پُری تقریباً روی انتهای راست شیار (۱۵۴mm) است
-    assert abs(max(r.x1 for r in dark) - 154 * MM) < 2 * MM
+    # لنگر از راست: لبهٔ راست پُری تقریباً روی انتهای راست شیار (۱۴۷mm) است
+    assert abs(max(r.x1 for r in dark) - 147 * MM) < 2 * MM
+    # شیار حول مرکز صفحه (۱۰۵mm) متقارن است
+    tracks = [dr["rect"] for dr in page.get_drawings()
+              if dr["rect"].y0 > 286 * MM and dr["rect"].width > 50 * MM
+              and dr["rect"].height < 3 * MM]
+    assert tracks
+    t = max(tracks, key=lambda r: r.width)
+    assert abs((t.x0 + t.x1) / 2 - 105 * MM) < 1.5 * MM

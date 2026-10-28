@@ -122,7 +122,7 @@ def frame_anatomy_nervous(session: Session, brand: dict[str, str], *,
   <rect x="13" y="3.9" width="34" height="4.6" fill="white"/>
   {f'<image href="{brand["logo_mono_uri"]}" x="13.4" y="3.8" width="5.2" height="5.2" preserveAspectRatio="xMidYMid meet"/>' if brand.get("logo_mono_uri") else ""}
   <text x="{32 if brand.get("logo_mono_uri") else 30}" y="7.5" font-size="2.7" font-weight="700" letter-spacing="0.7"
-        fill="{_DEEP}" text-anchor="middle" font-family="DejaVu Sans">{escape(brand['en'])}</text>
+        fill="{_DEEP}" text-anchor="middle" font-family="Inter">{escape(brand['en'])}</text>
   <!-- فوتر روی خط پایین: راست برند، چپ عنوان مجموعه؛ وسط جای کپسول شماره می‌ماند -->
   <rect x="{192 - foot_r_w:.1f}" y="288.9" width="{foot_r_w:.1f}" height="4.4" fill="white"/>
   <text x="{192 - foot_r_w / 2:.1f}" y="292.35" font-size="2.9" font-weight="700"

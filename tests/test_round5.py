@@ -49,13 +49,12 @@ def test_entity_css_vars_generated():
     assert "--ent-schwann:#059669" in css
 
 
-def test_comparison_table_headers_get_entity_colors():
+def test_comparison_table_headers_uniform_no_word_coloring():
+    """راند ۸ (تصمیم محصول): واژه‌ها رنگ‌بندی نمی‌شوند؛ سربرگ جدول یکدست است."""
     s, plan = _plan()
     html = Typesetter(plan).document("")
-    # سربرگ «آکسون/دندریت» در جدول مقایسه باید رنگ موجودیتی بگیرد
-    assert 'class="th-ent"' in html
-    assert "--th-ent:#0B3050" in html  # آکسون
-    assert "--th-ent:#0B7A6E" in html  # دندریت
+    assert "th-ent" not in html
+    assert "--th-ent:" not in html
     assert "tbl--compare" in html
 
 
