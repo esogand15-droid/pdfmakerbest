@@ -294,9 +294,8 @@ class Typesetter:
             for idx, m in enumerate(smap):
                 n = int(m["number"])
                 st = "cur" if n == t.number else ("done" if n < t.number else "todo")
-                cells.append(f'<span class="pstrip__c pstrip__c--{st}" '
-                             f'style="--topic-c:{session_vars(self.session.session_number)["--session-header"]}"><b>{fa_num(n)}</b>'
-                             f'{escape(str(m["title"]))}</span>')
+                cells.append(f'<span class="pstrip__c pstrip__c--{st}">'
+                             f'<b>{fa_num(n)}</b>{escape(str(m["title"]))}</span>')
             strip = (f'<div class="pstrip" aria-hidden="true">{"".join(cells)}</div>')
         pre = "".join(f'<span class="chip chip--pre">{inline(p)}</span>' for p in t.prereq_required)
         pre_s = "".join(f'<span class="chip">{inline(p)}</span>' for p in t.prereq_suggested)
@@ -309,13 +308,13 @@ class Typesetter:
       <span class="topic-head__pages">جزوهٔ مادر: ص {escape(t.mother_pages)}</span>
     </div>{strip}
     <div class="topic-card">
-      <p class="why"><b>چرا مهم است؟</b> {inline(t.why)}</p>
+      <p class="why"><b class="h-ic">{icon_svg('bridge', 12)}چرا مهم است؟</b> {inline(t.why)}</p>
       <div class="topic-card__grid">
-        <div><h3 class="h-ic">{icon_svg('target', 12)}در این مبحث یاد می‌گیرید:</h3><ul class="objlist">{objs}</ul></div>
-        <div><h3>پیش‌نیاز ضروری</h3><div class="chips">{pre}</div>
-             <h3 style="margin-top:4pt">پیش‌نیاز پیشنهادی</h3><div class="chips">{pre_s}</div></div>
+        <div><h3 class="h-ic tc-obj">{icon_svg('target', 12)}در این مبحث یاد می‌گیرید:</h3><ul class="objlist">{objs}</ul></div>
+        <div><h3 class="h-ic tc-pre">{icon_svg('compass', 12)}پیش‌نیاز ضروری</h3><div class="chips">{pre}</div>
+             <h3 class="tc-pre" style="margin-top:3pt">پیش‌نیاز پیشنهادی</h3><div class="chips">{pre_s}</div></div>
       </div>
-      <div class="topic-card__foot"><span class="h-ic">{icon_svg('terminology', 12)}اصطلاحات کلیدی:</span>
+      <div class="topic-card__foot"><span class="h-ic tc-term">{icon_svg('terminology', 12)}اصطلاحات کلیدی:</span>
         <span class="chips" style="display:inline-flex">{terms}</span></div>
     </div>
   </div>"""

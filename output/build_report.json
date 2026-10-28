@@ -15,36 +15,36 @@
    "merged": 3
   },
   "pages_in_book": [
-   34,
-   35
+   30,
+   31
   ]
  },
- "build_seconds": 84.2,
+ "build_seconds": 81.4,
  "toc_pages_found": {
   "s01-t01": 3,
   "s01t1-s1": 3,
   "s01t1-s2": 5,
-  "s01-t02": 6,
+  "s01-t02": 5,
   "s01t2-s1": 6,
-  "s01t2-s2": 7,
-  "s01-t03": 11,
-  "s01t3-s1": 11,
-  "s01t3-s2": 11,
-  "s01-t04": 13,
-  "s01t4-s1": 13,
-  "s01t4-s2": 14,
-  "s01t4-s3": 15,
-  "s01-t05": 17,
-  "s01t5-s1": 17,
-  "s01t5-s2": 17,
-  "s01t5-s3": 20,
-  "s01-t06": 24,
-  "s01t6-s1": 24,
-  "s01t6-s2": 26,
-  "s01t6-s3": 27,
-  "s01t6-s4": 28,
-  "s01t6-s5": 28,
-  "s01t6-s6": 30
+  "s01t2-s2": 6,
+  "s01-t03": 9,
+  "s01t3-s1": 9,
+  "s01t3-s2": 10,
+  "s01-t04": 11,
+  "s01t4-s1": 11,
+  "s01t4-s2": 12,
+  "s01t4-s3": 12,
+  "s01-t05": 14,
+  "s01t5-s1": 15,
+  "s01t5-s2": 15,
+  "s01t5-s3": 17,
+  "s01-t06": 20,
+  "s01t6-s1": 20,
+  "s01t6-s2": 22,
+  "s01t6-s3": 23,
+  "s01t6-s4": 24,
+  "s01t6-s5": 24,
+  "s01t6-s6": 26
  },
  "toc_links": 24,
  "planner_decisions": [
@@ -87,20 +87,19 @@
   "s01t6-f9: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.85؛ رقیب بعدی: full با 0.73؛ عرض چاپ ≈80mm، ارتفاع تصویر ≈118mm، وضوح مؤثر ≈349 DPI",
   "[بسته‌بندی] s01t1-f1: تصویر کپشن‌کناری برای جا شدن در صفحهٔ جاری کوچک شد",
   "[بسته‌بندی] s01t2-f3: بلوک «s01t2-p6» از پنجرهٔ بعدی جلو کشیده شد تا جای خالی انتهای صفحه پر شود (همان بخش، بدون ارجاع پیش‌رو به شکل)",
-  "[بسته‌بندی] s01t2-f4: تصویر برای جا شدن در صفحهٔ جاری تا عرض 41٪ کوچک شد (خوانایی حفظ شده)",
-  "[بسته‌بندی] s01t3-f1: بلوک «s01t3-p5» از پنجرهٔ بعدی جلو کشیده شد تا جای خالی انتهای صفحه پر شود (همان بخش، بدون ارجاع پیش‌رو به شکل)",
+  "[بسته‌بندی] s01t2-f4: تصویر برای جا شدن در صفحهٔ جاری تا عرض 51٪ کوچک شد (خوانایی حفظ شده)",
+  "[بسته‌بندی] s01t3-f1: تصویر کپشن‌کناری برای جا شدن در صفحهٔ جاری کوچک شد",
   "[بسته‌بندی] s01t4-f1: بلوک «s01t4-p4» از پنجرهٔ بعدی جلو کشیده شد تا جای خالی انتهای صفحه پر شود (همان بخش، بدون ارجاع پیش‌رو به شکل)",
-  "[بسته‌بندی] s01t5-f5: تصویر برای جا شدن در صفحهٔ جاری تا عرض 65٪ کوچک شد (خوانایی حفظ شده)",
-  "[بسته‌بندی] s01t5-tb2: جدول در باقیماندهٔ صفحه جا نشد و کامل به صفحهٔ بعد منتقل شد (Keep Together؛ تقسیم نشد)",
+  "[بسته‌بندی] s01t4-tb2: جدول در باقیماندهٔ صفحه جا نشد و کامل به صفحهٔ بعد منتقل شد (Keep Together؛ تقسیم نشد)",
+  "[بسته‌بندی] s01t5-tb1: جدول در باقیماندهٔ صفحه جا نشد و کامل به صفحهٔ بعد منتقل شد (Keep Together؛ تقسیم نشد)",
+  "[بسته‌بندی] s01t5-f6: تصویر برای جا شدن در صفحهٔ جاری تا عرض 56٪ کوچک شد (خوانایی حفظ شده)",
+  "[بسته‌بندی] s01t5-f8: تصویر برای جا شدن در صفحهٔ جاری تا عرض 52٪ کوچک شد (خوانایی حفظ شده)",
   "[بسته‌بندی] s01t6-tb1: جدول در باقیماندهٔ صفحه جا نشد و کامل به صفحهٔ بعد منتقل شد (Keep Together؛ تقسیم نشد)",
-  "[بسته‌بندی] s01t6-f3: تصویر برای جا شدن در صفحهٔ جاری تا عرض 56٪ کوچک شد (خوانایی حفظ شده)",
-  "[بسته‌بندی] s01t6-f9: تصویر کپشن‌کناری برای جا شدن در صفحهٔ جاری کوچک شد",
-  "[بسته‌بندی] s01t5-f4: کنترل تنوع — سه صفحهٔ متوالی با امضای یکسان (TFalseFTruePFalseCFalseDhigh)؛ چیدمان «sidecap» به «full» عوض شد (اختلاف امتیاز 0.01 ≤ اپسیلون)",
-  "[بسته‌بندی] شبیه‌سازی بسته‌بندی: ≈27 صفحهٔ بدنه",
+  "[بسته‌بندی] s01t6-f3: تصویر برای جا شدن در صفحهٔ جاری تا عرض 69٪ کوچک شد (خوانایی حفظ شده)",
+  "[بسته‌بندی] شبیه‌سازی بسته‌بندی: ≈28 صفحهٔ بدنه",
   "s01t1-f3: [بازرسی بصری] زیرنویس از تصویر جدا افتاده بود؛ شکل کامل به صفحهٔ بعد منتقل می‌شود",
-  "[بسته‌بندی] s01t2-f1: [بازخورد PDF واقعی] صفحهٔ قبل 96mm فضای خالی داشت؛ تصویر تا عرض 84٪ کوچک شد تا در همان صفحه جا شود",
-  "[بسته‌بندی] s01t5-f6: [بازخورد PDF واقعی] صفحهٔ قبل 114mm فضای خالی داشت؛ تصویر تا عرض 54٪ کوچک شد تا در همان صفحه جا شود",
-  "[بسته‌بندی] s01t1-f4: [بازخورد PDF واقعی] صفحهٔ قبل 72mm فضای خالی داشت؛ تصویر تا عرض 53٪ کوچک شد تا در همان صفحه جا شود",
+  "[بسته‌بندی] s01t1-f3: [حسابرسی شکست] تهِ صفحهٔ قبل در رندر واقعی 153mm خالی بود و بلوک (120mm) جا می‌شد؛ شکست اجباری حذف شد",
+  "[بسته‌بندی] s01t2-f1: [بازخورد PDF واقعی] صفحهٔ قبل 92mm فضای خالی داشت؛ تصویر تا عرض 80٪ کوچک شد تا در همان صفحه جا شود",
   "برگهٔ فوق‌فشرده: 2 صفحه، پوشش A 97/100"
  ],
  "planner_warnings": [
@@ -2213,16 +2212,6 @@
      }
     }
    ]
-  },
-  {
-   "block": "s01t5-f4",
-   "kind": "diversity_swap",
-   "page": 17,
-   "from": "sidecap",
-   "to": "full",
-   "score_from": 0.7861,
-   "score_to": 0.7722,
-   "run_signature": "TFalseFTruePFalseCFalseDhigh"
   }
  ],
  "page_signatures": [
@@ -2232,7 +2221,7 @@
    "figures": 1,
    "process_tree": 0,
    "callouts": 0,
-   "height": 186.4,
+   "height": 181.4,
    "density": "mid",
    "signature": "TFalseFTruePFalseCFalseDmid"
   },
@@ -2242,7 +2231,7 @@
    "figures": 2,
    "process_tree": 0,
    "callouts": 0,
-   "height": 242.2,
+   "height": 239.3,
    "density": "high",
    "signature": "TFalseFTruePFalseCFalseDhigh"
   },
@@ -2252,7 +2241,7 @@
    "figures": 1,
    "process_tree": 0,
    "callouts": 1,
-   "height": 196.3,
+   "height": 186.1,
    "density": "mid",
    "signature": "TFalseFTruePFalseCFalseDmid"
   },
@@ -2262,9 +2251,9 @@
    "figures": 1,
    "process_tree": 0,
    "callouts": 0,
-   "height": 148.1,
-   "density": "mid",
-   "signature": "TFalseFTruePFalseCFalseDmid"
+   "height": 144.6,
+   "density": "low",
+   "signature": "TFalseFTruePFalseCFalseDlow"
   },
   {
    "page": 5,
@@ -2272,7 +2261,7 @@
    "figures": 1,
    "process_tree": 0,
    "callouts": 0,
-   "height": 258.5,
+   "height": 250.3,
    "density": "high",
    "signature": "TFalseFTruePFalseCFalseDhigh"
   },
@@ -2282,7 +2271,7 @@
    "figures": 2,
    "process_tree": 0,
    "callouts": 0,
-   "height": 295.2,
+   "height": 282.0,
    "density": "high",
    "signature": "TFalseFTruePFalseCFalseDhigh"
   },
@@ -2292,29 +2281,29 @@
    "figures": 2,
    "process_tree": 0,
    "callouts": 1,
-   "height": 258.1,
+   "height": 242.8,
    "density": "high",
    "signature": "TTrueFTruePFalseCFalseDhigh"
   },
   {
    "page": 8,
    "tables": 0,
-   "figures": 0,
+   "figures": 1,
    "process_tree": 0,
    "callouts": 0,
-   "height": 150.0,
+   "height": 206.8,
    "density": "mid",
-   "signature": "TFalseFFalsePFalseCFalseDmid"
+   "signature": "TFalseFTruePFalseCFalseDmid"
   },
   {
    "page": 9,
    "tables": 0,
-   "figures": 2,
+   "figures": 1,
    "process_tree": 0,
    "callouts": 1,
-   "height": 252.0,
-   "density": "high",
-   "signature": "TFalseFTruePFalseCFalseDhigh"
+   "height": 180.2,
+   "density": "mid",
+   "signature": "TFalseFTruePFalseCFalseDmid"
   },
   {
    "page": 10,
@@ -2322,7 +2311,7 @@
    "figures": 0,
    "process_tree": 0,
    "callouts": 0,
-   "height": 112.5,
+   "height": 105.8,
    "density": "low",
    "signature": "TFalseFFalsePFalseCFalseDlow"
   },
@@ -2332,7 +2321,7 @@
    "figures": 1,
    "process_tree": 0,
    "callouts": 0,
-   "height": 252.6,
+   "height": 247.0,
    "density": "high",
    "signature": "TTrueFTruePFalseCFalseDhigh"
   },
@@ -2340,31 +2329,31 @@
    "page": 12,
    "tables": 0,
    "figures": 1,
-   "process_tree": 0,
+   "process_tree": 1,
    "callouts": 0,
-   "height": 149.2,
-   "density": "mid",
-   "signature": "TFalseFTruePFalseCFalseDmid"
+   "height": 254.6,
+   "density": "high",
+   "signature": "TFalseFTruePTrueCFalseDhigh"
   },
   {
    "page": 13,
    "tables": 1,
    "figures": 0,
-   "process_tree": 1,
-   "callouts": 1,
-   "height": 252.1,
-   "density": "high",
-   "signature": "TTrueFFalsePTrueCFalseDhigh"
+   "process_tree": 0,
+   "callouts": 2,
+   "height": 161.9,
+   "density": "mid",
+   "signature": "TTrueFFalsePFalseCTrueDmid"
   },
   {
    "page": 14,
    "tables": 0,
-   "figures": 0,
+   "figures": 1,
    "process_tree": 0,
-   "callouts": 1,
-   "height": 142.1,
-   "density": "low",
-   "signature": "TFalseFFalsePFalseCFalseDlow"
+   "callouts": 0,
+   "height": 195.2,
+   "density": "mid",
+   "signature": "TFalseFTruePFalseCFalseDmid"
   },
   {
    "page": 15,
@@ -2372,9 +2361,9 @@
    "figures": 1,
    "process_tree": 0,
    "callouts": 0,
-   "height": 188.4,
-   "density": "mid",
-   "signature": "TTrueFTruePFalseCFalseDmid"
+   "height": 214.7,
+   "density": "high",
+   "signature": "TTrueFTruePFalseCFalseDhigh"
   },
   {
    "page": 16,
@@ -2382,7 +2371,7 @@
    "figures": 2,
    "process_tree": 0,
    "callouts": 0,
-   "height": 250.9,
+   "height": 243.2,
    "density": "high",
    "signature": "TFalseFTruePFalseCFalseDhigh"
   },
@@ -2392,102 +2381,102 @@
    "figures": 2,
    "process_tree": 0,
    "callouts": 0,
-   "height": 270.3,
+   "height": 284.4,
    "density": "high",
    "signature": "TFalseFTruePFalseCFalseDhigh"
   },
   {
    "page": 18,
-   "tables": 0,
+   "tables": 1,
    "figures": 2,
    "process_tree": 0,
    "callouts": 0,
-   "height": 260.4,
+   "height": 284.6,
    "density": "high",
-   "signature": "TFalseFTruePFalseCFalseDhigh"
+   "signature": "TTrueFTruePFalseCFalseDhigh"
   },
   {
    "page": 19,
-   "tables": 1,
-   "figures": 1,
+   "tables": 0,
+   "figures": 0,
    "process_tree": 0,
-   "callouts": 1,
-   "height": 246.8,
-   "density": "high",
-   "signature": "TTrueFTruePFalseCFalseDhigh"
+   "callouts": 2,
+   "height": 130.4,
+   "density": "low",
+   "signature": "TFalseFFalsePFalseCTrueDlow"
   },
   {
    "page": 20,
    "tables": 0,
-   "figures": 0,
+   "figures": 2,
    "process_tree": 0,
-   "callouts": 1,
-   "height": 96.3,
-   "density": "low",
-   "signature": "TFalseFFalsePFalseCFalseDlow"
+   "callouts": 0,
+   "height": 210.9,
+   "density": "mid",
+   "signature": "TFalseFTruePFalseCFalseDmid"
   },
   {
    "page": 21,
+   "tables": 1,
+   "figures": 1,
+   "process_tree": 0,
+   "callouts": 0,
+   "height": 269.6,
+   "density": "high",
+   "signature": "TTrueFTruePFalseCFalseDhigh"
+  },
+  {
+   "page": 22,
+   "tables": 0,
+   "figures": 1,
+   "process_tree": 0,
+   "callouts": 1,
+   "height": 261.6,
+   "density": "high",
+   "signature": "TFalseFTruePFalseCFalseDhigh"
+  },
+  {
+   "page": 23,
+   "tables": 1,
+   "figures": 1,
+   "process_tree": 0,
+   "callouts": 0,
+   "height": 252.3,
+   "density": "high",
+   "signature": "TTrueFTruePFalseCFalseDhigh"
+  },
+  {
+   "page": 24,
    "tables": 0,
    "figures": 2,
    "process_tree": 0,
    "callouts": 0,
-   "height": 215.5,
+   "height": 250.1,
    "density": "high",
    "signature": "TFalseFTruePFalseCFalseDhigh"
-  },
-  {
-   "page": 22,
-   "tables": 1,
-   "figures": 1,
-   "process_tree": 0,
-   "callouts": 0,
-   "height": 283.4,
-   "density": "high",
-   "signature": "TTrueFTruePFalseCFalseDhigh"
-  },
-  {
-   "page": 23,
-   "tables": 0,
-   "figures": 1,
-   "process_tree": 0,
-   "callouts": 1,
-   "height": 252.6,
-   "density": "high",
-   "signature": "TFalseFTruePFalseCFalseDhigh"
-  },
-  {
-   "page": 24,
-   "tables": 1,
-   "figures": 1,
-   "process_tree": 0,
-   "callouts": 0,
-   "height": 246.5,
-   "density": "high",
-   "signature": "TTrueFTruePFalseCFalseDhigh"
   },
   {
    "page": 25,
    "tables": 0,
-   "figures": 2,
+   "figures": 1,
    "process_tree": 0,
    "callouts": 0,
-   "height": 258.1,
-   "density": "high",
-   "signature": "TFalseFTruePFalseCFalseDhigh"
+   "height": 131.9,
+   "density": "low",
+   "signature": "TFalseFTruePFalseCFalseDlow"
   },
   {
    "page": 26,
    "tables": 0,
-   "figures": 2,
+   "figures": 1,
    "process_tree": 0,
    "callouts": 0,
-   "height": 769.2,
+   "height": 579.1,
    "density": "high",
    "signature": "TFalseFTruePFalseCFalseDhigh"
   },
   {
-   "page": 27,
+   "page": 28,
    "tables": 0,
    "figures": 0,
    "process_tree": 1,
@@ -2503,58 +2492,42 @@
     "round": 1,
     "findings": [
      {
-      "page": 7,
-      "type": "low_fill",
-      "severity": "warn",
-      "detail": "پُری صفحه 60% است",
-      "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
-      "block": null
-     },
-     {
       "page": 10,
       "type": "overfull",
       "severity": "info",
-      "detail": "تراکم نویسه 2883 در برابر میانهٔ 1802",
+      "detail": "تراکم نویسه 3330 در برابر میانهٔ 1983",
       "cause": "تراکم بالای محتوای همان بخش",
       "block": null
      },
      {
-      "page": 12,
+      "page": 13,
       "type": "overfull",
       "severity": "info",
-      "detail": "تراکم نویسه 2535 در برابر میانهٔ 1802",
+      "detail": "تراکم نویسه 2815 در برابر میانهٔ 1983",
       "cause": "تراکم بالای محتوای همان بخش",
       "block": null
      },
      {
-      "page": 15,
+      "page": 14,
       "type": "low_fill",
       "severity": "warn",
-      "detail": "پُری صفحه 61% است",
+      "detail": "پُری صفحه 71% است",
       "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
       "block": null
      },
      {
-      "page": 20,
+      "page": 28,
       "type": "low_fill",
       "severity": "warn",
-      "detail": "پُری صفحه 57% است",
+      "detail": "پُری صفحه 51% است",
       "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
       "block": null
      },
      {
-      "page": 32,
-      "type": "low_fill",
-      "severity": "warn",
-      "detail": "پُری صفحه 56% است",
-      "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
-      "block": null
-     },
-     {
-      "page": 33,
+      "page": 29,
       "type": "overfull",
       "severity": "info",
-      "detail": "تراکم نویسه 3717 در برابر میانهٔ 1802",
+      "detail": "تراکم نویسه 3717 در برابر میانهٔ 1983",
       "cause": "تراکم بالای محتوای همان بخش",
       "block": null
      },
@@ -2567,7 +2540,15 @@
       "block": "s01t1-f3"
      },
      {
-      "page": 27,
+      "page": 5,
+      "type": "monotony",
+      "severity": "info",
+      "detail": "6 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
+      "cause": "تکرار قالب در بخش‌های هم‌ساختار",
+      "block": null
+     },
+     {
+      "page": 23,
       "type": "monotony",
       "severity": "info",
       "detail": "5 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
@@ -2576,9 +2557,7 @@
      }
     ],
     "repairs": [
-     "s01t1-f3: [بازرسی بصری] زیرنویس از تصویر جدا افتاده بود؛ شکل کامل به صفحهٔ بعد منتقل می‌شود",
-     "s01t2-f1: [بازخورد PDF واقعی] صفحهٔ قبل 96mm فضای خالی داشت؛ تصویر تا عرض 84٪ کوچک شد تا در همان صفحه جا شود",
-     "s01t5-f6: [بازخورد PDF واقعی] صفحهٔ قبل 114mm فضای خالی داشت؛ تصویر تا عرض 54٪ کوچک شد تا در همان صفحه جا شود"
+     "s01t1-f3: [بازرسی بصری] زیرنویس از تصویر جدا افتاده بود؛ شکل کامل به صفحهٔ بعد منتقل می‌شود"
     ]
    },
    {
@@ -2588,31 +2567,31 @@
       "page": 3,
       "type": "low_fill",
       "severity": "warn",
-      "detail": "پُری صفحه 44% است",
+      "detail": "پُری صفحه 43% است",
       "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
       "block": null
      },
      {
-      "page": 7,
+      "page": 5,
+      "type": "low_fill",
+      "severity": "warn",
+      "detail": "پُری صفحه 65% است",
+      "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
+      "block": null
+     },
+     {
+      "page": 11,
       "type": "overfull",
       "severity": "info",
-      "detail": "تراکم نویسه 2697 در برابر میانهٔ 1770",
+      "detail": "تراکم نویسه 3330 در برابر میانهٔ 1855",
       "cause": "تراکم بالای محتوای همان بخش",
       "block": null
      },
      {
-      "page": 10,
+      "page": 14,
       "type": "overfull",
       "severity": "info",
-      "detail": "تراکم نویسه 2883 در برابر میانهٔ 1770",
-      "cause": "تراکم بالای محتوای همان بخش",
-      "block": null
-     },
-     {
-      "page": 12,
-      "type": "overfull",
-      "severity": "info",
-      "detail": "تراکم نویسه 2535 در برابر میانهٔ 1770",
+      "detail": "تراکم نویسه 2815 در برابر میانهٔ 1855",
       "cause": "تراکم بالای محتوای همان بخش",
       "block": null
      },
@@ -2620,39 +2599,31 @@
       "page": 15,
       "type": "low_fill",
       "severity": "warn",
-      "detail": "پُری صفحه 61% است",
+      "detail": "پُری صفحه 71% است",
       "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
       "block": null
      },
      {
-      "page": 21,
-      "type": "low_fill",
-      "severity": "warn",
-      "detail": "پُری صفحه 33% است",
-      "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
-      "block": null
-     },
-     {
-      "page": 26,
+      "page": 23,
       "type": "overfull",
       "severity": "info",
-      "detail": "تراکم نویسه 2490 در برابر میانهٔ 1770",
+      "detail": "تراکم نویسه 2606 در برابر میانهٔ 1855",
       "cause": "تراکم بالای محتوای همان بخش",
       "block": null
      },
      {
-      "page": 32,
+      "page": 29,
       "type": "low_fill",
       "severity": "warn",
-      "detail": "پُری صفحه 56% است",
+      "detail": "پُری صفحه 51% است",
       "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
       "block": null
      },
      {
-      "page": 33,
+      "page": 30,
       "type": "overfull",
       "severity": "info",
-      "detail": "تراکم نویسه 3717 در برابر میانهٔ 1770",
+      "detail": "تراکم نویسه 3717 در برابر میانهٔ 1855",
       "cause": "تراکم بالای محتوای همان بخش",
       "block": null
      },
@@ -2665,7 +2636,7 @@
       "block": "s01t1-f3"
      },
      {
-      "page": 27,
+      "page": 24,
       "type": "monotony",
       "severity": "info",
       "detail": "5 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
@@ -2674,69 +2645,62 @@
      }
     ],
     "repairs": [
-     "s01t1-f4: [بازخورد PDF واقعی] صفحهٔ قبل 72mm فضای خالی داشت؛ تصویر تا عرض 53٪ کوچک شد تا در همان صفحه جا شود"
+     "s01t1-f3: [حسابرسی شکست] تهِ صفحهٔ قبل در رندر واقعی 153mm خالی بود و بلوک (120mm) جا می‌شد؛ شکست اجباری حذف شد",
+     "s01t2-f1: [بازخورد PDF واقعی] صفحهٔ قبل 92mm فضای خالی داشت؛ تصویر تا عرض 80٪ کوچک شد تا در همان صفحه جا شود"
     ]
    }
   ],
   "final_findings": [
    {
-    "page": 3,
-    "type": "low_fill",
-    "severity": "warn",
-    "detail": "پُری صفحه 44% است",
-    "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
+    "page": 6,
+    "type": "overfull",
+    "severity": "info",
+    "detail": "تراکم نویسه 2825 در برابر میانهٔ 1983",
+    "cause": "تراکم بالای محتوای همان بخش",
     "block": null
    },
    {
     "page": 10,
     "type": "overfull",
     "severity": "info",
-    "detail": "تراکم نویسه 2883 در برابر میانهٔ 1802",
+    "detail": "تراکم نویسه 3330 در برابر میانهٔ 1983",
     "cause": "تراکم بالای محتوای همان بخش",
     "block": null
    },
    {
-    "page": 12,
+    "page": 13,
     "type": "overfull",
     "severity": "info",
-    "detail": "تراکم نویسه 2535 در برابر میانهٔ 1802",
+    "detail": "تراکم نویسه 2815 در برابر میانهٔ 1983",
     "cause": "تراکم بالای محتوای همان بخش",
     "block": null
    },
    {
-    "page": 15,
+    "page": 14,
     "type": "low_fill",
     "severity": "warn",
-    "detail": "پُری صفحه 61% است",
+    "detail": "پُری صفحه 71% است",
     "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
     "block": null
    },
    {
-    "page": 21,
+    "page": 28,
     "type": "low_fill",
     "severity": "warn",
-    "detail": "پُری صفحه 33% است",
+    "detail": "پُری صفحه 51% است",
     "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
     "block": null
    },
    {
-    "page": 32,
-    "type": "low_fill",
-    "severity": "warn",
-    "detail": "پُری صفحه 56% است",
-    "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
-    "block": null
-   },
-   {
-    "page": 33,
+    "page": 29,
     "type": "overfull",
     "severity": "info",
-    "detail": "تراکم نویسه 3717 در برابر میانهٔ 1802",
+    "detail": "تراکم نویسه 3717 در برابر میانهٔ 1983",
     "cause": "تراکم بالای محتوای همان بخش",
     "block": null
    },
    {
-    "page": 4,
+    "page": 3,
     "type": "caption_split",
     "severity": "warn",
     "detail": "عنوان شکل در صفحهٔ تصویر پیدا نشد",
@@ -2744,7 +2708,15 @@
     "block": "s01t1-f3"
    },
    {
-    "page": 27,
+    "page": 4,
+    "type": "monotony",
+    "severity": "info",
+    "detail": "5 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
+    "cause": "تکرار قالب در بخش‌های هم‌ساختار",
+    "block": null
+   },
+   {
+    "page": 23,
     "type": "monotony",
     "severity": "info",
     "detail": "5 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
@@ -2940,15 +2912,12 @@
   "errors": [],
   "warnings": [
    "ماتریس پوشش: 31 مورد جزئیات درون‌تصویر ماشینی قابل استخراج نیست و به خود شکل ارجاع داده شده است",
-   "میانگین پُری صفحات محتوایی 83٪ است (هدف ≥۸۸٪)",
-   "صفحات با پُری زیر ۷۰٪ (نیازمند توضیح/اصلاح): [4, 10, 16, 18, 20, 22, 33]",
-   "بازرسی بصری: صفحهٔ 4 — پُری صفحه 44% است (علت محتمل: بلوک نشکن بعدی در باقیمانده جا نشده)",
-   "بازرسی بصری: صفحهٔ 16 — پُری صفحه 61% است (علت محتمل: بلوک نشکن بعدی در باقیمانده جا نشده)",
-   "بازرسی بصری: صفحهٔ 22 — پُری صفحه 33% است (علت محتمل: بلوک نشکن بعدی در باقیمانده جا نشده)",
-   "بازرسی بصری: صفحهٔ 33 — پُری صفحه 56% است (علت محتمل: بلوک نشکن بعدی در باقیمانده جا نشده)",
-   "بازرسی بصری: صفحهٔ 5 — عنوان شکل در صفحهٔ تصویر پیدا نشد (علت محتمل: شکستن قاب شکل بین دو صفحه)"
+   "صفحات با پُری زیر ۷۰٪ (نیازمند توضیح/اصلاح): [29]",
+   "بازرسی بصری: صفحهٔ 15 — پُری صفحه 71% است (علت محتمل: بلوک نشکن بعدی در باقیمانده جا نشده)",
+   "بازرسی بصری: صفحهٔ 29 — پُری صفحه 51% است (علت محتمل: بلوک نشکن بعدی در باقیمانده جا نشده)",
+   "بازرسی بصری: صفحهٔ 4 — عنوان شکل در صفحهٔ تصویر پیدا نشد (علت محتمل: شکستن قاب شکل بین دو صفحه)"
   ],
-  "pages": 36,
+  "pages": 32,
   "checked_fragments": 553,
   "figures_model": 31,
   "figures_pdf": 31,
@@ -2969,83 +2938,75 @@
   "min_font_pt": 7.0,
   "chars_per_page": [
    232,
-   3828,
-   2549,
-   1140,
-   1977,
-   2218,
-   1794,
-   2573,
+   3824,
+   2547,
+   1953,
+   2628,
+   2050,
+   2947,
    2195,
-   1299,
-   3003,
-   1324,
-   2658,
-   1510,
-   2009,
-   1860,
-   2366,
-   1676,
-   1476,
-   1050,
+   2599,
+   2103,
+   3452,
+   1929,
+   1590,
+   2932,
+   2226,
+   1234,
+   1911,
    1815,
-   869,
-   1426,
-   2300,
+   1778,
+   2697,
    1399,
    1922,
-   2610,
-   2407,
+   2726,
+   2291,
    1944,
    1890,
    1405,
-   2161,
-   969,
+   2163,
+   968,
    3824,
    5175,
-   4101
+   4097
   ],
-  "avg_chars_per_page": 2135,
+  "avg_chars_per_page": 2394,
   "cover_full_bleed": true,
   "fill_per_page": [
    null,
    null,
    99,
-   44,
    96,
-   74,
-   95,
-   92,
-   77,
-   64,
-   92,
-   92,
-   78,
-   92,
+   96,
    99,
-   63,
-   76,
-   68,
-   92,
-   69,
-   96,
-   33,
-   92,
-   75,
-   79,
-   96,
    98,
+   75,
    100,
-   93,
-   84,
+   98,
+   95,
+   99,
+   86,
+   92,
+   71,
    79,
-   90,
-   56,
+   89,
+   96,
+   96,
+   79,
+   77,
+   97,
+   96,
+   93,
+   91,
+   93,
+   78,
+   85,
+   51,
    100,
    100,
    93
   ],
-  "fill_avg_pct": 83,
+  "fill_avg_pct": 90,
   "tables_checked": 7,
   "tables_split_badly": [],
   "review_items": [
@@ -3085,9 +3046,9 @@
    "s01t3-p3 [needs_review] (paragraph)",
    "s01t3-s2 [needs_review] (section)",
    "s01t3-p4 [needs_review] (paragraph)",
-   "s01t3-p5 [needs_review] (paragraph)",
    "s01t3-f1 [needs_review] (figure)",
    "s01t3-f2 [needs_review] (figure)",
+   "s01t3-p5 [needs_review] (paragraph)",
    "s01t3-c1 [needs_review] (callout)",
    "s01t4-s1 [needs_review] (section)",
    "s01t4-p1 [needs_review] (paragraph)",
@@ -3169,63 +3130,55 @@
   ],
   "inspection_findings": [
    {
-    "page": 3,
-    "type": "low_fill",
-    "severity": "warn",
-    "detail": "پُری صفحه 44% است",
-    "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
+    "page": 6,
+    "type": "overfull",
+    "severity": "info",
+    "detail": "تراکم نویسه 2825 در برابر میانهٔ 1983",
+    "cause": "تراکم بالای محتوای همان بخش",
     "block": null
    },
    {
     "page": 10,
     "type": "overfull",
     "severity": "info",
-    "detail": "تراکم نویسه 2883 در برابر میانهٔ 1802",
+    "detail": "تراکم نویسه 3330 در برابر میانهٔ 1983",
     "cause": "تراکم بالای محتوای همان بخش",
     "block": null
    },
    {
-    "page": 12,
+    "page": 13,
     "type": "overfull",
     "severity": "info",
-    "detail": "تراکم نویسه 2535 در برابر میانهٔ 1802",
+    "detail": "تراکم نویسه 2815 در برابر میانهٔ 1983",
     "cause": "تراکم بالای محتوای همان بخش",
     "block": null
    },
    {
-    "page": 15,
+    "page": 14,
     "type": "low_fill",
     "severity": "warn",
-    "detail": "پُری صفحه 61% است",
+    "detail": "پُری صفحه 71% است",
     "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
     "block": null
    },
    {
-    "page": 21,
+    "page": 28,
     "type": "low_fill",
     "severity": "warn",
-    "detail": "پُری صفحه 33% است",
+    "detail": "پُری صفحه 51% است",
     "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
     "block": null
    },
    {
-    "page": 32,
-    "type": "low_fill",
-    "severity": "warn",
-    "detail": "پُری صفحه 56% است",
-    "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
-    "block": null
-   },
-   {
-    "page": 33,
+    "page": 29,
     "type": "overfull",
     "severity": "info",
-    "detail": "تراکم نویسه 3717 در برابر میانهٔ 1802",
+    "detail": "تراکم نویسه 3717 در برابر میانهٔ 1983",
     "cause": "تراکم بالای محتوای همان بخش",
     "block": null
    },
    {
-    "page": 4,
+    "page": 3,
     "type": "caption_split",
     "severity": "warn",
     "detail": "عنوان شکل در صفحهٔ تصویر پیدا نشد",
@@ -3233,7 +3186,15 @@
     "block": "s01t1-f3"
    },
    {
-    "page": 27,
+    "page": 4,
+    "type": "monotony",
+    "severity": "info",
+    "detail": "5 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
+    "cause": "تکرار قالب در بخش‌های هم‌ساختار",
+    "block": null
+   },
+   {
+    "page": 23,
     "type": "monotony",
     "severity": "info",
     "detail": "5 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
@@ -3244,9 +3205,9 @@
   "toc_verified": true,
   "toc_links": 24,
   "back_matter": {
-   "tree_page": 31,
-   "ultra_first_page": 34,
-   "glossary_page": 36,
+   "tree_page": 27,
+   "ultra_first_page": 30,
+   "glossary_page": 32,
    "revmap_present": false,
    "errors": []
   }
@@ -3283,10 +3244,6 @@
   "/home/user/pdfmakerbest/output/pages/page_29.png",
   "/home/user/pdfmakerbest/output/pages/page_30.png",
   "/home/user/pdfmakerbest/output/pages/page_31.png",
-  "/home/user/pdfmakerbest/output/pages/page_32.png",
-  "/home/user/pdfmakerbest/output/pages/page_33.png",
-  "/home/user/pdfmakerbest/output/pages/page_34.png",
-  "/home/user/pdfmakerbest/output/pages/page_35.png",
-  "/home/user/pdfmakerbest/output/pages/page_36.png"
+  "/home/user/pdfmakerbest/output/pages/page_32.png"
  ]
 }

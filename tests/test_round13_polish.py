@@ -67,10 +67,12 @@ def test_no_runtime_color_computation_in_css():
 
 # ---------------------------------------------------------------- قانون ۳
 def test_white_cards_and_table_session_header():
-    assert "table.tbl th{\n  background:var(--session-header" in CSS
+    # بازخورد کاربر (پس از R13): نشانه‌های تکرارشونده — از جمله سربرگ جدول —
+    # رنگ خانوادهٔ معنایی خودشان را دارند (ساختار=fam6)، نه رنگ جلسه.
+    assert "table.tbl th{\n  background:var(--fam6-deep)" in CSS
     assert "td:not(.rowh){ background:var(--zebra)" in CSS
-    assert "td.rowh{ font-weight:700; color:var(--session-deep" in CSS
-    assert "background:var(--session-soft" in CSS
+    assert "td.rowh{ font-weight:700; color:var(--fam6-deep)" in CSS
+    assert "background:var(--fam6-soft)" in CSS
     # کادر معنایی کارت سفید است و فقط نوار آغازین رنگ خانواده را دارد
     assert (".callout.fam{ background:var(--surface); "
             "border-inline-start:5px solid var(--fam); }") in CSS

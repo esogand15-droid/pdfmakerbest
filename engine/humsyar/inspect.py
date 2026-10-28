@@ -107,7 +107,7 @@ def inspect_body(body_pdf: Path, session: Session, plan: Plan) -> list[dict[str,
 
     for idx, p in enumerate(content):
         is_last = idx == len(content) - 1
-        if not is_last and p["fill"] < 0.62:
+        if not is_last and p["fill"] < 0.72:
             add(p["page"], "low_fill", "warn",
                 f"پُری صفحه {p['fill']:.0%} است", "بلوک نشکن بعدی در باقیمانده جا نشده")
         # شکاف داخلی بزرگ: با «خط آب» سنجیده می‌شود تا چیدمان دوستونه (کپشن‌کناری)
@@ -219,7 +219,7 @@ def _grow_to_fill(findings: list[dict[str, Any]], session: Session,
             if p["page"] not in low_pages:
                 continue
             blank = ZONE_BOTTOM - p["bottom"]
-            if blank < 50:
+            if blank < 38:
                 continue
             on_page = [b for b in figs if fig_at[id(b)][0] == p["page"]]
             if not on_page:
@@ -239,7 +239,7 @@ def _grow_to_fill(findings: list[dict[str, Any]], session: Session,
             pct_now = float(b.data.get("_width_pct", 100))
             col_w = 94.6 if layout == "sidecap" else 182.0
             pct_max = 100.0 if (layout == "sidecap" or b.data.get("min_width_mm")) else 75.0
-            target_h = min(cap_h, img_h + blank * 0.55, img_h * 1.3)
+            target_h = min(cap_h, img_h + blank * 0.7, img_h * 1.45)
             pct_new = min(pct_max, pct_now * (target_h / img_h))
             gain = img_h * (pct_new / max(pct_now, 1) - 1)
             if pct_new <= pct_now + 2 or gain < 12:

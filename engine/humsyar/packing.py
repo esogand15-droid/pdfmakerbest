@@ -214,7 +214,7 @@ def pack(session: Session, plan: Plan, heights: dict[str, float],
                 and (b.type == "figure" or (b.type == "table" and it.keep))):
             # ۲) کشیدن بلوک‌های مستقل از پنجرهٔ سه بلوک بعدی به جای خالی همین صفحه (حداکثر دو بار)
             pulled = False
-            for j in range(i + 1, min(i + 4, len(items))):
+            for j in range(i + 1, min(i + 5, len(items))):
                 nxt = items[j]
                 if nxt.topic_id != it.topic_id or nxt.is_head:
                     break
@@ -383,11 +383,56 @@ def feedback_adjust(session: Session, body_pdf: Path, plan: Plan,
     fig_at = {id(b): images[i] for i, b in enumerate(figs)}
 
     adjusted = 0
+    # ۰) حسابرسی شکست‌های اجباری در برابر صفحه‌بندی واقعی: شبیه‌سازی ممکن است
+    # برای جدول/شکل _break_before گذاشته باشد، ولی کرومیوم صفحه‌ها را طور
+    # دیگری شکسته و تهِ صفحهٔ قبل عملاً جا داشته است. در آن حالت شکست اجباری
+    # بی‌جهت است و حذف می‌شود (break-inside:avoid خودش یکپارچگی را نگه می‌دارد).
+    from .model import normalize_text
+    norm_pages = [normalize_text(pg_.get_text()) for pg_ in doc]
+
+    def _real_page(blk) -> int | None:
+        if blk.type == "figure":
+            return fig_at.get(id(blk), (None,))[0]
+        title = normalize_text(str(blk.data.get("title", "") or "")).strip()
+        if len(title) < 6:
+            return None
+        for pi, txt in enumerate(norm_pages):
+            if title in txt:
+                return pi
+        return None
+
+    for t in session.topics:
+        if adjusted >= 8:
+            break
+        for b in t.blocks:
+            if adjusted >= 8:
+                break
+            if b.type not in ("figure", "table"):
+                continue
+            if not b.data.get("_break_before") or b.data.get("_chunks"):
+                continue
+            pg = _real_page(b)
+            if pg is None or pg < 1:
+                continue
+            prev_blank = zone_bottom - bottoms[pg - 1]
+            need = float((heights or {}).get(b.id, 0.0) or 0.0)
+            if need <= 0 and b.type == "figure":
+                _, _y0, ih = fig_at[id(b)]
+                need = ih + (22.0 if b.data.get("_layout", "full") == "full" else 5.0)
+            if need > 0 and need + 8.0 <= prev_blank:
+                b.data.pop("_break_before", None)
+                msg = (f"{b.id}: [حسابرسی شکست] تهِ صفحهٔ قبل در رندر واقعی "
+                       f"{prev_blank:.0f}mm خالی بود و بلوک ({need:.0f}mm) جا می‌شد؛ "
+                       f"شکست اجباری حذف شد")
+                logs.append(msg)
+                plan.log(f"[بسته‌بندی] {msg}")
+                adjusted += 1
+
     for pno in range(len(doc) - 1):
-        if adjusted >= 3:
+        if adjusted >= 8:
             break
         blank = zone_bottom - bottoms[pno]
-        if blank < 45.0:
+        if blank < 32.0:
             continue
         # اولین شکلِ صفحهٔ بعد
         nxt = None
@@ -408,7 +453,7 @@ def feedback_adjust(session: Session, body_pdf: Path, plan: Plan,
         else:
             cap_allow = 22.0 if layout == "full" else 5.0
         block_h = img_h + cap_allow
-        if block_h <= blank - 6 or block_h > blank + 34:
+        if block_h <= blank - 6 or block_h > blank + 48:
             continue  # یا خودش جا می‌شده (علت دیگری دارد) یا بیش از حد بزرگ است
         target_img = blank - cap_allow - 8.0
         if target_img < MIN_FIG_H_MM or img_h <= 0:
@@ -417,7 +462,8 @@ def feedback_adjust(session: Session, body_pdf: Path, plan: Plan,
         col = TEXT_WIDTH_MM if layout == "full" else SIDECAP_COL_MM
         w_now = col * float(b.data.get("_width_pct", 100)) / 100.0
         w_new = w_now * (target_img / img_h)
-        min_w = max(float(b.data.get("min_width_mm") or 0), 55.0 if layout == "full" else 50.0)
+        min_w = max(float(b.data.get("min_width_mm") or 0),
+                    55.0 if layout == "full" else 50.0, 0.55 * w_now)
         if w_new < min_w:
             continue
         b.data["_width_pct"] = max(30, round(w_new / col * 100))
