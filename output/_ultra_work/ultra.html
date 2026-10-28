@@ -10,99 +10,125 @@
 /* ============================================================
    HumsYar — Brand Design Tokens (منبع واحد رنگ‌های برند)
    ------------------------------------------------------------
+   راند ۱۲: پالت «گرم و پزشکی» (Warm Medical) + رنگ مبحث خودکار
+   + شش خانوادهٔ معنایی آیکون/کادر. رنگ فقط از «نقش» می‌آید
+   (نوع کادر، خانوادهٔ نشانه، شمارهٔ مبحث) — هرگز از محتوای علمی.
    تنها فایلی که مجاز است مقدار HEX داشته باشد.
    - سند بدنه، کاور و قاب این فایل را پیش از استایل‌های خودشان می‌خوانند.
    - کد پایتون (کاور/قاب/نوار پیشرفت/SVG) از راه humsyar/palette.py همین
-     فایل را می‌خواند؛ فهرست دومی از رنگ‌ها ساخته نمی‌شود.
+     فایل را می‌خواند؛ مشتقات کنتراست‌امن مبحث‌ها آنجا با HSL ساخته می‌شوند.
    - رنگ داخل تصاویر اصلی کتاب‌ها مشمول این پالت نیست.
+   نسبت هدف: ۷۰٪ کرم/سفید، ۱۵٪ متن و Primary، ۱۰٪ رنگ مبحث، ۵٪ معنایی.
    ============================================================ */
 :root {
-  /* --- هستهٔ برند --- */
-  --navy-950: #050D18;
-  --navy-900: #061E4E;
-  --navy-800: #0F2A52;
-  --navy-700: #0A2A7E;
-  --royal-600: #0636AE;
-  --azure-500: #0666F6;
-  --sky-400: #5FB3F1;
-  --cyan-400: #06D2DE;
-  --aqua-300: #6FE6EE;
-  --tealcyan-500: #04B9D3;
-  --teal-ink: #0A6E85;
-
-  /* --- سطوح روشن --- */
+  /* --- هستهٔ گرم برند --- */
+  --paper: #FFFBF5;            /* پس‌زمینهٔ صفحه: کرم گرم */
+  --surface: #FFFFFF;          /* سطح کادرها */
+  --surface-warm: #FFF6EA;     /* سطح گرم ملایم */
+  --ink: #26324B;              /* متن اصلی */
+  --ink-soft: #6B7488;         /* متن فرعی/کپشن/منبع */
+  --line-warm: #EADFCF;        /* خطوط و حاشیه‌ها: بژ ملایم */
+  --primary: #139A8E;          /* برند اصلی: فیروزهٔ زنده */
+  --primary-deep: #0F5E63;     /* تیتر و عناصر مهم */
+  --secondary: #FF6B5B;        /* تأکید گرم */
+  --sun: #FFB627;              /* نقطهٔ شاد/هایلایت */
+  --sun-soft: #FFE3A6;
+  --cover-deep: #1B2440;       /* سرمه‌ای گرم جلد */
   --white: #FFFFFF;
-  --ice-50: #F3F9FE;
-  --ice-100: #E8F4FD;
-  --ice-teal: #E6F8FB;
-  --hairline: #D3E2F2;
 
-  /* --- متن --- */
-  --ink: #0B1B3A;
-  --slate: #5B6B88;
+  /* --- رنگ مبحث (Chapter Accent): accent[(number-1) mod 8] --- */
+  --chapter-1: #139A8E;
+  --chapter-2: #FF7A45;
+  --chapter-3: #7C5CFA;
+  --chapter-4: #2F80ED;
+  --chapter-5: #E8508B;
+  --chapter-6: #2EAD6B;
+  --chapter-7: #F2A100;
+  --chapter-8: #E5484D;
 
-  /* --- رنگ‌های کارکردی (فقط هشدار/اختلاف واقعی) --- */
-  --warn: #E8A33D;
-  --warn-bg: #FFF4E0;
-  --conflict: #C75B3A;
-  --conflict-bg: #FBEDE8;
-  --conflict-ink: #8A3418;
+  /* --- شش خانوادهٔ معنایی (deepها با اسکریپت کنتراست ≥۴٫۶ روی soft ساخته شده‌اند) --- */
+  --fam1: #139A8E;  --fam1-deep: #0F766D;   /* دانش پایه/تعریف */
+  --fam2: #F59E0B;  --fam2-deep: #996206;   /* تأکید و یادگیری */
+  --fam3: #2EAD6B;  --fam3-deep: #20794B;   /* کاربرد/بالینی */
+  --fam4w: #FF6B5B; --fam4w-deep: #D51500;  /* هشدار */
+  --fam4c: #F97316; --fam4c-deep: #B44C05;  /* اختلاف منابع */
+  --fam4e: #D9A400; --fam4e-deep: #876600;  /* استثنا */
+  --fam4u: #8B7FB8; --fam4u-deep: #7061A8;  /* نیازمند بررسی */
+  --fam5: #E8508B;  --fam5-deep: #CC1B5F;   /* حافظه و آزمون */
+  --fam6: #6D5BD0;  --fam6-deep: #6957CF;   /* ساختار و ناوبری */
 
-  /* --- گرادیان‌های برند --- */
-  --brand-grad: linear-gradient(135deg, #061E4E 0%, #0636AE 45%, #06D2DE 100%);
-  --brand-grad-h: linear-gradient(90deg, #0636AE 0%, #04B9D3 100%);
-  --cover-bg: linear-gradient(180deg, #050D18 0%, #0F2A52 100%);
-
-  /* --- فقط ناوبری مباحث (تب کناری، کارت فعال نقشهٔ جلسه) --- */
-  --topic-1: #061E4E;
-  --topic-2: #0A2A7E;
-  --topic-3: #0636AE;
-  --topic-4: #0666F6;
-  --topic-5: #0A6E85;
-  --topic-6: #4B5BD6;
-
-  /* --- سایه‌ها --- */
-  --shadow-sm: 0 1px 2px rgba(6, 30, 78, 0.08);
-  --shadow-md: 0 2px 8px rgba(6, 30, 78, 0.10);
+  /* --- گرادیان‌ها و سایه‌ها --- */
+  --brand-grad: linear-gradient(135deg, #1B2440 0%, #0F5E63 55%, #139A8E 100%);
+  --brand-grad-h: linear-gradient(90deg, #0F5E63 0%, #139A8E 100%);
+  --cover-bg: linear-gradient(180deg, #1B2440 0%, #0F5E63 100%);
+  --shadow-sm: 0 1px 2px rgba(80, 50, 20, 0.08);
+  --shadow-md: 0 2px 8px rgba(80, 50, 20, 0.10);
 
   /* ==========================================================
      لایهٔ معنایی موتور — نام‌هایی که کامپوننت‌ها مصرف می‌کنند.
-     همه به توکن‌های بالا اشاره می‌کنند؛ این‌جا HEX تازه‌ای نیست.
      ========================================================== */
-  --brand: var(--royal-600);            /* ساختار و تأکید اصلی بدنه */
-  --brand-deep: var(--navy-900);        /* عنوان‌ها و سطوح تیرهٔ محدود */
-  --brand-ink: var(--navy-800);         /* متن برجسته روی زمینهٔ روشن */
-  --accent: var(--azure-500);           /* ارجاع‌ها و تأکید فرعی */
-  --muted: var(--slate);                /* کپشن، منبع، توضیح ثانویه */
-  --faint: color-mix(in srgb, var(--slate) 72%, var(--white));
-  --line: var(--hairline);
-  --line-soft: var(--ice-100);
-  --paper: var(--white);
-  --soft: var(--ice-50);
-  --tint: var(--ice-teal);
-  --tint-blue: var(--ice-100);
+  --brand: var(--primary-deep);
+  --brand-deep: var(--primary-deep);
+  --brand-ink: var(--primary-deep);
+  --brand-soft: var(--surface-warm);
+  --accent: var(--primary);
+  --muted: var(--ink-soft);
+  --faint: color-mix(in srgb, var(--ink-soft) 72%, var(--white));
+  --line: var(--line-warm);
+  --line-soft: var(--surface-warm);
+  --soft: var(--surface-warm);
+  --tint: #E7F4F1;
+  --tint-blue: var(--surface-warm);
+  --slate: var(--ink-soft);
+  --slate-deep: color-mix(in srgb, var(--ink-soft) 55%, var(--ink));
+  --slate-soft: color-mix(in srgb, var(--ink-soft) 55%, var(--white));
+  --hairline: var(--line-warm);
 
-  /* رنگ نقشِ کادرهای آموزشی — معنا با آیکون+برچسب هم منتقل می‌شود، نه فقط رنگ */
-  --c-key: var(--royal-600);            --bg-key: var(--ice-100);
-  --c-clinical: var(--teal-ink);        --bg-clinical: var(--ice-teal);
-  --c-warning: color-mix(in srgb, var(--warn) 50%, var(--ink));
-  --bg-warning: var(--warn-bg);
-  --c-bridge: var(--royal-600);         --bg-bridge: var(--ice-100);
-  --c-conflict: var(--conflict);        --bg-conflict: var(--conflict-bg);
-  --c-exam: var(--navy-700);            --bg-exam: var(--ice-100);
-  --c-definition: var(--navy-700);      --bg-definition: var(--ice-50);
-  --c-example: var(--teal-ink);         --bg-example: var(--ice-teal);
-  --c-summary: var(--navy-900);         --bg-summary: var(--ice-100);
-  --c-exception: color-mix(in srgb, var(--warn) 30%, var(--conflict-ink));  /* کننتراست متن ≥۴٫۵ روی warn-bg */
-  --bg-exception: var(--warn-bg);
-  --c-mnemonic: color-mix(in srgb, var(--azure-500) 78%, var(--ink));
-  --bg-mnemonic: var(--ice-100);
-  --c-formula: var(--teal-ink);         --bg-formula: var(--ice-teal);
-  --slate-deep: color-mix(in srgb, var(--slate) 74%, var(--ink));
-  --slate-soft: color-mix(in srgb, var(--slate) 55%, var(--white));
-  --c-terminology: var(--slate-deep);
-  --bg-terminology: var(--ice-50);
-  --c-unresolved: var(--slate);         --bg-unresolved: var(--ice-50);
+  /* رنگ نقش کادرها از خانوادهٔ معنایی‌شان (معنا با آیکون+برچسب+الگو هم هست) */
+  --c-key: var(--fam2-deep);          --bg-key: #FEF3E0;
+  --c-clinical: var(--fam3-deep);     --bg-clinical: #ECF4E9;
+  --c-warning: var(--fam4w-deep);     --bg-warning: #FFEEE7;
+  --c-bridge: var(--fam3-deep);       --bg-bridge: #ECF4E9;
+  --c-conflict: var(--fam4c-deep);    --bg-conflict: #FEEFE1;
+  --c-exam: var(--fam5-deep);         --bg-exam: #FDECEB;
+  --c-definition: var(--fam1-deep);   --bg-definition: #EAF2EC;
+  --c-example: var(--fam3-deep);      --bg-example: #ECF4E9;
+  --c-summary: var(--fam2-deep);      --bg-summary: #FEF3E0;
+  --c-exception: var(--fam4e-deep);   --bg-exception: #FCF3DF;
+  --c-mnemonic: var(--fam5-deep);     --bg-mnemonic: #FDECEB;
+  --c-formula: var(--fam5-deep);      --bg-formula: #FDECEB;
+  --c-terminology: var(--fam1-deep);  --bg-terminology: #EAF2EC;
+  --c-unresolved: var(--fam4u-deep);  --bg-unresolved: #F5F0F0;
+
+  /* ==========================================================
+     نام‌های قدیمی (لایهٔ سازگاری) — مقدارها به پالت گرم نگاشت شده‌اند
+     تا مصرف‌کننده‌های موجود (کاور، درخت، ریل، برگهٔ مرور) یکدست گرم شوند.
+     ========================================================== */
+  --navy-950: var(--cover-deep);
+  --navy-900: var(--primary-deep);
+  --navy-800: var(--primary-deep);
+  --navy-700: var(--primary);
+  --royal-600: var(--primary-deep);
+  --azure-500: var(--primary);
+  --sky-400: #8CCFC5;
+  --cyan-400: var(--sun);
+  --aqua-300: #FFD9A0;
+  --tealcyan-500: #FF7A45;   /* جهت دوم نمودارها: گرم، در برابر فیروزهٔ Primary */
+  --teal-ink: #CF3B00;       /* متن امنِ جهت دوم روی روشن */
+  --ice-50: var(--surface-warm);
+  --ice-100: #FDEFDC;
+  --ice-teal: #E7F4F1;
+  --warn: var(--fam4e);
+  --warn-bg: #FCF3DF;
+  --conflict: var(--fam4c);
+  --conflict-bg: #FEEFE1;
+  --conflict-ink: var(--fam4c-deep);
+  --topic-1: var(--chapter-1);
+  --topic-2: var(--chapter-2);
+  --topic-3: var(--chapter-3);
+  --topic-4: var(--chapter-4);
+  --topic-5: var(--chapter-5);
+  --topic-6: var(--chapter-6);
 }
 
 :root{--u-base:8.8pt}
@@ -152,4 +178,4 @@ body{ font-family:Vazirmatn,sans-serif; color:var(--ink); margin:0;
 .term{ font-weight:700; color:var(--brand-ink) }
 .en, bdi.en{ font-family:Inter,Vazirmatn,sans-serif; direction:ltr; color:var(--ink) }
 .numbadge{ font-weight:800; color:var(--navy-900) }
-</style></head><body class=""><div class="upage"><div class="uhead"><span class="ut">آناتومی دستگاه اعصاب — بافت‌شناسی سیستم عصبی: از نورون تا میلین</span><span class="ubadge">اسکلت مفهومی مبحث · صفحهٔ ۱ از ۲</span><span class="ub">هامزیار · HumsYar</span></div><div class="ucols"><section class="uc uc--skeleton"><h3>اسکلت مبحث</h3><div class="usk"><b>نوروگلیاها و غلاف میلین</b><span>شش سلول گلیال در یک نگاه: منشأ، محل، وظیفه</span><span>آستروسیت: پرتعدادترین گلیال</span><span>سلول‌های اپندیمال: فرش‌کننده‌های حفره‌های <bdi class="en">CNS</bdi></span><span>میکروگلیا: پلیس ضدشورش <bdi class="en">CNS</bdi></span><span>غلاف میلین: الیگودندروسیت در <bdi class="en">CNS</bdi>، سلول شوان در <bdi class="en">PNS</bdi></span><span>بازگشت به نقشهٔ کل بدن: <bdi class="en">CNS</bdi>، <bdi class="en">PNS</bdi> و نخاع</span></div></section><section class="uc uc--table"><h3>شش سلول گلیال: منشأ جنینی، محل و وظیفهٔ کلیدی</h3><table class="utbl"><thead><tr><th>سلول</th><th>منشأ جنینی</th><th>محل</th><th>وظیفهٔ کلیدی</th></tr></thead><tbody><tr><td class="rowh">آستروسیت پروتوپلاسمیک</td><td class="">اکتودرم عصبی (لوله)</td><td class="">مادهٔ خاکستری</td><td class="">پای عروقی، تغذیه، تنظیم یونی، غشای محدودکنندهٔ گلیال</td></tr><tr><td class="rowh">آستروسیت فیبروز</td><td class="">اکتودرم عصبی (لوله)</td><td class="">مادهٔ سفید</td><td class="">زوائد کمتر و طویل‌تر، پشتیبانی ساختاری، <bdi class="en">GFAP</bdi></td></tr><tr><td class="rowh">الیگودندروسیت</td><td class="">اکتودرم عصبی (لوله)</td><td class="">مادهٔ سفید، ردیف روی آکسون‌های میلین‌دار</td><td class="">ساخت میلین <bdi class="en">CNS</bdi>؛ یک سلول برای چند آکسون</td></tr><tr><td class="rowh">میکروگلیا</td><td class="">مونوسیت (مزودرم)</td><td class="">پراکنده در کل <bdi class="en">CNS</bdi></td><td class="">دفاع: بیگانه‌خواری، معرفی آنتی‌ژن، ترشح سایتوکاین</td></tr><tr><td class="rowh">سلول اپندیمال</td><td class="">اکتودرم عصبی (لوله)</td><td class="">بطن‌های مغز و کانال مرکزی نخاع</td><td class="">پوشش حفره‌ها، جریان و جذب <bdi class="en">CSF</bdi></td></tr><tr><td class="rowh">سلول شوان</td><td class="">ستیغ عصبی</td><td class=""><bdi class="en">PNS</bdi>، روی آکسون‌های عصبی</td><td class="">ساخت میلین <bdi class="en">PNS</bdi>؛ یک سلول برای یک قطعه از یک آکسون</td></tr><tr><td class="rowh">سلول اقماری</td><td class="">ستیغ عصبی</td><td class=""><bdi class="en">PNS</bdi>، گانگلیون‌های حسی عصبی</td><td class="">ایزوله‌کردن و تغذیهٔ جسم سلولی نورون گانگلیونی</td></tr></tbody></table></section><section class="uc uc--table"><h3>میکروگلیا در دو حالت استراحت و فعال</h3><table class="utbl"><thead><tr><th>حالت</th><th>رفتار سلول</th></tr></thead><tbody><tr><td class="rowh">استراحت</td><td class="">زوائد متعددی دارد و محیط را اسکن می‌کند</td></tr><tr><td class="rowh">فعال</td><td class="">با دیدن آنتی‌ژن یا بافت آسیب‌دیده پاهایش را جمع می‌کند، گرد می‌شود، سریع تقسیم می‌شود و تعدادش زیاد می‌شود</td></tr></tbody></table></section><section class="uc uc--defs"><h3>تعریف‌ها و اصول پایه</h3><ul class="up"><li>زوائدی از نوروگلیا در بخش‌هایی با زوائد نورون‌ها در ارتباطند؛ به مجموع زوائد متصل‌به‌هم نوروگلیاها و نورون‌ها <strong>نوروپیل</strong> گفته می‌شود.</li></ul></section><section class="uc uc--numbers"><h3>اعداد و مقادیر کلیدی</h3><ul class="up"><li>شکل <b class="un">۲</b>-<b class="un">۲۸</b> اسنل چهار نوع گلیال مرکزی را در کنار نورون و مویرگ می‌چیند؛ دو نوع محیطی (شوان و اقماری) در این شکل نیستند، چون در <bdi class="en">CNS</bdi> جایی ندارند.</li></ul></section><section class="uc uc--chips"><h3>اصطلاحات کلیدی</h3><span class="uchip">آستروسیت <bdi class="en">(Astrocyte)</bdi></span><span class="uchip">الیگودندروسیت <bdi class="en">(Oligodendrocyte)</bdi></span><span class="uchip">میکروگلیا <bdi class="en">(Microglia)</bdi></span><span class="uchip">اپندیم <bdi class="en">(Ependymal cell)</bdi></span><span class="uchip">سلول شوان <bdi class="en">(Schwann cell)</bdi></span><span class="uchip">سلول اقماری <bdi class="en">(Satellite cell)</bdi></span><span class="uchip">پروتئین اسیدی رشتهٔ گلیال (GFAP) <bdi class="en">(Glial fibrillary acid protein)</bdi></span><span class="uchip">نوروپیل</span><span class="uchip">غشای محدودکنندهٔ گلیال <bdi class="en">(Glial Limitans)</bdi></span><span class="uchip">نورون <bdi class="en">(Neuron)</bdi></span><span class="uchip">مویرگ <bdi class="en">(Capillary)</bdi></span><span class="uchip">پروتوپلاسمیک <bdi class="en">(Protoplasmic)</bdi></span><span class="uchip">فیبروز <bdi class="en">(Fibrous)</bdi></span><span class="uchip">پروتئین اسیدی رشتهٔ گلیال <bdi class="en">(Glial fibrillary acid protein (GFAP))</bdi></span><span class="uchip">سلول‌های اپندیمال <bdi class="en">(Ependymal cells)</bdi></span><span class="uchip">کانال مرکزی نخاع <bdi class="en">(Central canal of spinal cord)</bdi></span><span class="uchip">بطن سوم <bdi class="en">(Third ventricle)</bdi></span><span class="uchip">هسته <bdi class="en">(Nucleus)</bdi></span><span class="uchip">بافت عصبی اطراف <bdi class="en">(Surrounding nervous tissue)</bdi></span><span class="uchip">سلول میلین‌ساز <bdi class="en">(Myelinating cell)</bdi></span><span class="uchip">آکسون <bdi class="en">(Axon)</bdi></span><span class="uchip">غلاف میلین <bdi class="en">(Myelin sheath)</bdi></span><span class="uchip">جسم سلولی نورون گانگلیونی <bdi class="en">(Peripheral ganglionic neuron cell body)</bdi></span><span class="uchip">سلول‌های اقماری <bdi class="en">(Satellite cells)</bdi></span><span class="uchip">سلول‌های شوان <bdi class="en">(Schwann cells)</bdi></span><span class="uchip">مغز <bdi class="en">(Brain)</bdi></span><span class="uchip">عصب جمجمه‌ای <bdi class="en">(Cranial nerve)</bdi></span><span class="uchip">نخاع <bdi class="en">(Spinal cord)</bdi></span><span class="uchip">عصب نخاعی <bdi class="en">(Spinal nerve)</bdi></span></section></div><div class="ufoot"><span>مرور فوق‌فشرده — مکمل جزوهٔ کامل است، نه جایگزین آن؛ جزئیات کامل در متن اصلی جزوه آمده است.</span><span>هامزیار</span></div></div><div class="upage"><div class="uhead"><span class="ut">آناتومی دستگاه اعصاب — بافت‌شناسی سیستم عصبی: از نورون تا میلین</span><span class="ubadge">جزئیات تعیین‌کننده و مرور نهایی · صفحهٔ ۲ از ۲</span><span class="ub">هامزیار · HumsYar</span></div><div class="ucols"><section class="uc uc--alerts"><h3>استثناها و اختلاف منابع</h3><ul class="up"><li class="ual">نکتهٔ مهم جنینی: بقیهٔ گلیال‌های مغز (آستروسیت، الیگودندروسیت و اپندیم) منشأ اکتودرمی دارند، اما میکروگلیا استثناست و همان ماکروفاژ سیستم عصبی است؛ منشأش از مونوسیت‌های خون و در نهایت از مغز استخوان و لایهٔ مزودرم جنینی است.</li></ul></section><section class="uc uc--points"><h3>نکات متمایزکننده</h3><ul class="up"><li>تفاوت مهم دو آستروسیت: فیبروزها زوائد کمتر اما طویل‌تر دارند و در مادهٔ سفید دیده می‌شوند، در حالی که پروتوپلاسمیک‌ها را می‌توان در مادهٔ خاکستری یافت؛ فیبروزها را بین عروق خونی هم می‌بینیم.</li><li>علاوه بر این، در زوائد بلند آستروسیت‌ها دسته‌جات فیلامنت‌های حد واسط، تحت عنوان پروتئین اسیدی رشتهٔ گلیال (<bdi class="en">Glial fibrillary acid protein, GFAP</bdi>)، وجود دارد که باعث تقویت زوائد می‌شود و به‌عنوان مارکر اختصاصی شناسایی آستروسیت‌ها به کار می‌رود.</li><li>آستروسیت‌ها شایع‌ترین منشأ تومور در مغز هستند و این تومورها آستروسیتوما نامیده می‌شوند. منطق تشخیص در جزوه اینگونه است: تومور یعنی سلول زیاد، سلول زیاد یعنی زوائد زیاد، زوائد بیش از اندازه زیاد یعنی <bdi class="en">GFAP</bdi> زیاد؛ پس با مارکر اختصاصی <bdi class="en">GFAP</bdi> می‌توان سلول‌ها را شناسایی کرد و به اطلاعاتی دست یافت که نوع سرطان از نوع آستروسیتوما است. آستروسیت‌ها علاوه بر تنظیم غلظت یونی، حمایت فیزیکی از نورون، تنظیم ارتباط عروق، تغذیه و ترمیم را هم بر عهده دارند.</li><li>در قطب اپیکال (سمت فضای خالی) بسیاری از آنها مژک دارند و زنش مژک‌ها باعث می‌شود مایع مغزی‌نخاعی راکد نماند و به جریان بیفتد؛ بعضی‌ها (مخصوصاً در بطن سوم) میکروویلی دارند که احتمالاً موادی را از <bdi class="en">CSF</bdi> جذب می‌کند.</li><li>برخلاف بقیهٔ گلیال‌ها که یکجا ثابت‌اند، میکروگلیا متحرک است و در لابه‌لای بافت گشت می‌زند.</li><li>غشای میلین (<bdi class="en">Myelin sheath</bdi>) عایق‌کاری آکسون‌هاست و طبق ارجاع جزوه به فیزیولوژی گایتون، باعث می‌شود سرعت هدایت پیام عصبی به‌شدت بالا برود (هدایت جهشی).</li><li>تفاوت ساختاری بسیار مهم: برخلاف الیگودندروسیت که چند آکسون را همزمان عایق می‌کند، هر سلول شوان فقط و فقط می‌تواند یک قطعهٔ کوچک از یک آکسون را میلین‌دار کند — <strong>نسبت یک به یک</strong> — و کل هیکلش را دور همان یک قطعه می‌پیچد.</li></ul></section><section class="uc uc--points"><h3>نکات تکمیلی</h3><ul class="up"><li>نوروگلیاها سلول‌هایی هستند که فعالیت حیاتی و درونی نورون‌ها را حمایت می‌کنند.</li><li>در دستگاه عصبی مرکزی (<bdi class="en">CNS</bdi>) بافت همبند وجود ندارد — جز در اطراف عروق بزرگی که وارد <bdi class="en">CNS</bdi> می‌شوند.</li><li>این قاب همان فهرست شش‌تایی متن است: آستروسیت، الیگودندروسیت، میکروگلیا، اپندیم، سلول شوان و سلول اقماری.</li><li>سلول‌ها را با محلشان تطبیق بدهید؛ چون در ادامهٔ همین مبحث هر سلول جداگانه باز می‌شود و این تصویر نقش نقشهٔ مرجع را دارد.</li><li>در پایین تصویر هم به <bdi class="en">GFAP</bdi> اشاره شده است؛ همان مارکر اختصاصی که در ادامه می‌آید.</li><li>اسنل همین ساختار را دوگانه می‌بیند: غشای محدودکنندهٔ گلیال خارجی زیر نرم‌شامه و غشای محدودکنندهٔ گلیال داخلی زیر اپندیم.</li><li>سلول‌های اپندیمال فضاهای توخالی داخل <bdi class="en">CNS</bdi> — یعنی بطن‌های مغزی و کانال مرکزی نخاع — را مفروش می‌کنند.</li><li>شکلشان معمولاً مکعبی یا استوانه‌ای است.</li><li>در قسمت رأس با اتصالات محکم به هم چفت شده‌اند.</li><li>اسنل همین را با جملهٔ کوتاه‌تری می‌گوید: پایهٔ سلول‌های اپندیمال روی غشای محدودکنندهٔ گلیال داخلی قرار دارد.</li><li>بخش <bdi class="en">A</bdi> همان تصویر نوری است که در آن یک لایه سلول مکعبی/استوانه‌ای کانال مرکزی نخاع را می‌پوشاند.</li><li>بخش <bdi class="en">B</bdi> جزئیات الکترونی همان سلول‌ها را در بطن سوم می‌دهد؛ همان‌جایی که متن جزوه از میکروویلی و اتصالات محکم صحبت می‌کند.</li><li>در رنگ‌آمیزی معمولی فقط هستهٔ کوچک، متراکم و کشیده‌اش دیده می‌شود، نه زوائدش.</li><li>ساختن این غشا در <bdi class="en">CNS</bdi> وظیفهٔ الیگودندروسیت‌ها و در <bdi class="en">PNS</bdi> وظیفهٔ شوان است.</li><li>این شکل همان سلولی را نشان می‌دهد که در متن نام «عایق‌کار» گرفت.</li><li>Figure 2-32 (A) Photomicrograph of a group of oligodendrocytes. (B) Electron micrograph of 2 oligodendrocytes. (Courtesy of Dr. J. M. Kerns.)</li><li>همان تصویری است که در جزوه برای تفهیم «میلین چطور ساخته می‌شود» آمده و در بحث سلول شوان به آن برمی‌گردیم.</li><li>سلول‌های شوان دقیقاً همکار الیگودندروسیت‌ها هستند، اما در <bdi class="en">PNS</bdi> کار می‌کنند.</li><li>همین تصویر تفاوت «پوشش جسم سلولی» و «پوشش آکسون» را در <bdi class="en">PNS</bdi> روشن می‌کند.</li><li>این قاب پایانی جلسه همان نقشهٔ مبحث ۱ است، اما این بار با یک برش عرضی نخاع در کنارش.</li></ul></section></div><div class="ufoot"><span>مرور فوق‌فشرده — مکمل جزوهٔ کامل است، نه جایگزین آن؛ جزئیات کامل در متن اصلی جزوه آمده است.</span><span>هامزیار</span></div></div></body></html>
+</style></head><body class=""><div class="upage"><div class="uhead"><span class="ut">آناتومی دستگاه اعصاب — بافت‌شناسی سیستم عصبی: از نورون تا میلین</span><span class="ubadge">اسکلت مفهومی مبحث · صفحهٔ ۱ از ۲</span><span class="ub">هامزیار · HumsYar</span></div><div class="ucols"><section class="uc uc--skeleton"><h3>اسکلت مبحث</h3><div class="usk"><b>آکسون، آکسوپلاسم و انتقال آکسونی</b><span>آکسون و منشأ آن: تپهٔ آکسونی و قطعهٔ اولیه</span><span>آکسوپلاسم و مقایسهٔ آکسون و دندریت</span><span>انتقال آکسونی: وقتی آکسون خودش پروتئین نمی‌سازد</span></div><div class="usk"><b>نوروگلیاها و غلاف میلین</b><span>شش سلول گلیال در یک نگاه: منشأ، محل، وظیفه</span><span>آستروسیت: پرتعدادترین گلیال</span><span>سلول‌های اپندیمال: فرش‌کننده‌های حفره‌های <bdi class="en">CNS</bdi></span><span>میکروگلیا: پلیس ضدشورش <bdi class="en">CNS</bdi></span><span>غلاف میلین: الیگودندروسیت در <bdi class="en">CNS</bdi>، سلول شوان در <bdi class="en">PNS</bdi></span><span>بازگشت به نقشهٔ کل بدن: <bdi class="en">CNS</bdi>، <bdi class="en">PNS</bdi> و نخاع</span></div></section><section class="uc uc--table"><h3>شش سلول گلیال: منشأ جنینی، محل و وظیفهٔ کلیدی</h3><table class="utbl"><thead><tr><th>سلول</th><th>منشأ جنینی</th><th>محل</th><th>وظیفهٔ کلیدی</th></tr></thead><tbody><tr><td class="rowh">آستروسیت پروتوپلاسمیک</td><td class="">اکتودرم عصبی (لوله)</td><td class="">مادهٔ خاکستری</td><td class="">پای عروقی، تغذیه، تنظیم یونی، غشای محدودکنندهٔ گلیال</td></tr><tr><td class="rowh">آستروسیت فیبروز</td><td class="">اکتودرم عصبی (لوله)</td><td class="">مادهٔ سفید</td><td class="">زوائد کمتر و طویل‌تر، پشتیبانی ساختاری، <bdi class="en">GFAP</bdi></td></tr><tr><td class="rowh">الیگودندروسیت</td><td class="">اکتودرم عصبی (لوله)</td><td class="">مادهٔ سفید، ردیف روی آکسون‌های میلین‌دار</td><td class="">ساخت میلین <bdi class="en">CNS</bdi>؛ یک سلول برای چند آکسون</td></tr><tr><td class="rowh">میکروگلیا</td><td class="">مونوسیت (مزودرم)</td><td class="">پراکنده در کل <bdi class="en">CNS</bdi></td><td class="">دفاع: بیگانه‌خواری، معرفی آنتی‌ژن، ترشح سایتوکاین</td></tr><tr><td class="rowh">سلول اپندیمال</td><td class="">اکتودرم عصبی (لوله)</td><td class="">بطن‌های مغز و کانال مرکزی نخاع</td><td class="">پوشش حفره‌ها، جریان و جذب <bdi class="en">CSF</bdi></td></tr><tr><td class="rowh">سلول شوان</td><td class="">ستیغ عصبی</td><td class=""><bdi class="en">PNS</bdi>، روی آکسون‌های عصبی</td><td class="">ساخت میلین <bdi class="en">PNS</bdi>؛ یک سلول برای یک قطعه از یک آکسون</td></tr><tr><td class="rowh">سلول اقماری</td><td class="">ستیغ عصبی</td><td class=""><bdi class="en">PNS</bdi>، گانگلیون‌های حسی عصبی</td><td class="">ایزوله‌کردن و تغذیهٔ جسم سلولی نورون گانگلیونی</td></tr></tbody></table></section><section class="uc uc--defs"><h3>تعریف‌ها و اصول پایه</h3><ul class="up"><li>زوائدی از نوروگلیا در بخش‌هایی با زوائد نورون‌ها در ارتباطند؛ به مجموع زوائد متصل‌به‌هم نوروگلیاها و نورون‌ها <strong>نوروپیل</strong> گفته می‌شود.</li><li>در <bdi class="en">CNS</bdi>: آستروسیت (دو نوع)، الیگودندروسیت (یک به چند)، میکروگلیا (از مزودرم) و اپندیم.</li><li>در <bdi class="en">PNS</bdi>: سلول شوان (یک به یک) و سلول اقماری (پوشش جسم سلولی در گانگلیون).</li><li>هر دو گلیال <bdi class="en">PNS</bdi> از ستیغ عصبی می‌آیند و هر سه گلیال اصلی <bdi class="en">CNS</bdi> از لولهٔ عصبی؛ تنها استثنا میکروگلیاست که از مونوسیت خون می‌آید.</li></ul></section><section class="uc uc--proc"><h3>دو مسیر گام‌به‌گام انتقال روی یک ریل میکروتوبولی</h3><div class="ulane"><b>آنتروگراد: از سوما به پایانه</b><div class="uchain"><span class="ustep"><b>1.</b> مبدأ: جسم سلولی (سوما) — ساخت پروتئین و بسته‌بندی در دستگاه گلژی</span></div></div><div class="ulane"><div class="uchain"><span class="ustep"><b>2.</b> بارگذاری: اتصال وزیکول یا اندامک به موتور پروتئینی کینزین</span> <span class="uarr">◀</span> <span class="ustep"><b>3.</b> مسیر: حرکت روی ریل میکروتوبولی، با مصرف <bdi class="en">ATP</bdi> توسط آنزیم <bdi class="en">ATPase</bdi> موتور</span> <span class="uarr">◀</span> <span class="ustep"><b>4.</b> مقصد: دکمه‌های انتهایی آکسون — تأمین وزیکول انتقال‌دهندهٔ عصبی و اندامک‌ها</span> <span class="uarr">◀</span> <span class="ustep"><b>2.</b> بارگذاری: اتصال مواد بازیافتی، غشای خالی وزیکول‌ها یا فاکتور رشد به داینین</span> <span class="uarr">◀</span> <span class="ustep"><b>3.</b> مسیر: حرکت روی میکروتوبول در جهت عکس، به سمت جسم سلولی</span> <span class="uarr">◀</span> <span class="ustep"><b>4.</b> مقصد: سوما — بازیافت مواد و انتقال پیام به هسته</span></div></div><div class="ulane"><b>رتروگراد: از پایانه به سوما</b><div class="uchain"><span class="ustep"><b>1.</b> مبدأ: انتهای آکسون (دکمه‌های سیناپسی)</span></div></div></section><section class="uc uc--numbers"><h3>اعداد و مقادیر کلیدی</h3><ul class="up"><li>متن جزوه عدد انتقال سریع را «بیش از <span class="numbadge"><b class="un">۴۰۰</b> میلی‌متر در روز</span>» می‌دهد. اسنل در صفحهٔ <b class="un">۱۰۸</b> انتقال سریع را «<span class="numbadge"><b class="un">۱۰۰</b> تا <b class="un">۴۰۰</b> میلی‌متر در روز</span>» می‌نویسد و همان دو موتور پروتئینی (کینزین برای آنتروگراد و داینین برای رتروگراد) را نام می‌برد. هر دو نقل شده‌اند و کنار هم مانده‌اند تا در بازبینی نهایی مشخص شود کدام در متن نهایی می‌ماند.</li><li>شکل <b class="un">۲</b>-<b class="un">۲۸</b> اسنل چهار نوع گلیال مرکزی را در کنار نورون و مویرگ می‌چیند؛ دو نوع محیطی (شوان و اقماری) در این شکل نیستند، چون در <bdi class="en">CNS</bdi> جایی ندارند.</li></ul></section></div><div class="ufoot"><span>مرور فوق‌فشرده — مکمل جزوهٔ کامل است، نه جایگزین آن؛ جزئیات کامل در متن اصلی جزوه آمده است.</span><span>هامزیار</span></div></div><div class="upage"><div class="uhead"><span class="ut">آناتومی دستگاه اعصاب — بافت‌شناسی سیستم عصبی: از نورون تا میلین</span><span class="ubadge">جزئیات تعیین‌کننده و مرور نهایی · صفحهٔ ۲ از ۲</span><span class="ub">هامزیار · HumsYar</span></div><div class="ucols"><section class="uc uc--table"><h3>مقایسهٔ آکسون و دندریت</h3><table class="utbl"><thead><tr><th>ویژگی</th><th>آکسون</th><th>دندریت</th></tr></thead><tbody><tr><td class="rowh">قطر</td><td class="">در تمام مسیر ثابت و یکسان</td><td class="">با نزدیک شدن به انتها کاهش می‌یابد</td></tr><tr><td class="rowh">تعداد در هر نورون</td><td class="">فقط یک عدد</td><td class="">می‌تواند بسیار زیاد باشد</td></tr><tr><td class="rowh">طول</td><td class="">معمولاً بسیار بلندتر</td><td class="">کوتاه‌تر</td></tr><tr><td class="rowh">عملکرد</td><td class="">انتقال پیام به سلول‌های دیگر</td><td class="">دریافت اطلاعات</td></tr><tr><td class="rowh">اجسام نیسل</td><td class="">ندارد؛ سنتز پروتئین در آکسون نیست</td><td class="">در سیتوپلاسم دارد (بخش پروکسیمال)</td></tr><tr><td class="rowh">دستگاه گلژی</td><td class="">ندارد</td><td class="">ندارد (استثنای دندریت)</td></tr><tr><td class="rowh">شاخه‌شدن</td><td class="">در انتهای مسیر</td><td class="">از همان ابتدا</td></tr></tbody></table></section><section class="uc uc--table"><h3>سه دستهٔ انتقال آنتروگراد بر اساس سرعت</h3><table class="utbl"><thead><tr><th>دسته</th><th>سرعت (به نقل جزوه)</th><th>چه چیزی جابه‌جا می‌شود</th></tr></thead><tbody><tr><td class="rowh">آهسته (<bdi class="en">Slow</bdi>)</td><td class="">کمتر از چند میلی‌متر در روز، حتی کمتر از یک میلی‌متر در روز</td><td class="">پروتئین‌های اسکلت سلولی مانند میکروفیلامنت‌ها و میکروتوبول‌ها</td></tr><tr><td class="rowh">متوسط (<bdi class="en">Intermediate</bdi>)</td><td class="">در جزوه عددی ذکر نشده است</td><td class="">اندامک‌هایی مانند میتوکندری‌ها که انرژی پمپ‌های یونی انتهای آکسون را تأمین می‌کنند</td></tr><tr><td class="rowh">سریع (<bdi class="en">Fast</bdi>)</td><td class="">بیش از ۴۰۰ میلی‌متر در روز (به نقل جزوه)</td><td class="">وزیکول‌های حاوی انتقال‌دهنده‌های عصبی</td></tr></tbody></table></section><section class="uc uc--table"><h3>میکروگلیا در دو حالت استراحت و فعال</h3><table class="utbl"><thead><tr><th>حالت</th><th>رفتار سلول</th></tr></thead><tbody><tr><td class="rowh">استراحت</td><td class="">زوائد متعددی دارد و محیط را اسکن می‌کند</td></tr><tr><td class="rowh">فعال</td><td class="">با دیدن آنتی‌ژن یا بافت آسیب‌دیده پاهایش را جمع می‌کند، گرد می‌شود، سریع تقسیم می‌شود و تعدادش زیاد می‌شود</td></tr></tbody></table></section><section class="uc uc--alerts"><h3>استثناها و اختلاف منابع</h3><ul class="up"><li class="ual">پیام تصویر همان جملهٔ متن است: آکسون شبیه دندریت است «به‌جز» نیسل، قطر، تعداد، طول و عملکرد.</li><li class="ual">نکتهٔ مهم جنینی: بقیهٔ گلیال‌های مغز (آستروسیت، الیگودندروسیت و اپندیم) منشأ اکتودرمی دارند، اما میکروگلیا استثناست و همان ماکروفاژ سیستم عصبی است؛ منشأش از مونوسیت‌های خون و در نهایت از مغز استخوان و لایهٔ مزودرم جنینی است.</li></ul></section><section class="uc uc--chips"><h3>اصطلاحات کلیدی</h3><span class="uchip">تپهٔ آکسونی <bdi class="en">(Axon hillock)</bdi></span><span class="uchip">قطعهٔ اولیه <bdi class="en">(Initial segment)</bdi></span><span class="uchip">آکسوپلاسم</span><span class="uchip">انتقال آنتروگراد <bdi class="en">(Anterograde transport)</bdi></span><span class="uchip">انتقال رتروگراد <bdi class="en">(Retrograde transport)</bdi></span><span class="uchip">کینزین <bdi class="en">(Kinesin)</bdi></span><span class="uchip">داینین <bdi class="en">(Dynein)</bdi></span><span class="uchip">جسم سلولی <bdi class="en">(Cell body)</bdi></span><span class="uchip">آکسون <bdi class="en">(Axon)</bdi></span><span class="uchip">گرهٔ رانویه <bdi class="en">(Node of Ranvier)</bdi></span><span class="uchip">غلاف میلین <bdi class="en">(Myelin)</bdi></span><span class="uchip">سلول شوان <bdi class="en">(Schwann cell)</bdi></span><span class="uchip">پایانهٔ آکسون <bdi class="en">(Axon terminal)</bdi></span><span class="uchip">میکروتوبول <bdi class="en">(Microtubules)</bdi></span><span class="uchip">وزیکول سیناپسی <bdi class="en">(Synaptic vesicle)</bdi></span><span class="uchip">آستروسیت <bdi class="en">(Astrocyte)</bdi></span><span class="uchip">الیگودندروسیت <bdi class="en">(Oligodendrocyte)</bdi></span><span class="uchip">میکروگلیا <bdi class="en">(Microglia)</bdi></span><span class="uchip">اپندیم <bdi class="en">(Ependymal cell)</bdi></span><span class="uchip">سلول اقماری <bdi class="en">(Satellite cell)</bdi></span><span class="uchip">پروتئین اسیدی رشتهٔ گلیال (GFAP) <bdi class="en">(Glial fibrillary acid protein)</bdi></span><span class="uchip">نوروپیل</span><span class="uchip">غشای محدودکنندهٔ گلیال <bdi class="en">(Glial Limitans)</bdi></span><span class="uchip">نورون <bdi class="en">(Neuron)</bdi></span><span class="uchip">مویرگ <bdi class="en">(Capillary)</bdi></span><span class="uchip">پروتوپلاسمیک <bdi class="en">(Protoplasmic)</bdi></span><span class="uchip">فیبروز <bdi class="en">(Fibrous)</bdi></span><span class="uchip">کانال مرکزی نخاع <bdi class="en">(Central canal of spinal cord)</bdi></span><span class="uchip">بطن سوم <bdi class="en">(Third ventricle)</bdi></span><span class="uchip">هسته <bdi class="en">(Nucleus)</bdi></span><span class="uchip">بافت عصبی اطراف <bdi class="en">(Surrounding nervous tissue)</bdi></span><span class="uchip">سلول میلین‌ساز <bdi class="en">(Myelinating cell)</bdi></span><span class="uchip">سلول‌های اقماری <bdi class="en">(Satellite cells)</bdi></span><span class="uchip">سلول‌های شوان <bdi class="en">(Schwann cells)</bdi></span><span class="uchip">مغز <bdi class="en">(Brain)</bdi></span><span class="uchip">عصب جمجمه‌ای <bdi class="en">(Cranial nerve)</bdi></span><span class="uchip">نخاع <bdi class="en">(Spinal cord)</bdi></span><span class="uchip">عصب نخاعی <bdi class="en">(Spinal nerve)</bdi></span></section></div><div class="ufoot"><span>مرور فوق‌فشرده — مکمل جزوهٔ کامل است، نه جایگزین آن؛ جزئیات کامل در متن اصلی جزوه آمده است.</span><span>هامزیار</span></div></div></body></html>

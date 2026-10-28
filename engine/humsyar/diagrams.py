@@ -79,6 +79,7 @@ def _prepare(node: dict[str, Any], depth: int = 0,
         "label_lines": label_lines, "note_lines": note_lines,
         "alert": bool(node.get("alert")), "w": min(w, st["max_w"]), "h": h,
         "children": children, "depth": depth, "st": st,
+        "chapter_num": node.get("chapter_num"),
         "sub_h": max(h, sub_h),
     }
 
@@ -156,8 +157,12 @@ def tree_svg(root: dict[str, Any], color_for=None,
             cls += " tree-node--branch"  # رنگ نقشی: شاخهٔ اصلی (نه رنگ مفهوم علمی)
         _nc = color_for(n) if color_for else None
         _rs = f' style="stroke:{_nc}"' if _nc else ""
+        _tn = ""
+        if n.get("chapter_num"):
+            from .palette import chapter_vars
+            _tn = f' style="--tn:{chapter_vars(int(n["chapter_num"]))["--chapter-header"]}"'
         parts.append(
-            f'<g class="{cls}"><rect x="{nx:.0f}" y="{ny:.0f}" width="{n["w"]:.0f}" '
+            f'<g class="{cls}"{_tn}><rect x="{nx:.0f}" y="{ny:.0f}" width="{n["w"]:.0f}" '
             f'height="{n["h"]:.0f}" rx="8"{_rs}/>'
         )
         lh_l, lh_n = st["fs_label"] * st["lh_label"], st["fs_note"] * st["lh_note"]
@@ -289,6 +294,7 @@ def session_tree(session, root_label: str, root_note: str = "") -> dict[str, Any
             _section_node(sec, blks, grafts.get(sec.id, []), all_graft_labels)
             for sec, blks in groups]
         topics.append({"label": f"مبحث {_fa(t.number)}: {_clean(t.title)}",
+                       "chapter_num": int(t.number),
                        "children": children})
     # پیوندی که هدفش پیدا نشود هرگز گم نمی‌شود: در سطح ریشه می‌آید
     known = {t.id for t in session.topics}

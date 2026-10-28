@@ -22,7 +22,7 @@
 }
 
 *{box-sizing:border-box; margin:0; padding:0;}
-html{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+html{ -webkit-print-color-adjust:exact; print-color-adjust:exact; background:var(--paper); }
 body{
   font-family:"Vazirmatn","Inter",sans-serif;
   font-size:var(--fs-body); line-height:var(--lh); color:var(--ink);
@@ -31,7 +31,7 @@ body{
 bdi,.en{ direction:ltr; unicode-bidi:isolate; font-family:"Inter","Vazirmatn",sans-serif;
   color:var(--ink); letter-spacing:.01em; }
 strong{ font-weight:700; }
-.term{ font-weight:700; color:var(--brand-ink); }
+.term{ font-weight:700; color:var(--brand-ink); background:linear-gradient(transparent 58%, var(--sun-soft) 58%); border-radius:2px; padding:0 1px; }
 .term .en{ font-weight:600; font-size:.93em; }
 p.body{ margin:0 0 6pt; text-align:justify; orphans:2; widows:2; }
 p.body .src{ margin-inline-start:4pt; }
@@ -67,10 +67,10 @@ p.body .src{ margin-inline-start:4pt; }
 /* نقشهٔ جلسه: همهٔ مباحث در یک نگاه */
 .session-map{ margin:2pt 0 12pt; break-inside:avoid; }
 .session-map h2,.toc h2{ font-size:11pt; color:var(--brand-deep); margin-bottom:5pt; font-weight:700;}
-.session-map ol{ list-style:none; display:grid; grid-template-columns:1fr 1fr; gap:4pt 8pt;}
+.session-map ol{ list-style:none; display:grid; grid-template-columns:1fr 1fr; gap:3pt 8pt;}
 .session-map li{
   display:flex; gap:7pt; align-items:baseline; border:1px solid var(--line-soft);
-  border-radius:var(--r-sm); padding:3pt 8pt; font-size:8.8pt; line-height:1.7; color:var(--muted);
+  border-radius:var(--r-sm); padding:2pt 8pt; font-size:8.5pt; line-height:1.55; color:var(--muted);
 }
 .session-map li .n{
   flex:0 0 auto; width:15pt; height:15pt; border-radius:50%; text-align:center; line-height:15.5pt;
@@ -86,7 +86,7 @@ p.body .src{ margin-inline-start:4pt; }
 .toc li{ font-size:9.6pt; line-height:var(--toc-lh,2); }
 .toc li a{ display:flex; align-items:baseline; gap:6pt; color:inherit; text-decoration:none; }
 .tocpage{ break-after:page; }
-.tocpage .guide{ margin-top:10pt; }
+.tocpage .guide{ margin-top:6pt; }
 .toc li.lvl2{ font-size:8.8pt; color:var(--muted); margin-inline-start:16pt; }
 .toc .dots{ flex:1; border-bottom:1.2px dotted var(--line); transform:translateY(-3px);}
 .toc .pno{ font-weight:700; color:var(--brand-deep); min-width:14pt; text-align:center;}
@@ -94,26 +94,26 @@ p.body .src{ margin-inline-start:4pt; }
 /* ============================================================= سربرگ مبحث (شناسنامهٔ فشرده) */
 .topic{ margin-top:10pt; }
 .topic-head{ break-inside:avoid; margin-bottom:7pt; }
-.topic-head__row{ display:flex; align-items:center; gap:9pt; border-bottom:2.2px solid var(--brand); padding-bottom:4pt;}
+.topic-head__row{ display:flex; align-items:center; gap:9pt; border-bottom:2.2px solid var(--chapter-accent,var(--brand)); padding-bottom:4pt;}
 .topic-num{
-  flex:0 0 auto; background:var(--brand-deep); color:#fff; border-radius:9px;
+  flex:0 0 auto; background:var(--chapter-header,var(--brand-deep)); color:#fff; border-radius:9px;
   font-weight:700; font-size:9pt; line-height:1.55; text-align:center; padding:3pt 9pt;
 }
 .topic-num b{ display:block; font-size:15pt; line-height:1.25; }
-.topic-head h2{ font-size:var(--fs-h-topic); color:var(--navy-900); line-height:1.6; font-weight:700;}
+.topic-head h2{ font-size:var(--fs-h-topic); color:var(--primary-deep); line-height:1.6; font-weight:700;}
 .topic-head__pages{ margin-inline-start:auto; font-size:7.8pt; color:var(--faint); white-space:nowrap;}
 .topic-card{
-  margin-top:6pt; border:1px solid var(--line); border-radius:var(--r); background:var(--ice-50);
+  margin-top:6pt; border:1px solid var(--line); border-radius:var(--r); background:var(--chapter-soft,var(--ice-50));
   padding:5pt 10pt 3.5pt; font-size:8.6pt; line-height:1.7;
 }
-.topic-card .why b{ color:var(--brand); }
+.topic-card .why b{ color:var(--chapter-deep,var(--brand)); }
 .topic-card__grid{ display:grid; grid-template-columns:1.25fr 1fr; gap:2pt 14pt; margin-top:3pt;}
 .topic-card h3{ font-size:8.6pt; color:var(--brand-deep); font-weight:700; margin-bottom:1pt;}
 .topic-card ul{ list-style:none; }
-.topic-card li::before{ content:"▸ "; color:var(--brand); font-weight:700;}
+.topic-card li::before{ content:"▸ "; color:var(--chapter-deep,var(--brand)); font-weight:700;}
 .chips{ display:flex; flex-wrap:wrap; gap:3.5pt; margin-top:2pt;}
 .chip{
-  font-size:7.9pt; line-height:1.65; border:1px solid var(--line); border-radius:20px;
+  font-size:7.9pt; line-height:1.65; border:1px solid var(--chapter-accent,var(--line)); border-radius:20px;
   padding:0 7px; background:#fff; color:var(--ink);
 }
 .chip .en{ font-weight:600; }
@@ -125,9 +125,9 @@ p.body .src{ margin-inline-start:4pt; }
   display:flex; align-items:baseline; gap:7pt; margin:11pt 0 5pt;
   break-after:avoid; break-inside:avoid;
 }
-.section::before{ content:""; width:8pt; height:8pt; border-radius:2.5px; background:var(--brand); flex:0 0 auto; transform:translateY(1px) rotate(45deg);}
-.section h3{ font-size:var(--fs-h-section); color:var(--royal-600); font-weight:700; line-height:1.6;}
-.section .sno{ color:var(--faint); font-size:9pt; font-weight:500;}
+.section::before{ content:""; width:8pt; height:8pt; border-radius:50%; background:var(--sun); border:1.6px solid var(--chapter-accent,var(--brand)); flex:0 0 auto; transform:translateY(1px);}
+.section h3{ font-size:var(--fs-h-section); color:var(--primary-deep); font-weight:700; line-height:1.6;}
+.section .sno{ color:var(--chapter-deep,var(--faint)); font-size:9pt; font-weight:700;}
 
 /* ============================================================= کادرهای آموزشی */
 .callout{
@@ -187,8 +187,8 @@ table.tbl.tbl--dense td{ padding:2.4pt 6pt; }
 .tblwrap__cap .src{ margin-inline-start:auto; }
 table.tbl{ width:100%; border-collapse:collapse; font-size:9.2pt; line-height:1.8; }
 table.tbl th{
-  background:var(--brand); color:#fff; font-weight:700; padding:4pt 7pt;
-  border-bottom:2pt solid var(--brand-deep); border-inline-end:.5pt solid var(--hairline);
+  background:var(--chapter-header,var(--primary-deep)); color:#fff; font-weight:700; padding:4pt 7pt;
+  border-bottom:2pt solid var(--chapter-header,var(--primary-deep)); border-inline-end:.5pt solid var(--hairline);
   text-align:right; font-size:9.2pt;
 }
 table.tbl td{ border-bottom:.5pt solid var(--line); border-inline-end:.5pt solid var(--line);
@@ -197,8 +197,68 @@ table.tbl th:last-child, table.tbl td:last-child{ border-inline-end:none; }
 table.tbl tbody tr:last-child td{ border-bottom:none; }
 /* راه‌راه بسیار لطیف و یکدست؛ سلول سرردیف (ستون اول) همیشه یخی می‌ماند */
 table.tbl tbody tr:nth-child(even) td:not(.rowh){ background:var(--ice-50); }
-table.tbl td.rowh{ font-weight:700; color:var(--navy-900); background:var(--ice-100); white-space:nowrap;}
+table.tbl td.rowh{ font-weight:700; color:var(--chapter-deep,var(--primary-deep)); background:var(--chapter-soft,var(--ice-100)); white-space:nowrap;}
 table.tbl .hl{ font-weight:700; color:var(--c-conflict); }
+
+/* ============================================================= خانواده‌های معنایی
+   رنگ کادر/نشانه از خانواده می‌آید؛ هر خانواده علاوه بر رنگ، الگوی نوار
+   متمایز دارد تا در چاپ سیاه‌وسفید هم (با برچسب و آیکون) معنا بماند. */
+.fam{ --fam:var(--ink-soft); --fam-deep:var(--ink); --fam-soft:var(--surface-warm); }
+.fam.fam1{ --fam:var(--fam1); --fam-deep:var(--fam1-deep); --fam-soft:color-mix(in srgb,var(--fam1) 9%,var(--paper)); }
+.fam.fam2{ --fam:var(--fam2); --fam-deep:var(--fam2-deep); --fam-soft:color-mix(in srgb,var(--fam2) 10%,var(--paper)); }
+.fam.fam3{ --fam:var(--fam3); --fam-deep:var(--fam3-deep); --fam-soft:color-mix(in srgb,var(--fam3) 9%,var(--paper)); }
+.fam.fam4w{ --fam:var(--fam4w); --fam-deep:var(--fam4w-deep); --fam-soft:color-mix(in srgb,var(--fam4w) 9%,var(--paper)); }
+.fam.fam4c{ --fam:var(--fam4c); --fam-deep:var(--fam4c-deep); --fam-soft:color-mix(in srgb,var(--fam4c) 9%,var(--paper)); }
+.fam.fam4e{ --fam:var(--fam4e); --fam-deep:var(--fam4e-deep); --fam-soft:color-mix(in srgb,var(--fam4e) 10%,var(--paper)); }
+.fam.fam4u{ --fam:var(--fam4u); --fam-deep:var(--fam4u-deep); --fam-soft:color-mix(in srgb,var(--fam4u) 9%,var(--paper)); }
+.fam.fam5{ --fam:var(--fam5); --fam-deep:var(--fam5-deep); --fam-soft:color-mix(in srgb,var(--fam5) 8%,var(--paper)); }
+.fam.fam6{ --fam:var(--fam6); --fam-deep:var(--fam6-deep); --fam-soft:color-mix(in srgb,var(--fam6) 8%,var(--paper)); }
+.icb{ display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px;
+  border-radius:50%; background:var(--fam-soft); color:var(--fam-deep); flex:0 0 auto;
+  border:1px solid color-mix(in srgb,var(--fam) 45%,var(--paper)); }
+.icb .ic{ color:var(--fam-deep); }
+.callout.fam{ border-color:color-mix(in srgb,var(--fam) 55%,var(--paper)); background:var(--fam-soft);
+  border-inline-start:5px solid var(--fam); }
+.callout.fam .callout__head{ color:var(--fam-deep); }
+.callout.fam .callout__head .kind{ color:var(--fam-deep); border-color:var(--fam-deep); }
+.callout.fam1{ border-inline-start-style:solid; }
+.callout.fam2{ border-inline-start-style:double; border-inline-start-width:6px; }
+.callout.fam3{ border-inline-start-style:dashed; }
+.callout.fam4w,.callout.fam4c,.callout.fam4e,.callout.fam4u{ border-inline-start-style:solid; border-inline-start-width:6px; }
+.callout.fam5{ border-inline-start-style:dotted; border-inline-start-width:6px; }
+.callout.fam6{ border-inline-start-style:groove; border-inline-start-width:6px; }
+
+/* راهنمای نشانه‌ها: شش کارت خانواده */
+.fguide{ display:grid; grid-template-columns:repeat(3,1fr); gap:4pt; margin-top:4pt; }
+.fguide__card{ border:1px solid var(--line); border-radius:var(--r); background:var(--surface);
+  padding:4pt 6pt 4.5pt; box-shadow:var(--shadow-sm); }
+.fguide__h{ font-weight:800; font-size:8.2pt; color:var(--ink); display:flex; align-items:center; gap:5pt; margin-bottom:2pt; }
+.fguide__dot{ width:9px; height:9px; border-radius:50%; flex:0 0 auto; background:var(--ink-soft); }
+.fcard--fam1 .fguide__dot{ background:var(--fam1); } .fcard--fam2 .fguide__dot{ background:var(--fam2); }
+.fcard--fam3 .fguide__dot{ background:var(--fam3); } .fcard--fam4 .fguide__dot{ background:var(--fam4w); }
+.fcard--fam5 .fguide__dot{ background:var(--fam5); } .fcard--fam6 .fguide__dot{ background:var(--fam6); }
+.fguide__items{ display:flex; flex-wrap:wrap; gap:2.5pt 8pt; }
+.fguide__it{ display:inline-flex; align-items:center; gap:3.5pt; font-size:7.3pt; color:var(--ink); }
+.fguide__it .icb{ width:15px; height:15px; }
+.fguide__sample{ margin-top:3pt; display:flex; align-items:center; gap:5pt; background:var(--fam-soft);
+  border:1px solid color-mix(in srgb,var(--fam) 55%,var(--paper)); border-inline-start:5px solid var(--fam);
+  border-radius:var(--r-sm); padding:1.8pt 5pt; }
+.fguide__sample-t{ font-weight:700; font-size:7.9pt; color:var(--fam-deep); }
+.fguide__sample .icb{ width:15px; height:15px; }
+
+/* پروفایل چاپ: رنگیِ کم‌جوهر (print-theme) و سیاه‌وسفید (bw-theme) */
+body.print-theme{ background:#fff; }
+body.print-theme .topic-card, body.print-theme .callout.fam{ background:#fff; }
+body.bw-theme{ background:#fff; }
+body.bw-theme .callout.fam, body.bw-theme .topic-card, body.bw-theme .fguide__sample{
+  background:#fff !important; }
+body.bw-theme table.tbl th{ background:#fff !important; color:var(--ink);
+  border-bottom:2pt solid var(--ink); }
+body.bw-theme table.tbl td.rowh{ background:#fff; color:var(--ink); }
+body.bw-theme .icb{ background:#fff; border-color:var(--ink-soft); }
+body.bw-theme .numbadge{ background:#fff; border-color:var(--ink-soft); }
+body.bw-theme .topic-num{ background:#fff; color:var(--ink); border:1.6px solid var(--ink); }
+body.bw-theme .term{ background:none; text-decoration:underline; }
 
 /* ============================================================= قاب تصویر */
 .fig{ margin:8pt 0; break-inside:avoid; }
@@ -261,11 +321,11 @@ table.tbl .hl{ font-weight:700; color:var(--c-conflict); }
 .tree-link{ fill:none; stroke:var(--sky-400); stroke-width:1.6; }
 .tree-node rect{ fill:var(--ice-100); stroke:var(--royal-600); stroke-width:1.3; }
 .tree-node--root rect{ fill:var(--brand-deep); stroke:var(--brand-deep); }
-.tree-node--branch rect{ fill:var(--royal-600); stroke:var(--royal-600); }
+.tree-node--branch rect{ fill:var(--tn,var(--primary-deep)); stroke:var(--tn,var(--primary-deep)); }
 .tree-node--branch .tree-label{ fill:var(--white); }
-.tree-node--branch .tree-note{ fill:var(--aqua-300); }
+.tree-node--branch .tree-note{ fill:var(--sun-soft); }
 .tree-node--root .tree-label{ fill:#fff; }
-.tree-node--root .tree-note{ fill:var(--aqua-300); }
+.tree-node--root .tree-note{ fill:var(--sun-soft); }
 .tree-node--alert rect{ stroke:var(--warn); stroke-dasharray:4 3; fill:var(--warn-bg); }
 .tree-label{ font-family:"Vazirmatn"; font-size:var(--tl-fs,12.5px); font-weight:700; fill:var(--brand-ink); text-anchor:middle; }
 .tree-note{ font-family:"Vazirmatn"; font-size:var(--tn-fs,10.5px); fill:var(--muted); text-anchor:middle; }
@@ -298,8 +358,8 @@ table.tbl .hl{ font-weight:700; color:var(--c-conflict); }
 
 /* راهنمای خواندن */
 .guide{ margin:4pt 0 6pt; }
-.guide h2{ font-size:11pt; color:var(--brand-deep); margin-bottom:4pt; font-weight:700;}
-.guide p{ font-size:8.9pt; line-height:1.9; text-align:justify; }
+.guide h2{ font-size:10.5pt; color:var(--brand-deep); margin-bottom:2.5pt; font-weight:700;}
+.guide p{ font-size:8.4pt; line-height:1.7; text-align:justify; }
 .guide__grid{ display:grid; grid-template-columns:1fr 1fr; gap:4pt 8pt; margin-top:5pt;}
 .guide__item{
   display:flex; gap:6pt; align-items:flex-start; font-size:8.3pt; line-height:1.7;
@@ -341,8 +401,7 @@ table.tbl .hl{ font-weight:700; color:var(--c-conflict); }
 
 /* ===== مرحلهٔ ۱ (Round 5): موجودیت، فهرست‌ها، پیشرفت، نشان عدد، تم چاپ ===== */
 /* نشان عدد برجسته: عدد و واحد دقیقاً از متن خود جزوه، فقط قالب برجسته می‌شود */
-.numbadge{ display:inline-block; padding:0 .45em; border-radius:999px; background:var(--brand-soft,var(--ice-teal));
-  color:var(--brand-deep); font-weight:700; border:.4pt solid var(--brand); line-height:1.5; }
+.numbadge{ display:inline-block; padding:0 .45em; border-radius:999px; background:var(--sun-soft); color:var(--ink); font-weight:800; border:1px solid var(--sun); }
 /* جدول مقایسه‌ای: ستون نخست چسبانِ بصری + سربرگ موجودیتی */
 .tbl--compare td:first-child{ font-weight:700; color:var(--navy-900); background:var(--ice-100); }
 
@@ -363,10 +422,10 @@ table.tbl .hl{ font-weight:700; color:var(--c-conflict); }
 .objlist li::before{ content:""; position:absolute; right:0; top:3.5pt; width:8.5pt; height:8.5pt;
   border:1pt solid var(--brand); border-radius:2.5pt; background:#FFF; }
 /* فهرست شکل‌ها و جدول‌ها */
-.lists{ display:flex; gap:14pt; margin-top:10pt; }
+.lists{ display:flex; gap:14pt; margin-top:6pt; }
 .lists__col{ flex:1 1 0; min-width:0; }
-.lists__col h2{ font-size:12.5pt; color:var(--brand-deep); margin:0 0 5pt; }
-.lists ol{ list-style:none; padding:0; margin:0; font-size:8.6pt; line-height:1.62; }
+.lists__col h2{ font-size:11pt; color:var(--brand-deep); margin:0 0 3pt; }
+.lists ol{ list-style:none; padding:0; margin:0; font-size:8.3pt; line-height:1.45; }
 .lists li{ display:flex; align-items:baseline; gap:4pt; }
 .lists .ln{ flex:none; font-weight:700; color:var(--brand); }
 .lists .dots{ flex:1; border-bottom:.5pt dotted var(--hairline); transform:translateY(-2pt); }

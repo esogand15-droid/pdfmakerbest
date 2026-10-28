@@ -101,26 +101,30 @@ def test_no_word_coloring_or_legend():
     assert "chip--ent" not in html
     assert 'class="edot"' not in html
     # رنگ ساختاری ریل دوجهته از پالت یکپارچهٔ برند می‌آید (راند ۱۰)
-    assert "#0636AE" in html and "#04B9D3" in html
+    assert "#0F5E63" in html and "#FF7A45" in html
 
 
 # --------------------------------------------------- نوار پیشرفت در PDF واقعی
 def test_progress_bar_rtl_and_dark_in_built_pdf():
+    """راند ۱۲: پُری نوار پیشرفت رنگ مبحث همان صفحه است (نقش)، و همچنان
+    از راست لنگر می‌گیرد و حول مرکز متقارن است."""
     pdf = ROOT / "output" / "neuroanat_s01_pilot_final.pdf"
     if not pdf.exists():
         return  # در محیط بدون خروجی ساخته‌شده رد می‌شود
     import pymupdf
+    from humsyar.palette import chapter_accent
     doc = pymupdf.open(str(pdf))
-    page = doc[min(8, doc.page_count - 1)]
+    page = doc[min(8, doc.page_count - 1)]  # صفحهٔ ۹: داخل مبحث ۶
     MM = 72 / 25.4
+    expect = tuple(int(chapter_accent(6)[i:i + 2], 16) / 255 for i in (1, 3, 5))
     dark = []
     for dr in page.get_drawings():
         r = dr["rect"]
         fill = dr.get("fill")
         if fill and r.y0 > 286 * MM and r.width > 10 * MM and r.height < 3 * MM:
-            if sum(fill) < 1.2:  # پُری تیره (در سیاه‌وسفید نزدیک مشکی چاپ می‌شود)
+            if all(abs(fill[i] - expect[i]) < 0.03 for i in range(3)):
                 dark.append(r)
-    assert dark, "پُری تیرهٔ نوار پیشرفت پیدا نشد"
+    assert dark, "پُری نوار پیشرفت با رنگ مبحث صفحه پیدا نشد"
     # لنگر از راست: لبهٔ راست پُری تقریباً روی انتهای راست شیار (۱۴۷mm) است
     assert abs(max(r.x1 for r in dark) - 147 * MM) < 2 * MM
     # شیار حول مرکز صفحه (۱۰۵mm) متقارن است

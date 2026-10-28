@@ -49,26 +49,13 @@ def test_T1_only_palette_hex_values_in_code():
     assert not bad, bad
 
 
-def test_T2_no_legacy_greens():
-    allowed = set(tokens().values())
-
-    def hue_sat(h):
-        r, g, b = (int(h[i:i + 2], 16) / 255 for i in (1, 3, 5))
-        hh, _l, ss = colorsys.rgb_to_hls(r, g, b)
-        return hh * 360, ss
-
-    bad = []
-    for f, h in _scan_hexes():
-        if h in allowed:
-            continue
-        hue, sat = hue_sat(h)
-        if 95 <= hue <= 165 and sat > 0.12:
-            bad.append(f"{f}:{h}")
-    assert not bad, sorted(set(bad))
-    # سبزهای مشخص قدیمی در هیچ فایلی از موتور نیستند
-    legacy = {"#0B7A6E", "#14B8A6", "#2DD4BF", "#1E7A4F", "#0B6E6B"}
-    hits = [f"{f}:{h}" for f, h in _scan_hexes() if h in legacy]
-    assert not hits, hits
+def test_T2_no_legacy_cold_blues():
+    """راند ۱۲ جایگزین ممنوعیت سبز راند ۱۰ شد: خانواده‌های سبز/فیروزه‌ایِ گرمِ
+    داخل brand.css مشروع‌اند؛ آبی‌های سرد قدیمی نباید در هیچ فایلی برگردند."""
+    banned = {"#061E4E", "#0636AE", "#0666F6", "#06D2DE", "#04B9D3",
+              "#0B1B3A", "#050D18", "#0A2A7E"}
+    bad = [f"{f}:{h}" for f, h in _scan_hexes() if h in banned]
+    assert not bad, bad
 
 
 def _lum(hexv: str) -> float:
@@ -89,17 +76,18 @@ def _ratio(fg: str, bg: str) -> float:
 def test_T3_contrast_pairs():
     """جفت‌های واقعی متن/زمینه؛ آستانهٔ متن معمولی ۴٫۵ و متن درشت/بولد ۳٫۵."""
     pairs_normal = [
-        ("ink", "white"), ("ink", "ice-100"), ("ink", "ice-50"),
-        ("slate", "white"), ("white", "royal-600"), ("white", "navy-900"),
-        ("navy-900", "ice-100"), ("navy-900", "white"), ("royal-600", "white"),
-        ("teal-ink", "white"), ("teal-ink", "ice-teal"),
-        ("conflict-ink", "conflict-bg"),
+        ("ink", "paper"), ("ink", "white"), ("ink", "surface-warm"),
+        ("ink-soft", "paper"), ("primary-deep", "paper"),
+        ("white", "primary-deep"), ("teal-ink", "paper"),
+        ("fam1-deep", "paper"), ("fam2-deep", "paper"), ("fam3-deep", "paper"),
+        ("fam4w-deep", "paper"), ("fam4c-deep", "paper"), ("fam4e-deep", "paper"),
+        ("fam4u-deep", "paper"), ("fam5-deep", "paper"), ("fam6-deep", "paper"),
     ]
     for fg, bg in pairs_normal:
         assert _ratio(hex_of(fg), hex_of(bg)) >= 4.5, (fg, bg)
-    # عنوان‌های درشت کاور و زیرعنوان فیروزه‌ای روی سرمه‌ای
-    assert _ratio(hex_of("aqua-300"), hex_of("navy-900")) >= 3.5
-    assert _ratio(hex_of("white"), hex_of("navy-950")) >= 10
+    # عنوان‌های درشت کاور روی سرمه‌ای گرم
+    assert _ratio(hex_of("white"), hex_of("cover-deep")) >= 10
+    assert _ratio(hex_of("aqua-300"), hex_of("primary-deep")) >= 3.0
     # متن هشدار تیره‌شده با color-mix (۵۰٪ warn + ۵۰٪ ink) روی زمینهٔ هشدار
     def mix(h1, h2, w1):
         c1 = [int(h1[i:i + 2], 16) for i in (1, 3, 5)]
@@ -169,7 +157,8 @@ def test_glossary_two_columns_on_last_page():
 def test_frame_and_progress_use_palette():
     import humsyar.build as build_mod
     import humsyar.frame as frame_mod
-    assert frame_mod._BRAND == hex_of("royal-600")
-    assert frame_mod._DEEP == hex_of("navy-900")
+    assert frame_mod._BRAND == hex_of("primary-deep")
+    assert frame_mod._DEEP == hex_of("ink")
     src = Path(build_mod.__file__).read_text(encoding="utf-8")
-    assert 'rgb_of("navy-900")' in src and 'rgb_of("royal-600")' in src
+    # پیشرفت و کپسول از رنگ مبحث همان صفحه می‌آیند (راند ۱۲)
+    assert "chapter_vars(int(key))" in src and "rgb_of_hex" in src

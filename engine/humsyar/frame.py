@@ -24,32 +24,34 @@ FRAME_INSET_MM = 6.0
 SAFE_RECT_MM = (12.0, 12.0, 198.0, 285.0)
 CAPSULE_CY_MM = 291.0  # مرکز کپسول شماره روی خط پایین قاب
 
-from .palette import hex_of
+from .palette import chapter_vars, hex_of
 
-_BRAND = hex_of("royal-600")
-_DEEP = hex_of("navy-900")
+_BRAND = hex_of("primary-deep")
+_DEEP = hex_of("ink")
 _SOFT = hex_of("sky-400")
-_HAIR = hex_of("hairline")
+_HAIR = hex_of("line-warm")
 
 
-def _corner_dendrite(seed: int) -> str:
+def _corner_dendrite(seed: int, color: str | None = None) -> str:
     """نقش دندریتی یک گوشه در مختصات محلی (مبدأ گوشه، جهت رشد به داخل: پایین-چپ).
 
     با transform برای چهار گوشه آینه می‌شود. برد کل نقش ≤ ۱۱mm.
+    رنگ نقش از رنگ مبحث همان صفحه می‌آید (نقش، نه محتوا).
     """
+    _c = color or _BRAND
     rng = random.Random(seed)
     parts: list[str] = []
 
     def branch(x: float, y: float, ang: float, length: float, w: float, depth: int) -> None:
         if depth == 0 or length < 0.8:
-            parts.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="0.42" fill="{_BRAND}" opacity="0.55"/>')
+            parts.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="0.42" fill="{_c}" opacity="0.5"/>')
             return
         x2 = x + math.cos(ang) * length
         y2 = y + math.sin(ang) * length
         qx = x + math.cos(ang + 0.22) * length * 0.55
         qy = y + math.sin(ang + 0.22) * length * 0.55
         parts.append(f'<path d="M {x:.1f} {y:.1f} Q {qx:.1f} {qy:.1f} {x2:.1f} {y2:.1f}" '
-                     f'fill="none" stroke="{_BRAND}" stroke-width="{w:.2f}" '
+                     f'fill="none" stroke="{_c}" stroke-width="{w:.2f}" '
                      f'stroke-linecap="round" opacity="0.5"/>')
         for _ in range(2):
             branch(x2, y2, ang + rng.uniform(-0.55, 0.55),
@@ -69,7 +71,9 @@ def _est_text_w(text: str, size_mm: float) -> float:
 def frame_anatomy_nervous(session: Session, brand: dict[str, str], *,
                           topic_number: int | None = None, topic_short: str = "",
                           topic_order: int = 0, side: str = "left") -> str:
-    corner = _corner_dendrite(seed=session.session_number * 7 + 1)
+    _accent = (chapter_vars(int(topic_number))["--chapter-accent"]
+               if topic_number is not None else _BRAND)
+    corner = _corner_dendrite(seed=session.session_number * 7 + 1, color=_accent)
     # چهار گوشه با آینه‌کردن نقش پایه (مبدأ روی گوشهٔ قاب)
     corners = (
         f'<g transform="translate(204 6)">{corner}</g>'
@@ -102,8 +106,8 @@ def frame_anatomy_nervous(session: Session, brand: dict[str, str], *,
         py = min(297 - 16 - ph, 38.0 + topic_order * 30.0)
         px, rot = (210 - 1.1 - pw, 90) if side == "right" else (1.1, -90)
         cx, cy = px + pw / 2, py + ph / 2
-        # رنگ تب فقط برای ناوبری است و از توکن‌های topic پالت می‌آید (چرخهٔ قابل توسعه)
-        _tab_fill = hex_of(f"topic-{(int(topic_order) % 6) + 1}")
+        # رنگ تب از شمارهٔ مبحث می‌آید: chapter[(number-1) mod 8]، نسخهٔ کنتراست‌امن برای متن سفید
+        _tab_fill = chapter_vars(int(topic_number))["--chapter-header"]
         tab = (
             f'<g><rect x="{px:.1f}" y="{py:.1f}" width="{pw}" height="{ph:.1f}" rx="2.2" '
             f'fill="{_tab_fill}"/>'

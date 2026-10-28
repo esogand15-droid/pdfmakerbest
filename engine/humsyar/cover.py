@@ -235,6 +235,9 @@ def cover_svg(session: Session, light: bool = False) -> str:
 def cover_html(session: Session, brand: dict[str, str], font_css: str,
                light: bool = False) -> str:
     C = _c(light)
+    from .palette import chapter_vars, mix_hex
+    _sess_deep = chapter_vars(int(session.session_number))["--chapter-header"]
+    _cover_to = mix_hex(_hx("cover-deep"), _sess_deep, 0.55)
     """سند HTML مستقل کاور؛ با حاشیهٔ صفر رندر و به ابتدای PDF چسبانده می‌شود."""
     draft_badge = ('<span class="cv-draft">پایلوت موتور — نسخهٔ آزمایشی</span>'
                    if session.draft else "")
@@ -250,7 +253,10 @@ def cover_html(session: Session, brand: dict[str, str], font_css: str,
 @page {{ size: A4; margin: 0; }}
 * {{ margin:0; padding:0; box-sizing:border-box; }}
 body {{ font-family:"Vazirmatn",sans-serif; }}
-.cover {{ position:relative; width:210mm; height:297mm; overflow:hidden; background:var(--cover-bg); }}
+.cover {{ position:relative; width:210mm; height:297mm; overflow:hidden; background:linear-gradient(180deg, var(--cover-deep) 0%, {_cover_to} 100%); }}
+.cv-bokeh {{ position:absolute; border-radius:50%; pointer-events:none; }}
+.cv-bokeh.b1 {{ width:95mm; height:95mm; top:-28mm; left:-24mm; background:radial-gradient(circle, color-mix(in srgb, var(--sun) 30%, transparent), transparent 68%); }}
+.cv-bokeh.b2 {{ width:80mm; height:80mm; bottom:8mm; right:-22mm; background:radial-gradient(circle, color-mix(in srgb, var(--secondary) 26%, transparent), transparent 68%); }}
 .cover-art {{ position:absolute; inset:0; width:210mm; height:297mm; }}
 .cv-scrim {{ position:absolute; top:0; left:0; right:0; height:118mm;
   background:linear-gradient(180deg, color-mix(in srgb, var(--navy-950) 62%, transparent), color-mix(in srgb, var(--navy-950) 28%, transparent) 62%, transparent); }}
@@ -289,6 +295,7 @@ body {{ font-family:"Vazirmatn",sans-serif; }}
 </style></head><body>
 <div class="cover{' cover--light' if light else ''}">
   {cover_svg(session, light)}
+  <div class="cv-bokeh b1"></div><div class="cv-bokeh b2"></div>
   <div class="cv-scrim"></div>
   <div class="cv-top"><span class="cv-course">{escape(session.course)}</span></div>
   <div class="cv-center">

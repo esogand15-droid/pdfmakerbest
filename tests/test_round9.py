@@ -129,11 +129,15 @@ def test_tree_page_rendering_and_gate():
 
 
 def test_icon_guide_compact():
+    """راند ۱۲ جایگزین شبکهٔ تک‌رنگ راند ۹ شد: راهنما شش کارت خانوادهٔ معنایی
+    است؛ همچنان فشرده (برچسب‌های کوتاه) و در همان صفحهٔ فهرست."""
     s, plan = _plan()
     g = Typesetter(plan).reading_guide()
-    assert 'class="iguide"' in g
-    assert "نمونهٔ کادر" not in g and "guide-sample" not in g
-    labels = re.findall(r'iguide__it">.*?<span>([^<]+)</span>', g, re.S)
+    assert 'class="fguide"' in g
+    assert g.count("fguide__card") == 6
+    for fam in ("fam1", "fam2", "fam3", "fam4", "fam5", "fam6"):
+        assert f"fcard--{fam}" in g
+    labels = re.findall(r'fguide__it">.*?<span>([^<]+)</span>', g, re.S)
     assert len(labels) >= 18
     assert all(len(l.split()) <= 4 for l in labels), labels
 

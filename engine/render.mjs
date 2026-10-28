@@ -49,12 +49,12 @@ async function launchBrowser() {
 const fontFace = cfg.fontFile
   ? `@font-face{font-family:Vazirmatn;src:url(file://${cfg.fontFile})}` : "";
 const hdrStyle = `<style>${fontFace}
-  .h{width:100%;font-family:Vazirmatn,DejaVu Sans,sans-serif;font-size:7.8pt;color:#5B6B88;
+  .h{width:100%;font-family:Vazirmatn,DejaVu Sans,sans-serif;font-size:7.8pt;color:#6B7488;
      padding:0 14mm;display:flex;justify-content:space-between;direction:rtl}
-  .h .b{font-weight:700;color:#061E4E}
-  .f{width:100%;font-family:Vazirmatn,DejaVu Sans,sans-serif;font-size:7.8pt;color:#5B6B88;
+  .h .b{font-weight:700;color:#0F5E63}
+  .f{width:100%;font-family:Vazirmatn,DejaVu Sans,sans-serif;font-size:7.8pt;color:#6B7488;
      padding:0 14mm;display:flex;justify-content:space-between;direction:rtl}
-  .f .p b{color:#061E4E}
+  .f .p b{color:#0F5E63}
 </style>`;
 
 const browser = await launchBrowser();

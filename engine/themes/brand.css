@@ -1,97 +1,123 @@
 /* ============================================================
    HumsYar — Brand Design Tokens (منبع واحد رنگ‌های برند)
    ------------------------------------------------------------
+   راند ۱۲: پالت «گرم و پزشکی» (Warm Medical) + رنگ مبحث خودکار
+   + شش خانوادهٔ معنایی آیکون/کادر. رنگ فقط از «نقش» می‌آید
+   (نوع کادر، خانوادهٔ نشانه، شمارهٔ مبحث) — هرگز از محتوای علمی.
    تنها فایلی که مجاز است مقدار HEX داشته باشد.
    - سند بدنه، کاور و قاب این فایل را پیش از استایل‌های خودشان می‌خوانند.
    - کد پایتون (کاور/قاب/نوار پیشرفت/SVG) از راه humsyar/palette.py همین
-     فایل را می‌خواند؛ فهرست دومی از رنگ‌ها ساخته نمی‌شود.
+     فایل را می‌خواند؛ مشتقات کنتراست‌امن مبحث‌ها آنجا با HSL ساخته می‌شوند.
    - رنگ داخل تصاویر اصلی کتاب‌ها مشمول این پالت نیست.
+   نسبت هدف: ۷۰٪ کرم/سفید، ۱۵٪ متن و Primary، ۱۰٪ رنگ مبحث، ۵٪ معنایی.
    ============================================================ */
 :root {
-  /* --- هستهٔ برند --- */
-  --navy-950: #050D18;
-  --navy-900: #061E4E;
-  --navy-800: #0F2A52;
-  --navy-700: #0A2A7E;
-  --royal-600: #0636AE;
-  --azure-500: #0666F6;
-  --sky-400: #5FB3F1;
-  --cyan-400: #06D2DE;
-  --aqua-300: #6FE6EE;
-  --tealcyan-500: #04B9D3;
-  --teal-ink: #0A6E85;
-
-  /* --- سطوح روشن --- */
+  /* --- هستهٔ گرم برند --- */
+  --paper: #FFFBF5;            /* پس‌زمینهٔ صفحه: کرم گرم */
+  --surface: #FFFFFF;          /* سطح کادرها */
+  --surface-warm: #FFF6EA;     /* سطح گرم ملایم */
+  --ink: #26324B;              /* متن اصلی */
+  --ink-soft: #6B7488;         /* متن فرعی/کپشن/منبع */
+  --line-warm: #EADFCF;        /* خطوط و حاشیه‌ها: بژ ملایم */
+  --primary: #139A8E;          /* برند اصلی: فیروزهٔ زنده */
+  --primary-deep: #0F5E63;     /* تیتر و عناصر مهم */
+  --secondary: #FF6B5B;        /* تأکید گرم */
+  --sun: #FFB627;              /* نقطهٔ شاد/هایلایت */
+  --sun-soft: #FFE3A6;
+  --cover-deep: #1B2440;       /* سرمه‌ای گرم جلد */
   --white: #FFFFFF;
-  --ice-50: #F3F9FE;
-  --ice-100: #E8F4FD;
-  --ice-teal: #E6F8FB;
-  --hairline: #D3E2F2;
 
-  /* --- متن --- */
-  --ink: #0B1B3A;
-  --slate: #5B6B88;
+  /* --- رنگ مبحث (Chapter Accent): accent[(number-1) mod 8] --- */
+  --chapter-1: #139A8E;
+  --chapter-2: #FF7A45;
+  --chapter-3: #7C5CFA;
+  --chapter-4: #2F80ED;
+  --chapter-5: #E8508B;
+  --chapter-6: #2EAD6B;
+  --chapter-7: #F2A100;
+  --chapter-8: #E5484D;
 
-  /* --- رنگ‌های کارکردی (فقط هشدار/اختلاف واقعی) --- */
-  --warn: #E8A33D;
-  --warn-bg: #FFF4E0;
-  --conflict: #C75B3A;
-  --conflict-bg: #FBEDE8;
-  --conflict-ink: #8A3418;
+  /* --- شش خانوادهٔ معنایی (deepها با اسکریپت کنتراست ≥۴٫۶ روی soft ساخته شده‌اند) --- */
+  --fam1: #139A8E;  --fam1-deep: #0F766D;   /* دانش پایه/تعریف */
+  --fam2: #F59E0B;  --fam2-deep: #996206;   /* تأکید و یادگیری */
+  --fam3: #2EAD6B;  --fam3-deep: #20794B;   /* کاربرد/بالینی */
+  --fam4w: #FF6B5B; --fam4w-deep: #D51500;  /* هشدار */
+  --fam4c: #F97316; --fam4c-deep: #B44C05;  /* اختلاف منابع */
+  --fam4e: #D9A400; --fam4e-deep: #876600;  /* استثنا */
+  --fam4u: #8B7FB8; --fam4u-deep: #7061A8;  /* نیازمند بررسی */
+  --fam5: #E8508B;  --fam5-deep: #CC1B5F;   /* حافظه و آزمون */
+  --fam6: #6D5BD0;  --fam6-deep: #6957CF;   /* ساختار و ناوبری */
 
-  /* --- گرادیان‌های برند --- */
-  --brand-grad: linear-gradient(135deg, #061E4E 0%, #0636AE 45%, #06D2DE 100%);
-  --brand-grad-h: linear-gradient(90deg, #0636AE 0%, #04B9D3 100%);
-  --cover-bg: linear-gradient(180deg, #050D18 0%, #0F2A52 100%);
-
-  /* --- فقط ناوبری مباحث (تب کناری، کارت فعال نقشهٔ جلسه) --- */
-  --topic-1: #061E4E;
-  --topic-2: #0A2A7E;
-  --topic-3: #0636AE;
-  --topic-4: #0666F6;
-  --topic-5: #0A6E85;
-  --topic-6: #4B5BD6;
-
-  /* --- سایه‌ها --- */
-  --shadow-sm: 0 1px 2px rgba(6, 30, 78, 0.08);
-  --shadow-md: 0 2px 8px rgba(6, 30, 78, 0.10);
+  /* --- گرادیان‌ها و سایه‌ها --- */
+  --brand-grad: linear-gradient(135deg, #1B2440 0%, #0F5E63 55%, #139A8E 100%);
+  --brand-grad-h: linear-gradient(90deg, #0F5E63 0%, #139A8E 100%);
+  --cover-bg: linear-gradient(180deg, #1B2440 0%, #0F5E63 100%);
+  --shadow-sm: 0 1px 2px rgba(80, 50, 20, 0.08);
+  --shadow-md: 0 2px 8px rgba(80, 50, 20, 0.10);
 
   /* ==========================================================
      لایهٔ معنایی موتور — نام‌هایی که کامپوننت‌ها مصرف می‌کنند.
-     همه به توکن‌های بالا اشاره می‌کنند؛ این‌جا HEX تازه‌ای نیست.
      ========================================================== */
-  --brand: var(--royal-600);            /* ساختار و تأکید اصلی بدنه */
-  --brand-deep: var(--navy-900);        /* عنوان‌ها و سطوح تیرهٔ محدود */
-  --brand-ink: var(--navy-800);         /* متن برجسته روی زمینهٔ روشن */
-  --accent: var(--azure-500);           /* ارجاع‌ها و تأکید فرعی */
-  --muted: var(--slate);                /* کپشن، منبع، توضیح ثانویه */
-  --faint: color-mix(in srgb, var(--slate) 72%, var(--white));
-  --line: var(--hairline);
-  --line-soft: var(--ice-100);
-  --paper: var(--white);
-  --soft: var(--ice-50);
-  --tint: var(--ice-teal);
-  --tint-blue: var(--ice-100);
+  --brand: var(--primary-deep);
+  --brand-deep: var(--primary-deep);
+  --brand-ink: var(--primary-deep);
+  --brand-soft: var(--surface-warm);
+  --accent: var(--primary);
+  --muted: var(--ink-soft);
+  --faint: color-mix(in srgb, var(--ink-soft) 72%, var(--white));
+  --line: var(--line-warm);
+  --line-soft: var(--surface-warm);
+  --soft: var(--surface-warm);
+  --tint: #E7F4F1;
+  --tint-blue: var(--surface-warm);
+  --slate: var(--ink-soft);
+  --slate-deep: color-mix(in srgb, var(--ink-soft) 55%, var(--ink));
+  --slate-soft: color-mix(in srgb, var(--ink-soft) 55%, var(--white));
+  --hairline: var(--line-warm);
 
-  /* رنگ نقشِ کادرهای آموزشی — معنا با آیکون+برچسب هم منتقل می‌شود، نه فقط رنگ */
-  --c-key: var(--royal-600);            --bg-key: var(--ice-100);
-  --c-clinical: var(--teal-ink);        --bg-clinical: var(--ice-teal);
-  --c-warning: color-mix(in srgb, var(--warn) 50%, var(--ink));
-  --bg-warning: var(--warn-bg);
-  --c-bridge: var(--royal-600);         --bg-bridge: var(--ice-100);
-  --c-conflict: var(--conflict);        --bg-conflict: var(--conflict-bg);
-  --c-exam: var(--navy-700);            --bg-exam: var(--ice-100);
-  --c-definition: var(--navy-700);      --bg-definition: var(--ice-50);
-  --c-example: var(--teal-ink);         --bg-example: var(--ice-teal);
-  --c-summary: var(--navy-900);         --bg-summary: var(--ice-100);
-  --c-exception: color-mix(in srgb, var(--warn) 30%, var(--conflict-ink));  /* کننتراست متن ≥۴٫۵ روی warn-bg */
-  --bg-exception: var(--warn-bg);
-  --c-mnemonic: color-mix(in srgb, var(--azure-500) 78%, var(--ink));
-  --bg-mnemonic: var(--ice-100);
-  --c-formula: var(--teal-ink);         --bg-formula: var(--ice-teal);
-  --slate-deep: color-mix(in srgb, var(--slate) 74%, var(--ink));
-  --slate-soft: color-mix(in srgb, var(--slate) 55%, var(--white));
-  --c-terminology: var(--slate-deep);
-  --bg-terminology: var(--ice-50);
-  --c-unresolved: var(--slate);         --bg-unresolved: var(--ice-50);
+  /* رنگ نقش کادرها از خانوادهٔ معنایی‌شان (معنا با آیکون+برچسب+الگو هم هست) */
+  --c-key: var(--fam2-deep);          --bg-key: #FEF3E0;
+  --c-clinical: var(--fam3-deep);     --bg-clinical: #ECF4E9;
+  --c-warning: var(--fam4w-deep);     --bg-warning: #FFEEE7;
+  --c-bridge: var(--fam3-deep);       --bg-bridge: #ECF4E9;
+  --c-conflict: var(--fam4c-deep);    --bg-conflict: #FEEFE1;
+  --c-exam: var(--fam5-deep);         --bg-exam: #FDECEB;
+  --c-definition: var(--fam1-deep);   --bg-definition: #EAF2EC;
+  --c-example: var(--fam3-deep);      --bg-example: #ECF4E9;
+  --c-summary: var(--fam2-deep);      --bg-summary: #FEF3E0;
+  --c-exception: var(--fam4e-deep);   --bg-exception: #FCF3DF;
+  --c-mnemonic: var(--fam5-deep);     --bg-mnemonic: #FDECEB;
+  --c-formula: var(--fam5-deep);      --bg-formula: #FDECEB;
+  --c-terminology: var(--fam1-deep);  --bg-terminology: #EAF2EC;
+  --c-unresolved: var(--fam4u-deep);  --bg-unresolved: #F5F0F0;
+
+  /* ==========================================================
+     نام‌های قدیمی (لایهٔ سازگاری) — مقدارها به پالت گرم نگاشت شده‌اند
+     تا مصرف‌کننده‌های موجود (کاور، درخت، ریل، برگهٔ مرور) یکدست گرم شوند.
+     ========================================================== */
+  --navy-950: var(--cover-deep);
+  --navy-900: var(--primary-deep);
+  --navy-800: var(--primary-deep);
+  --navy-700: var(--primary);
+  --royal-600: var(--primary-deep);
+  --azure-500: var(--primary);
+  --sky-400: #8CCFC5;
+  --cyan-400: var(--sun);
+  --aqua-300: #FFD9A0;
+  --tealcyan-500: #FF7A45;   /* جهت دوم نمودارها: گرم، در برابر فیروزهٔ Primary */
+  --teal-ink: #CF3B00;       /* متن امنِ جهت دوم روی روشن */
+  --ice-50: var(--surface-warm);
+  --ice-100: #FDEFDC;
+  --ice-teal: #E7F4F1;
+  --warn: var(--fam4e);
+  --warn-bg: #FCF3DF;
+  --conflict: var(--fam4c);
+  --conflict-bg: #FEEFE1;
+  --conflict-ink: var(--fam4c-deep);
+  --topic-1: var(--chapter-1);
+  --topic-2: var(--chapter-2);
+  --topic-3: var(--chapter-3);
+  --topic-4: var(--chapter-4);
+  --topic-5: var(--chapter-5);
+  --topic-6: var(--chapter-6);
 }

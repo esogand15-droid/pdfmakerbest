@@ -13,8 +13,9 @@ import re
 from html import escape
 
 from .diagrams import PAGE_STYLE as TREE_PAGE_STYLE, measure_tree, session_tree, tree_svg
-from .palette import hex_of
-from .icons import CALLOUT_ICONS, icon_svg
+from .palette import chapter_style, chapter_vars, hex_of
+from .icons import (CALLOUT_ICONS, FAMILY_LABELS, ICON_FAMILY, family_of_kind,
+                    icon_svg)
 from .revision import extract_items
 from .model import Block, Session, Source, Topic
 from .planner import Plan, fa_num
@@ -30,6 +31,20 @@ KIND_LABELS = {
 KIND_ORDER = ["key", "definition", "clinical", "bridge", "warning", "exception",
               "conflict", "exam", "mnemonic", "formula", "terminology",
               "example", "summary", "unresolved"]
+
+
+def icon_color_css() -> str:
+    """رنگ هر آیکون = رنگ deep خانواده‌اش (تولید خودکار از نگاشت مرکزی)."""
+    rules = []
+    for name, fam in sorted(ICON_FAMILY.items()):
+        rules.append(f".ic--{name}{{color:var(--{fam}-deep)}}")
+    return "".join(rules)
+
+
+def icon_badge(name: str, size: float = 12) -> str:
+    """آیکون داخل نشان دایره‌ای خانواده (پس‌زمینهٔ نرم + خط رنگی خانواده)."""
+    from .icons import family_of_icon
+    return f'<span class="icb fam {family_of_icon(name)}">{icon_svg(name, size)}</span>'
 
 
 def icon(kind: str) -> str:
@@ -61,7 +76,7 @@ class Typesetter:
     def __init__(self, plan: Plan, *, show_sources: bool = True,
                  toc_pages: dict[str, int] | None = None,
                  fig_pages: dict[str, int] | None = None,
-                 print_theme: bool = False,
+                 print_theme: bool = False, bw_theme: bool = False,
                  assets_uri: str = "", brand: dict | None = None) -> None:
         self.plan = plan
         self.session = plan.session
@@ -70,6 +85,7 @@ class Typesetter:
         self.fig_pages = fig_pages or {}
         self._qc_items: list[tuple[int, str]] = []  # (شماره، پاسخ) برای پاسخ‌نامهٔ پایانی
         self.print_theme = print_theme
+        self.bw_theme = bw_theme
         self.assets_uri = assets_uri  # پیشوند file:// برای مسیر دارایی‌ها
         self.brand = brand or {"fa": "هامزیار", "en": "HumsYar"}
 
@@ -99,8 +115,8 @@ class Typesetter:
             '<!DOCTYPE html><html lang="fa" dir="rtl"'
             + (f' data-theme="{theme}"' if theme != "a" else "") + '><head><meta charset="utf-8">'
             f'<title>{escape(s.course)} — جلسهٔ {fa_num(s.session_number)}: {escape(s.title)}</title>{favicon}'
-            f'<style>{css}</style></head>'
-            f'<body class="{"print-theme" if self.print_theme else ""}">{"".join(body)}</body></html>'
+            f'<style>{css}{icon_color_css()}</style></head>'
+            f'<body class="{"print-theme" if self.print_theme else ""}{" bw-theme" if self.bw_theme else ""}">{"".join(body)}</body></html>'
         )
 
     def toc_page(self) -> str:
@@ -159,7 +175,7 @@ class Typesetter:
             pg_txt = f'ص {fa_num(pg)}' if pg else str(m.get("tag", ""))
             items.append(
                 f'<li class="{"in" if n in included else ""}" '
-                f'style="--topic-c:var(--topic-{(idx % 6) + 1})">'
+                f'style="{chapter_style(n)};--topic-c:{chapter_vars(n)["--chapter-header"]}">'
                 f'<span class="n">{fa_num(n)}</span><span>{escape(str(m["title"]))}</span>'
                 f'<span class="pg">{escape(pg_txt)}</span></li>')
         return f'<nav class="session-map"><h2>نقشهٔ جلسه</h2><ol>{"".join(items)}</ol></nav>'
@@ -168,7 +184,7 @@ class Typesetter:
         n = len(self.plan.headings)
         lh = 2.35 if n <= 12 else (2.05 if n <= 20 else 1.8)
         if any(b.type in ("figure", "table") for b in self.session.all_blocks()):
-            lh = max(1.58, lh - 0.62)  # جای فهرست شکل‌ها/جدول‌ها و راهنمای رنگ در همان صفحه
+            lh = max(1.42, lh - 0.62)  # جای فهرست‌ها و راهنمای خانوادگی نشانه‌ها در همان صفحه
         items = []
         for lvl, text, anchor in self.plan.headings:
             pg = self.toc_pages.get(anchor)
@@ -204,7 +220,8 @@ class Typesetter:
         return f'<div class="lists">{col_f}{col_t}</div>'
 
     def reading_guide(self) -> str:
-        """راهنمای سریع علائم: آیکون + معنای چندکلمه‌ای؛ بدون کادر نمونه و شرح مفصل."""
+        """راهنمای نشانه‌ها: شش کارت خانوادهٔ معنایی؛ رنگ نشانه از خانواده‌اش
+        می‌آید (نقش)، و کنار هر خانواده نمونهٔ کوچک همان کادر دیده می‌شود."""
         seen: dict[str, str] = {}
 
         def add(icon_name: str, label: str) -> None:
@@ -219,15 +236,45 @@ class Typesetter:
                             ("compass", "نقشهٔ جامع مرور"), ("microscope", "جزئیات درون شکل"),
                             ("book", "واژه‌نامه"), ("reference", "منبع مطلب")):
             add(name, label)
-        items = "".join(
-            f'<span class="iguide__it">{icon_svg(n, 12)}<span>{escape(l)}</span></span>'
-            for n, l in seen.items())
+
+        from .icons import family_of_icon
+        groups: dict[str, list[tuple[str, str]]] = {}
+        for n, l in seen.items():
+            fam = family_of_icon(n)
+            key = "fam4" if fam.startswith("fam4") else fam
+            groups.setdefault(key, []).append((n, l))
+        fam_order = ["fam1", "fam2", "fam3", "fam4", "fam5", "fam6"]
+        # نمونهٔ کوچک هر خانواده: نخستین گونهٔ کادر همان خانواده (فقط برچسب، بدون متن ساختگی)
+        sample_kind = {}
+        for k in KIND_ORDER:
+            fam = family_of_kind(k)
+            key = "fam4" if fam.startswith("fam4") else fam
+            sample_kind.setdefault(key, (k, fam))
+        cards = []
+        for key in fam_order:
+            entries = groups.get(key, [])
+            if not entries:
+                continue
+            items = "".join(
+                f'<span class="fguide__it">{icon_badge(n, 11)}<span>{escape(l)}</span></span>'
+                for n, l in entries)
+            sk = sample_kind.get(key)
+            sample = ""
+            if sk:
+                k, fam = sk
+                sample = (f'<div class="fguide__sample fam {fam}">'
+                          f'<span class="icb fam {fam}">{icon(k)}</span>'
+                          f'<span class="fguide__sample-t">{escape(KIND_LABELS[k])}</span></div>')
+            cards.append(
+                f'<div class="fguide__card fcard--{key}">'
+                f'<div class="fguide__h"><span class="fguide__dot"></span>{escape(FAMILY_LABELS[key])}</div>'
+                f'<div class="fguide__items">{items}</div>{sample}</div>')
         return f"""
 <div class="guide avoid-break">
   <h2>چطور این جزوه را بخوانیم؟</h2>
   <p class="guide__line">کنار هر مطلب، منبعش آمده است: <span class="src">{icon_svg("reference", 9)}<b>منبع:</b> جزوهٔ درس، ص ۹</span>
-  و اصطلاح‌ها در نخستین ورود با معادل <bdi class="en">(English)</bdi> می‌آیند. معنای علائم در کل جزوه ثابت است:</p>
-  <div class="iguide">{items}</div>
+  و اصطلاح‌ها در نخستین ورود با معادل <bdi class="en">(English)</bdi> می‌آیند. رنگ هر نشانه از خانواده‌اش می‌آید و در کل جزوه ثابت است؛ رنگ هر مبحث هم از شماره‌اش (تب کناری و سربرگ جدول‌ها).</p>
+  <div class="fguide">{"".join(cards)}</div>
 </div>"""
 
     # -------------------------------------------------------------- مبحث
@@ -247,13 +294,13 @@ class Typesetter:
                 n = int(m["number"])
                 st = "cur" if n == t.number else ("done" if n < t.number else "todo")
                 cells.append(f'<span class="pstrip__c pstrip__c--{st}" '
-                             f'style="--topic-c:var(--topic-{(idx % 6) + 1})"><b>{fa_num(n)}</b>'
+                             f'style="{chapter_style(n)};--topic-c:{chapter_vars(n)["--chapter-header"]}"><b>{fa_num(n)}</b>'
                              f'{escape(str(m["title"]))}</span>')
             strip = (f'<div class="pstrip" aria-hidden="true">{"".join(cells)}</div>')
         pre = "".join(f'<span class="chip chip--pre">{inline(p)}</span>' for p in t.prereq_required)
         pre_s = "".join(f'<span class="chip">{inline(p)}</span>' for p in t.prereq_suggested)
         head = f"""
-<section class="topic" id="{escape(t.id)}">
+<section class="topic" id="{escape(t.id)}" style="{chapter_style(t.number)}">
   <div class="topic-head" data-bid="topichead:{escape(t.id)}">
     <div class="topic-head__row">
       <div class="topic-num">مبحث<b>{fa_num(t.number)}</b></div>
@@ -538,9 +585,10 @@ class Typesetter:
 
     def b_callout(self, b: Block) -> str:
         kind = b.data["kind"]
+        fam = family_of_kind(kind)
         return f"""
-<aside class="callout callout--{kind}" data-bid="{escape(b.id)}">
-  <div class="callout__head">{icon(kind)}<span>{inline(b.data["title"])}</span>
+<aside class="callout callout--{kind} fam {fam}" data-bid="{escape(b.id)}">
+  <div class="callout__head"><span class="icb fam {fam}">{icon(kind)}</span><span>{inline(b.data["title"])}</span>
   <span class="kind">{KIND_LABELS.get(kind, kind)}</span></div>
   <p>{inline(b.data["text"])}</p>
   <div class="srcrow">{src_chips(b.sources, self.show_sources)}</div>

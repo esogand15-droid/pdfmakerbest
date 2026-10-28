@@ -108,3 +108,45 @@ CALLOUT_ICONS: dict[str, str] = {
     "terminology": "terminology",
     "unresolved": "unresolved",
 }
+
+
+# ---------------------------------------------------------------- خانوادهٔ معنایی
+# رنگ نشانه از «خانوادهٔ معنایی» می‌آید (نقش)، هرگز از محتوای علمی. افزودن
+# نشانهٔ تازه = یک خط در ICON_FAMILY. نشانهٔ ناشناخته به خانوادهٔ خنثی
+# برمی‌گردد و در UNKNOWN_ICONS ثبت می‌شود (هشدار، نه خطا).
+ICON_FAMILY: dict[str, str] = {
+    # ۱) دانش پایه/تعریف — فیروزه‌ای
+    "definition": "fam1", "terminology": "fam1", "book": "fam1",
+    "reference": "fam1", "location": "fam1", "origin": "fam1",
+    # ۲) تأکید و یادگیری — کهربایی
+    "key": "fam2", "summary": "fam2", "target": "fam2", "check": "fam2",
+    "glance": "fam2",
+    # ۳) کاربرد و دنیای واقعی — سبز
+    "clinical": "fam3", "bridge": "fam3", "example": "fam3", "function": "fam3",
+    # ۴) دقت و احتیاط — چهار زیررنگ
+    "warning": "fam4w", "conflict": "fam4c", "exception": "fam4e",
+    "unresolved": "fam4u",
+    # ۵) حافظه و آزمون — سرخابی
+    "exam": "fam5", "mnemonic": "fam5", "formula": "fam5",
+    # ۶) ساختار و ناوبری — نیلی
+    "compare": "fam6", "branch": "fam6", "process": "fam6", "compass": "fam6",
+    "microscope": "fam6", "structure": "fam6", "arrow": "fam6", "time": "fam6",
+}
+KIND_FAMILY: dict[str, str] = {k: ICON_FAMILY[v] for k, v in CALLOUT_ICONS.items()}
+FAMILY_LABELS: dict[str, str] = {
+    "fam1": "دانش پایه", "fam2": "تأکید و یادگیری", "fam3": "کاربرد و دنیای واقعی",
+    "fam4": "دقت و احتیاط", "fam5": "حافظه و آزمون", "fam6": "ساختار و ناوبری",
+}
+UNKNOWN_ICONS: set[str] = set()
+
+
+def family_of_icon(name: str) -> str:
+    fam = ICON_FAMILY.get(name)
+    if fam is None:
+        UNKNOWN_ICONS.add(name)
+        return "neutral"
+    return fam
+
+
+def family_of_kind(kind: str) -> str:
+    return KIND_FAMILY.get(kind) or family_of_icon(CALLOUT_ICONS.get(kind, "note"))

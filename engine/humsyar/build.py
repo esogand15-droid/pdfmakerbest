@@ -18,7 +18,7 @@ from .brand import load_brand
 from .cover import cover_html
 from .frame import CAPSULE_CY_MM, frame_html
 import os as _os
-from .palette import brand_css_text, rgb_of
+from .palette import brand_css_text, chapter_vars, rgb_of, rgb_of_hex
 from .model import Session, load_session, normalize_text, validate
 from .packing import measure_blocks, pack
 from .planner import Plan, fa_num, plan_session
@@ -214,23 +214,27 @@ def _stamp_furniture(doc, frame_pdfs, page_topics: dict | None = None) -> None:
             page.show_pdf_page(page.rect, overlay, 0)
             # نوار پیشرفت مطالعه: از راست پر می‌شود (جهت خواندن فارسی) و در چاپ
             # سیاه‌وسفید هم با قاب تیره + پُری تیره + شیار سفید قابل تشخیص است.
+            # رنگ پیشرفت/کپسول از مبحث همان صفحه می‌آید (شمارهٔ مبحث ← نقش)
+            _cv = (chapter_vars(int(key)) if key else None)
+            _acc = rgb_of_hex(_cv["--chapter-accent"]) if _cv else rgb_of("primary")
+            _acc_h = rgb_of_hex(_cv["--chapter-header"]) if _cv else rgb_of("primary-deep")
             frac = i / max(1, total - 1)
             tx0, tx1, ty, th = 63 * MM, 147 * MM, 288.2 * MM, 1.15 * MM  # متقارن دور مرکز ۱۰۵
             page.draw_rect(pymupdf.Rect(tx0, ty, tx1, ty + th),
-                           color=rgb_of("navy-900"), fill=rgb_of("hairline"),
+                           color=rgb_of("ink"), fill=rgb_of("line-warm"),
                            width=0.8, radius=0.5)
             fw = (tx1 - tx0) * frac
             if fw > 0.6 * MM:
                 page.draw_rect(pymupdf.Rect(tx1 - fw, ty, tx1, ty + th),
-                               color=None, fill=rgb_of("navy-900"), radius=0.5)
+                               color=None, fill=_acc, radius=0.5)
             cx, cy = 105 * MM, CAPSULE_CY_MM * MM
             r = pymupdf.Rect(cx - 8 * MM, cy - 2.6 * MM, cx + 8 * MM, cy + 2.6 * MM)
-            page.draw_rect(r, color=rgb_of("royal-600"), fill=(1, 1, 1), width=0.7, radius=0.5)
+            page.draw_rect(r, color=_acc_h, fill=_acc_h, width=0.7, radius=0.5)
             txt = fa_num(i + 1)
             tw = pymupdf.TextWriter(page.rect)
             tw.append((cx - font.text_length(txt, fontsize=9) / 2, cy + 3.2),
                       txt, font=font, fontsize=9)
-            tw.write_text(page, color=rgb_of("navy-900"))
+            tw.write_text(page, color=(1, 1, 1))
 
 
 def _stamp_toc_links(doc, toc_pages: dict[str, int],
@@ -290,7 +294,8 @@ def _add_bookmarks(pdf_path: Path, plan: Plan, toc_pages: dict[str, int],
 
 
 def build(content_path: str, *, edition: str = "final", theme: str = "a",
-          show_sources: bool = True, print_theme: bool = False, out_dir: str = "output",
+          show_sources: bool = True, print_theme: bool = False,
+          bw_theme: bool = False, out_dir: str = "output",
           control_facts: list[str] | None = None) -> dict:
     t0 = time.time()
     session = load_session(content_path)
@@ -320,12 +325,12 @@ def build(content_path: str, *, edition: str = "final", theme: str = "a",
     brand_css = brand_css_text()
     css = font_css + "\n" + brand_css + "\n" + (ENGINE_DIR / "themes" / "humsyar.css").read_text(encoding="utf-8")
     assets_uri = f"file://{REPO_ROOT}/"
-    pdf_path = out / f"{session.id}_{edition}{'_print' if print_theme else ''}.pdf"
+    pdf_path = out / f"{session.id}_{edition}{'_bw' if bw_theme else '_print' if print_theme else ''}.pdf"
     body_pdf = work / "body.pdf"
 
     # گذر اندازه‌گیری + بسته‌بندی فضا (look-ahead)
     ts = Typesetter(plan, show_sources=show_sources, assets_uri=assets_uri, brand=brand,
-                      print_theme=print_theme)
+                      print_theme=print_theme, bw_theme=bw_theme)
     html_a = ts.document(css, theme)
     html_a_path = work / "measure.html"
     html_a_path.write_text(html_a, encoding="utf-8")
@@ -334,7 +339,7 @@ def build(content_path: str, *, edition: str = "final", theme: str = "a",
 
     # رندر بدنه و یافتن شمارهٔ واقعی صفحات (با آفست +۱ برای کاور)
     ts_b = Typesetter(plan, show_sources=show_sources, assets_uri=assets_uri, brand=brand,
-                      print_theme=print_theme)
+                      print_theme=print_theme, bw_theme=bw_theme)
     _render_pdf(ts_b.document(css, theme), body_pdf, work, session,
                 margin=BODY_MARGIN, tag="body1")
     # حلقهٔ بازرسی بصری: Render → Inspect → Repair → Render Again (حداکثر دو دور)؛
@@ -350,7 +355,7 @@ def build(content_path: str, *, edition: str = "final", theme: str = "a",
         if not actions:
             break
         ts_fb = Typesetter(plan, show_sources=show_sources, assets_uri=assets_uri, brand=brand,
-                      print_theme=print_theme)
+                      print_theme=print_theme, bw_theme=bw_theme)
         _render_pdf(ts_fb.document(css, theme), body_pdf, work, session,
                     margin=BODY_MARGIN, tag=f"body1fb{fb_round}")
     inspection_final = inspect_body(body_pdf, session, plan)
@@ -358,7 +363,7 @@ def build(content_path: str, *, edition: str = "final", theme: str = "a",
     fig_pages = {k: v + 1 for k, v in _find_block_pages(body_pdf, session, plan).items()}
 
     ts_c = Typesetter(plan, show_sources=show_sources, toc_pages=toc_pages,
-                      fig_pages=fig_pages, print_theme=print_theme,
+                      fig_pages=fig_pages, print_theme=print_theme, bw_theme=bw_theme,
                       assets_uri=assets_uri, brand=brand)
     html_final = ts_c.document(css, theme)
     (out / f"{session.id}_{edition}.html").write_text(html_final, encoding="utf-8")
