@@ -60,6 +60,15 @@ def inline(text: str) -> str:
     s = re.sub(r"\[\[num:(.+?)\]\]", r'<span class="numbadge">\1</span>', s)
     s = re.sub(r"\[en:([^\]]+)\]", r'<bdi class="en">\1</bdi>', s)
     s = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", s)
+    # پیکان‌های متنی ←/→ در هیچ‌کدام از فونت‌های خودمیزبان نیستند و کرومیوم
+    # بی‌صدا DejaVu جایگزین می‌کند؛ مثل راند ۱۴ با SVG درون‌خطی رسم می‌شوند.
+    def _arr(left: bool) -> str:
+        pts = "1.5,5 6,1 6,3.4 14,3.4 14,6.6 6,6.6 6,9" if left else \
+              "14.5,5 10,1 10,3.4 2,3.4 2,6.6 10,6.6 10,9"
+        return (f'<svg viewBox="0 0 16 10" aria-hidden="true" '
+                f'style="width:1.05em;height:.66em;vertical-align:-.08em">'
+                f'<polygon points="{pts}" fill="currentColor"/></svg>')
+    s = s.replace("←", _arr(True)).replace("→", _arr(False))
     return s
 
 
@@ -344,13 +353,36 @@ class Typesetter:
                             root_label=f"جلسهٔ {fa_num(self.session.session_number)}")
         if len(root.get("children", [])) < 1:
             return ""
-        svg = tree_svg(root, style=TREE_PAGE_STYLE)
-        # ابعاد صریح چاپی: درخت هرگز از صفحهٔ اختصاصی‌اش بیرون نمی‌زند
-        tw, th = measure_tree(root, TREE_PAGE_STYLE)
-        scale = min(516 / tw, 574 / th, 1.0)
-        svg = svg.replace('<svg class="tree-svg"',
-                          f'<svg class="tree-svg" width="{tw * scale:.0f}" '
-                          f'height="{th * scale:.0f}"', 1)
+        # ابعاد صریح چاپی (pt): عنوان + درخت + نوار اصطلاحات باید با هم در صفحهٔ
+        # اختصاصی جا شوند و برچسب‌ها هرگز زیر کف خوانایی نروند (یادداشت ۸٫۶ واحد
+        # ← مقیاس ≥۰٫۸۲). اگر درخت کامل در یک صفحه با این مقیاس جا نشد، شاخه‌های
+        # ریشه (مبحث‌ها) دست‌نخورده میان چند صفحهٔ اختصاصی پیاپی پخش می‌شوند —
+        # هیچ شاخه‌ای حذف یا ریز نمی‌شود.
+        def _scale_of(sub: dict) -> float:
+            tw, th = measure_tree(sub, TREE_PAGE_STYLE)
+            return min(516 / tw, 540 / th, 1.0)
+
+        min_scale = 0.82
+        groups: list[list[dict]] = []
+        cur: list[dict] = []
+        for child in root.get("children", []):
+            trial = {**root, "children": cur + [child]}
+            if cur and _scale_of(trial) < min_scale:
+                groups.append(cur)
+                cur = [child]
+            else:
+                cur.append(child)
+        if cur:
+            groups.append(cur)
+
+        def _svg_for(children: list[dict]) -> str:
+            sub = {**root, "children": children}
+            out = tree_svg(sub, style=TREE_PAGE_STYLE)
+            tw, th = measure_tree(sub, TREE_PAGE_STYLE)
+            sc = _scale_of(sub)
+            return out.replace('<svg class="tree-svg"',
+                               f'<svg class="tree-svg" width="{tw * sc:.0f}pt" '
+                               f'height="{th * sc:.0f}pt"', 1)
         # نوار یکپارچهٔ اصطلاحات کلیدی جلسه، زیر درخت (فهرست‌های خود مباحث)
         parts = []
         for t in self.session.topics:
@@ -368,13 +400,20 @@ class Typesetter:
             srcs = " " + "".join(src_chips(b.sources, True) for b in tree_blocks)
         term_rows = (f'<div class="treepage__terms"><b>اصطلاحات کلیدی جلسه —</b> '
                      + " ".join(parts) + srcs + "</div>") if parts else ""
-        return f"""
+        n_pages = len(groups)
+        out_pages = []
+        for gi, children in enumerate(groups):
+            suffix = (f" (بخش {fa_num(gi + 1)} از {fa_num(n_pages)})"
+                      if n_pages > 1 else "")
+            span = "یک صفحه" if n_pages == 1 else f"{fa_num(n_pages)} صفحهٔ پیاپی"
+            out_pages.append(f"""
 <div class="treepage">
-  <h2 class="h-ic">{icon_svg("branch", 15)}نمودار درختی جامع جلسه</h2>
-  <p class="treepage__sub">اسکلت طبقه‌بندی همین جلسه در یک صفحه؛ برای مرور سریع. جزئیات کامل هر شاخه در متن آمده و جمع‌بندی دوصفحه‌ای پایان جزوه آن‌ها را یکجا مرور می‌کند.</p>
-  {svg}
-  {term_rows}
-</div>"""
+  <h2 class="h-ic">{icon_svg("branch", 15)}نمودار درختی جامع جلسه{suffix}</h2>
+  <p class="treepage__sub">اسکلت طبقه‌بندی همین جلسه در {span}؛ برای مرور سریع. جزئیات کامل هر شاخه در متن آمده و جمع‌بندی دوصفحه‌ای پایان جزوه آن‌ها را یکجا مرور می‌کند.</p>
+  {_svg_for(children)}
+  {term_rows if gi == n_pages - 1 else ""}
+</div>""")
+        return "".join(out_pages)
 
     def revision_map(self) -> str:
         """نقشهٔ جامع مرور: همهٔ گزاره‌های علمی جلسه، عین عبارت منبع، زیر بخش خودشان.

@@ -58,6 +58,19 @@ def _numset(text: str) -> frozenset:
     return frozenset(re.findall(r"[۰-۹٠-٩0-9]+", str(text)))
 
 
+# رقم ارجاعی (شمارهٔ شکل/جدول/صفحه/فصل/مبحث/جلسه) «عدد علمی» نیست؛ اولویت A و
+# کادر «اعداد کلیدی» فقط برای کمیت‌های واقعی (اندازه/سرعت/تعداد/محدوده) است.
+_REF_NUM = re.compile(
+    r"(?:شکل|جدول|فصل|مبحث|جلسه|صفحه|ص|Fig\.?|Figure|Table)"
+    r"\s*[۰-۹٠-٩0-9][۰-۹٠-٩0-9\s\-–—.٫,،و]*")
+_DIGIT_RE = re.compile(r"[۰-۹٠-٩0-9]")
+
+
+def _has_quantity(text: str) -> bool:
+    """آیا متن — بیرون از ارجاع‌ها — کمیت عددی علمی دارد؟"""
+    return bool(_DIGIT_RE.search(_REF_NUM.sub("", str(text or ""))))
+
+
 def prioritize(session: Session, items: list[Item]) -> list[UItem]:
     """اولویت‌بندی قطعی بر پایهٔ گونهٔ گزاره و نشانه‌های ساختاری خود منبع.
 
@@ -75,7 +88,7 @@ def prioritize(session: Session, items: list[Item]) -> list[UItem]:
             u.priority = "C"  # کپشن انگلیسی شکل؛ کنار خود شکل در جزوه مرور می‌شود
         elif k == "detail" and any(m in txt for m in ("قاب پایانی", "همین جزوه", "در این جزوه")):
             u.priority = "C"  # جملهٔ ناوبریِ سند است، نه نکتهٔ علمی
-        elif k in _A_KINDS or it.has_number:
+        elif k in _A_KINDS or _has_quantity(txt):
             u.priority = "A"
         elif k == "table_row":
             u.priority = "A"
@@ -100,7 +113,7 @@ def prioritize(session: Session, items: list[Item]) -> list[UItem]:
                   "source_conflict": 28, "process": 24, "table_row": 22,
                   "summary": 20, "key": 20, "clinical": 14, "relationship": 13,
                   "terminology": 10, "detail": 8, "example": 6}.get(k, 5)
-        u.score = kind_w + (6 if it.has_number else 0) + 14.0 / math.sqrt(
+        u.score = kind_w + (6 if _has_quantity(txt) else 0) + 14.0 / math.sqrt(
             max(len(txt), 1))
         out.append(u)
     return out
@@ -180,7 +193,7 @@ def build_components(session: Session, uitems: list[UItem]) -> list[Comp]:
     # تعریف‌ها و اصول (A): definition + جزئیات تعریف‌گونه + key/summary
     defs = take(lambda u: u.priority == "A" and u.item.kind in
                 ("definition", "key", "summary", "formula") or
-                (u.priority == "A" and u.item.kind == "detail" and not u.item.has_number))
+                (u.priority == "A" and u.item.kind == "detail" and not _has_quantity(u.item.text)))
     if defs:
         comps.append(Comp("defs", "تعریف‌ها و اصول پایه", 1, uitems=defs))
 
@@ -195,7 +208,7 @@ def build_components(session: Session, uitems: list[UItem]) -> list[Comp]:
                           1, uitems=steps, block=b))
 
     # اعداد کلیدی: گزاره‌های عدددارِ باقی‌مانده (خانهٔ واحد هر گزاره)
-    nums = take(lambda u: u.item.has_number and u.priority == "A")
+    nums = take(lambda u: _has_quantity(u.item.text) and u.priority == "A")
     if nums:
         comps.append(Comp("numbers", "اعداد و مقادیر کلیدی", 1, uitems=nums))
 
@@ -226,6 +239,30 @@ def build_components(session: Session, uitems: list[UItem]) -> list[Comp]:
         filler = Comp("points", "نکات تکمیلی", 2, uitems=[], min_priority="C")
         filler.uitems = rest
         comps.append(filler)
+
+    # توازن دو صفحه: جدول‌ها صفحهٔ ثابت ندارند؛ بر اساس وزن متنی میان دو استخر
+    # پخش می‌شوند تا هیچ صفحه‌ای از ابتدا سرریز نباشد (ترتیب درون هر صفحه حفظ
+    # می‌شود و اسکلت/تعریف/فرایند در صفحهٔ ۱ و اعداد/هشدار/چیپ در صفحهٔ ۲ می‌مانند).
+    # وزن هر جزء ≈ طول متن × ضریب سربار نمایشی گونه‌اش (جدول تمام‌عرض و اسکلت و
+    # زنجیرهٔ فرایند به‌ازای هر نویسه گران‌تر از فهرست دوستونه‌اند).
+    _WF = {"table": 1.5, "proc": 1.3, "chips": 1.25, "defs": 1.05,
+           "numbers": 1.05, "alerts": 1.05, "points": 1.05}
+    def _w(c: Comp) -> float:
+        return _WF.get(c.kind, 1.0) * sum(
+            len(u.item.text) for u in c.uitems if not u.dropped)
+    skel_w = 1.6 * sum(len(t.title) + sum(len(str(b.data.get("title", "")))
+                                          for b in t.blocks if b.type == "section")
+                       for t in session.topics)
+    w1 = skel_w + sum(_w(c) for c in comps if c.kind in ("defs", "proc", "numbers"))
+    w2 = sum(_w(c) for c in comps if c.kind in ("alerts", "chips"))
+    for c in comps:
+        if c.kind != "table":
+            continue
+        tw = _w(c) + 90
+        if w1 <= w2:
+            c.pool, w1 = 1, w1 + tw
+        else:
+            c.pool, w2 = 2, w2 + tw
     for c in comps:
         for u in c.uitems:
             u.home, u.pool = c.kind, c.pool
@@ -339,7 +376,7 @@ body{ font-family:Vazirmatn,sans-serif; color:var(--ink); margin:0;
 .uhead .ut{ font-weight:800; color:var(--session-deep,var(--navy-900)); font-size:1.5em }
 .uhead .ub{ color:var(--session-deep,var(--royal-600)); font-weight:700 }
 .uhead .ubadge{ background:var(--session-header,var(--royal-600)); color:#fff; border-radius:20pt;
-  padding:1pt 7pt; font-weight:700; font-size:.82em }
+  padding:1pt 7pt; font-weight:700; font-size:max(.82em,7.05pt) }
 .ucols{ columns:2; column-gap:5mm }
 .uc{ break-inside:avoid; border:1pt solid var(--hairline); border-radius:5pt;
   padding:1.9mm 2.3mm; margin:0 0 2.4mm; background:#fff }
@@ -352,8 +389,8 @@ body{ font-family:Vazirmatn,sans-serif; color:var(--ink); margin:0;
 .up li{ margin:.4mm 0 }
 .usk b{ color:var(--session-deep,var(--navy-900)); display:block; margin-top:1mm }
 .usk span{ display:inline-block; background:var(--surface-warm); border-radius:10pt;
-  padding:0 5pt; margin:.6mm 0 .6mm 1.2mm; font-size:.86em }
-.utbl{ width:100%; border-collapse:collapse; font-size:.92em }
+  padding:0 5pt; margin:.6mm 0 .6mm 1.2mm; font-size:max(.86em,7.05pt) }
+.utbl{ width:100%; border-collapse:collapse; font-size:max(.92em,7.05pt) }
 .utbl th{ background:var(--session-header,var(--royal-600)); color:#fff; padding:1.2mm 1.6mm; text-align:start }
 .utbl td{ border-bottom:.5pt solid var(--hairline); padding:.7mm 1.4mm; vertical-align:top }
 .utbl td.rowh{ background:var(--session-soft,var(--ice-100)); font-weight:700; color:var(--session-deep,var(--navy-900)) }
@@ -363,12 +400,27 @@ body{ font-family:Vazirmatn,sans-serif; color:var(--ink); margin:0;
   padding:0 6pt; white-space:nowrap }
 .uarr{ width:7pt; height:7pt; fill:var(--session-deep,var(--royal-600)); vertical-align:-1pt }
 .uchip{ display:inline-block; border:1pt solid var(--line-chip); background:var(--surface);
-  border-radius:10pt; padding:0 5pt; margin:.6mm 0 .6mm 1.2mm; font-size:.9em }
-.uvs{ color:var(--slate-deep); font-size:.85em }
+  border-radius:10pt; padding:0 5pt; margin:.6mm 0 .6mm 1.2mm; font-size:max(.9em,7.05pt) }
+.uvs{ color:var(--slate-deep); font-size:max(.85em,7.05pt) }
 .ufoot{ border-top:1pt solid var(--hairline); margin-top:2mm; padding-top:1.6mm;
-  color:var(--slate-deep); font-size:.8em; display:flex; justify-content:space-between }
-.tight .uc{ margin-bottom:2mm; padding:1.8mm 2.2mm }
+  color:var(--slate-deep); font-size:max(.8em,7.05pt); display:flex; justify-content:space-between }
+body.tight{ line-height:1.35 }
+.tight .ucols{ column-gap:4mm }
+.tight .uchain{ line-height:1.62 }
+.tight .uchip{ font-size:max(.85em,7.05pt) }
+.tight .upage{ padding-top:1mm }
+.tight .uhead{ margin-bottom:2mm; padding-bottom:1.4mm }
+.tight .uc{ margin-bottom:1.6mm; padding:1.4mm 2.1mm }
+.tight .uc h3{ margin-bottom:1mm }
 .tight .up li{ margin:.2mm 0 }
+.tight .utbl{ line-height:1.3 }
+.tight .utbl td{ padding:.35mm 1.3mm }
+.tight .utbl th{ padding:.7mm 1.4mm }
+.tight .usk b{ display:inline; margin:0 0 0 2mm }
+.tight .usk span{ margin:.35mm 0 .35mm 1mm; font-size:max(.82em,7.05pt) }
+.tight .uchip{ margin:.35mm 0 .35mm 1mm }
+.tight .ufoot{ margin-top:1.2mm; padding-top:1mm }
+.up li{ break-inside:avoid }
 .term,.numbadge,.un{ background-color:var(--hl); color:inherit; border:0; padding:0 .2em;
   border-radius:.2em; display:inline; line-height:inherit; box-decoration-break:clone;
   -webkit-box-decoration-break:clone; box-shadow:none; text-shadow:none }
@@ -474,8 +526,8 @@ def build_ultra(content_path: str, *, out_dir: str = "output",
                            trimmed_ids=trimmed_ids(), single=single_mode,
                            extra_css=extra_css)
         _render_pdf(html, pdf_path, work, session,
-                    margin={"top": "8mm", "bottom": "8mm",
-                            "left": "9mm", "right": "9mm"}, tag="ultra")
+                    margin={"top": "6.5mm", "bottom": "6.5mm",
+                            "left": "7.5mm", "right": "7.5mm"}, tag="ultra")
         doc = pymupdf.open(str(pdf_path))
         marker = None
         probe = normalize_text("جزئیات تعیین‌کننده")
@@ -518,9 +570,24 @@ def build_ultra(content_path: str, *, out_dir: str = "output",
                       if c.movable and c.pool == 1 and c.kind in ("table", "defs", "numbers")
                       and any(not u.dropped for u in c.uitems))
             mv.pool = 2
+            mv.movable = False  # قفل ضد رفت‌وبرگشت در نردبان جاگیری
             for u in mv.uitems:
                 u.pool = 2
             acted = f"move:{mv.kind}->p2"
+        elif pool == 2 and p1_used < 0.92 and any(
+                c.movable and c.pool == 2 and c.kind in ("numbers", "chips", "points")
+                and any(not u.dropped for u in c.uitems) for c in comps):
+            # دم خالی صفحهٔ ۱ را با کامپوننت متحرک صفحهٔ ۲ پر کن (قرارداد دوصفحه‌ای
+            # و همهٔ Aها سر جایشان می‌مانند؛ فقط جای نمایشی عوض می‌شود).
+            mv = next(c for c in comps
+                      if c.movable and c.pool == 2
+                      and c.kind in ("numbers", "chips", "points")
+                      and any(not u.dropped for u in c.uitems))
+            mv.pool = 1
+            mv.movable = False  # قفل ضد رفت‌وبرگشت در نردبان جاگیری
+            for u in mv.uitems:
+                u.pool = 1
+            acted = f"move:{mv.kind}->p1"
         elif base - 0.3 >= floor:
             base = round(base - 0.3, 1)
             acted = f"font:{base}"

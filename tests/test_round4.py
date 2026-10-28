@@ -153,6 +153,6 @@ def test_pilot_decisions_logged_and_content_preserved():
     rep = json.loads((ROOT / "output" / "build_report.json").read_text(encoding="utf-8"))
     assert rep["qa"]["ok"]
     fig_decisions = [d for d in rep["layout_decisions"] if d["kind"] == "figure"]
-    assert len(fig_decisions) == 11
+    assert len(fig_decisions) == 31  # نسخهٔ کامل جلسه: ۳۱ شکل
     assert all("candidates" in d and d["candidates"] for d in fig_decisions)
     assert rep["content_analysis"][0]["archetype"]

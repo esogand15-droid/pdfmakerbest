@@ -170,4 +170,4 @@ def test_cover_contains_logo_image_and_brand_text():
     # تصاویر محتوایی با مدل برابرند (دارایی برند در شمارش شکل‌ها نیست)
     import json
     qa = json.loads((ROOT / "output" / "build_report.json").read_text(encoding="utf-8"))["qa"]
-    assert qa["figures_pdf"] == qa["figures_model"] == 11
+    assert qa["figures_pdf"] == qa["figures_model"] == 31  # نسخهٔ کامل جلسه

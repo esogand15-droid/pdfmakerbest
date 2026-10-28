@@ -15,7 +15,7 @@ sys.path.insert(0, str(ROOT / "engine"))
 
 from humsyar.model import load_session, normalize_text  # noqa: E402
 from humsyar.revision import extract_items  # noqa: E402
-from humsyar.ultra import _cfg, build_components, dedup, prioritize  # noqa: E402
+from humsyar.ultra import _cfg, _has_quantity, build_components, dedup, prioritize  # noqa: E402
 
 PILOT = ROOT / "content" / "session01_pilot.yaml"
 ULTRA_PDF = ROOT / "output" / "session01_pilot_ultra.pdf"
@@ -39,9 +39,11 @@ def test_priority_rules():
     assert by_kind["table_row"] == {"A"}
     assert by_kind["figure_visual"] == {"X"}
     # هر گزارهٔ عدددار علمی دست‌کم A است؛ استثناهای مجاز: کپشن انگلیسی شکل و
-    # جملهٔ ارجاعی به خودِ سند (ناوبری، نه نکتهٔ علمی)
+    # جملهٔ ارجاعی به خودِ سند (ناوبری، نه نکتهٔ علمی). «عدد» یعنی کمیت علمی؛
+    # رقم ارجاعیِ تنها (شمارهٔ شکل/جدول/صفحه/فصل/مبحث/جلسه) کمیت نیست —
+    # پالایش نسخهٔ کامل: با ۳۱ شکل، شرح‌های پر از ارجاع A کاذب می‌ساختند.
     for u in us:
-        if (u.item.has_number and u.priority != "X"
+        if (_has_quantity(u.item.text) and u.priority != "X"
                 and u.item.meta.get("lang") != "en"
                 and not any(m in u.item.text for m in ("قاب پایانی", "همین جزوه", "در این جزوه"))):
             assert u.priority == "A", u.item.id

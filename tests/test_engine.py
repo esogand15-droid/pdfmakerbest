@@ -84,7 +84,7 @@ def test_built_pdf_qa_and_facts(session):
     _sheet = set((_rep.get("ultra_sheet") or {}).get("pages_in_book") or [])
     qa = run_qa(session, PILOT_PDF, CONTROL_FACTS, sheet_pages=_sheet)
     assert qa["ok"], qa["errors"]
-    assert qa["figures_pdf"] == qa["figures_model"] == 11
+    assert qa["figures_pdf"] == qa["figures_model"] == 31  # نسخهٔ کامل جلسه: هر ۳۱ شکل جزوهٔ مادر
     assert qa["min_font_pt"] >= 7.0
     import pymupdf
     doc = pymupdf.open(str(PILOT_PDF))
