@@ -168,17 +168,24 @@ def test_packing_is_deterministic(session):
 
 
 def test_fill_metrics_meet_round2_targets():
-    """هدف‌های پُری (به‌روزرسانی Round 5): سند حالا مادهٔ پایانی دارد و صفحهٔ
-    پایانِ مبحث (پیش از «جمع‌بندی») می‌تواند یکی باشد؛ اما میانگین باید بالا
-    بماند و هیچ صفحه‌ای واقعاً خالی نباشد."""
+    """هدف‌های پُری (به‌روزرسانی Round 9): معیار سخت‌گیرانه برای صفحات بدنه است؛
+    صفحات پسامطلب (دنبالهٔ نقشهٔ مرور، صفحهٔ درخت، جمع‌بندی، واژه‌نامه) ساختاری‌اند
+    و فقط نباید واقعاً خالی باشند. میانگین کلی همچنان باید بالا بماند."""
+    import pymupdf
     report = json.loads((ROOT / "output" / "build_report.json").read_text(encoding="utf-8"))
     qa = report["qa"]
     assert qa["ok"]
     assert qa.get("fill_avg_pct", 0) >= 85
     fills = qa.get("fill_per_page") or []
-    content_fills = [f for f in fills[2:-1] if f is not None]  # جز کاور/فهرست/صفحهٔ آخر
-    assert all(f >= 60 for f in content_fills), fills
-    assert sum(1 for f in content_fills if f < 70) <= 1, fills
+    doc = pymupdf.open(str(ROOT / "output" / "neuroanat_s01_pilot_final.pdf"))
+    body_end = next((i + 1 for i, pg in enumerate(doc)
+                     if i + 1 >= 3 and normalize_text("نقشهٔ جامع مرور")
+                     in normalize_text(pg.get_text())), doc.page_count)
+    body_fills = [f for f in fills[2:body_end - 1] if f is not None]
+    assert all(f >= 60 for f in body_fills), fills
+    assert sum(1 for f in body_fills if f < 70) <= 1, fills
+    back_fills = [f for f in fills[body_end - 1:] if f is not None]
+    assert all(f >= 40 for f in back_fills), fills
 
 
 def test_science_conflict_still_displayed(pdf):

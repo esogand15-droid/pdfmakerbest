@@ -287,8 +287,8 @@ table.tbl .hl{ font-weight:700; color:var(--c-conflict); }
 .tree-node--root .tree-label{ fill:#fff; }
 .tree-node--root .tree-note{ fill:#cfe6e9; }
 .tree-node--alert rect{ stroke:var(--c-conflict); stroke-dasharray:4 3; fill:var(--bg-conflict); }
-.tree-label{ font-family:"Vazirmatn"; font-size:12.5px; font-weight:700; fill:var(--brand-ink); text-anchor:middle; }
-.tree-note{ font-family:"Vazirmatn"; font-size:10.5px; fill:var(--muted); text-anchor:middle; }
+.tree-label{ font-family:"Vazirmatn"; font-size:var(--tl-fs,12.5px); font-weight:700; fill:var(--brand-ink); text-anchor:middle; }
+.tree-note{ font-family:"Vazirmatn"; font-size:var(--tn-fs,10.5px); fill:var(--muted); text-anchor:middle; }
 
 /* چک‌لیست خودآزمایی + جمع‌بندی */
 .checklist{ margin:8pt 0; break-inside:avoid; border:1.2px solid var(--brand); border-radius:var(--r); padding:8pt 12pt 6pt; background:var(--tint);}
@@ -315,8 +315,6 @@ table.tbl .hl{ font-weight:700; color:var(--c-conflict); }
 /* صفحه‌بندی */
 .pagebreak{ break-before:page; }
 .avoid-break{ break-inside:avoid; }
-.doc-end{ margin-top:14pt; border-top:1.6px solid var(--brand); padding-top:6pt; text-align:center; color:var(--muted); font-size:8.6pt;}
-.doc-end .en{ font-weight:700; letter-spacing:1px; color:var(--brand-deep);}
 
 /* راهنمای خواندن */
 .guide{ margin:4pt 0 6pt; }
@@ -394,9 +392,6 @@ table.tbl .hl{ font-weight:700; color:var(--c-conflict); }
 .lists .dots{ flex:1; border-bottom:.5pt dotted #B9CBDA; transform:translateY(-2pt); }
 .lists .pno{ flex:none; font-weight:700; color:var(--brand-deep); }
 /* نمونهٔ واقعی کادرها در راهنمای خواندن */
-.guide__samples{ display:flex; gap:8pt; margin-top:8pt; flex-wrap:wrap; }
-.guide-sample{ flex:1 1 30%; margin:0 !important; font-size:8.1pt; }
-.guide-sample p{ margin:1.5pt 0 0; line-height:1.7; }
 /* تم چاپ کم‌جوهر: داخل روشن و تخت، جلد همان تیره می‌ماند */
 body.print-theme .callout, body.print-theme .topic-card, body.print-theme .summary-box{
   background:#FFF !important; box-shadow:none !important; }
@@ -431,8 +426,8 @@ body.print-theme .numbadge{ background:#FFF; }
 .tbl__takeaway{ margin:4pt 2pt 8pt; font-size:9.3pt; color:var(--brand-deep);
   border-inline-start:3pt solid var(--brand); padding:2pt 7pt; background:#F7FAFC; border-radius:6pt; }
 /* واژه‌نامه و پاسخ‌نامه و شناسنامه */
-.glossary, .answerkey, .colophon{ margin-top:14pt; border-top:1.6pt solid var(--brand); padding-top:8pt; }
-.glossary h2, .answerkey h2, .colophon h2{ font-size:14pt; color:var(--brand-deep); margin:0 0 4pt;
+.glossary, .answerkey{ margin-top:14pt; border-top:1.6pt solid var(--brand); padding-top:8pt; }
+.glossary h2, .answerkey h2{ font-size:14pt; color:var(--brand-deep); margin:0 0 4pt;
   break-after:avoid; }
 .gloss__note{ font-size:8pt; color:#5B7186; margin:0 0 4pt; }
 .gloss__grid{ columns:2; column-gap:14pt; font-size:8.3pt; line-height:1.66; }
@@ -442,11 +437,6 @@ body.print-theme .numbadge{ background:#FFF; }
 .gloss__pg{ flex:none; color:var(--brand); font-weight:700; font-size:8.4pt; }
 .ak__it{ margin:3pt 0; line-height:1.9; }
 .ak__it b{ color:var(--brand-deep); }
-.colophon{ border:1pt solid #D7E3EC; border-radius:10pt; padding:9pt 11pt; border-top:1.6pt solid var(--brand);
-  background:#FAFCFE; break-inside:avoid; }
-.col__row{ display:flex; gap:8pt; margin:3pt 0; font-size:9.2pt; line-height:1.85; }
-.col__row b{ flex:none; width:92pt; color:var(--brand-deep); }
-.col__brand{ margin-top:7pt; text-align:left; font-weight:800; color:var(--brand-deep); font-size:9.5pt; }
 
 /* ===== راند ۶: کتابخانهٔ آیکون و نقطهٔ رنگی موجودیت ===== */
 .ic{ vertical-align:-2.5pt; flex:none; }
@@ -483,3 +473,34 @@ body.print-theme .numbadge{ background:#FFF; }
 .rev__terms{ break-inside:avoid; margin:2pt 0 5pt; line-height:2.05; }
 .rev__term{ margin:1pt 0 1pt 3pt; white-space:nowrap; display:inline-block; }
 body.print-theme .rev__it, body.print-theme .rev__head{ background:#FFF !important; }
+
+/* --- راند ۹: صفحهٔ درخت، راهنمای فشردهٔ علائم، واژه‌نامهٔ صفحهٔ آخر --- */
+.h-ic{ display:flex; align-items:center; gap:5pt; }
+.h-ic .ic{ color:var(--brand); flex:none; }
+span.h-ic{ display:inline-flex; }
+.src .ic{ vertical-align:-1.5pt; margin-inline-end:2pt; color:var(--brand); }
+.tldr__tag .ic{ vertical-align:-2pt; }
+.treepage{ break-before:page; }
+.treepage h2{ margin:0 0 2pt; }
+.treepage__sub{ font-size:8.6pt; color:var(--muted); margin:0 0 5pt; }
+.treepage .tree-svg{ display:block; margin-inline:auto; }
+.treepage__terms{ font-size:7.9pt; line-height:1.82; border-top:.6pt solid var(--line);
+  padding-top:4pt; margin-top:4pt; color:var(--brand-deep); }
+.treepage__terms .chip{ margin:1pt 0 1pt 3pt; white-space:nowrap; display:inline-block; }
+.gloss--page{ break-before:page; }
+.gloss--page .gloss__grid{ columns:3; column-gap:12pt; font-size:8.1pt; line-height:1.62; }
+.guide__line{ font-size:9pt; line-height:1.9; margin:2pt 0 0; }
+.iguide{ display:grid; grid-template-columns:repeat(4,1fr); gap:4pt 12pt;
+  border-top:.6pt solid var(--line); padding-top:6.5pt; margin-top:6pt; }
+.iguide__it{ display:flex; align-items:center; gap:4.5pt; font-size:8.1pt;
+  color:var(--brand-deep); white-space:nowrap; }
+.iguide__it .ic{ color:var(--brand); flex:none; }
+.closing-head{ margin-top:10pt; }
+.gloss__it{ break-inside:avoid; }
+.srclist{ margin-top:12pt; border-top:.6pt solid var(--line); padding-top:7pt; }
+.srclist h3{ margin:0 0 5pt; }
+.srclist__row{ display:flex; gap:7pt; align-items:baseline; margin:3.5pt 0;
+  font-size:8.6pt; line-height:2; }
+.srclist__row b{ flex:none; color:var(--brand-deep); }
+.srclist__row .ic{ color:var(--brand); margin-inline-end:3pt; }
+.srclist__row .chip{ margin:1pt 0 1pt 3pt; }

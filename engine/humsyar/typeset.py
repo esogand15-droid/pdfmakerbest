@@ -12,7 +12,7 @@ from __future__ import annotations
 import re
 from html import escape
 
-from .diagrams import tree_svg
+from .diagrams import PAGE_STYLE as TREE_PAGE_STYLE, measure_tree, session_tree, tree_svg
 from .entities import entity_color, entity_css_vars
 from .icons import CALLOUT_ICONS, icon_svg
 from .revision import extract_items
@@ -59,7 +59,9 @@ def _tree_color(node: dict) -> str | None:
 def src_chips(sources: list[Source], show: bool = True) -> str:
     if not show or not sources:
         return ""
-    return " ".join(f'<span class="src"><b>منبع:</b> {escape(s.label())}</span>' for s in sources)
+    return " ".join(
+        f'<span class="src">{icon_svg("reference", 9)}<b>منبع:</b> {escape(s.label())}</span>'
+        for s in sources)
 
 
 class Typesetter:
@@ -84,19 +86,20 @@ class Typesetter:
         body = [self.toc_page()]
         for topic in s.topics:
             body.append(self.topic(topic))
-        if s.closing:
-            body.append('<div class="section" style="margin-top:16pt"><h3>جمع‌بندی و مرور جلسه</h3></div>')
-            body.append(self.render_blocks(s.closing))
         body.append(self.revision_map())
-        body.append(self.glossary())
+        tree_html = self.tree_page()
+        body.append(tree_html)
+        # درخت‌های تألیفیِ پایانی در صفحهٔ درخت مصرف شده‌اند؛ این‌جا فقط جمع‌بندی‌ها می‌آیند
+        closing_blocks = [b for b in s.closing
+                          if not (tree_html and b.type == "tree")]
+        if closing_blocks:
+            body.append(
+                '<div class="section closing-head"><h2 class="h-ic">'
+                + icon_svg("summary", 15) + 'جمع‌بندی و مرور جلسه</h2></div>')
+            body.append(self.render_blocks(closing_blocks))
+            body.append(self.sources_list())
         body.append(self.answer_key())
-        body.append(self.colophon())
-        body.append(
-            f'<div class="doc-end"><span class="en">{escape(self.brand["en"])}</span> · جزوهٔ '
-            f'{escape(s.course)} — جلسهٔ {fa_num(s.session_number)} · نسخهٔ {escape(s.version)}'
-            f'<br>این سند با موتور جزوه‌ساز {escape(self.brand["fa"])} از روی جزوهٔ مادر تولید شده است؛ '
-            f'ارجاع هر مطلب با برچسب منبع در کنار آن آمده است.</div>'
-        )
+        body.append(self.glossary())
         favicon = (f'<link rel="icon" type="image/png" href="{self.brand["favicon_uri"]}">'
                    if self.brand.get("favicon_uri") else "")
         return (
@@ -207,50 +210,30 @@ class Typesetter:
         return f'<div class="lists">{col_f}{col_t}</div>'
 
     def reading_guide(self) -> str:
-        """راهنمای خواندن: معنای کادرها و برچسب منبع — مبلمان ثابت جزوه، نه محتوای علمی."""
-        guide_texts = {
-            "key": "مفهومی که باید در نگاه اول دیده شود.",
-            "clinical": "کاربرد بالینی همان مطلب، به نقل از خود جزوه/منابع.",
-            "warning": "جای اشتباه رایج یا استثنای قاعده.",
-            "bridge": "پل میان آناتومی و کارکرد.",
-            "conflict": "جایی که دو منبع عدد/عبارت متفاوت دارند؛ هر دو می‌مانند تا تیم علمی تصمیم بگیرد.",
-            "exam": "فقط وقتی خود منبع چنین برچسبی زده باشد.",
-            "definition": "تعریف کوتاه و دقیق یک اصطلاح.",
-            "example": "مثال آموزشیِ موجود در خود محتوا.",
-            "summary": "جمع‌بندی سریع همان بخش.",
-            "exception": "جایی که قاعدهٔ کلی صدق نمی‌کند؛ مرز اعتبار قاعده.",
-            "mnemonic": "یادیار کوتاهِ موجود در خود محتوا برای به‌خاطرسپاری.",
-            "formula": "فرمول یا رابطهٔ عددیِ خود منبع، با نمادهای دقیق خودش.",
-            "terminology": "ریشه و کاربرد اصطلاح، به نقل از خود منبع.",
-            "unresolved": "موردی که هنوز پاسخ قطعی در منابع این جلسه ندارد.",
-        }
-        # راهنما فقط کادرهایی را توضیح می‌دهد که واقعاً در همین جلسه به کار رفته‌اند
-        used = {b.data.get("kind") for b in self.session.all_blocks() if b.type == "callout"}
-        items = [(k, KIND_LABELS[k], guide_texts[k]) for k in KIND_ORDER if k in used]
-        rows = ""  # نمونهٔ واقعی کادر خودش راهنماست؛ ردیف توضیحی تکراری حذف شد
-        # نمونهٔ واقعی قالب کادر (متن نمونهٔ رابط کاربر است، نه محتوای علمی)
-        sample_texts = {
-            "key": "نمونهٔ کادر: جملهٔ محوری بخش این‌جا برجسته می‌شود.",
-            "clinical": "نمونهٔ کادر: کاربرد بالینی، فقط به نقل از خود منبع.",
-            "warning": "نمونهٔ کادر: استثنا یا دام رایج این‌جا جدا می‌شود.",
-            "conflict": "نمونهٔ کادر: اختلاف دو منبع، بدون دست‌کاری، کنار هم می‌ماند.",
-            "definition": "نمونهٔ کادر: تعریف کوتاه اصطلاح این‌جا می‌آید.",
-            "bridge": "نمونهٔ کادر: پیوند ساختار و کارکرد این‌جا نشان داده می‌شود.",
-            "example": "نمونهٔ کادر: مثال موجود در خود محتوا این‌جا می‌نشیند.",
-            "summary": "نمونهٔ کادر: جمع‌بندی همان بخش این‌جا می‌آید.",
-            "exam": "نمونهٔ کادر: فقط با برچسب صریح خود منبع.",
-        }
-        samples = "".join(
-            f'<aside class="callout callout--{k} guide-sample"><div class="callout__head">'
-            f'{icon(k)}<span>{KIND_LABELS[k]}</span></div><p>{guide_texts[k]}</p></aside>'
-            for k in KIND_ORDER if k in used and k in guide_texts)
+        """راهنمای سریع علائم: آیکون + معنای چندکلمه‌ای؛ بدون کادر نمونه و شرح مفصل."""
+        seen: dict[str, str] = {}
+
+        def add(icon_name: str, label: str) -> None:
+            if icon_name not in seen:
+                seen[icon_name] = label
+
+        for k in KIND_ORDER:  # معنای ثابت کادرهای آموزشی در کل جزوه
+            add(CALLOUT_ICONS.get(k, "note"), KIND_LABELS[k])
+        for name, label in (("glance", "در یک نگاه"), ("target", "هدف‌های یادگیری"),
+                            ("terminology", "اصطلاحات کلیدی"), ("process", "فرایند گام‌به‌گام"),
+                            ("compare", "مقایسه"), ("branch", "نمودار درختی/طبقه‌بندی"),
+                            ("compass", "نقشهٔ جامع مرور"), ("microscope", "جزئیات درون شکل"),
+                            ("book", "واژه‌نامه"), ("reference", "منبع مطلب")):
+            add(name, label)
+        items = "".join(
+            f'<span class="iguide__it">{icon_svg(n, 12)}<span>{escape(l)}</span></span>'
+            for n, l in seen.items())
         return f"""
 <div class="guide avoid-break">
   <h2>چطور این جزوه را بخوانیم؟</h2>
-  <p>کنار هر مطلب، برچسب <span class="src"><b>منبع:</b> جزوهٔ درس، ص ۹</span> می‌بینید؛ یعنی آن
-  جمله دقیقاً از کجای جزوهٔ درس، اسنل یا گری آمده است. اصطلاح‌ها در نخستین ورودشان به صورت
-  <span class="term">فارسی <bdi class="en">(English)</bdi></span> می‌آیند. کادرها هم هر کدام معنای ثابتی دارند:</p>
-  <div class="guide__samples">{samples}</div>
+  <p class="guide__line">کنار هر مطلب، منبعش آمده است: <span class="src">{icon_svg("reference", 9)}<b>منبع:</b> جزوهٔ درس، ص ۹</span>
+  و اصطلاح‌ها در نخستین ورود با معادل <bdi class="en">(English)</bdi> می‌آیند. معنای علائم در کل جزوه ثابت است:</p>
+  <div class="iguide">{items}</div>
 </div>"""
 
     # -------------------------------------------------------------- مبحث
@@ -285,11 +268,11 @@ class Typesetter:
     <div class="topic-card">
       <p class="why"><b>چرا مهم است؟</b> {inline(t.why)}</p>
       <div class="topic-card__grid">
-        <div><h3>در این مبحث یاد می‌گیرید:</h3><ul class="objlist">{objs}</ul></div>
+        <div><h3 class="h-ic">{icon_svg('target', 12)}در این مبحث یاد می‌گیرید:</h3><ul class="objlist">{objs}</ul></div>
         <div><h3>پیش‌نیاز ضروری</h3><div class="chips">{pre}</div>
              <h3 style="margin-top:4pt">پیش‌نیاز پیشنهادی</h3><div class="chips">{pre_s}</div></div>
       </div>
-      <div class="topic-card__foot">اصطلاحات کلیدی:
+      <div class="topic-card__foot"><span class="h-ic">{icon_svg('terminology', 12)}اصطلاحات کلیدی:</span>
         <span class="chips" style="display:inline-flex">{terms}</span></div>
     </div>
   </div>"""
@@ -314,6 +297,51 @@ class Typesetter:
                 f'{src_chips(b.sources, self.show_sources)}</p>')
 
     # ---------------------------------------------------------- مادهٔ پایانی
+    def tree_page(self) -> str:
+        """صفحهٔ اختصاصی نمودار درختی جامع جلسه — ساخته‌شدهٔ مکانیکی از ساختار محتوا.
+
+        ریشه ← مبحث ← بخش ← طبقه‌بندی‌ها/جدول‌ها/فرایندها + درخت(های) تألیفیِ
+        خود محتوا (با attach_to). هیچ برچسبی ساخته یا بازنویسی نمی‌شود.
+        """
+        cfg = (self.plan.layout_cfg or {}).get("tree_page", {})
+        if not cfg.get("enabled", True):
+            return ""
+        root = session_tree(self.session,
+                            root_label=f"جلسهٔ {fa_num(self.session.session_number)}")
+        if len(root.get("children", [])) < 1:
+            return ""
+        svg = tree_svg(root, color_for=lambda n: _tree_color(n), style=TREE_PAGE_STYLE)
+        # ابعاد صریح چاپی: درخت هرگز از صفحهٔ اختصاصی‌اش بیرون نمی‌زند
+        tw, th = measure_tree(root, TREE_PAGE_STYLE)
+        scale = min(516 / tw, 574 / th, 1.0)
+        svg = svg.replace('<svg class="tree-svg"',
+                          f'<svg class="tree-svg" width="{tw * scale:.0f}" '
+                          f'height="{th * scale:.0f}"', 1)
+        # نوار یکپارچهٔ اصطلاحات کلیدی جلسه، زیر درخت (فهرست‌های خود مباحث)
+        parts = []
+        for t in self.session.topics:
+            if not t.key_terms:
+                continue
+            chips = "".join(
+                f'<span class="chip">{escape(str(kt.get("fa", "")))}'
+                + (f' · <bdi class="en">{escape(str(kt["en"]))}</bdi>' if kt.get("en") else "")
+                + "</span>"
+                for kt in t.key_terms)
+            parts.append(f'<b>مبحث {fa_num(t.number)}:</b> {chips}')
+        srcs = ""
+        tree_blocks = [b for b in self.session.closing if b.type == "tree"]
+        if tree_blocks and self.show_sources:
+            srcs = " " + "".join(src_chips(b.sources, True) for b in tree_blocks)
+        term_rows = (f'<div class="treepage__terms"><b>اصطلاحات کلیدی جلسه —</b> '
+                     + " ".join(parts) + srcs + "</div>") if parts else ""
+        return f"""
+<div class="treepage">
+  <h2 class="h-ic">{icon_svg("branch", 15)}نمودار درختی جامع جلسه</h2>
+  <p class="treepage__sub">اسکلت طبقه‌بندی همین جلسه در یک صفحه؛ برای مرور سریع. جزئیات کامل هر شاخه در متن و نقشهٔ جامع مرور آمده است.</p>
+  {svg}
+  {term_rows}
+</div>"""
+
     def revision_map(self) -> str:
         """نقشهٔ جامع مرور: همهٔ گزاره‌های علمی جلسه، عین عبارت منبع، زیر بخش خودشان.
 
@@ -403,7 +431,7 @@ class Typesetter:
             f'<span class="rev__lg rev__lg--source_conflict">اختلاف منابع</span>'
             f'<span class="rev__lg">{icon_svg("formula", 10)} دارای عدد/مقدار</span>'
             f'<span class="rev__lg">{icon_svg("microscope", 10)} مرور سرِ شکل</span>')
-        return (f'<div class="revmap"><h2>نقشهٔ جامع مرور</h2>'
+        return (f'<div class="revmap"><h2 class="h-ic">{icon_svg("compass", 15)}نقشهٔ جامع مرور</h2>'
                 f'<p class="rev__intro">همهٔ {fa_num(n_real)} گزارهٔ علمی این جلسه — جمله‌به‌جمله و '
                 f'ردیف‌به‌ردیف — با همان عبارت خود جزوه، زیر بخش مربوطشان کنار هم چیده شده‌اند؛ '
                 f'چیزی خلاصه یا بازنویسی نشده است. شمارهٔ کنار هر بخش، صفحهٔ متن کامل آن است. '
@@ -411,6 +439,33 @@ class Typesetter:
                 f'نشانهٔ میکروسکوپ به خود شکل ارجاع داده شده است.</p>'
                 f'<div class="rev__legend">{legend}</div>'
                 f'{"".join(panels)}</div>')
+
+    def sources_list(self) -> str:
+        """منابع علمی همین جلسه — گردآوری مکانیکی برچسب‌های منبعِ خود بلوک‌ها."""
+        if not self.show_sources:
+            return ""
+        by_book: dict[str, list[str]] = {}
+        seen: set[tuple[str, str]] = set()
+        for b in self.session.all_blocks():
+            for src in b.sources or []:
+                detail = "، ".join(x for x in (
+                    f"شکل {src.figure}" if src.figure else "",
+                    f"ص {src.pages}" if src.pages else "") if x)
+                key = (src.book, detail)
+                if key in seen:
+                    continue
+                seen.add(key)
+                by_book.setdefault(src.book, []).append(detail)
+        if not by_book:
+            return ""
+        rows = ""
+        for book, details in by_book.items():
+            chips = "".join(f'<span class="chip">{escape(d)}</span>'
+                            for d in details if d)
+            rows += (f'<div class="srclist__row"><b>{icon_svg("reference", 11)}'
+                     f'{escape(book)}</b><span class="chips">{chips}</span></div>')
+        return (f'<div class="srclist"><h3 class="h-ic">{icon_svg("book", 13)}'
+                f'منابع علمی این جلسه</h3>{rows}</div>')
 
     def glossary(self) -> str:
         """واژه‌نامهٔ فارسی–انگلیسی: فقط معادل‌هایی که در خود جلسه آمده‌اند + صفحهٔ نخستین کاربرد."""
@@ -452,7 +507,7 @@ class Typesetter:
             en_html = f' <bdi class="en">({escape(en)})</bdi>' if en else ""
             items.append(f'<div class="gloss__it"><span class="gloss__fa">{escape(fa)}{en_html}</span>'
                          f'<span class="dots"></span><span class="gloss__pg">{pg_txt}</span></div>')
-        return (f'<div class="glossary"><h2>واژه‌نامهٔ فارسی–انگلیسی همین جلسه</h2>'
+        return (f'<div class="glossary gloss--page"><h2 class="h-ic">' + icon_svg("book", 15) + 'واژه‌نامهٔ فارسی–انگلیسی همین جلسه</h2>'
                 f'<p class="gloss__note">فقط اصطلاح‌هایی که در متن همین جلسه آمده‌اند؛ '
                 f'شمارهٔ صفحه، نخستین کاربرد هر اصطلاح است.</p>'
                 f'<div class="gloss__grid">{"".join(items)}</div></div>')
@@ -468,41 +523,11 @@ class Typesetter:
                 f'<p class="gloss__note">اول خودتان پاسخ دهید، بعد با این صفحه چک کنید؛ '
                 f'پاسخ درست، همان عبارتی است که در متن بخش آمده بود.</p>{rows}</div>')
 
-    def colophon(self) -> str:
-        """شناسنامهٔ نسخه — همهٔ سطرها از دادهٔ خود جلسه؛ نام/نشانی ساخته نمی‌شود."""
-        s = self.session
-        books: list[str] = []
-        for b in s.all_blocks():
-            for src in b.sources:
-                if src.book and src.book not in books:
-                    books.append(src.book)
-        needs = s.draft  # وضعیت انتشار را خود سند اعلام می‌کند، نه حدس موتور
-        topics_txt = "؛ ".join(f"مبحث {fa_num(t.number)}: {t.title}" for t in s.topics)
-        rows = [
-            ("درس و جلسه", f"{s.course} — جلسهٔ {fa_num(s.session_number)}: {s.title}"),
-            ("مباحث این نسخه", topics_txt),
-            ("نسخهٔ جزوه", s.version),
-            ("منابع به‌کاررفته", "؛ ".join(books) if books else "—"),
-            ("وضعیت انتشار",
-             "پیش‌نویس (پایلوت موتور)" if needs else "نسخهٔ نهایی"),
-            ("گزارش خطا",
-             "اگر جایی خطا یا ناهماهنگی دیدید، شمارهٔ صفحه و عنوان بخش را یادداشت کنید و به تیم علمی برسانید."),
-            ("یادداشت",
-             "این جزوه ابزار کمکیِ مطالعه است و جایگزین منابع اصلی و نظر استاد نیست؛ "
-             "مرجع نهایی هر مطلب، برچسب منبع کنار همان مطلب است."),
-        ]
-        rows_html = "".join(
-            f'<div class="col__row"><b>{escape(k)}</b><span>{escape(v)}</span></div>'
-            for k, v in rows)
-        return (f'<div class="colophon"><h2>شناسنامهٔ این نسخه</h2>{rows_html}'
-                f'<div class="col__brand">{escape(self.brand["fa"])} · '
-                f'<bdi class="en">{escape(self.brand["en"])}</bdi></div></div>')
-
     # ---------------------------------------------------------- بلوک‌های یادگیری
     def b_tldr(self, b: Block) -> str:
         return f"""
 <aside class="tldr" data-bid="{escape(b.id)}">
-  <div class="tldr__head"><span class="tldr__tag">در یک نگاه</span></div>
+  <div class="tldr__head"><span class="tldr__tag">{icon_svg('glance', 11)} در یک نگاه</span></div>
   <p>{inline(b.data["text"])}</p>
   <div class="srcrow">{src_chips(b.sources, self.show_sources)}</div>
 </aside>"""

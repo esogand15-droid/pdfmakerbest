@@ -46,7 +46,8 @@ def _pages_with(pdf_path: str, probe: str) -> list[int]:
     # صفحات ۱–۲ (کاور و فهرست‌ها) شمرده نمی‌شوند؛ عنوان جدول در «فهرست جدول‌ها» هم می‌آید
     # نقشهٔ جامع مرور (Round 7) متن ردیف‌ها را عیناً تکرار می‌کند؛ آن صفحات کنار گذاشته می‌شوند
     rev_start = next((i + 1 for i, p in enumerate(doc)
-                      if normalize_text("نقشهٔ جامع مرور") in normalize_text(p.get_text())),
+                      if i + 1 >= 3
+                      and normalize_text("نقشهٔ جامع مرور") in normalize_text(p.get_text())),
                      doc.page_count + 1)
     # صفحهٔ آغاز نقشهٔ مرور خودش شمرده می‌شود (بدنه و نقشه می‌توانند هم‌صفحه باشند)؛
     # صفحات بعد از آن فقط تکرار نقشه‌اند. صفحات ۱–۲ کاور/فهرست‌اند.

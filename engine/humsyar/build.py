@@ -69,12 +69,25 @@ def _render_pdf(html: str, out_pdf: Path, work: Path, session: Session,
         raise RuntimeError(f"رندر PDF ({tag}) ناموفق بود:\n{proc.stdout}\n{proc.stderr}")
 
 
+def _body_end_index(pages_norm: list[str], start: int) -> int:
+    """نخستین صفحهٔ پسامطلب (نقشهٔ مرور/درخت/واژه‌نامه): جست‌وجوی عنوان‌های بدنه
+    نباید به آن‌سو برود، چون آن صفحات عنوان بخش‌ها را عیناً تکرار می‌کنند."""
+    end = len(pages_norm)
+    for probe in ("نقشهٔ جامع مرور", "نمودار درختی جامع جلسه", "واژه‌نامهٔ فارسی"):
+        pn = normalize_text(probe)
+        hit = next((i for i in range(start, len(pages_norm)) if pn in pages_norm[i]), None)
+        if hit is not None:
+            end = min(end, hit)
+    return end
+
+
 def _find_heading_pages(pdf_path: Path, plan: Plan, start: int = 1) -> dict[str, int]:
     """شمارهٔ صفحهٔ هر سرفصل در PDF بدنه (بدون کاور) با جست‌وجوی ترتیبی نرمال‌شده."""
     import pymupdf
     doc = pymupdf.open(str(pdf_path))
     pages_norm = [normalize_text(p.get_text()) for p in doc]
     found: dict[str, int] = {}
+    end = _body_end_index(pages_norm, start)
     # start: نخستین اندیس صفحهٔ محتوا (بدنه: ۱ بعد از فهرست؛ نهایی: ۲ بعد از کاور+فهرست)
     for _lvl, display, anchor in plan.headings:
         parts = display.split(": ", 1)
@@ -89,7 +102,8 @@ def _find_heading_pages(pdf_path: Path, plan: Plan, start: int = 1) -> dict[str,
         for key_n in cands:
             if not key_n:
                 continue
-            hit = next((i for i in range(start, len(pages_norm)) if key_n in pages_norm[i]), None)
+            hit = next((i for i in range(start, min(end + 1, len(pages_norm)))
+                        if key_n in pages_norm[i]), None)
             if hit is not None:
                 found[anchor] = hit + 1
                 start = hit
@@ -104,6 +118,7 @@ def _find_block_pages(pdf_path: Path, session: Session, plan: Plan) -> dict[str,
     pages_norm = [normalize_text(p.get_text()) for p in doc]
     found: dict[str, int] = {}
     start = 1  # بعد از صفحهٔ فهرست
+    end = _body_end_index(pages_norm, start)
     for b in session.all_blocks():
         if b.type not in ("figure", "table"):
             continue
@@ -115,7 +130,8 @@ def _find_block_pages(pdf_path: Path, session: Session, plan: Plan) -> dict[str,
         for key_n in cands:
             if not key_n:
                 continue
-            hit = next((i for i in range(start, len(pages_norm)) if key_n in pages_norm[i]), None)
+            hit = next((i for i in range(start, min(end + 1, len(pages_norm)))
+                        if key_n in pages_norm[i]), None)
             if hit is not None:
                 found[b.id] = hit + 1
                 start = hit
@@ -153,6 +169,7 @@ def _optimize_figures(session: Session, work: Path) -> None:
     try:
         from PIL import Image
     except ImportError:
+        print('هشدار: Pillow نصب نیست؛ بهینه‌سازی تصویر رد شد (PDF پرحجم می‌شود)')
         return
     fig_dir = work / "fig"
     fig_dir.mkdir(parents=True, exist_ok=True)

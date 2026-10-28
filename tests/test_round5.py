@@ -180,13 +180,15 @@ def test_glossary_only_session_terms_with_pages():
     assert "…" in g
 
 
-def test_colophon_from_session_data():
+def test_no_colophon_or_doc_end():
+    """راند ۹ (تصمیم محصول): شناسنامه و امضای پایانی به‌طور ساختاری حذف شده‌اند."""
     s, plan = _plan()
-    c = Typesetter(plan).colophon()
-    assert "شناسنامهٔ این نسخه" in c
-    assert s.version in c
-    assert "نسخهٔ نهایی" in c and "پیش‌نویس" not in c  # سند draft نیست
-    assert "HumsYar" in c and "هامزیار" in c
+    assert not hasattr(Typesetter(plan), "colophon")
+    html = Typesetter(plan).document("")
+    assert "شناسنامه" not in html
+    assert "doc-end" not in html
+    css = (ROOT / "engine" / "themes" / "humsyar.css").read_text(encoding="utf-8")
+    assert ".colophon" not in css
 
 
 # ------------------------------------------------------------- نمودار ریلی

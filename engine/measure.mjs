@@ -4,7 +4,9 @@
  * خروجی: [{bid, top, height}] برحسب میلی‌متر — فاصلهٔ بالای هر بلوک تا بلوک بعدی
  * (شامل margin) تا شبیه‌سازی صفحه‌بندی دقیق باشد.
  */
-import { writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { brotliDecompressSync } from "node:zlib";
+import { execSync } from "node:child_process";
 import path from "node:path";
 import puppeteer from "puppeteer-core";
 
@@ -18,7 +20,17 @@ async function launchBrowser() {
     });
   }
   const chromium = (await import("@sparticuz/chromium")).default;
-  const ld = `/tmp/humsyar-chromium-libs/lib:${process.env.LD_LIBRARY_PATH || ""}`;
+  // کتابخانه‌های همراه پکیج (nspr/nss) — در محیط تازه خودمان بازش می‌کنیم
+  const libDir = "/tmp/humsyar-chromium-libs";
+  if (!existsSync(path.join(libDir, "lib", "libnspr4.so"))) {
+    const brPath = path.join(
+      path.dirname(new URL(import.meta.url).pathname),
+      "node_modules/@sparticuz/chromium/bin/al2023.tar.br");
+    mkdirSync(libDir, { recursive: true });
+    writeFileSync("/tmp/humsyar-al2023.tar", brotliDecompressSync(readFileSync(brPath)));
+    execSync(`tar xf /tmp/humsyar-al2023.tar -C ${libDir}`);
+  }
+  const ld = `${libDir}/lib:${process.env.LD_LIBRARY_PATH || ""}`;
   return puppeteer.launch({
     args: [...chromium.args, "--no-sandbox", "--disable-dev-shm-usage"],
     executablePath: await chromium.executablePath(), headless: true,

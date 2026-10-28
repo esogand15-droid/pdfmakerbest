@@ -88,8 +88,8 @@ def test_pilot_declared_final():
     from humsyar.cover import cover_html
     cover = cover_html(s, load_brand(ROOT), "")
     assert "پایلوت موتور" not in cover  # نشان پیش‌نویس روی کاور نیست
-    col = Typesetter(plan).colophon()
-    assert "نسخهٔ نهایی" in col and "پیش‌نویس" not in col
+    html = Typesetter(plan).document("")
+    assert "شناسنامه" not in html and "پیش‌نویس" not in html
 
 
 # ------------------------------------------------- راهنمای رنگ و نقطه‌ها

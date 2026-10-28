@@ -51,7 +51,7 @@ class Block:
         """همهٔ رشته‌های متنی بلوک؛ برای تست پوشش محتوا در PDF نهایی."""
         out: list[str] = []
 
-        skip = {"file", "layout", "quality_flags"}
+        skip = {"file", "layout", "quality_flags", "attach_to"}
 
         def walk(v: Any) -> None:
             if isinstance(v, str):
