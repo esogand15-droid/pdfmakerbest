@@ -145,7 +145,7 @@ def test_icon_system_expanded_and_used():
     s, plan = _plan()
     html = Typesetter(plan).document("")
     for cls in ("ic--target", "ic--branch", "ic--book", "ic--compass",
-                "ic--reference", "ic--terminology", "ic--glance"):
+                "ic--reference", "ic--terminology"):
         assert cls in html, cls
 
 

@@ -54,7 +54,6 @@
    "title": "آکسون و منشأ آن: تپهٔ آکسونی و قطعهٔ اولیه",
    "blocks": [
     "s01t4-s1",
-    "s01t4-tl1",
     "s01t4-p1",
     "s01t4-p2",
     "s01t4-p3",
@@ -63,7 +62,6 @@
    ],
    "counts": {
     "section": 1,
-    "tldr": 1,
     "paragraph": 4,
     "figure": 1
    },
@@ -182,7 +180,6 @@
    "title": "شش سلول گلیال در یک نگاه: منشأ، محل، وظیفه",
    "blocks": [
     "s01t6-s1",
-    "s01t6-tl1",
     "s01t6-p1",
     "s01t6-p2",
     "s01t6-f1",
@@ -191,7 +188,6 @@
    ],
    "counts": {
     "section": 1,
-    "tldr": 1,
     "paragraph": 2,
     "figure": 2,
     "table": 1
@@ -537,8 +533,6 @@
   ],
   "unassigned": [],
   "excluded_derived_blocks": [
-   "s01t4-tl1",
-   "s01t6-tl1",
    "s01-tree-glia"
   ],
   "complete": true
@@ -912,9 +906,9 @@
    "figures": 0,
    "process_tree": 0,
    "callouts": 0,
-   "height": 152.9,
-   "density": "mid",
-   "signature": "TFalseFFalsePFalseCFalseDmid"
+   "height": 112.5,
+   "density": "low",
+   "signature": "TFalseFFalsePFalseCFalseDlow"
   },
   {
    "page": 2,
@@ -952,7 +946,7 @@
    "figures": 0,
    "process_tree": 0,
    "callouts": 1,
-   "height": 129.2,
+   "height": 96.3,
    "density": "low",
    "signature": "TFalseFFalsePFalseCFalseDlow"
   },
@@ -1033,18 +1027,18 @@
     "round": 1,
     "findings": [
      {
-      "page": 2,
-      "type": "overfull",
-      "severity": "info",
-      "detail": "تراکم نویسه 2684 در برابر میانهٔ 1886",
-      "cause": "تراکم بالای محتوای همان بخش",
-      "block": null
-     },
-     {
       "page": 5,
       "type": "low_fill",
       "severity": "warn",
       "detail": "پُری صفحه 61% است",
+      "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
+      "block": null
+     },
+     {
+      "page": 7,
+      "type": "low_fill",
+      "severity": "warn",
+      "detail": "پُری صفحه 44% است",
       "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
       "block": null
      },
@@ -1118,18 +1112,18 @@
   ],
   "final_findings": [
    {
-    "page": 2,
-    "type": "overfull",
-    "severity": "info",
-    "detail": "تراکم نویسه 2684 در برابر میانهٔ 1886",
-    "cause": "تراکم بالای محتوای همان بخش",
-    "block": null
-   },
-   {
     "page": 5,
     "type": "low_fill",
     "severity": "warn",
     "detail": "پُری صفحه 61% است",
+    "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
+    "block": null
+   },
+   {
+    "page": 7,
+    "type": "low_fill",
+    "severity": "warn",
+    "detail": "پُری صفحه 44% است",
     "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
     "block": null
    },
@@ -1277,8 +1271,6 @@
    ],
    "unassigned": [],
    "excluded_derived_blocks": [
-    "s01t4-tl1",
-    "s01t6-tl1",
     "s01-tree-glia"
    ],
    "complete": true
@@ -1287,9 +1279,10 @@
   "warnings": [
    "ماتریس پوشش: 11 مورد جزئیات درون‌تصویر ماشینی قابل استخراج نیست و به خود شکل ارجاع داده شده است",
    "صفحات کم‌تراکم نسبت به میانگین (بررسی فضای سفید): [20]",
-   "میانگین پُری صفحات محتوایی 87٪ است (هدف ≥۸۸٪)",
-   "صفحات با پُری زیر ۷۰٪ (نیازمند توضیح/اصلاح): [6, 18, 20]",
+   "میانگین پُری صفحات محتوایی 85٪ است (هدف ≥۸۸٪)",
+   "صفحات با پُری زیر ۷۰٪ (نیازمند توضیح/اصلاح): [6, 8, 18, 20]",
    "بازرسی بصری: صفحهٔ 6 — پُری صفحه 61% است (علت محتمل: بلوک نشکن بعدی در باقیمانده جا نشده)",
+   "بازرسی بصری: صفحهٔ 8 — پُری صفحه 44% است (علت محتمل: بلوک نشکن بعدی در باقیمانده جا نشده)",
    "بازرسی بصری: صفحهٔ 18 — پُری صفحه 52% است (علت محتمل: بلوک نشکن بعدی در باقیمانده جا نشده)",
    "بازرسی بصری: صفحهٔ 20 — پُری صفحه 43% است (علت محتمل: بلوک نشکن بعدی در باقیمانده جا نشده)"
   ],
@@ -1315,13 +1308,13 @@
   "min_font_pt": 7.2,
   "chars_per_page": [
    232,
-   2066,
-   2806,
+   2044,
+   2657,
    1509,
    2008,
    1859,
-   2022,
-   1398,
+   2341,
+   967,
    1921,
    2610,
    2407,
@@ -1334,19 +1327,19 @@
    1983,
    1853,
    716,
-   1745
+   1739
   ],
-  "avg_chars_per_page": 2382,
+  "avg_chars_per_page": 2367,
   "cover_full_bleed": true,
   "fill_per_page": [
    null,
    null,
-   94,
+   79,
    92,
    99,
    61,
-   72,
-   79,
+   94,
+   44,
    96,
    98,
    100,
@@ -1359,14 +1352,13 @@
    52,
    95,
    43,
-   43
+   55
   ],
-  "fill_avg_pct": 87,
+  "fill_avg_pct": 85,
   "tables_checked": 4,
   "tables_split_badly": [],
   "review_items": [
    "s01t4-s1 [needs_review] (section)",
-   "s01t4-tl1 [needs_review] (tldr)",
    "s01t4-p1 [needs_review] (paragraph)",
    "s01t4-p2 [needs_review] (paragraph)",
    "s01t4-p3 [needs_review] (paragraph)",
@@ -1384,7 +1376,6 @@
    "s01t4-c1 [unresolved_conflict] (callout)",
    "s01t4-c2 [needs_review] (callout)",
    "s01t6-s1 [needs_review] (section)",
-   "s01t6-tl1 [needs_review] (tldr)",
    "s01t6-p1 [needs_review] (paragraph)",
    "s01t6-p2 [needs_review] (paragraph)",
    "s01t6-f1 [needs_review] (figure)",
@@ -1423,18 +1414,18 @@
   ],
   "inspection_findings": [
    {
-    "page": 2,
-    "type": "overfull",
-    "severity": "info",
-    "detail": "تراکم نویسه 2684 در برابر میانهٔ 1886",
-    "cause": "تراکم بالای محتوای همان بخش",
-    "block": null
-   },
-   {
     "page": 5,
     "type": "low_fill",
     "severity": "warn",
     "detail": "پُری صفحه 61% است",
+    "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
+    "block": null
+   },
+   {
+    "page": 7,
+    "type": "low_fill",
+    "severity": "warn",
+    "detail": "پُری صفحه 44% است",
     "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
     "block": null
    },

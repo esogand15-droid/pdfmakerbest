@@ -1,0 +1,97 @@
+/* ============================================================
+   HumsYar — Brand Design Tokens (منبع واحد رنگ‌های برند)
+   ------------------------------------------------------------
+   تنها فایلی که مجاز است مقدار HEX داشته باشد.
+   - سند بدنه، کاور و قاب این فایل را پیش از استایل‌های خودشان می‌خوانند.
+   - کد پایتون (کاور/قاب/نوار پیشرفت/SVG) از راه humsyar/palette.py همین
+     فایل را می‌خواند؛ فهرست دومی از رنگ‌ها ساخته نمی‌شود.
+   - رنگ داخل تصاویر اصلی کتاب‌ها مشمول این پالت نیست.
+   ============================================================ */
+:root {
+  /* --- هستهٔ برند --- */
+  --navy-950: #050D18;
+  --navy-900: #061E4E;
+  --navy-800: #0F2A52;
+  --navy-700: #0A2A7E;
+  --royal-600: #0636AE;
+  --azure-500: #0666F6;
+  --sky-400: #5FB3F1;
+  --cyan-400: #06D2DE;
+  --aqua-300: #6FE6EE;
+  --tealcyan-500: #04B9D3;
+  --teal-ink: #0A6E85;
+
+  /* --- سطوح روشن --- */
+  --white: #FFFFFF;
+  --ice-50: #F3F9FE;
+  --ice-100: #E8F4FD;
+  --ice-teal: #E6F8FB;
+  --hairline: #D3E2F2;
+
+  /* --- متن --- */
+  --ink: #0B1B3A;
+  --slate: #5B6B88;
+
+  /* --- رنگ‌های کارکردی (فقط هشدار/اختلاف واقعی) --- */
+  --warn: #E8A33D;
+  --warn-bg: #FFF4E0;
+  --conflict: #C75B3A;
+  --conflict-bg: #FBEDE8;
+  --conflict-ink: #8A3418;
+
+  /* --- گرادیان‌های برند --- */
+  --brand-grad: linear-gradient(135deg, #061E4E 0%, #0636AE 45%, #06D2DE 100%);
+  --brand-grad-h: linear-gradient(90deg, #0636AE 0%, #04B9D3 100%);
+  --cover-bg: linear-gradient(180deg, #050D18 0%, #0F2A52 100%);
+
+  /* --- فقط ناوبری مباحث (تب کناری، کارت فعال نقشهٔ جلسه) --- */
+  --topic-1: #061E4E;
+  --topic-2: #0A2A7E;
+  --topic-3: #0636AE;
+  --topic-4: #0666F6;
+  --topic-5: #0A6E85;
+  --topic-6: #4B5BD6;
+
+  /* --- سایه‌ها --- */
+  --shadow-sm: 0 1px 2px rgba(6, 30, 78, 0.08);
+  --shadow-md: 0 2px 8px rgba(6, 30, 78, 0.10);
+
+  /* ==========================================================
+     لایهٔ معنایی موتور — نام‌هایی که کامپوننت‌ها مصرف می‌کنند.
+     همه به توکن‌های بالا اشاره می‌کنند؛ این‌جا HEX تازه‌ای نیست.
+     ========================================================== */
+  --brand: var(--royal-600);            /* ساختار و تأکید اصلی بدنه */
+  --brand-deep: var(--navy-900);        /* عنوان‌ها و سطوح تیرهٔ محدود */
+  --brand-ink: var(--navy-800);         /* متن برجسته روی زمینهٔ روشن */
+  --accent: var(--azure-500);           /* ارجاع‌ها و تأکید فرعی */
+  --muted: var(--slate);                /* کپشن، منبع، توضیح ثانویه */
+  --faint: color-mix(in srgb, var(--slate) 72%, var(--white));
+  --line: var(--hairline);
+  --line-soft: var(--ice-100);
+  --paper: var(--white);
+  --soft: var(--ice-50);
+  --tint: var(--ice-teal);
+  --tint-blue: var(--ice-100);
+
+  /* رنگ نقشِ کادرهای آموزشی — معنا با آیکون+برچسب هم منتقل می‌شود، نه فقط رنگ */
+  --c-key: var(--royal-600);            --bg-key: var(--ice-100);
+  --c-clinical: var(--teal-ink);        --bg-clinical: var(--ice-teal);
+  --c-warning: color-mix(in srgb, var(--warn) 50%, var(--ink));
+  --bg-warning: var(--warn-bg);
+  --c-bridge: var(--royal-600);         --bg-bridge: var(--ice-100);
+  --c-conflict: var(--conflict);        --bg-conflict: var(--conflict-bg);
+  --c-exam: var(--navy-700);            --bg-exam: var(--ice-100);
+  --c-definition: var(--navy-700);      --bg-definition: var(--ice-50);
+  --c-example: var(--teal-ink);         --bg-example: var(--ice-teal);
+  --c-summary: var(--navy-900);         --bg-summary: var(--ice-100);
+  --c-exception: color-mix(in srgb, var(--warn) 30%, var(--conflict-ink));  /* کننتراست متن ≥۴٫۵ روی warn-bg */
+  --bg-exception: var(--warn-bg);
+  --c-mnemonic: color-mix(in srgb, var(--azure-500) 78%, var(--ink));
+  --bg-mnemonic: var(--ice-100);
+  --c-formula: var(--teal-ink);         --bg-formula: var(--ice-teal);
+  --slate-deep: color-mix(in srgb, var(--slate) 74%, var(--ink));
+  --slate-soft: color-mix(in srgb, var(--slate) 55%, var(--white));
+  --c-terminology: var(--slate-deep);
+  --bg-terminology: var(--ice-50);
+  --c-unresolved: var(--slate);         --bg-unresolved: var(--ice-50);
+}

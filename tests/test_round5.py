@@ -11,7 +11,6 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "engine"))
 
 from humsyar.build import _page_topics
-from humsyar.entities import entity_color, entity_css_vars
 from humsyar.model import load_session, normalize_text, validate
 from humsyar.planner import plan_session
 from humsyar.qa import bidi_lint
@@ -31,24 +30,7 @@ def _sentences(text: str) -> list[str]:
     return [p.strip() for p in re.split(r"(?<=\.)\s+", str(text)) if p.strip()]
 
 
-# ---------------------------------------------------------------- موجودیت‌ها
-def test_entity_colors_exact_match_only():
-    assert entity_color("آستروسیت") == "#B45309"
-    assert entity_color("Schwann cell") == "#059669"
-    assert entity_color("Anterograde") == "#0284C7"
-    assert entity_color("Retrograde") == "#EA580C"
-    # نام ناشناس یا تقریبی رنگ نمی‌گیرد (حدس فازی ممنوع)
-    assert entity_color("سلول گلیال") is None
-    assert entity_color("آستروسیت‌ها و غیره") is None
-    assert entity_color("") is None
-
-
-def test_entity_css_vars_generated():
-    css = entity_css_vars()
-    assert "--ent-astrocyte:#B45309" in css
-    assert "--ent-schwann:#059669" in css
-
-
+# -+ سربرگ جدول
 def test_comparison_table_headers_uniform_no_word_coloring():
     """راند ۸ (تصمیم محصول): واژه‌ها رنگ‌بندی نمی‌شوند؛ سربرگ جدول یکدست است."""
     s, plan = _plan()
@@ -100,16 +82,11 @@ def _section_of(session, block_id):
     return None
 
 
-def test_tldr_text_is_verbatim_sentence_of_its_section():
+def test_no_tldr_blocks_in_pilot():
+    """راند ۱۰ (تصمیم محصول): بلوک‌های «در یک نگاه» (TL;DR) به‌طور کامل حذف‌اند."""
     s = load_session(str(PILOT))
-    tldrs = [b for b in s.all_blocks() if b.type == "tldr"]
-    assert tldrs, "پایلوت باید دست‌کم یک TL;DR داشته باشد"
-    for tb in tldrs:
-        assert "پیشنهاد" not in str(tb.data)  # راند ۶: بدون برچسب موقت؛ نسخهٔ نهایی
-        sec = _section_of(s, tb.id)
-        sents = [normalize_text(x) for p in _section_paragraphs(s, sec)
-                 for x in _sentences(p.data["text"])]
-        assert normalize_text(tb.data["text"]) in sents, tb.id
+    assert [b for b in s.all_blocks() if b.type == "tldr"] == []
+    assert validate(s) == []
 
 
 def _synthetic_session(tmp_path):
@@ -196,7 +173,7 @@ def test_dual_rail_svg_from_block_data():
     s, plan = _plan()
     html = Typesetter(plan).document("")
     assert 'class="dualrail"' in html
-    assert "#0284C7" in html and "#EA580C" in html  # رنگ ثابت دو جهت
+    assert "#0636AE" in html and "#04B9D3" in html  # رنگ دو جهت از پالت برند (راند ۱۰)
     assert "آنتروگراد: از سوما به پایانه" in html  # عین عنوان داده
 
 
@@ -246,4 +223,4 @@ def test_new_block_types_validate():
     s = load_session(str(PILOT))
     assert validate(s) == []
     types = {b.type for b in s.all_blocks()}
-    assert "tldr" in types and "quick_check" not in types
+    assert "tldr" not in types and "quick_check" not in types  # راند ۱۰: TL;DR حذف

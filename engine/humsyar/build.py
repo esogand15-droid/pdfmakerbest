@@ -17,6 +17,8 @@ from . import __version__
 from .brand import load_brand
 from .cover import cover_html
 from .frame import CAPSULE_CY_MM, frame_html
+import os as _os
+from .palette import brand_css_text, rgb_of
 from .model import Session, load_session, normalize_text, validate
 from .packing import measure_blocks, pack
 from .planner import Plan, fa_num, plan_session
@@ -215,19 +217,20 @@ def _stamp_furniture(doc, frame_pdfs, page_topics: dict | None = None) -> None:
             frac = i / max(1, total - 1)
             tx0, tx1, ty, th = 63 * MM, 147 * MM, 288.2 * MM, 1.15 * MM  # متقارن دور مرکز ۱۰۵
             page.draw_rect(pymupdf.Rect(tx0, ty, tx1, ty + th),
-                           color=(0.13, 0.23, 0.33), fill=(1, 1, 1), width=0.8, radius=0.5)
+                           color=rgb_of("navy-900"), fill=rgb_of("hairline"),
+                           width=0.8, radius=0.5)
             fw = (tx1 - tx0) * frac
             if fw > 0.6 * MM:
                 page.draw_rect(pymupdf.Rect(tx1 - fw, ty, tx1, ty + th),
-                               color=None, fill=(0.13, 0.23, 0.33), radius=0.5)
+                               color=None, fill=rgb_of("navy-900"), radius=0.5)
             cx, cy = 105 * MM, CAPSULE_CY_MM * MM
             r = pymupdf.Rect(cx - 8 * MM, cy - 2.6 * MM, cx + 8 * MM, cy + 2.6 * MM)
-            page.draw_rect(r, color=(0.043, 0.43, 0.42), fill=(1, 1, 1), width=0.7, radius=0.5)
+            page.draw_rect(r, color=rgb_of("royal-600"), fill=(1, 1, 1), width=0.7, radius=0.5)
             txt = fa_num(i + 1)
             tw = pymupdf.TextWriter(page.rect)
             tw.append((cx - font.text_length(txt, fontsize=9) / 2, cy + 3.2),
                       txt, font=font, fontsize=9)
-            tw.write_text(page, color=(0.043, 0.188, 0.314))
+            tw.write_text(page, color=rgb_of("navy-900"))
 
 
 def _stamp_toc_links(doc, toc_pages: dict[str, int],
@@ -314,7 +317,8 @@ def build(content_path: str, *, edition: str = "final", theme: str = "a",
                   f"(مسیر مورد انتظار: {brand.get('logo')})")
 
     font_css = _font_css()
-    css = font_css + "\n" + (ENGINE_DIR / "themes" / "humsyar.css").read_text(encoding="utf-8")
+    brand_css = brand_css_text()
+    css = font_css + "\n" + brand_css + "\n" + (ENGINE_DIR / "themes" / "humsyar.css").read_text(encoding="utf-8")
     assets_uri = f"file://{REPO_ROOT}/"
     pdf_path = out / f"{session.id}_{edition}{'_print' if print_theme else ''}.pdf"
     body_pdf = work / "body.pdf"
@@ -362,7 +366,9 @@ def build(content_path: str, *, edition: str = "final", theme: str = "a",
 
     # کاور تمام‌صفحه + قاب موضوعی
     cover_pdf = work / "cover.pdf"
-    _render_pdf(cover_html(session, brand, font_css), cover_pdf, work, session,
+    _cover_light = print_theme or _os.environ.get("BRAND_COVER", "").lower() == "light"
+    _render_pdf(cover_html(session, brand, font_css + "\n" + brand_css, light=_cover_light),
+                cover_pdf, work, session,
                 margin=ZERO_MARGIN, tag="cover")
     # واریانت قاب به‌ازای (مبحث جاری، زوج/فرد) برای زبانهٔ انگشت‌نما + نوار پیشرفت
     import pymupdf as _pm
@@ -373,7 +379,7 @@ def build(content_path: str, *, edition: str = "final", theme: str = "a",
     needed = {page_topics.get(pg, {}).get("number"): page_topics.get(pg, {})
               for pg in range(2, max(page_topics, default=2) + 1)}
     for tnum, info in needed.items():
-        fdoc = frame_html(session, brand, font_css,
+        fdoc = frame_html(session, brand, font_css + "\n" + brand_css,
                           topic_number=tnum, topic_short=info.get("short", ""),
                           topic_order=info.get("order", 0),
                           side="right")  # همیشه لبهٔ راست: سمت ورق‌زدن دانشجو

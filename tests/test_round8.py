@@ -17,7 +17,10 @@ def test_latin_font_is_inter_and_dark():
     assert '"Inter"' in CSS
     assert "DejaVu" not in CSS
     # رنگ لاتین تیره است، نه آبی روشن (accent)
-    assert "color:#22384F" in CSS
+    assert "bdi,.en{ direction:ltr; unicode-bidi:isolate;" in CSS
+    import re as _re
+    m = _re.search(r"bdi,\.en\{[^}]*\}", CSS)
+    assert m and "color:var(--ink)" in m.group(0)  # لاتین تیره از توکن جوهر است
     assert ".term .en{ font-weight:600; color:var(--accent)" not in CSS
     for f in ("Inter-Regular.woff2", "Inter-SemiBold.woff2", "Inter-Bold.woff2"):
         assert (ROOT / "assets" / "fonts" / f).exists()

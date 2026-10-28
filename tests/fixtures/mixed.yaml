@@ -107,9 +107,7 @@ topics:
       صفحه دیده شود. در متن واقعی جزوه، هر جمله منبع خودش را دارد.
 closing:
 - id: fxc-ck1
-  type: checklist
+  type: summary_box
   status: needs_review
-  title: چک‌لیست آزمایشی پایان سند
-  items:
-  - مورد آزمایشی یک
-  - مورد آزمایشی دو
+  title: جمع‌بندی آزمایشی پایان سند
+  text: مورد آزمایشی یک و مورد آزمایشی دو.

@@ -73,8 +73,8 @@ def test_coverage_matrix_complete_and_honest():
     # تنها موارد unresolved جزئیات درون تصویرها هستند — نه حذف بی‌صدا
     assert len(rep["unresolved"]) == n_figs
     assert rep["by_status"]["covered"] == rep["total_items"] - n_figs
-    # بلوک‌های مشتق (tldr/tree) صریح از جهان پوشش کنار گذاشته شده‌اند
-    assert any("tl" in x for x in rep["excluded_derived_blocks"])
+    # بلوک‌های مشتق (درخت) صریح از جهان پوشش کنار گذاشته شده‌اند
+    # (راند ۱۰: TL;DR‌ها از محتوا حذف شدند؛ درخت همچنان مشتق‌حذفی است)
     assert any("tree" in x for x in rep["excluded_derived_blocks"])
     m = assign_coverage(s)
     assert all(v["node"] for v in m.values())

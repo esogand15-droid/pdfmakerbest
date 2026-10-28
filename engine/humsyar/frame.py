@@ -24,9 +24,12 @@ FRAME_INSET_MM = 6.0
 SAFE_RECT_MM = (12.0, 12.0, 198.0, 285.0)
 CAPSULE_CY_MM = 291.0  # مرکز کپسول شماره روی خط پایین قاب
 
-_BRAND = "#0B7A6E"
-_DEEP = "#0B3050"
-_SOFT = "#7FB3A8"
+from .palette import hex_of
+
+_BRAND = hex_of("royal-600")
+_DEEP = hex_of("navy-900")
+_SOFT = hex_of("sky-400")
+_HAIR = hex_of("hairline")
 
 
 def _corner_dendrite(seed: int) -> str:
@@ -99,9 +102,11 @@ def frame_anatomy_nervous(session: Session, brand: dict[str, str], *,
         py = min(297 - 16 - ph, 38.0 + topic_order * 30.0)
         px, rot = (210 - 1.1 - pw, 90) if side == "right" else (1.1, -90)
         cx, cy = px + pw / 2, py + ph / 2
+        # رنگ تب فقط برای ناوبری است و از توکن‌های topic پالت می‌آید (چرخهٔ قابل توسعه)
+        _tab_fill = hex_of(f"topic-{(int(topic_order) % 6) + 1}")
         tab = (
             f'<g><rect x="{px:.1f}" y="{py:.1f}" width="{pw}" height="{ph:.1f}" rx="2.2" '
-            f'fill="{_BRAND}"/>'
+            f'fill="{_tab_fill}"/>'
             f'<text transform="translate({cx:.1f} {cy:.1f}) rotate({rot})" font-size="2.65" '
             f'font-weight="700" fill="#FFFFFF" text-anchor="middle" dominant-baseline="central" '
             f'font-family="Vazirmatn">{escape(ttext)}</text></g>'
@@ -111,7 +116,7 @@ def frame_anatomy_nervous(session: Session, brand: dict[str, str], *,
     return f'''<svg class="frame-art" viewBox="0 0 210 297" preserveAspectRatio="none"
   xmlns="http://www.w3.org/2000/svg">
   <rect x="6" y="6" width="198" height="285" rx="3.5" fill="none" stroke="{_BRAND}" stroke-width="0.22"/>
-  <rect x="7.2" y="7.2" width="195.6" height="282.6" rx="2.8" fill="none" stroke="{_BRAND}" stroke-width="0.11" opacity="0.75"/>
+  <rect x="7.2" y="7.2" width="195.6" height="282.6" rx="2.8" fill="none" stroke="{_HAIR}" stroke-width="0.11"/>
   {corners}
   {"".join(myelin)}
   <!-- زبانهٔ سربرگ روی خط بالا (راست) -->

@@ -66,10 +66,6 @@ topics:
       - id: s01t4-s1
         type: section
         title: "آکسون و منشأ آن: تپهٔ آکسونی و قطعهٔ اولیه"
-      - id: s01t4-tl1
-        type: tldr
-        status: needs_review
-        sources: [{ book: جزوهٔ درس, pages: "۷" }]
         text: "آکسون‌ها رشته‌های بلندی هستند که معمولاً فقط **یک عدد** از هر نورون خارج می‌شود و از نظر ظاهری استوانه‌ای و نخ‌مانندند."
       - id: s01t4-p1
         type: paragraph
@@ -287,10 +283,6 @@ topics:
       - id: s01t6-s1
         type: section
         title: "شش سلول گلیال در یک نگاه: منشأ، محل، وظیفه"
-      - id: s01t6-tl1
-        type: tldr
-        status: needs_review
-        sources: [{ book: جزوهٔ درس, pages: "۱۴" }]
         text: "نوروگلیاها سلول‌هایی هستند که فعالیت حیاتی و درونی نورون‌ها را حمایت می‌کنند."
       - id: s01t6-p1
         type: paragraph

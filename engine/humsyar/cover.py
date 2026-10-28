@@ -19,14 +19,35 @@ from html import escape
 from .model import Session
 from .planner import fa_num
 
-# پالت کاور (هماهنگ با Design System؛ نسخهٔ تیره)
-C = {
-    "bg1": "#0A0F1E", "bg2": "#0D2B52", "bg3": "#0D1524",
-    "glow": "#2DD4BF", "cyan": "#8FE8DC", "cyan2": "#3B82F6",
-    "myelin": "#BFDBFE", "myelin2": "#93C5FD", "axon": "#7DD3FC",
-    "soma": "#E0F2FE", "nucleus": "#2563EB", "ink": "#ffffff",
-    "mint": "#99F6E4", "pale": "#BAE6FD",
-}
+from .palette import hex_of as _hx
+
+
+def _c(light: bool = False) -> dict[str, str]:
+    """پالت کاور از منبع واحد برند (brand.css).
+
+    نسخهٔ روشن (BRAND_COVER=light یا چاپ کم‌جوهر) همان قالب و موتیف را با
+    زمینهٔ روشن اجرا می‌کند؛ قالب دومی ساخته نمی‌شود.
+    """
+    if light:
+        return {
+            "bg1": _hx("ice-50"), "bg2": _hx("ice-100"), "bg3": _hx("white"),
+            "glow": _hx("cyan-400"), "cyan": _hx("tealcyan-500"),
+            "cyan2": _hx("azure-500"), "myelin": _hx("white"),
+            "myelin2": _hx("sky-400"), "axon": _hx("royal-600"),
+            "soma": _hx("white"), "nucleus": _hx("royal-600"),
+            "ink": _hx("navy-900"), "mint": _hx("teal-ink"),
+            "pale": _hx("slate"),
+        }
+    return {
+        "bg1": _hx("navy-950"), "bg2": _hx("navy-800"), "bg3": _hx("navy-900"),
+        "glow": _hx("cyan-400"), "cyan": _hx("aqua-300"), "cyan2": _hx("azure-500"),
+        "myelin": _hx("ice-100"), "myelin2": _hx("sky-400"), "axon": _hx("aqua-300"),
+        "soma": _hx("ice-100"), "nucleus": _hx("royal-600"), "ink": _hx("white"),
+        "mint": _hx("aqua-300"), "pale": _hx("ice-100"),
+    }
+
+
+C = _c()
 
 
 def _branch(rng: random.Random, x: float, y: float, angle: float, length: float,
@@ -61,7 +82,8 @@ def _qpoint(p0, p1, p2, t: float):
             mt * mt * p0[1] + 2 * mt * t * p1[1] + t * t * p2[1])
 
 
-def motif_histology_neuron_glia(seed: int) -> str:
+def motif_histology_neuron_glia(seed: int, C: dict | None = None) -> str:
+    C = C or _c()
     rng = random.Random(seed)
     g: list[str] = []
 
@@ -75,7 +97,7 @@ def motif_histology_neuron_glia(seed: int) -> str:
     # ذرات نورانی
     for _ in range(44):
         g.append(f'<circle cx="{rng.uniform(4,206):.1f}" cy="{rng.uniform(4,293):.1f}" '
-                 f'r="{rng.uniform(0.25,0.7):.2f}" fill="#cfeee8" opacity="{rng.uniform(0.08,0.3):.2f}"/>')
+                 f'r="{rng.uniform(0.25,0.7):.2f}" fill="{C["mint"]}" opacity="{rng.uniform(0.08,0.3):.2f}"/>')
 
     # ——— شبکهٔ گلیال پس‌زمینه (ستاره‌های آستروسیتی کم‌رنگ) ———
     for gx, gy, gs in [(24, 96, 7), (44, 168, 6), (178, 96, 6.5), (188, 178, 7.5),
@@ -97,7 +119,7 @@ def motif_histology_neuron_glia(seed: int) -> str:
         for _ in range(7))
     g.append(f'''<g opacity="0.95">
       <path d="M {sx-9} {sy-14} Q {sx-4} {sy-7} {sx-5.5} {sy-2}" fill="none" stroke="{C['axon']}" stroke-width="0.9"/>
-      <circle cx="{sx}" cy="{sy}" r="5.6" fill="#0D2B52" stroke="{C['cyan']}" stroke-width="0.7"/>{ves}
+      <circle cx="{sx}" cy="{sy}" r="5.6" fill="{C['bg2']}" stroke="{C['cyan']}" stroke-width="0.7"/>{ves}
       <path d="M {sx-7} {sy+8.4} Q {sx} {sy+11} {sx+7} {sy+8.4}" fill="none" stroke="{C['mint']}" stroke-width="0.8"/>
       <path d="M {sx-7} {sy+11.4} Q {sx} {sy+14} {sx+7} {sy+11.4}" fill="none" stroke="{C['mint']}" stroke-width="0.8" opacity="0.75"/>
       <circle cx="{sx-1.5}" cy="{sy+8}" r="0.55" fill="{C['cyan']}"/><circle cx="{sx+1.8}" cy="{sy+7.6}" r="0.55" fill="{C['cyan']}"/>
@@ -150,7 +172,7 @@ def motif_histology_neuron_glia(seed: int) -> str:
         g.append(f'<path d="{d}" fill="none" stroke="url(#myelin)" stroke-width="5.4" '
                  f'stroke-linecap="round" opacity="0.96"/>')
         node = path_pts[idx + seg_len + 1]
-        g.append(f'<circle cx="{node[0]:.1f}" cy="{node[1]:.1f}" r="1.15" fill="#eafffa"/>')
+        g.append(f'<circle cx="{node[0]:.1f}" cy="{node[1]:.1f}" r="1.15" fill="{C["soma"]}"/>')
         if seg_no == 1:  # هستهٔ سلول شوان روی یک قطعه
             sp = path_pts[idx + 4]
             g.append(f'<ellipse cx="{sp[0]:.1f}" cy="{sp[1] - 2.4:.1f}" rx="2.1" ry="1.25" '
@@ -168,7 +190,7 @@ def motif_histology_neuron_glia(seed: int) -> str:
     # سوما و هسته (روی همه‌چیز)
     g.append(f'''<circle cx="{soma_x}" cy="{soma_y}" r="{soma_r}" fill="url(#soma)" opacity="0.97"/>
       <circle cx="{soma_x - 1}" cy="{soma_y - 1}" r="4.6" fill="{C['nucleus']}" opacity="0.85"/>
-      <circle cx="{soma_x - 1}" cy="{soma_y - 1}" r="1.5" fill="#1D4ED8"/>''')
+      <circle cx="{soma_x - 1}" cy="{soma_y - 1}" r="1.5" fill="{C['cyan2']}"/>''')
 
     # ——— الیگودندروسیت (پایین-راست): یک سلول، چند قطعه ———
     ox, oy = 164.0, 238.0
@@ -191,7 +213,7 @@ def motif_histology_neuron_glia(seed: int) -> str:
         <stop offset="0" stop-color="{C['myelin']}"/><stop offset="1" stop-color="{C['myelin2']}"/>
       </linearGradient>
       <radialGradient id="soma" cx="0.42" cy="0.4" r="0.75">
-        <stop offset="0" stop-color="#EFF6FF"/><stop offset="1" stop-color="{C['myelin2']}"/>
+        <stop offset="0" stop-color="{C['soma']}"/><stop offset="1" stop-color="{C['myelin2']}"/>
       </radialGradient>
     </defs>'''
     return defs + "".join(g)
@@ -200,17 +222,19 @@ def motif_histology_neuron_glia(seed: int) -> str:
 MOTIFS = {"histology-neuron-glia": motif_histology_neuron_glia}
 
 
-def cover_svg(session: Session) -> str:
+def cover_svg(session: Session, light: bool = False) -> str:
     fn = MOTIFS.get(session.cover_motif)
     if fn is None:
         raise ValueError(
             f"موتیف کاور ناشناخته: «{session.cover_motif}» — موتیف‌های موجود: {sorted(MOTIFS)}")
     seed = session.session_number * 1000 + 13
     return (f'<svg class="cover-art" viewBox="0 0 210 297" preserveAspectRatio="xMidYMid slice" '
-            f'xmlns="http://www.w3.org/2000/svg">{fn(seed)}</svg>')
+            f'xmlns="http://www.w3.org/2000/svg">{fn(seed, _c(light))}</svg>')
 
 
-def cover_html(session: Session, brand: dict[str, str], font_css: str) -> str:
+def cover_html(session: Session, brand: dict[str, str], font_css: str,
+               light: bool = False) -> str:
+    C = _c(light)
     """سند HTML مستقل کاور؛ با حاشیهٔ صفر رندر و به ابتدای PDF چسبانده می‌شود."""
     draft_badge = ('<span class="cv-draft">پایلوت موتور — نسخهٔ آزمایشی</span>'
                    if session.draft else "")
@@ -226,18 +250,18 @@ def cover_html(session: Session, brand: dict[str, str], font_css: str) -> str:
 @page {{ size: A4; margin: 0; }}
 * {{ margin:0; padding:0; box-sizing:border-box; }}
 body {{ font-family:"Vazirmatn",sans-serif; }}
-.cover {{ position:relative; width:210mm; height:297mm; overflow:hidden; background:#0A0F1E; }}
+.cover {{ position:relative; width:210mm; height:297mm; overflow:hidden; background:var(--cover-bg); }}
 .cover-art {{ position:absolute; inset:0; width:210mm; height:297mm; }}
 .cv-scrim {{ position:absolute; top:0; left:0; right:0; height:118mm;
-  background:linear-gradient(180deg, rgba(3,16,22,.62), rgba(3,16,22,.28) 62%, rgba(3,16,22,0)); }}
+  background:linear-gradient(180deg, color-mix(in srgb, var(--navy-950) 62%, transparent), color-mix(in srgb, var(--navy-950) 28%, transparent) 62%, transparent); }}
 .cv-top {{ position:absolute; top:17mm; left:0; right:0; text-align:center; color:{C['pale']}; }}
 .cv-course {{ font-size:12.5pt; font-weight:500; letter-spacing:.4px; }}
 .cv-course::before,.cv-course::after {{ content:""; display:inline-block; width:16mm; height:1px;
   background:{C['cyan']}; opacity:.65; vertical-align:middle; margin:0 4mm; }}
 .cv-center {{ position:absolute; top:30mm; left:14mm; right:14mm; text-align:center; color:#fff;
-  padding:6mm 4mm 7mm; background:radial-gradient(ellipse 62% 58% at 50% 44%, rgba(7,12,26,.62), rgba(7,12,26,.32) 55%, rgba(7,12,26,0) 74%); }}
+  padding:6mm 4mm 7mm; background:radial-gradient(ellipse 62% 58% at 50% 44%, color-mix(in srgb, var(--navy-950) 62%, transparent), color-mix(in srgb, var(--navy-950) 32%, transparent) 55%, transparent 74%); }}
 .cv-sess {{ display:inline-block; border:1.2px solid {C['cyan']}; color:{C['cyan']};
-  border-radius:20px; padding:1.2mm 6mm; font-size:11pt; font-weight:700; background:rgba(4,20,26,.45); }}
+  border-radius:20px; padding:1.2mm 6mm; font-size:11pt; font-weight:700; background:color-mix(in srgb, var(--navy-950) 45%, transparent); }}
 .cv-sess b {{ font-size:14pt; color:#fff; }}
 .cv-title {{ margin-top:5.5mm; font-size:27pt; font-weight:700; line-height:1.55;
   text-shadow:0 1px 14px rgba(0,0,0,.45); }}
@@ -245,20 +269,26 @@ body {{ font-family:"Vazirmatn",sans-serif; }}
 .cv-sub {{ margin-top:4mm; font-size:11.5pt; color:{C['pale']}; }}
 .cv-brand {{ position:relative; margin-top:5mm; color:#fff; padding:3mm 0 2mm; }}
 .cv-brand::before {{ content:""; position:absolute; inset:-6mm -22mm -4mm; z-index:-1;
-  background:radial-gradient(ellipse 58% 62% at 50% 50%, rgba(6,11,24,.94), rgba(6,11,24,.78) 55%, rgba(6,11,24,0) 78%); }}
+  background:radial-gradient(ellipse 58% 62% at 50% 50%, color-mix(in srgb, var(--navy-950) 94%, transparent), color-mix(in srgb, var(--navy-950) 78%, transparent) 55%, transparent 78%); }}
 .cv-brand .fa, .cv-brand .en {{ text-shadow:0 1px 10px rgba(0,0,0,.9), 0 0 3px rgba(0,0,0,.9); }}
 .cv-logo {{ display:block; width:28mm; height:auto; margin:0 auto 2.5mm;
-  filter:drop-shadow(0 1.5mm 5mm rgba(45,212,191,.28)); }}
+  filter:drop-shadow(0 1.5mm 5mm color-mix(in srgb, var(--cyan-400) 28%, transparent)); }}
 .cv-brand .fa {{ font-size:17pt; font-weight:700; }}
 .cv-brand .en {{ display:block; margin-top:1mm; font-family:"Inter",sans-serif;
   font-size:10.5pt; font-weight:700; letter-spacing:3.5px; color:{C['cyan']}; direction:ltr; }}
 .cv-bottom {{ position:absolute; bottom:10mm; left:12mm; right:12mm; display:flex;
   justify-content:space-between; align-items:center; color:{C['pale']}; font-size:9pt;
-  border-top:0.6px solid rgba(168,230,216,.4); padding-top:3mm; }}
-.cv-draft {{ border:1px dashed #7DD3FC; color:#7DD3FC; border-radius:20px; padding:.6mm 4mm; font-size:8.4pt; }}
+  border-top:0.6px solid color-mix(in srgb, var(--aqua-300) 40%, transparent); padding-top:3mm; }}
+.cv-draft {{ border:1px dashed var(--sky-400); color:var(--sky-400); border-radius:20px; padding:.6mm 4mm; font-size:8.4pt; }}
+.cover--light {{ background:var(--ice-50); }}
+.cover--light .cv-scrim, .cover--light .cv-center, .cover--light .cv-brand {{ background:none; }}
+.cover--light .cv-center, .cover--light .cv-sess b, .cover--light .cv-brand {{ color:var(--navy-900); }}
+.cover--light .cv-brand .fa, .cover--light .cv-brand .en,
+.cover--light .cv-title {{ text-shadow:none; }}
+.cover--light .cv-sess {{ background:var(--white); }}
 </style></head><body>
-<div class="cover">
-  {cover_svg(session)}
+<div class="cover{' cover--light' if light else ''}">
+  {cover_svg(session, light)}
   <div class="cv-scrim"></div>
   <div class="cv-top"><span class="cv-course">{escape(session.course)}</span></div>
   <div class="cv-center">

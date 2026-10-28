@@ -12,7 +12,7 @@ from humsyar.typeset import KIND_LABELS, Typesetter
 
 ROOT = Path(__file__).resolve().parents[1]
 PILOT = ROOT / "content" / "session01_pilot.yaml"
-CSS = (ROOT / "engine" / "themes" / "humsyar.css").read_text(encoding="utf-8")
+CSS = ((ROOT / "engine" / "themes" / "brand.css").read_text(encoding="utf-8") + (ROOT / "engine" / "themes" / "humsyar.css").read_text(encoding="utf-8"))
 
 
 def _plan():
@@ -69,14 +69,13 @@ def test_new_kinds_validate_and_render(tmp_path):
 
 # ------------------------------------------------------------- قاب جدول
 def test_table_frame_single_owner_css():
-    assert "border:1pt solid #C4D6E4; border-radius:9pt" in CSS  # قاب واحد روی wrapper
+    assert "border:1pt solid var(--hairline); border-radius:9pt" in CSS  # قاب واحد روی wrapper (توکن برند)
     assert "overflow:hidden" in CSS
     # خط زیر سربرگ در همهٔ ستون‌ها هم‌وزن و یکدست است — بدون پله و بدون رنگ واژه
     assert "border-bottom:2.2pt" not in CSS
     assert "th-ent" not in CSS
-    # سایه‌زنی راه‌راه سراسری حذف شده؛ فقط سبک مرجع
-    assert "table.tbl tbody tr:nth-child(even){ background:" not in CSS
-    assert ".tbl--zebra tbody tr:nth-child(even) td" in CSS
+    # راند ۱۰ (بند ۸): راه‌راه ظریف سراسری با حذف ستون rowh از سایه
+    assert "table.tbl tbody tr:nth-child(even) td:not(.rowh){ background:var(--ice-50)" in CSS
 
 
 # --------------------------------------------------------- حس نسخهٔ نهایی
@@ -101,8 +100,8 @@ def test_no_word_coloring_or_legend():
     assert "رنگ ثابت مفاهیم این جلسه" not in html
     assert "chip--ent" not in html
     assert 'class="edot"' not in html
-    # رنگ ساختاری ریل دوجهته همچنان از رجیستری موجودیت می‌آید
-    assert "#0284C7" in html and "#EA580C" in html
+    # رنگ ساختاری ریل دوجهته از پالت یکپارچهٔ برند می‌آید (راند ۱۰)
+    assert "#0636AE" in html and "#04B9D3" in html
 
 
 # --------------------------------------------------- نوار پیشرفت در PDF واقعی

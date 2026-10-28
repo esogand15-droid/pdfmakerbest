@@ -13,7 +13,7 @@ import re
 from html import escape
 
 from .diagrams import PAGE_STYLE as TREE_PAGE_STYLE, measure_tree, session_tree, tree_svg
-from .entities import entity_color, entity_css_vars
+from .palette import hex_of
 from .icons import CALLOUT_ICONS, icon_svg
 from .revision import extract_items
 from .model import Block, Session, Source, Topic
@@ -47,13 +47,6 @@ def inline(text: str) -> str:
     s = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", s)
     return s
 
-
-def _tree_color(node: dict) -> str | None:
-    """رنگ ثابت موجودیت از روی برچسب گرهٔ درخت (نام دقیق؛ حدس فازی ممنوع)."""
-    lab = str(node.get("label") or " ".join(node.get("label_lines", [])))
-    cands = [lab, lab.split("(")[0].strip(),
-             lab.rstrip(")").split("(")[-1].strip()]
-    return next((c for c in (entity_color(c) for c in cands) if c), None)
 
 
 def src_chips(sources: list[Source], show: bool = True) -> str:
@@ -106,7 +99,7 @@ class Typesetter:
             '<!DOCTYPE html><html lang="fa" dir="rtl"'
             + (f' data-theme="{theme}"' if theme != "a" else "") + '><head><meta charset="utf-8">'
             f'<title>{escape(s.course)} — جلسهٔ {fa_num(s.session_number)}: {escape(s.title)}</title>{favicon}'
-            f'<style>{css}{entity_css_vars()}</style></head>'
+            f'<style>{css}</style></head>'
             f'<body class="{"print-theme" if self.print_theme else ""}">{"".join(body)}</body></html>'
         )
 
@@ -160,15 +153,16 @@ class Typesetter:
             return ""
         included = {t.number for t in s.topics}
         items = []
-        for m in s.session_map:
+        for idx, m in enumerate(s.session_map):
             n = int(m["number"])
             pg = self.toc_pages.get(str(m.get("id", "")))
             pg_txt = f'ص {fa_num(pg)}' if pg else str(m.get("tag", ""))
             items.append(
-                f'<li class="{"in" if n in included else ""}">'
+                f'<li class="{"in" if n in included else ""}" '
+                f'style="--topic-c:var(--topic-{(idx % 6) + 1})">'
                 f'<span class="n">{fa_num(n)}</span><span>{escape(str(m["title"]))}</span>'
                 f'<span class="pg">{escape(pg_txt)}</span></li>')
-        return f'<nav class="session-map"><h2>نقشهٔ جلسه در یک نگاه</h2><ol>{"".join(items)}</ol></nav>'
+        return f'<nav class="session-map"><h2>نقشهٔ جلسه</h2><ol>{"".join(items)}</ol></nav>'
 
     def toc(self) -> str:
         n = len(self.plan.headings)
@@ -219,7 +213,7 @@ class Typesetter:
 
         for k in KIND_ORDER:  # معنای ثابت کادرهای آموزشی در کل جزوه
             add(CALLOUT_ICONS.get(k, "note"), KIND_LABELS[k])
-        for name, label in (("glance", "در یک نگاه"), ("target", "هدف‌های یادگیری"),
+        for name, label in (("target", "هدف‌های یادگیری"),
                             ("terminology", "اصطلاحات کلیدی"), ("process", "فرایند گام‌به‌گام"),
                             ("compare", "مقایسه"), ("branch", "نمودار درختی/طبقه‌بندی"),
                             ("compass", "نقشهٔ جامع مرور"), ("microscope", "جزئیات درون شکل"),
@@ -249,10 +243,11 @@ class Typesetter:
         strip = ""
         if smap:
             cells = []
-            for m in smap:
+            for idx, m in enumerate(smap):
                 n = int(m["number"])
                 st = "cur" if n == t.number else ("done" if n < t.number else "todo")
-                cells.append(f'<span class="pstrip__c pstrip__c--{st}"><b>{fa_num(n)}</b>'
+                cells.append(f'<span class="pstrip__c pstrip__c--{st}" '
+                             f'style="--topic-c:var(--topic-{(idx % 6) + 1})"><b>{fa_num(n)}</b>'
                              f'{escape(str(m["title"]))}</span>')
             strip = (f'<div class="pstrip" aria-hidden="true">{"".join(cells)}</div>')
         pre = "".join(f'<span class="chip chip--pre">{inline(p)}</span>' for p in t.prereq_required)
@@ -310,7 +305,7 @@ class Typesetter:
                             root_label=f"جلسهٔ {fa_num(self.session.session_number)}")
         if len(root.get("children", [])) < 1:
             return ""
-        svg = tree_svg(root, color_for=lambda n: _tree_color(n), style=TREE_PAGE_STYLE)
+        svg = tree_svg(root, style=TREE_PAGE_STYLE)
         # ابعاد صریح چاپی: درخت هرگز از صفحهٔ اختصاصی‌اش بیرون نمی‌زند
         tw, th = measure_tree(root, TREE_PAGE_STYLE)
         scale = min(516 / tw, 574 / th, 1.0)
@@ -524,14 +519,6 @@ class Typesetter:
                 f'پاسخ درست، همان عبارتی است که در متن بخش آمده بود.</p>{rows}</div>')
 
     # ---------------------------------------------------------- بلوک‌های یادگیری
-    def b_tldr(self, b: Block) -> str:
-        return f"""
-<aside class="tldr" data-bid="{escape(b.id)}">
-  <div class="tldr__head"><span class="tldr__tag">{icon_svg('glance', 11)} در یک نگاه</span></div>
-  <p>{inline(b.data["text"])}</p>
-  <div class="srcrow">{src_chips(b.sources, self.show_sources)}</div>
-</aside>"""
-
     def b_quick_check(self, b: Block) -> str:
         items_html = []
         for it in b.data.get("items", []):
@@ -689,8 +676,9 @@ class Typesetter:
     def b_dual_process(self, b: Block) -> str:
         d = b.data
         fwd, bwd = d["forward"], d["backward"]
-        cf = entity_color("Anterograde") or "#0284C7"
-        cb = entity_color("Retrograde") or "#EA580C"
+        cf = hex_of("royal-600")    # جهت روبه‌جلو: آبی سلطنتی برند
+        cb = hex_of("tealcyan-500")  # جهت برگشت: فیروزه‌ای برند
+        ct = hex_of("teal-ink")     # متن برچسب جهت برگشت (کنتراست متن ≥۴٫۵ روی سفید)
         # برچسب‌های نمودار فقط از متن خود بلوک: عنوان دو مسیر + سوما/پایانه اگر در داده هست
         titles = str(fwd.get("title", "")) + str(bwd.get("title", ""))
         node_r = "سوما" if "سوما" in titles else ""
@@ -698,11 +686,11 @@ class Typesetter:
         rail_svg = f"""
 <svg class="dualrail" viewBox="0 0 182 31" dir="ltr" role="img"
      aria-label="{escape(str(d["title"]))}">
-  <circle cx="169" cy="13" r="6.2" fill="#0B3050"/>
+  <circle cx="169" cy="13" r="6.2" fill="{hex_of('navy-900')}"/>
   <circle cx="167.4" cy="11.4" r="1.7" fill="#FFFFFF" opacity=".85"/>
-  <g fill="#0B7A6E"><circle cx="9" cy="8.5" r="2.6"/><circle cx="7" cy="14.5" r="2.6"/>
+  <g fill="{cb}"><circle cx="9" cy="8.5" r="2.6"/><circle cx="7" cy="14.5" r="2.6"/>
   <circle cx="10" cy="20" r="2.6"/></g>
-  <g stroke="#9FB4C6" stroke-width=".55">
+  <g stroke="{hex_of('sky-400')}" stroke-width=".55">
     <line x1="16" y1="11.6" x2="162" y2="11.6"/><line x1="16" y1="14.4" x2="162" y2="14.4"/></g>
   <line x1="158" y1="7.6" x2="24" y2="7.6" stroke="{cf}" stroke-width="1.15"/>
   <polygon points="24,7.6 29.5,5.4 29.5,9.8" fill="{cf}"/>
@@ -712,10 +700,10 @@ class Typesetter:
   <circle cx="80" cy="18.4" r="2.1" fill="{cb}"/>
   <text x="91" y="4.6" font-size="3.1" font-weight="700" fill="{cf}" text-anchor="middle"
         font-family="Vazirmatn">{escape(str(fwd.get("title", "")))}</text>
-  <text x="91" y="26.6" font-size="3.1" font-weight="700" fill="{cb}" text-anchor="middle"
+  <text x="91" y="26.6" font-size="3.1" font-weight="700" fill="{ct}" text-anchor="middle"
         font-family="Vazirmatn">{escape(str(bwd.get("title", "")))}</text>
-  {f'<text x="169" y="23.6" font-size="2.6" fill="#0B3050" text-anchor="middle" font-family="Vazirmatn">{node_r}</text>' if node_r else ""}
-  {f'<text x="9" y="26.6" font-size="2.6" fill="#0B7A6E" text-anchor="middle" font-family="Vazirmatn">{node_l}</text>' if node_l else ""}
+  {f'<text x="169" y="23.6" font-size="2.6" fill="{hex_of("navy-900")}" text-anchor="middle" font-family="Vazirmatn">{node_r}</text>' if node_r else ""}
+  {f'<text x="9" y="26.6" font-size="2.6" fill="{ct}" text-anchor="middle" font-family="Vazirmatn">{node_l}</text>' if node_l else ""}
 </svg>"""
         return f"""
 <div class="dual" data-bid="{escape(b.id)}">
@@ -734,13 +722,8 @@ class Typesetter:
 <figure class="tree" data-bid="{escape(b.id)}">
   <div class="process__title"><span class="pno">نمودار</span>
   <span>{inline(b.data["title"])}</span>{src_chips(b.sources, self.show_sources)}</div>
-  {tree_svg(b.data["root"], color_for=lambda n: _tree_color(n))}
+  {tree_svg(b.data["root"])}
 </figure>"""
-
-    def b_checklist(self, b: Block) -> str:
-        items = "".join(f"<li>{inline(i)}</li>" for i in b.data["items"])
-        return (f'<div class="checklist" data-bid="{escape(b.id)}"><h3>{inline(b.data["title"])}</h3>'
-                f'<ul>{items}</ul>{src_chips(b.sources, self.show_sources)}</div>')
 
     def b_summary_box(self, b: Block) -> str:
         return (f'<div class="summarybox" data-bid="{escape(b.id)}"><h3>{inline(b.data["title"])}</h3>'

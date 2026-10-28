@@ -152,6 +152,8 @@ def tree_svg(root: dict[str, Any], color_for=None,
         cls = "tree-node tree-node--alert" if n["alert"] else "tree-node"
         if n["depth"] == 0:
             cls += " tree-node--root"
+        elif n["depth"] == 1:
+            cls += " tree-node--branch"  # رنگ نقشی: شاخهٔ اصلی (نه رنگ مفهوم علمی)
         _nc = color_for(n) if color_for else None
         _rs = f' style="stroke:{_nc}"' if _nc else ""
         parts.append(
