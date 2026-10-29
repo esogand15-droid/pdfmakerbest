@@ -173,7 +173,8 @@ def test_dual_rail_svg_from_block_data():
     s, plan = _plan()
     html = Typesetter(plan).document("")
     assert 'class="dualrail"' in html
-    assert "#0F5E63" in html and "#FF7A45" in html  # رنگ دو جهت از پالت برند (راند ۱۰)
+    from humsyar.palette import hex_of
+    assert hex_of("dir-forward") in html and hex_of("dir-reverse") in html  # دو توکن عمومی جهت
     assert "آنتروگراد: از سوما به پایانه" in html  # عین عنوان داده
 
 

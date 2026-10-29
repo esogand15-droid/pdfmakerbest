@@ -145,8 +145,8 @@ def test_no_concept_color_system():
     html = Typesetter(plan_session(s, "final", ROOT)).document("")
     for old in ("#B45309", "#EA580C", "#0284C7", "entity"):
         assert old not in html, old
-    # جهت‌های ریل از پالت برند می‌آیند
-    assert hex_of("royal-600") in html and hex_of("tealcyan-500") in html
+    # جهت‌های ریل از دو توکن عمومی جهت می‌آیند (مرحلهٔ ۱)
+    assert hex_of("dir-forward") in html and hex_of("dir-reverse") in html
 
 
 def test_glossary_two_columns_on_last_page():

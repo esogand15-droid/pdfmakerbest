@@ -101,7 +101,8 @@ def test_no_word_coloring_or_legend():
     assert "chip--ent" not in html
     assert 'class="edot"' not in html
     # رنگ ساختاری ریل دوجهته از پالت یکپارچهٔ برند می‌آید (راند ۱۰)
-    assert "#0F5E63" in html and "#FF7A45" in html
+    from humsyar.palette import hex_of
+    assert hex_of("dir-forward") in html and hex_of("dir-reverse") in html
 
 
 # --------------------------------------------------- نوار پیشرفت در PDF واقعی

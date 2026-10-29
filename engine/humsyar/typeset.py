@@ -754,9 +754,9 @@ class Typesetter:
     def b_dual_process(self, b: Block) -> str:
         d = b.data
         fwd, bwd = d["forward"], d["backward"]
-        cf = hex_of("royal-600")    # جهت روبه‌جلو: آبی سلطنتی برند
-        cb = hex_of("tealcyan-500")  # جهت برگشت: فیروزه‌ای برند
-        ct = hex_of("teal-ink")     # متن برچسب جهت برگشت (کنتراست متن ≥۴٫۵ روی سفید)
+        cf = hex_of("dir-forward")  # جهت روبه‌جلو (توکن عمومی)
+        cb = hex_of("dir-reverse")  # جهت برگشت (توکن عمومی؛ متن و سفید رویش ≥۴٫۵:۱)
+        ct = cb                     # برچسب مسیر برگشت هم‌رنگ خود مسیر
         # برچسب‌های نمودار فقط از متن خود بلوک: عنوان دو مسیر + سوما/پایانه اگر در داده هست
         titles = str(fwd.get("title", "")) + str(bwd.get("title", ""))
         node_r = "سوما" if "سوما" in titles else ""
@@ -789,8 +789,8 @@ class Typesetter:
   <span>{inline(d["title"])}</span>{src_chips(b.sources, self.show_sources)}</div>
   {rail_svg}
   <div class="dual__lanes">
-    <div class="lane lane--fwd"><div class="lane__head" style="--lane:{cf}"><svg class="lane__tri" viewBox="0 0 10 10"><polygon points="10,1 10,9 2,5"/></svg> {inline(fwd["title"])}</div>{self._steps(fwd["steps"])}</div>
-    <div class="lane lane--bwd"><div class="lane__head" style="--lane:{cb}">{inline(bwd["title"])} <svg class="lane__tri" viewBox="0 0 10 10"><polygon points="0,1 0,9 8,5"/></svg></div>{self._steps(bwd["steps"])}</div>
+    <div class="lane lane--fwd" style="--lane:{cf}"><div class="lane__head"><svg class="lane__tri" viewBox="0 0 10 10"><polygon points="10,1 10,9 2,5"/></svg> {inline(fwd["title"])}</div>{self._steps(fwd["steps"])}</div>
+    <div class="lane lane--bwd" style="--lane:{cb}"><div class="lane__head">{inline(bwd["title"])} <svg class="lane__tri" viewBox="0 0 10 10"><polygon points="0,1 0,9 8,5"/></svg></div>{self._steps(bwd["steps"])}</div>
   </div>
   <div class="dual__rail">{inline(d.get("rail_note", ""))}</div>
 </div>"""

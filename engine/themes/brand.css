@@ -30,6 +30,9 @@
   --primary-deep: #0F5E63;
   --secondary: #FF6B5B;
   --sun: #FFB627;
+  /* دو جهت جریان (عمومی؛ نه مخصوص هیچ مبحثی) — متن روی کاغذ و سفید روی آن ≥۴٫۵:۱ */
+  --dir-forward: #0F5E63;
+  --dir-reverse: #B84A12;
   --hl: #FFE9A8;               /* تنها سبک هایلایت کل جزوه */
   --sun-soft: #FFE9A8;
   --cover-deep: #1B2440;

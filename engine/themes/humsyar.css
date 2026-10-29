@@ -79,7 +79,7 @@ p.body .src{ margin-inline-start:4pt; }
   background:var(--line-soft); color:var(--muted); font-weight:700; font-size:8pt;
 }
 .session-map li.in{ color:var(--ink); border-color:var(--session-accent,var(--brand)); background:var(--surface);}
-.session-map li.in .n{ background:var(--fam6-deep); color:#fff;}
+.session-map li.in .n{ background:var(--session-header,var(--brand-deep)); color:#fff;}
 .session-map li .pg{ margin-inline-start:auto; color:var(--faint); font-size:7.6pt; white-space:nowrap;}
 
 /* فهرست مطالب */
@@ -113,7 +113,7 @@ p.body .src{ margin-inline-start:4pt; }
 .topic-head{ break-inside:avoid; margin-bottom:5pt; }
 .topic-head__row{ display:flex; align-items:center; gap:8pt; border-bottom:2.2px solid var(--session-accent,var(--brand)); padding-bottom:3pt;}
 .topic-num{
-  flex:0 0 auto; background:var(--fam6-deep); color:#fff; border-radius:9px;
+  flex:0 0 auto; background:var(--session-header,var(--brand-deep)); color:#fff; border-radius:9px;
   font-weight:700; font-size:8pt; line-height:1.35; text-align:center; padding:2pt 7pt 3pt;
 }
 .topic-num b{ display:block; font-size:12.5pt; line-height:1.15; }
@@ -124,22 +124,22 @@ p.body .src{ margin-inline-start:4pt; }
   box-shadow:var(--shadow-sm);
   padding:4pt 8pt 3pt; font-size:8.3pt; line-height:1.55;
 }
-.topic-card .why b{ color:var(--fam3-deep); }
+.topic-card .why b{ color:var(--session-deep,var(--brand-deep)); }
 .topic-card .why b.h-ic{ display:inline-flex; vertical-align:-2.5pt; }
-.topic-card h3.tc-obj{ color:var(--fam2-deep); }
-.topic-card h3.tc-pre{ color:var(--fam6-deep); }
-.topic-card__foot .tc-term{ color:var(--fam1-deep); font-weight:700; }
+.topic-card h3.tc-obj{ color:var(--session-deep,var(--brand-deep)); }
+.topic-card h3.tc-pre{ color:var(--session-deep,var(--brand-deep)); }
+.topic-card__foot .tc-term{ color:var(--session-deep,var(--brand-deep)); font-weight:700; }
 .topic-card__grid{ display:grid; grid-template-columns:1.25fr 1fr; gap:2pt 12pt; margin-top:2pt;}
 .topic-card h3{ font-size:8.3pt; color:var(--brand-deep); font-weight:700; margin-bottom:1pt;}
 .topic-card ul{ list-style:none; }
-.topic-card li::before{ content:"▸ "; color:var(--fam2-deep); font-weight:700;}
+.topic-card li::before{ content:"▸ "; color:var(--session-deep,var(--brand)); font-weight:700;}
 .chips{ display:flex; flex-wrap:wrap; gap:2.5pt; margin-top:1pt;}
 .chip{
   font-size:7.6pt; line-height:1.5; border:1px solid var(--line-chip); border-radius:20px;
   padding:0 6px; background:#fff; color:var(--ink);
 }
 .chip .en{ font-weight:600; }
-.chip--pre{ background:var(--fam6-soft); border-color:var(--fam6); }
+.chip--pre{ background:var(--surface); border-color:var(--line-chip); }
 .topic-card__foot{ margin-top:3pt; padding-top:2pt; border-top:1px dashed var(--line); color:var(--muted); font-size:8pt;}
 
 /* تیتر بخش */
@@ -147,9 +147,9 @@ p.body .src{ margin-inline-start:4pt; }
   display:flex; align-items:baseline; gap:7pt; margin:8pt 0 4pt;
   break-after:avoid; break-inside:avoid;
 }
-.section::before{ content:""; width:7pt; height:7pt; border-radius:50%; background:var(--fam6); flex:0 0 auto; transform:translateY(1px);}
+.section::before{ content:""; width:7pt; height:7pt; border-radius:50%; background:var(--sun); flex:0 0 auto; transform:translateY(1px);}
 .section h3{ font-size:var(--fs-h-section); color:var(--session-deep,var(--primary-deep)); font-weight:700; line-height:1.6;}
-.section .sno{ color:var(--fam6-deep); font-size:9pt; font-weight:700;}
+.section .sno{ color:var(--session-deep,var(--faint)); font-size:9pt; font-weight:700;}
 
 /* ============================================================= کادرهای آموزشی */
 .callout{
@@ -202,15 +202,15 @@ table.tbl.tbl--dense td{ padding:2.4pt 6pt; }
 .tblwrap__cap{ display:flex; align-items:baseline; gap:7pt; padding:5pt 8pt 4pt;
   border-bottom:.6pt solid var(--hairline); break-after:avoid;}
 .tblwrap__cap .tno{
-  background:var(--fam6-deep); color:#fff; font-size:8pt; font-weight:700;
+  background:var(--session-header,var(--brand-deep)); color:#fff; font-size:8pt; font-weight:700;
   border-radius:5px; padding:0 7px; line-height:1.8; white-space:nowrap;
 }
 .tblwrap__cap .tt{ font-weight:700; font-size:10pt; color:var(--brand-ink);}
 .tblwrap__cap .src{ margin-inline-start:auto; }
 table.tbl{ width:100%; border-collapse:collapse; font-size:9.2pt; line-height:1.72; }
 table.tbl th{
-  background:var(--fam6-deep); color:#fff; font-weight:700; padding:3.2pt 7pt;
-  border-bottom:2pt solid var(--fam6-deep); border-inline-end:.5pt solid var(--hairline);
+  background:var(--session-header,var(--primary-deep)); color:#fff; font-weight:700; padding:3.2pt 7pt;
+  border-bottom:2pt solid var(--session-header,var(--primary-deep)); border-inline-end:.5pt solid var(--hairline);
   text-align:right; font-size:9.2pt;
 }
 table.tbl td{ border-bottom:.5pt solid var(--line); border-inline-end:.5pt solid var(--line);
@@ -219,7 +219,7 @@ table.tbl th:last-child, table.tbl td:last-child{ border-inline-end:none; }
 table.tbl tbody tr:last-child td{ border-bottom:none; }
 /* راه‌راه بسیار لطیف و یکدست؛ سلول سرردیف (ستون اول) همیشه یخی می‌ماند */
 table.tbl tbody tr:nth-child(even) td:not(.rowh){ background:var(--zebra); }
-table.tbl td.rowh{ font-weight:700; color:var(--fam6-deep); background:var(--fam6-soft); white-space:nowrap;}
+table.tbl td.rowh{ font-weight:700; color:var(--session-deep,var(--primary-deep)); background:var(--session-soft,var(--ice-100)); white-space:nowrap;}
 table.tbl .hl{ font-weight:700; color:var(--c-conflict); }
 
 /* ============================================================= خانواده‌های معنایی
@@ -279,7 +279,7 @@ body.bw-theme .term{ background:none; text-decoration:underline; }
 .fig img{ display:block; width:100%; height:auto; margin-inline:auto; }
 .fig__cap{ padding:4pt 8pt 5pt; font-size:var(--fs-caption); line-height:1.68; border-top:1px solid var(--line-soft); background:var(--surface);}
 .fig__cap .fno{
-  display:inline-block; background:var(--fam6-deep); color:#fff; font-weight:700; font-size:7.8pt;
+  display:inline-block; background:var(--session-header,var(--brand-deep)); color:#fff; font-weight:700; font-size:7.8pt;
   border-radius:5px; padding:0 7px; line-height:1.8; margin-inline-end:5pt; vertical-align:1px;
 }
 .fig__cap .ft{ font-weight:700; color:var(--brand-ink); font-size:9.2pt;}
@@ -294,7 +294,7 @@ body.bw-theme .term{ background:none; text-decoration:underline; }
 .fig__labels{ margin-top:4pt; display:flex; flex-wrap:wrap; gap:2.5pt; }
 .figpair{ display:grid; grid-template-columns:1fr 1fr; gap:9pt; margin:6pt 0; break-inside:avoid; align-items:start; }
 .figpair .fig{ margin:0; width:100% !important; }
-.fig__labels .chip{ font-size:7.6pt; border-color:var(--fam1); }
+.fig__labels .chip{ font-size:7.6pt; }
 /* چیدمان کنار متن: تصویر + متن لنگر در دو ستون */
 .figside{ display:grid; grid-template-columns:1fr 1fr; gap:11pt; margin:6pt 0; break-inside:avoid; align-items:start;}
 .figside .fig{ margin:0; }
@@ -304,7 +304,7 @@ body.bw-theme .term{ background:none; text-decoration:underline; }
 /* ============================================================= فرایند مرحله‌ای */
 .process{ margin:6pt 0; break-inside:avoid; }
 .process__title{ font-weight:700; color:var(--brand-ink); font-size:10pt; margin-bottom:5pt; display:flex; gap:7pt; align-items:baseline;}
-.process__title .pno{ background:var(--fam6-deep); color:#fff; font-size:8pt; border-radius:5px; padding:0 7px; line-height:1.8;}
+.process__title .pno{ background:var(--session-header,var(--brand-deep)); color:#fff; font-size:8pt; border-radius:5px; padding:0 7px; line-height:1.8;}
 .steps{ list-style:none; position:relative; margin-inline-start:11pt; }
 .steps::before{
   content:""; position:absolute; top:8pt; bottom:8pt; inset-inline-start:0;
@@ -314,7 +314,7 @@ body.bw-theme .term{ background:none; text-decoration:underline; }
 .step:last-child{ padding-bottom:0; }
 .step .n{
   position:absolute; inset-inline-start:-11pt; top:2pt; width:16.5pt; height:16.5pt; border-radius:50%;
-  background:var(--fam6); color:#fff; font-weight:700; font-size:8.6pt; text-align:center; line-height:17.5pt;
+  background:var(--session-accent,var(--brand)); color:#fff; font-weight:700; font-size:8.6pt; text-align:center; line-height:17.5pt;
 }
 .step b.st{ color:var(--brand-ink); }
 /* دو مسیر روبه‌رو (مثل آنتروگراد ↔ رتروگراد) */
@@ -322,10 +322,9 @@ body.bw-theme .term{ background:none; text-decoration:underline; }
 .dual__lanes{ display:grid; grid-template-columns:1fr 1fr; gap:9pt; }
 .lane{ border:1px solid var(--line-warm); border-radius:var(--r); padding:7pt 10pt 4pt; background:var(--surface); box-shadow:var(--shadow-sm);}
 .lane__head{ display:flex; align-items:center; gap:6pt; font-weight:700; font-size:9.8pt; margin-bottom:4pt;}
-.lane--fwd .lane__head{ color:var(--brand); }
-.lane--bwd .lane__head{ color:var(--accent); }
-.lane .steps::before{ border-color:var(--line); }
-.lane--bwd .step .n{ background:var(--accent); }
+.lane__head{ color:var(--lane, var(--session-deep,var(--brand-deep))); }
+.lane .steps::before{ border-color:var(--lane, var(--line)); }
+.lane .step .n{ background:var(--lane, var(--session-accent,var(--brand))); }
 .dual__rail{ text-align:center; color:var(--faint); font-size:8pt; margin-top:4pt;}
 
 /* ============================================================= نمودار درختی */
@@ -427,14 +426,14 @@ body.bw-theme .term{ background:none; text-decoration:underline; }
 .pstrip__c b{ flex:none; width:11pt; height:11pt; border-radius:50%; display:inline-flex;
   align-items:center; justify-content:center; background:var(--ice-100); color:var(--slate); font-size:8pt; }
 .pstrip__c--done{ color:var(--brand-deep); border-color:var(--hairline); }
-.pstrip__c--done b{ background:var(--fam6); color:#FFF; }
-.pstrip__c--cur{ background:var(--fam6-deep); color:#FFF; border-color:var(--fam6-deep); font-weight:700; }
-.pstrip__c--cur b{ background:#FFF; color:var(--fam6-deep); }
+.pstrip__c--done b{ background:var(--session-accent,var(--brand)); color:#FFF; }
+.pstrip__c--cur{ background:var(--session-header,var(--brand-deep)); color:#FFF; border-color:var(--session-header,var(--brand-deep)); font-weight:700; }
+.pstrip__c--cur b{ background:#FFF; color:var(--session-deep,var(--brand-deep)); }
 /* اهداف یادگیری با جای تیک (خودارزیابی خواننده) */
 .objlist{ list-style:none; padding:0; margin:0; }
 .objlist li{ position:relative; padding-right:14pt; margin:1.2pt 0; }
 .objlist li::before{ content:""; position:absolute; right:0; top:3pt; width:7.5pt; height:7.5pt;
-  border:1.2pt solid var(--fam2); border-radius:2.5pt; background:#FFF; }
+  border:1.2pt solid var(--session-accent,var(--brand)); border-radius:2.5pt; background:#FFF; }
 /* فهرست شکل‌ها و جدول‌ها */
 .lists{ display:flex; gap:14pt; margin-top:6pt; }
 .lists__col{ flex:1 1 0; min-width:0; }
