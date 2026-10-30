@@ -1,0 +1,187 @@
+# گزارش بازبینی — آناتومی دستگاه اعصاب، جلسهٔ 1 (final)
+
+این گزارش جای «برگه‌های تحویل» جزوهٔ مادر را در فرایند نهایی می‌گیرد: هر ابهام علمی اینجاست، نه حدس‌زده‌شده در متن.
+
+- صفحات PDF: 31 (کاور + فهرست + بدنه) · میانگین نویسه/صفحه: 2407
+- میانگین پُری صفحات محتوایی: 90٪ · پُری هر صفحه: [None, None, 100, 98, 96, 98, 70, 92, 99, 95, 84, 98, 87, 99, 97, 98, 63, 99, 99, 91, 100, 84, 81, 88, 85, 78, 85, 51, 100, 100, 93]
+- تصاویر: مدل 31 / PDF 31 · کمترین فونت: 7.0pt · پیوندهای فهرست: 24
+- نتیجهٔ QA خودکار: ✅ قبول
+
+## موارد نیازمند بازبینی انسانی
+- s01t1-s1 [needs_review] (section)
+- s01t1-p1 [needs_review] (paragraph)
+- s01t1-p2 [needs_review] (paragraph)
+- s01t1-p3 [needs_review] (paragraph)
+- s01t1-f1 [needs_review] (figure)
+- s01t1-p4 [needs_review] (paragraph)
+- s01t1-f2 [needs_review] (figure)
+- s01t1-f3 [needs_review] (figure)
+- s01t1-p5 [needs_review] (paragraph)
+- s01t1-s2 [needs_review] (section)
+- s01t1-p6 [needs_review] (paragraph)
+- s01t1-f4 [needs_review] (figure)
+- s01t1-c1 [needs_review] (callout)
+- s01t2-s1 [needs_review] (section)
+- s01t2-p1 [needs_review] (paragraph)
+- s01t2-p2 [needs_review] (paragraph)
+- s01t2-f1 [needs_review] (figure)
+- s01t2-f2 [needs_review] (figure)
+- s01t2-s2 [needs_review] (section)
+- s01t2-p3 [needs_review] (paragraph)
+- s01t2-p4 [needs_review] (paragraph)
+- s01t2-p5 [needs_review] (paragraph)
+- s01t2-f3 [needs_review] (figure)
+- s01t2-p6 [needs_review] (paragraph)
+- s01t2-p7 [needs_review] (paragraph)
+- s01t2-f4 [needs_review] (figure)
+- s01t2-f5 [needs_review] (figure)
+- s01t2-f6 [needs_review] (figure)
+- s01t2-c1 [needs_review] (callout)
+- s01t2-tb1 [needs_review] (table)
+- s01t3-s1 [needs_review] (section)
+- s01t3-p1 [needs_review] (paragraph)
+- s01t3-p2 [needs_review] (paragraph)
+- s01t3-p3 [needs_review] (paragraph)
+- s01t3-s2 [needs_review] (section)
+- s01t3-p4 [needs_review] (paragraph)
+- s01t3-f1 [needs_review] (figure)
+- s01t3-f2 [needs_review] (figure)
+- s01t3-p5 [needs_review] (paragraph)
+- s01t3-c1 [needs_review] (callout)
+- s01t4-s1 [needs_review] (section)
+- s01t4-p1 [needs_review] (paragraph)
+- s01t4-p2 [needs_review] (paragraph)
+- s01t4-p3 [needs_review] (paragraph)
+- s01t4-p4 [needs_review] (paragraph)
+- s01t4-f1 [needs_review] (figure)
+- s01t4-s2 [needs_review] (section)
+- s01t4-p5 [needs_review] (paragraph)
+- s01t4-tb1 [needs_review] (table)
+- s01t4-s3 [needs_review] (section)
+- s01t4-p6 [needs_review] (paragraph)
+- s01t4-f2 [needs_review] (figure)
+- s01t4-pr1 [needs_review] (dual_process)
+- s01t4-tb2 [needs_review] (table)
+- s01t4-p7 [needs_review] (paragraph)
+- s01t4-c1 [unresolved_conflict] (callout)
+- s01t4-c2 [needs_review] (callout)
+- s01t5-s1 [needs_review] (section)
+- s01t5-p1 [needs_review] (paragraph)
+- s01t5-p2 [needs_review] (paragraph)
+- s01t5-s2 [needs_review] (section)
+- s01t5-p3 [needs_review] (paragraph)
+- s01t5-f1 [needs_review] (figure)
+- s01t5-tb1 [needs_review] (table)
+- s01t5-f2 [needs_review] (figure)
+- s01t5-f3 [needs_review] (figure)
+- s01t5-f4 [needs_review] (figure)
+- s01t5-s3 [needs_review] (section)
+- s01t5-p4 [needs_review] (paragraph)
+- s01t5-f5 [needs_review] (figure)
+- s01t5-p5 [needs_review] (paragraph)
+- s01t5-f6 [needs_review] (figure)
+- s01t5-f7 [needs_review] (figure)
+- s01t5-tb2 [needs_review] (table)
+- s01t5-f8 [needs_review] (figure)
+- s01t5-c1 [needs_review] (callout)
+- s01t5-c2 [needs_review] (callout)
+- s01t6-s1 [needs_review] (section)
+- s01t6-p1 [needs_review] (paragraph)
+- s01t6-p2 [needs_review] (paragraph)
+- s01t6-f1 [needs_review] (figure)
+- s01t6-f2 [needs_review] (figure)
+- s01t6-tb1 [needs_review] (table)
+- s01t6-s2 [needs_review] (section)
+- s01t6-p3 [needs_review] (paragraph)
+- s01t6-f3 [needs_review] (figure)
+- s01t6-p4 [needs_review] (paragraph)
+- s01t6-c1 [needs_review] (callout)
+- s01t6-f4 [needs_review] (figure)
+- s01t6-p5 [needs_review] (paragraph)
+- s01t6-s3 [needs_review] (section)
+- s01t6-p6 [needs_review] (paragraph)
+- s01t6-p7 [needs_review] (paragraph)
+- s01t6-f5 [needs_review] (figure)
+- s01t6-s4 [needs_review] (section)
+- s01t6-p8 [needs_review] (paragraph)
+- s01t6-tb2 [needs_review] (table)
+- s01t6-p9 [needs_review] (paragraph)
+- s01t6-s5 [needs_review] (section)
+- s01t6-p10 [needs_review] (paragraph)
+- s01t6-f6 [needs_review] (figure)
+- s01t6-f7 [needs_review] (figure)
+- s01t6-p11 [needs_review] (paragraph)
+- s01t6-f8 [needs_review] (figure)
+- s01t6-p12 [needs_review] (paragraph)
+- s01t6-s6 [needs_review] (section)
+- s01t6-f9 [needs_review] (figure)
+- s01-tree-glia [needs_review] (tree)
+- s01t6-sb1 [needs_review] (summary_box)
+
+## هشدارهای موتور چیدمان (کیفیت تصویر و …)
+- s01t4-f1: پرچم کیفی تصویر از استخراج: وضوح مؤثر پایین در جزوهٔ مادر (حدود ۹۰ DPI)
+- s01t4-f1: پرچم کیفی تصویر از استخراج: اسکرین‌شات اسلاید: نوار گرادیان تیره در پایین تصویر و نقاط رابط کاربری در گوشهٔ بالا
+- s01t6-f1: پرچم کیفی تصویر از استخراج: نوار تیره در لبهٔ پایین اسلاید (در فایل اصلی جزوهٔ مادر) — نسخهٔ تمیزتر از منبع لازم است؛ برش داده نشد
+- s01t6-f4: پرچم کیفی تصویر از استخراج: وضوح مؤثر پایین در جزوهٔ مادر (حدود ۹۰ DPI)
+- s01t6-f8: پرچم کیفی تصویر از استخراج: وضوح مؤثر بسیار پایین در جزوهٔ مادر (حدود ۶۵ DPI) — اولویت جایگزینی با نسخهٔ باکیفیت‌تر
+
+## خطاها/هشدارهای QA
+- ⚠️ ماتریس پوشش: 31 مورد جزئیات درون‌تصویر ماشینی قابل استخراج نیست و به خود شکل ارجاع داده شده است
+- ⚠️ صفحات با پُری زیر ۷۰٪ (نیازمند توضیح/اصلاح): [17, 28]
+- ⚠️ بازرسی بصری: صفحهٔ 7 — پُری صفحه 70% است (علت محتمل: بلوک نشکن بعدی در باقیمانده جا نشده)
+- ⚠️ بازرسی بصری: صفحهٔ 17 — پُری صفحه 63% است (علت محتمل: بلوک نشکن بعدی در باقیمانده جا نشده)
+- ⚠️ بازرسی بصری: صفحهٔ 28 — پُری صفحه 51% است (علت محتمل: بلوک نشکن بعدی در باقیمانده جا نشده)
+- ⚠️ بازرسی بصری: صفحهٔ 4 — عنوان شکل در صفحهٔ تصویر پیدا نشد (علت محتمل: شکستن قاب شکل بین دو صفحه)
+
+## تصمیم‌های چیدمان و بسته‌بندی (خلاصه)
+- s01t1-f1: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.86؛ رقیب بعدی: full با 0.78؛ عرض چاپ ≈79mm، ارتفاع تصویر ≈90mm، وضوح مؤثر ≈202 DPI
+- s01t1-f2: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.83؛ رقیب بعدی: full با 0.79؛ عرض چاپ ≈84mm، ارتفاع تصویر ≈85mm، وضوح مؤثر ≈242 DPI
+- s01t1-f3: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.81؛ رقیب بعدی: full با 0.77؛ عرض چاپ ≈53mm، ارتفاع تصویر ≈89mm، وضوح مؤثر ≈564 DPI
+- s01t1-f4: چیدمان تصویر «full» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.92؛ عرض چاپ ≈136mm، ارتفاع تصویر ≈46mm، وضوح مؤثر ≈222 DPI
+- s01t2-f1: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.87؛ رقیب بعدی: full با 0.79؛ عرض چاپ ≈84mm، ارتفاع تصویر ≈87mm، وضوح مؤثر ≈205 DPI
+- s01t2-f2: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.81؛ رقیب بعدی: full با 0.76؛ عرض چاپ ≈48mm، ارتفاع تصویر ≈90mm، وضوح مؤثر ≈303 DPI
+- s01t2-f3: چیدمان تصویر «full» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.87؛ عرض چاپ ≈89mm، ارتفاع تصویر ≈62mm، وضوح مؤثر ≈253 DPI
+- s01t2-f4: چیدمان تصویر «full» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.83؛ رقیب بعدی: sidecap با 0.70؛ عرض چاپ ≈85mm، ارتفاع تصویر ≈62mm، وضوح مؤثر ≈249 DPI
+- s01t2-f5: چیدمان تصویر «full» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.83؛ رقیب بعدی: sidecap با 0.70؛ عرض چاپ ≈86mm، ارتفاع تصویر ≈62mm، وضوح مؤثر ≈225 DPI
+- s01t2-f6: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.83؛ رقیب بعدی: full با 0.73؛ عرض چاپ ≈84mm، ارتفاع تصویر ≈69mm، وضوح مؤثر ≈202 DPI
+- s01t2-tb1: عرض ستون‌ها متناسب با طول محتوای سلول‌ها تنظیم شد: [17, 31, 27, 25]
+- s01t2-f4+s01t2-f5: جفت‌تصویر در یک ردیف (هر دو در نیم‌عرض خوانا می‌مانند)
+- s01t3-f1: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.87؛ رقیب بعدی: full با 0.79؛ عرض چاپ ≈84mm، ارتفاع تصویر ≈80mm، وضوح مؤثر ≈198 DPI
+- s01t3-f2: چیدمان تصویر «full» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.90؛ عرض چاپ ≈100mm، ارتفاع تصویر ≈62mm، وضوح مؤثر ≈203 DPI
+- s01t4-f1: چیدمان تصویر «full» — کهن‌الگوی بخش «mixed» و بالاترین امتیاز 0.83؛ عرض چاپ ≈118mm، ارتفاع تصویر ≈88mm، وضوح مؤثر ≈133 DPI
+- s01t4-tb1: عرض ستون‌ها متناسب با طول محتوای سلول‌ها تنظیم شد: [25, 37, 38]
+- s01t4-f2: چیدمان تصویر «full» — کهن‌الگوی بخش «process» و بالاترین امتیاز 0.86؛ عرض چاپ ≈126mm، ارتفاع تصویر ≈62mm، وضوح مؤثر ≈276 DPI
+- s01t4-tb2: عرض ستون‌ها متناسب با طول محتوای سلول‌ها تنظیم شد: [23, 35, 42]
+- s01t5-f1: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.82؛ رقیب بعدی: full با 0.77؛ عرض چاپ ≈84mm، ارتفاع تصویر ≈83mm، وضوح مؤثر ≈202 DPI
+- s01t5-f2: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.74؛ رقیب بعدی: full با 0.73؛ عرض چاپ ≈52mm، ارتفاع تصویر ≈90mm، وضوح مؤثر ≈151 DPI
+- s01t5-f3: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.78؛ رقیب بعدی: full با 0.77؛ عرض چاپ ≈82mm، ارتفاع تصویر ≈90mm، وضوح مؤثر ≈206 DPI
+- s01t5-f4: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.78؛ رقیب بعدی: full با 0.77؛ عرض چاپ ≈84mm، ارتفاع تصویر ≈88mm، وضوح مؤثر ≈239 DPI
+- s01t5-f5: چیدمان تصویر «full» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.88؛ عرض چاپ ≈93mm، ارتفاع تصویر ≈62mm، وضوح مؤثر ≈228 DPI
+- s01t5-f6: چیدمان تصویر «full» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.84؛ عرض چاپ ≈97mm، ارتفاع تصویر ≈62mm، وضوح مؤثر ≈217 DPI
+- s01t5-f7: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.83؛ رقیب بعدی: full با 0.73؛ عرض چاپ ≈84mm، ارتفاع تصویر ≈75mm، وضوح مؤثر ≈202 DPI
+- s01t5-tb2: عرض ستون‌ها متناسب با طول محتوای سلول‌ها تنظیم شد: [10, 38, 21, 31]
+- s01t5-f8: چیدمان تصویر «full» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.87؛ عرض چاپ ≈90mm، ارتفاع تصویر ≈62mm، وضوح مؤثر ≈201 DPI
+- s01t6-f1: چیدمان تصویر «full» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.90؛ عرض چاپ ≈140mm، ارتفاع تصویر ≈57mm، وضوح مؤثر ≈250 DPI
+- s01t6-f2: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.81؛ رقیب بعدی: full با 0.72؛ عرض چاپ ≈71mm، ارتفاع تصویر ≈90mm، وضوح مؤثر ≈241 DPI
+- s01t6-tb1: عرض ستون‌ها متناسب با طول محتوای سلول‌ها تنظیم شد: [19, 21, 25, 35]
+- s01t6-f3: چیدمان تصویر «full» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.90؛ عرض چاپ ≈104mm، ارتفاع تصویر ≈62mm، وضوح مؤثر ≈237 DPI
+- s01t6-f4: چیدمان تصویر «full» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.84؛ عرض چاپ ≈106mm، ارتفاع تصویر ≈62mm، وضوح مؤثر ≈149 DPI
+- s01t6-f5: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.85؛ رقیب بعدی: full با 0.72؛ عرض چاپ ≈50mm، ارتفاع تصویر ≈90mm، وضوح مؤثر ≈340 DPI
+- s01t6-f6: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.84؛ رقیب بعدی: full با 0.80؛ عرض چاپ ≈84mm، ارتفاع تصویر ≈69mm، وضوح مؤثر ≈231 DPI
+- s01t6-f7: چیدمان تصویر «side» — درخواست صریح در داده؛ عرض چاپ ≈56mm، ارتفاع تصویر ≈90mm، وضوح مؤثر ≈212 DPI
+- s01t6-f8: چیدمان تصویر «full» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.86؛ عرض چاپ ≈84mm، ارتفاع تصویر ≈53mm، وضوح مؤثر ≈135 DPI
+- s01t6-f9: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.85؛ رقیب بعدی: full با 0.73؛ عرض چاپ ≈60mm، ارتفاع تصویر ≈90mm، وضوح مؤثر ≈459 DPI
+- [بسته‌بندی] s01t2-tb1: بلوک «s01t2-c1» از پنجرهٔ بعدی جلو کشیده شد تا جای خالی انتهای صفحه پر شود (همان بخش، بدون ارجاع پیش‌رو به شکل)
+- [بسته‌بندی] s01t2-tb1: جدول در باقیماندهٔ صفحه جا نشد و کامل به صفحهٔ بعد منتقل شد (Keep Together؛ تقسیم نشد)
+- [بسته‌بندی] s01t4-f1: بلوک «s01t4-p4» از پنجرهٔ بعدی جلو کشیده شد تا جای خالی انتهای صفحه پر شود (همان بخش، بدون ارجاع پیش‌رو به شکل)
+- [بسته‌بندی] s01t4-tb2: جدول در باقیماندهٔ صفحه جا نشد و کامل به صفحهٔ بعد منتقل شد (Keep Together؛ تقسیم نشد)
+- [بسته‌بندی] s01t5-tb1: جدول در باقیماندهٔ صفحه جا نشد و کامل به صفحهٔ بعد منتقل شد (Keep Together؛ تقسیم نشد)
+- [بسته‌بندی] s01t6-tb1: جدول در باقیماندهٔ صفحه جا نشد و کامل به صفحهٔ بعد منتقل شد (Keep Together؛ تقسیم نشد)
+- [بسته‌بندی] s01t6-f6: تصویر کپشن‌کناری برای جا شدن در صفحهٔ جاری کوچک شد
+- [بسته‌بندی] شبیه‌سازی بسته‌بندی: ≈27 صفحهٔ بدنه
+- s01t1-f3: [بازرسی بصری] زیرنویس از تصویر جدا افتاده بود؛ شکل کامل به صفحهٔ بعد منتقل می‌شود
+- [بسته‌بندی] s01t5-tb1: [حسابرسی شکست] تهِ صفحهٔ قبل در رندر واقعی 89mm خالی بود و بلوک (80mm) جا می‌شد؛ شکست اجباری حذف شد
+- [بسته‌بندی] s01t5-f3: [بازخورد PDF واقعی] صفحهٔ قبل 97mm فضای خالی داشت؛ تصویر تا عرض 78٪ کوچک شد تا در همان صفحه جا شود
+- [بسته‌بندی] s01t1-f3: [حسابرسی شکست] تهِ صفحهٔ قبل در رندر واقعی 171mm خالی بود و بلوک (92mm) جا می‌شد؛ شکست اجباری حذف شد
+- [بسته‌بندی] s01t5-f4: [بازخورد PDF واقعی] صفحهٔ قبل 74mm فضای خالی داشت؛ تصویر تا عرض 68٪ کوچک شد تا در همان صفحه جا شود
+- برگهٔ فوق‌فشرده: 2 صفحه، پوشش A 97/100

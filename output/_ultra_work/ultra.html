@@ -1,0 +1,218 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><style>@font-face{font-family:Vazirmatn;src:url(file:///home/user/pdfmakerbest/assets/fonts/Vazirmatn-Regular.ttf);font-weight:400}
+@font-face{font-family:Vazirmatn;src:url(file:///home/user/pdfmakerbest/assets/fonts/Vazirmatn-Medium.ttf);font-weight:500}
+@font-face{font-family:Vazirmatn;src:url(file:///home/user/pdfmakerbest/assets/fonts/Vazirmatn-Bold.ttf);font-weight:700}
+@font-face{font-family:Vazirmatn;src:url(file:///home/user/pdfmakerbest/assets/fonts/Vazirmatn-Light.ttf);font-weight:300}
+@font-face{font-family:Inter;src:url(file:///home/user/pdfmakerbest/assets/fonts/Inter-Regular.woff2) format("woff2");font-weight:400;font-style:normal}
+@font-face{font-family:Inter;src:url(file:///home/user/pdfmakerbest/assets/fonts/Inter-Italic.woff2) format("woff2");font-weight:400;font-style:italic}
+@font-face{font-family:Inter;src:url(file:///home/user/pdfmakerbest/assets/fonts/Inter-Medium.woff2) format("woff2");font-weight:500;font-style:normal}
+@font-face{font-family:Inter;src:url(file:///home/user/pdfmakerbest/assets/fonts/Inter-SemiBold.woff2) format("woff2");font-weight:600;font-style:normal}
+@font-face{font-family:Inter;src:url(file:///home/user/pdfmakerbest/assets/fonts/Inter-Bold.woff2) format("woff2");font-weight:700;font-style:normal}
+/* ============================================================
+   HumsYar — Brand Design Tokens (منبع واحد رنگ‌های برند)
+   ------------------------------------------------------------
+   راند ۱۳ (پولیش): یک رنگ جلسه برای کل جزوه، کاغذ یکدست، کارت سفید.
+   - رنگ فقط از «نقش» می‌آید: خانوادهٔ معنایی نشانه/کادر و شمارهٔ جلسه؛
+     رنگ مبحث به‌صورت پیش‌فرض خاموش است (chapter_accent_mode در layout.yaml).
+   - همهٔ مقدارها hex نهایی و از پیش محاسبه‌شده‌اند؛ در این فایل و CSS
+     کامپوننت‌ها color-mix/rgba/زنجیرهٔ var برای ساخت رنگ به کار نمی‌رود.
+     مشتقات کنتراست‌امن جلسه در humsyar/palette.py با HSL ساخته و به‌صورت
+     hex به سند تزریق می‌شوند.
+   - تنها فایلی که مجاز است مقدار HEX داشته باشد. رنگ تصاویر اصلی
+     کتاب‌ها مشمول این پالت نیست.
+   قانون هر صفحه: حداکثر سه خانوادهٔ رنگ — رنگ جلسه، کرم/خنثی، و در
+   صورت وجود کادر، رنگ معنایی همان کادر. زرد فقط هایلایت است.
+   ============================================================ */
+/* رنگ کاغذ روی خودِ صفحه است (نه روی ظرف‌ها) تا هیچ مرز سفیدی نماند.
+   این خط باید با --paper هم‌مقدار بماند (تست خودکار بررسی می‌کند). */
+@page { background: #FFFBF3; }
+:root {
+  /* --- هستهٔ گرم برند --- */
+  --paper: #FFFBF3;            /* پس‌زمینهٔ صفحه: کرم بسیار ملایم */
+  --surface: #FFFFFF;          /* کارت‌ها سفیدند */
+  --surface-warm: #FFF6EA;
+  --zebra: #FFF8EC;            /* ردیف زوج جدول */
+  --ink: #26324B;
+  --ink-soft: #6B7488;
+  --line-warm: #EADFCF;
+  --line-chip: #E2D6C3;
+  --primary: #139A8E;          /* رنگ پایهٔ برند (رنگ جلسهٔ ۱) */
+  --primary-deep: #0F5E63;
+  --secondary: #FF6B5B;
+  --sun: #FFB627;
+  --hl: #FFE9A8;               /* تنها سبک هایلایت کل جزوه */
+  --sun-soft: #FFE9A8;
+  --cover-deep: #1B2440;
+  --white: #FFFFFF;
+
+  /* --- رنگ جلسه: session[(number-1) mod 13] — هر ۱۳ جلسه از همین‌جا --- */
+  --session-1: #139A8E;
+  --session-2: #2F80ED;
+  --session-3: #7C5CFA;
+  --session-4: #E8508B;
+  --session-5: #FF7A45;
+  --session-6: #2EAD6B;
+  --session-7: #F2A100;
+  --session-8: #E5484D;
+  --session-9: #4F46E5;
+  --session-10: #0E7490;
+  --session-11: #C2410C;
+  --session-12: #15803D;
+  --session-13: #B45309;
+
+  /* --- رنگ مبحث (فقط برای حالت tab_only؛ پیش‌فرض خاموش) --- */
+  --chapter-1: #139A8E;
+  --chapter-2: #FF7A45;
+  --chapter-3: #7C5CFA;
+  --chapter-4: #2F80ED;
+  --chapter-5: #E8508B;
+  --chapter-6: #2EAD6B;
+  --chapter-7: #F2A100;
+  --chapter-8: #E5484D;
+
+  /* --- شش خانوادهٔ معنایی: base/deep/soft همگی hex نهایی ---
+     softها با HSL ساخته شده‌اند: Hue خانواده، S≈۵۵-۷۰٪، L≈۹۵٫۵٪ */
+  --fam1: #139A8E;  --fam1-deep: #0F766D;  --fam1-soft: #EBFCFA;
+  --fam2: #F59E0B;  --fam2-deep: #996206;  --fam2-soft: #FCF6EB;
+  --fam3: #2EAD6B;  --fam3-deep: #20794B;  --fam3-soft: #EDFAF3;
+  --fam4w: #FF6B5B; --fam4w-deep: #D51500; --fam4w-soft: #FCEDEB;
+  --fam4c: #F97316; --fam4c-deep: #B44C05; --fam4c-soft: #FCF2EB;
+  --fam4e: #D9A400; --fam4e-deep: #876600; --fam4e-soft: #FCF8EB;
+  --fam4u: #8B7FB8; --fam4u-deep: #7061A8; --fam4u-soft: #F0EDFA;
+  --fam5: #E8508B;  --fam5-deep: #CC1B5F;  --fam5-soft: #FCEBF2;
+  --fam6: #6D5BD0;  --fam6-deep: #6957CF;  --fam6-soft: #EFEDFA;
+
+  /* --- گرادیان جلد و سایهٔ گرم (رنگ سایه جامد و گرم است) --- */
+  --brand-grad: linear-gradient(135deg, #1B2440 0%, #0F5E63 55%, #139A8E 100%);
+  --brand-grad-h: linear-gradient(90deg, #0F5E63 0%, #139A8E 100%);
+  --cover-bg: linear-gradient(180deg, #1B2440 0%, #0F5E63 100%);
+  --shadow-sm: 0 1px 2px #EFE5D3;
+  --shadow-md: 0 2px 8px #EDE1CC;
+
+  /* ==========================================================
+     لایهٔ معنایی موتور (همه hex نهایی؛ بدون زنجیرهٔ var)
+     ========================================================== */
+  --brand: #0F5E63;
+  --brand-deep: #0F5E63;
+  --brand-ink: #0F5E63;
+  --brand-soft: #FFF6EA;
+  --accent: #139A8E;
+  --muted: #6B7488;
+  --faint: #949BA9;
+  --line: #EADFCF;
+  --line-soft: #FFF6EA;
+  --soft: #FFF6EA;
+  --tint: #EBFCFA;
+  --tint-blue: #FFF6EA;
+  --slate: #6B7488;
+  --slate-deep: #4C566D;
+  --slate-soft: #AEB3BE;
+  --hairline: #EADFCF;
+
+  /* نقش کادرها از خانواده‌شان — پس‌زمینهٔ کادر سفید است و --bg-* فقط
+     برای بج‌ها/نوارهای کوچکِ نیازمند سطح رنگی نگه داشته شده‌اند */
+  --c-key: #996206;          --bg-key: #FCF6EB;
+  --c-clinical: #20794B;     --bg-clinical: #EDFAF3;
+  --c-warning: #D51500;      --bg-warning: #FCEDEB;
+  --c-bridge: #20794B;       --bg-bridge: #EDFAF3;
+  --c-conflict: #B44C05;     --bg-conflict: #FCF2EB;
+  --c-exam: #CC1B5F;         --bg-exam: #FCEBF2;
+  --c-definition: #0F766D;   --bg-definition: #EBFCFA;
+  --c-example: #20794B;      --bg-example: #EDFAF3;
+  --c-summary: #996206;      --bg-summary: #FCF6EB;
+  --c-exception: #876600;    --bg-exception: #FCF8EB;
+  --c-mnemonic: #CC1B5F;     --bg-mnemonic: #FCEBF2;
+  --c-formula: #CC1B5F;      --bg-formula: #FCEBF2;
+  --c-terminology: #0F766D;  --bg-terminology: #EBFCFA;
+  --c-unresolved: #7061A8;   --bg-unresolved: #F0EDFA;
+
+  /* نام‌های قدیمی مصرف‌کننده‌ها (کاور، درخت، ریل، برگهٔ مرور) */
+  --navy-950: #1B2440;
+  --navy-900: #0F5E63;
+  --navy-800: #0F5E63;
+  --navy-700: #139A8E;
+  --royal-600: #0F5E63;
+  --azure-500: #139A8E;
+  --sky-400: #89CCC6;
+  --cyan-400: #FFB627;
+  --aqua-300: #FFD9A0;
+  --tealcyan-500: #FF7A45;
+  --teal-ink: #CF3B00;
+  --ice-50: #FFF6EA;
+  --ice-100: #FDEFDC;
+  --ice-teal: #EBFCFA;
+  --warn: #D9A400;
+  --warn-bg: #FCF8EB;
+  --conflict: #F97316;
+  --conflict-bg: #FCF2EB;
+  --conflict-ink: #B44C05;
+  --topic-1: #139A8E;
+  --topic-2: #FF7A45;
+  --topic-3: #7C5CFA;
+  --topic-4: #2F80ED;
+  --topic-5: #E8508B;
+  --topic-6: #2EAD6B;
+}
+
+:root{--u-base:7.6pt}
+
+@page{ size:A4; margin:0 }
+*{ box-sizing:border-box }
+body{ font-family:Vazirmatn,sans-serif; color:var(--ink); margin:0;
+      font-size:var(--u-base,8.8pt); line-height:1.47 }
+.upage{ padding:2mm 1mm 0 }
+.upage+.upage{ break-before:page }
+.uhead{ display:flex; justify-content:space-between; align-items:center;
+  border-bottom:2pt solid var(--session-header,var(--royal-600)); padding-bottom:2mm; margin-bottom:3mm }
+.uhead .ut{ font-weight:800; color:var(--session-deep,var(--navy-900)); font-size:1.5em }
+.uhead .ub{ color:var(--session-deep,var(--royal-600)); font-weight:700 }
+.uhead .ubadge{ background:var(--session-header,var(--royal-600)); color:#fff; border-radius:20pt;
+  padding:1pt 7pt; font-weight:700; font-size:max(.82em,7.05pt) }
+.ucols{ columns:2; column-gap:5mm }
+.uc{ break-inside:avoid; border:1pt solid var(--hairline); border-radius:5pt;
+  padding:1.9mm 2.3mm; margin:0 0 2.4mm; background:#fff }
+.uc--skeleton,.uc--table,.uc--proc{ column-span:all }
+.uc h3{ margin:0 0 1.6mm; color:var(--session-deep,var(--royal-600)); font-size:1.06em }
+.uc--alerts{ border-color:var(--line-warm); border-inline-start:3pt solid var(--fam4w); background:var(--surface) }
+.uc--alerts h3{ color:var(--c-warning) }
+.uc--numbers{ background:var(--surface) }
+.up{ margin:0; padding-inline-start:4.2mm }
+.up li{ margin:.4mm 0 }
+.usk b{ color:var(--session-deep,var(--navy-900)); display:block; margin-top:1mm }
+.usk span{ display:inline-block; background:var(--surface-warm); border-radius:10pt;
+  padding:0 5pt; margin:.6mm 0 .6mm 1.2mm; font-size:max(.86em,7.05pt) }
+.utbl{ width:100%; border-collapse:collapse; font-size:max(.92em,7.05pt) }
+.utbl th{ background:var(--session-header,var(--royal-600)); color:#fff; padding:1.2mm 1.6mm; text-align:start }
+.utbl td{ border-bottom:.5pt solid var(--hairline); padding:.7mm 1.4mm; vertical-align:top }
+.utbl td.rowh{ background:var(--session-soft,var(--ice-100)); font-weight:700; color:var(--session-deep,var(--navy-900)) }
+.utbl tbody tr:nth-child(even) td:not(.rowh){ background:var(--zebra) }
+.uchain{ margin:1mm 0; line-height:2 }
+.ustep{ background:var(--surface); border:1pt solid var(--line-chip); border-radius:10pt;
+  padding:0 6pt; white-space:nowrap }
+.uarr{ width:7pt; height:7pt; fill:var(--session-deep,var(--royal-600)); vertical-align:-1pt }
+.uchip{ display:inline-block; border:1pt solid var(--line-chip); background:var(--surface);
+  border-radius:10pt; padding:0 5pt; margin:.6mm 0 .6mm 1.2mm; font-size:max(.9em,7.05pt) }
+.uvs{ color:var(--slate-deep); font-size:max(.85em,7.05pt) }
+.ufoot{ border-top:1pt solid var(--hairline); margin-top:2mm; padding-top:1.6mm;
+  color:var(--slate-deep); font-size:max(.8em,7.05pt); display:flex; justify-content:space-between }
+body.tight{ line-height:1.35 }
+.tight .ucols{ column-gap:4mm }
+.tight .uchain{ line-height:1.62 }
+.tight .uchip{ font-size:max(.85em,7.05pt) }
+.tight .upage{ padding-top:1mm }
+.tight .uhead{ margin-bottom:2mm; padding-bottom:1.4mm }
+.tight .uc{ margin-bottom:1.6mm; padding:1.4mm 2.1mm }
+.tight .uc h3{ margin-bottom:1mm }
+.tight .up li{ margin:.2mm 0 }
+.tight .utbl{ line-height:1.3 }
+.tight .utbl td{ padding:.35mm 1.3mm }
+.tight .utbl th{ padding:.7mm 1.4mm }
+.tight .usk b{ display:inline; margin:0 0 0 2mm }
+.tight .usk span{ margin:.35mm 0 .35mm 1mm; font-size:max(.82em,7.05pt) }
+.tight .uchip{ margin:.35mm 0 .35mm 1mm }
+.tight .ufoot{ margin-top:1.2mm; padding-top:1mm }
+.up li{ break-inside:avoid }
+.term,.numbadge,.un{ background-color:var(--hl); color:inherit; border:0; padding:0 .2em;
+  border-radius:.2em; display:inline; line-height:inherit; box-decoration-break:clone;
+  -webkit-box-decoration-break:clone; box-shadow:none; text-shadow:none }
+.en, bdi.en{ font-family:Inter,Vazirmatn,sans-serif; direction:ltr; color:var(--ink) }
+</style></head><body style="--session-accent:#139A8E;--session-deep:#107F75;--session-header:#108379;--session-soft:#EEF4EC" class="tight"><div class="upage"><div class="uhead"><span class="ut">آناتومی دستگاه اعصاب — بافت‌شناسی سیستم عصبی: از نورون تا میلین</span><span class="ubadge">اسکلت مفهومی مبحث · صفحهٔ ۱ از ۲</span><span class="ub">هامزیار · HumsYar</span></div><div class="ucols"><section class="uc uc--skeleton"><h3>اسکلت مبحث</h3><div class="usk"><b>تقسیم‌بندی سیستم عصبی: مرکزی و محیطی</b><span>دو جزء اصلی: دستگاه عصبی مرکزی و محیطی</span><span>منشأ جنینی: از اکتودرم تا ستیغ عصبی</span></div><div class="usk"><b>نورون و پریکاریون: هسته، اجسام نیسل و اندامک‌ها</b><span>دو نوع سلولِ بافت عصبی و سه جزء نورون</span><span>جسم سلولی: مرکز سازمان‌دهی سلول</span></div><div class="usk"><b>دندریت و خارهای دندریتی</b><span>دندریت: زوائد درخت‌مانند نورون</span><span>خارهای دندریتی: ایستگاه‌های دریافت پیام</span></div><div class="usk"><b>آکسون، آکسوپلاسم و انتقال آکسونی</b><span>آکسون و منشأ آن: تپهٔ آکسونی و قطعهٔ اولیه</span><span>آکسوپلاسم و مقایسهٔ آکسون و دندریت</span><span>انتقال آکسونی: وقتی آکسون خودش پروتئین نمی‌سازد</span></div><div class="usk"><b>انواع نورون و سیناپس</b><span>طبقه‌بندی عملکردی: نورون چه کاری می‌کند</span><span>طبقه‌بندی مورفولوژیک: نورون چه شکلی است</span><span>سیناپس: محل انتقال یک‌طرفهٔ پیام</span></div><div class="usk"><b>نوروگلیاها و غلاف میلین</b><span>شش سلول گلیال در یک نگاه: منشأ، محل، وظیفه</span><span>آستروسیت: پرتعدادترین گلیال</span><span>سلول‌های اپندیمال: فرش‌کننده‌های حفره‌های <bdi class="en">CNS</bdi></span><span>میکروگلیا: پلیس ضدشورش <bdi class="en">CNS</bdi></span><span>غلاف میلین: الیگودندروسیت در <bdi class="en">CNS</bdi>، سلول شوان در <bdi class="en">PNS</bdi></span><span>بازگشت به نقشهٔ کل بدن: <bdi class="en">CNS</bdi>، <bdi class="en">PNS</bdi> و نخاع</span></div></section><section class="uc uc--table"><h3>سه دستهٔ انتقال آنتروگراد بر اساس سرعت</h3><table class="utbl"><thead><tr><th>دسته</th><th>سرعت (به نقل جزوه)</th><th>چه چیزی جابه‌جا می‌شود</th></tr></thead><tbody><tr><td class="rowh">آهسته (<bdi class="en">Slow</bdi>)</td><td class="">کمتر از چند میلی‌متر در روز، حتی کمتر از یک میلی‌متر در روز</td><td class="">پروتئین‌های اسکلت سلولی مانند میکروفیلامنت‌ها و میکروتوبول‌ها</td></tr><tr><td class="rowh">متوسط (<bdi class="en">Intermediate</bdi>)</td><td class="">در جزوه عددی ذکر نشده است</td><td class="">اندامک‌هایی مانند میتوکندری‌ها که انرژی پمپ‌های یونی انتهای آکسون را تأمین می‌کنند</td></tr><tr><td class="rowh">سریع (<bdi class="en">Fast</bdi>)</td><td class="">بیش از ۴۰۰ میلی‌متر در روز (به نقل جزوه)</td><td class="">وزیکول‌های حاوی انتقال‌دهنده‌های عصبی</td></tr></tbody></table></section><section class="uc uc--table"><h3>شش نوع سیناپس بر اساس ساختارهای درگیر</h3><table class="utbl"><thead><tr><th>#</th><th>نوع سیناپس</th><th>ساختار پیش‌سیناپسی</th><th>ساختار پس‌سیناپسی</th></tr></thead><tbody><tr><td class="rowh">۱</td><td class="">آکسوسوماتیک (<bdi class="en">Axosomatic</bdi>)</td><td class="">آکسون</td><td class="">جسم سلولی نورون دیگر</td></tr><tr><td class="rowh">۲</td><td class="">آکسودندریتی (<bdi class="en">Axodendritic</bdi>)</td><td class="">آکسون</td><td class="">دندریت نورون دیگر</td></tr><tr><td class="rowh">۳</td><td class="">آکسوآکسونی (<bdi class="en">Axoaxonic</bdi>)</td><td class="">آکسون</td><td class="">آکسون نورون دیگر</td></tr><tr><td class="rowh">۴</td><td class="">دندروسوماتیک (<bdi class="en">Dendrosomatic</bdi>)</td><td class="">دندریت</td><td class="">جسم سلولی</td></tr><tr><td class="rowh">۵</td><td class="">دندرودندریتیک (<bdi class="en">Dendrodendritic</bdi>)</td><td class="">دندریت</td><td class="">دندریت نورون دیگر</td></tr><tr><td class="rowh">۶</td><td class="">دندروآکسونی (<bdi class="en">Dendroaxonic</bdi>)</td><td class="">دندریت</td><td class="">آکسون نورون دیگر</td></tr></tbody></table></section><section class="uc uc--proc"><h3>دو مسیر گام‌به‌گام انتقال روی یک ریل میکروتوبولی</h3><div class="ulane"><b>آنتروگراد: از سوما به پایانه</b><div class="uchain"><span class="ustep"><b>1.</b> مبدأ: جسم سلولی (سوما) — ساخت پروتئین و بسته‌بندی در دستگاه گلژی</span></div></div><div class="ulane"><div class="uchain"><span class="ustep"><b>2.</b> بارگذاری: اتصال وزیکول یا اندامک به موتور پروتئینی کینزین</span> <svg class="uarr" viewBox="0 0 10 10" aria-hidden="true"><polygon points="10,1 10,9 2,5"/></svg> <span class="ustep"><b>3.</b> مسیر: حرکت روی ریل میکروتوبولی، با مصرف <bdi class="en">ATP</bdi> توسط آنزیم <bdi class="en">ATPase</bdi> موتور</span> <svg class="uarr" viewBox="0 0 10 10" aria-hidden="true"><polygon points="10,1 10,9 2,5"/></svg> <span class="ustep"><b>4.</b> مقصد: دکمه‌های انتهایی آکسون — تأمین وزیکول انتقال‌دهندهٔ عصبی و اندامک‌ها</span> <svg class="uarr" viewBox="0 0 10 10" aria-hidden="true"><polygon points="10,1 10,9 2,5"/></svg> <span class="ustep"><b>2.</b> بارگذاری: اتصال مواد بازیافتی، غشای خالی وزیکول‌ها یا فاکتور رشد به داینین</span> <svg class="uarr" viewBox="0 0 10 10" aria-hidden="true"><polygon points="10,1 10,9 2,5"/></svg> <span class="ustep"><b>3.</b> مسیر: حرکت روی میکروتوبول در جهت عکس، به سمت جسم سلولی</span> <svg class="uarr" viewBox="0 0 10 10" aria-hidden="true"><polygon points="10,1 10,9 2,5"/></svg> <span class="ustep"><b>4.</b> مقصد: سوما — بازیافت مواد و انتقال پیام به هسته</span></div></div><div class="ulane"><b>رتروگراد: از پایانه به سوما</b><div class="uchain"><span class="ustep"><b>1.</b> مبدأ: انتهای آکسون (دکمه‌های سیناپسی)</span></div></div></section><section class="uc uc--chips"><h3>اصطلاحات کلیدی</h3><span class="uchip">دستگاه عصبی مرکزی <bdi class="en">(Central Nervous System)</bdi></span><span class="uchip">دستگاه عصبی محیطی <bdi class="en">(Peripheral Nervous System)</bdi></span><span class="uchip">لولهٔ عصبی <bdi class="en">(Neural tube)</bdi></span><span class="uchip">ستیغ عصبی <bdi class="en">(Neural crest)</bdi></span><span class="uchip">اکتودرم <bdi class="en">(Ectoderm)</bdi></span><span class="uchip">مغز <bdi class="en">(Brain)</bdi></span><span class="uchip">مخچه <bdi class="en">(Cerebellum)</bdi></span><span class="uchip">نخاع <bdi class="en">(Spinal cord)</bdi></span><span class="uchip">پریکاریون <bdi class="en">(Perikaryon)</bdi></span><span class="uchip">اجسام نیسل <bdi class="en">(Nissl bodies)</bdi></span><span class="uchip">مادهٔ کروماتوفیل</span><span class="uchip">نوروفیلامنت <bdi class="en">(Neurofilaments)</bdi></span><span class="uchip">لیپوفوسین <bdi class="en">(Lipofuscin)</bdi></span><span class="uchip">یوکروماتین <bdi class="en">(Euchromatin)</bdi></span><span class="uchip">هسته <bdi class="en">(Nucleus)</bdi></span><span class="uchip">هستک <bdi class="en">(Nucleolus)</bdi></span><span class="uchip">دندریت <bdi class="en">(Dendrite)</bdi></span><span class="uchip">آکسون <bdi class="en">(Axon)</bdi></span><span class="uchip">ریبوزوم <bdi class="en">(Ribosomes)</bdi></span><span class="uchip">خار دندریتی <bdi class="en">(Dendritic spine)</bdi></span><span class="uchip">میکروفیلامنت <bdi class="en">(Microfilament)</bdi></span><span class="uchip">اکتین <bdi class="en">(Actin)</bdi></span><span class="uchip">شکل‌پذیری عصبی <bdi class="en">(Neuroplasticity)</bdi></span><span class="uchip">سر خار <bdi class="en">(Spine head)</bdi></span><span class="uchip">قطعهٔ اولیه <bdi class="en">(Initial segment)</bdi></span><span class="uchip">آکسوپلاسم</span><span class="uchip">انتقال آنتروگراد <bdi class="en">(Anterograde transport)</bdi></span><span class="uchip">انتقال رتروگراد <bdi class="en">(Retrograde transport)</bdi></span><span class="uchip">کینزین <bdi class="en">(Kinesin)</bdi></span><span class="uchip">داینین <bdi class="en">(Dynein)</bdi></span><span class="uchip">آوران <bdi class="en">(Afferent)</bdi></span><span class="uchip">وابران <bdi class="en">(Efferent)</bdi></span><span class="uchip">بینابینی <bdi class="en">(Interneuron)</bdi></span><span class="uchip">چندقطبی <bdi class="en">(Multipolar)</bdi></span><span class="uchip">دوقطبی <bdi class="en">(Bipolar)</bdi></span><span class="uchip">تک‌قطبی کاذب <bdi class="en">(Pseudounipolar)</bdi></span><span class="uchip">بدون آکسون <bdi class="en">(Anaxonic)</bdi></span><span class="uchip">سیناپس شیمیایی <bdi class="en">(Chemical synapse)</bdi></span><span class="uchip">سیناپس الکتریکی <bdi class="en">(Electrical synapse)</bdi></span><span class="uchip">تک‌قطبی <bdi class="en">(Unipolar neuron)</bdi></span><span class="uchip">آستروسیت <bdi class="en">(Astrocyte)</bdi></span><span class="uchip">الیگودندروسیت <bdi class="en">(Oligodendrocyte)</bdi></span><span class="uchip">میکروگلیا <bdi class="en">(Microglia)</bdi></span><span class="uchip">اپندیم <bdi class="en">(Ependymal cell)</bdi></span><span class="uchip">سلول اقماری <bdi class="en">(Satellite cell)</bdi></span><span class="uchip">پروتئین اسیدی رشتهٔ گلیال (GFAP) <bdi class="en">(Glial fibrillary acid protein)</bdi></span><span class="uchip">نوروپیل</span><span class="uchip">غشای محدودکنندهٔ گلیال <bdi class="en">(Glial Limitans)</bdi></span><span class="uchip">نورون <bdi class="en">(Neuron)</bdi></span><span class="uchip">مویرگ <bdi class="en">(Capillary)</bdi></span><span class="uchip">فیبروز <bdi class="en">(Fibrous)</bdi></span><span class="uchip">بطن سوم <bdi class="en">(Third ventricle)</bdi></span></section></div><div class="ufoot"><span>مرور فوق‌فشرده — مکمل جزوهٔ کامل است، نه جایگزین آن؛ جزئیات کامل در متن اصلی جزوه آمده است.</span><span>هامزیار</span></div></div><div class="upage"><div class="uhead"><span class="ut">آناتومی دستگاه اعصاب — بافت‌شناسی سیستم عصبی: از نورون تا میلین</span><span class="ubadge">جزئیات تعیین‌کننده و مرور نهایی · صفحهٔ ۲ از ۲</span><span class="ub">هامزیار · HumsYar</span></div><div class="ucols"><section class="uc uc--table"><h3>ساختارهای جسم سلولی نورون</h3><table class="utbl"><thead><tr><th>ساختار</th><th>شکل و ظاهر</th><th>محل</th><th>وظیفه</th></tr></thead><tbody><tr><td class="rowh">هسته</td><td class="">بزرگ و گرد، کروماتین روشن و پراکنده، یک هستک برجسته</td><td class="">مرکز پریکاریون</td><td class="">کنترل فعالیت سلول</td></tr><tr><td class="rowh">اجسام نیسل</td><td class="">دانه‌های شبکهٔ آندوپلاسمی خشن، بازوفیل</td><td class="">سراسر سیتوپلاسم و بخش پروکسیمال دندریت؛ غایب در تپهٔ آکسونی و آکسون</td><td class="">سنتز پروتئین</td></tr><tr><td class="rowh">دستگاه گلژی</td><td class="">رشته‌های موج‌دار، دسته‌های سیسترن پهن و وزیکول‌های کوچک</td><td class="">کنار هسته</td><td class="">بسته‌بندی و ترشح</td></tr><tr><td class="rowh">میتوکندری</td><td class="">کروی یا میله‌ای، دو غشا با کریستا</td><td class="">پراکنده در پریکاریون، دندریت و آکسون</td><td class="">تولید انرژی شیمیایی</td></tr><tr><td class="rowh">نوروفیلامنت</td><td class="">رشته‌های موازی، دسته‌های فیلامنت ۱۰ نانومتری</td><td class="">از دندریت تا آکسون</td><td class="">شکل نورون و اسکلت سلولی</td></tr><tr><td class="rowh">میکروتوبول</td><td class="">لولهٔ ۲۵ نانومتری</td><td class="">بین نوروفیلامنت‌ها</td><td class="">انتقال سلولی</td></tr><tr><td class="rowh">لیزوزوم</td><td class="">وزیکول ۸ نانومتری</td><td class="">سراسر سلول</td><td class="">پاک‌سازی سلولی</td></tr><tr><td class="rowh">لیپوفوسین</td><td class="">دانه‌های قهوه‌ای-زرد</td><td class="">پراکنده در سیتوپلاسم</td><td class="">محصول جانبی متابولیسم؛ با افزایش سن بیشتر می‌شود</td></tr></tbody></table></section><section class="uc uc--table"><h3>مقایسهٔ آکسون و دندریت</h3><table class="utbl"><thead><tr><th>ویژگی</th><th>آکسون</th><th>دندریت</th></tr></thead><tbody><tr><td class="rowh">قطر</td><td class="">در تمام مسیر ثابت و یکسان</td><td class="">با نزدیک شدن به انتها کاهش می‌یابد</td></tr><tr><td class="rowh">تعداد در هر نورون</td><td class="">فقط یک عدد</td><td class="">می‌تواند بسیار زیاد باشد</td></tr><tr><td class="rowh">طول</td><td class="">معمولاً بسیار بلندتر</td><td class="">کوتاه‌تر</td></tr><tr><td class="rowh">عملکرد</td><td class="">انتقال پیام به سلول‌های دیگر</td><td class="">دریافت اطلاعات</td></tr><tr><td class="rowh">اجسام نیسل</td><td class="">ندارد؛ سنتز پروتئین در آکسون نیست</td><td class="">در سیتوپلاسم دارد (بخش پروکسیمال)</td></tr><tr><td class="rowh">دستگاه گلژی</td><td class="">ندارد</td><td class="">ندارد (استثنای دندریت)</td></tr><tr><td class="rowh">شاخه‌شدن</td><td class="">در انتهای مسیر</td><td class="">از همان ابتدا</td></tr></tbody></table></section><section class="uc uc--table"><h3>چهار نوع نورون بر اساس مورفولوژی</h3><table class="utbl"><thead><tr><th>نوع</th><th>خروجی از سوما</th><th>محل اصلی</th><th>نکته</th></tr></thead><tbody><tr><td class="rowh">چندقطبی (<bdi class="en">Multipolar</bdi>)</td><td class="">یک آکسون و بیش از یک دندریت</td><td class="">اکثر نورون‌های مغز و نخاع، از جمله نورون‌های حرکتی</td><td class="">فراوان‌ترین نوع در بدن</td></tr><tr><td class="rowh">دوقطبی (<bdi class="en">Bipolar</bdi>)</td><td class="">دقیقاً یک آکسون و یک دندریت</td><td class="">شبکیه، مخاط بویایی، گانگلیون‌های وستیبولار و کوکلئار</td><td class="">نورون‌های «حواس ویژه»</td></tr><tr><td class="rowh">تک‌قطبی کاذب (<bdi class="en">Pseudounipolar</bdi>)</td><td class="">یک زائدهٔ کوتاه که فوراً <bdi class="en">T</bdi> شکل می‌شود</td><td class="">گانگلیون ریشهٔ پشتی نخاع و گانگلیون‌های حسی اعصاب جمجمه‌ای</td><td class="">شاخهٔ بلند عملکرد دندریتی و ساختار آکسونی دارد</td></tr><tr><td class="rowh">بدون آکسون (<bdi class="en">Anaxonic</bdi>)</td><td class="">آکسون قابل تشخیص ندارد</td><td class="">بیشتر در مغز</td><td class="">پتانسیل عمل نمی‌سازد؛ پتانسیل تدریجی می‌سازد</td></tr></tbody></table></section><section class="uc uc--table"><h3>شش سلول گلیال: منشأ جنینی، محل و وظیفهٔ کلیدی</h3><table class="utbl"><thead><tr><th>سلول</th><th>منشأ جنینی</th><th>محل</th><th>وظیفهٔ کلیدی</th></tr></thead><tbody><tr><td class="rowh">آستروسیت پروتوپلاسمیک</td><td class="">اکتودرم عصبی (لوله)</td><td class="">مادهٔ خاکستری</td><td class="">پای عروقی، تغذیه، تنظیم یونی، غشای محدودکنندهٔ گلیال</td></tr><tr><td class="rowh">آستروسیت فیبروز</td><td class="">اکتودرم عصبی (لوله)</td><td class="">مادهٔ سفید</td><td class="">زوائد کمتر و طویل‌تر، پشتیبانی ساختاری، <bdi class="en">GFAP</bdi></td></tr><tr><td class="rowh">الیگودندروسیت</td><td class="">اکتودرم عصبی (لوله)</td><td class="">مادهٔ سفید، ردیف روی آکسون‌های میلین‌دار</td><td class="">ساخت میلین <bdi class="en">CNS</bdi>؛ یک سلول برای چند آکسون</td></tr><tr><td class="rowh">میکروگلیا</td><td class="">مونوسیت (مزودرم)</td><td class="">پراکنده در کل <bdi class="en">CNS</bdi></td><td class="">دفاع: بیگانه‌خواری، معرفی آنتی‌ژن، ترشح سایتوکاین</td></tr><tr><td class="rowh">سلول اپندیمال</td><td class="">اکتودرم عصبی (لوله)</td><td class="">بطن‌های مغز و کانال مرکزی نخاع</td><td class="">پوشش حفره‌ها، جریان و جذب <bdi class="en">CSF</bdi></td></tr><tr><td class="rowh">سلول شوان</td><td class="">ستیغ عصبی</td><td class=""><bdi class="en">PNS</bdi>، روی آکسون‌های عصبی</td><td class="">ساخت میلین <bdi class="en">PNS</bdi>؛ یک سلول برای یک قطعه از یک آکسون</td></tr><tr><td class="rowh">سلول اقماری</td><td class="">ستیغ عصبی</td><td class=""><bdi class="en">PNS</bdi>، گانگلیون‌های حسی عصبی</td><td class="">ایزوله‌کردن و تغذیهٔ جسم سلولی نورون گانگلیونی</td></tr></tbody></table></section><section class="uc uc--table"><h3>میکروگلیا در دو حالت استراحت و فعال</h3><table class="utbl"><thead><tr><th>حالت</th><th>رفتار سلول</th></tr></thead><tbody><tr><td class="rowh">استراحت</td><td class="">زوائد متعددی دارد و محیط را اسکن می‌کند</td></tr><tr><td class="rowh">فعال</td><td class="">با دیدن آنتی‌ژن یا بافت آسیب‌دیده پاهایش را جمع می‌کند، گرد می‌شود، سریع تقسیم می‌شود و تعدادش زیاد می‌شود</td></tr></tbody></table></section><section class="uc uc--defs"><h3>تعریف‌ها و اصول پایه</h3><ul class="up"><li>سیستم عصبی از دو جزء اصلی تشکیل شده است: <span class="term">دستگاه عصبی مرکزی <bdi class="en">(Central Nervous System)</bdi></span> که به اختصار <bdi class="en">CNS</bdi> گفته می‌شود، و <span class="term">دستگاه عصبی محیطی <bdi class="en">(Peripheral Nervous System)</bdi></span> که به اختصار <bdi class="en">PNS</bdi> نامیده می‌شود.</li><li>اسنل در جدول ۲-۲، هستهٔ سلول عصبی را «بزرگ و گرد، با کروماتین روشن و یک هستک برجسته» توصیف می‌کند و همین را نشانهٔ فعالیت می‌داند؛ متن جزوه هم دقیقاً روی همین دو ویژگی (یوکروماتین بودن و هستک واضح) دست می‌گذارد. هیچ اختلافی میان دو منبع در این بخش نیست.</li><li>در <bdi class="en">CNS</bdi> سه خانواده نام برده شده است: کاتکول‌آمین‌ها مانند اپی‌نفرین، نوراپی‌نفرین و دوپامین؛ آمینواسیدها مانند گلوتامات، گلیسین و گاماآمینوبوتیریک‌اسید (گابا)؛ و پپتیدهای کوچک مانند اندورفین‌ها و مادهٔ <bdi class="en">P</bdi>. این فهرست همان است که در جزوه آمده و در این جلسه فقط معرفی می‌شود؛ جزئیات هرکدام در جلسهٔ فیزیولوژی باز می‌شود.</li><li>زوائدی از نوروگلیا در بخش‌هایی با زوائد نورون‌ها در ارتباطند؛ به مجموع زوائد متصل‌به‌هم نوروگلیاها و نورون‌ها <strong>نوروپیل</strong> گفته می‌شود.</li><li>در <bdi class="en">CNS</bdi>: آستروسیت (دو نوع)، الیگودندروسیت (یک به چند)، میکروگلیا (از مزودرم) و اپندیم.</li><li>در <bdi class="en">PNS</bdi>: سلول شوان (یک به یک) و سلول اقماری (پوشش جسم سلولی در گانگلیون).</li><li>هر دو گلیال <bdi class="en">PNS</bdi> از ستیغ عصبی می‌آیند و هر سه گلیال اصلی <bdi class="en">CNS</bdi> از لولهٔ عصبی؛ تنها استثنا میکروگلیاست که از مونوسیت خون می‌آید.</li></ul></section><section class="uc uc--numbers"><h3>اعداد و مقادیر کلیدی</h3><ul class="up"><li>همین بخش‌بندی نخاع به چهار ناحیه، پایهٔ جلسه‌های <b class="un">۳</b> و <b class="un">۴</b> است.</li><li><b class="un">1.33</b>); functionally, it can be divided into somatic and visceral parts.</li><li>متن جزوه عدد انتقال سریع را «بیش از <span class="numbadge"><b class="un">۴۰۰</b> میلی‌متر در روز</span>» می‌دهد. اسنل در صفحهٔ <b class="un">۱۰۸</b> انتقال سریع را «<span class="numbadge"><b class="un">۱۰۰</b> تا <b class="un">۴۰۰</b> میلی‌متر در روز</span>» می‌نویسد و همان دو موتور پروتئینی (کینزین برای آنتروگراد و داینین برای رتروگراد) را نام می‌برد. هر دو نقل شده‌اند و کنار هم مانده‌اند تا در بازبینی نهایی مشخص شود کدام در متن نهایی می‌ماند.</li><li>همین جمله، در ورود به جلسهٔ <b class="un">۱۲</b> (دستگاه عصبی خودکار) است.</li></ul></section><section class="uc uc--alerts"><h3>استثناها و اختلاف منابع</h3><ul class="up"><li class="ual">سیتوپلاسم دندریت به‌شدت شبیه سیتوپلاسم جسم سلولی است، اما با دو استثنای مهم: درون آن <strong>هسته وجود ندارد و دستگاه گلژی دیده نمی‌شود</strong>.</li><li class="ual">پیام تصویر همان جملهٔ متن است: آکسون شبیه دندریت است «به‌جز» نیسل، قطر، تعداد، طول و عملکرد.</li><li class="ual">نکتهٔ مهم جنینی: بقیهٔ گلیال‌های مغز (آستروسیت، الیگودندروسیت و اپندیم) منشأ اکتودرمی دارند، اما میکروگلیا استثناست و همان ماکروفاژ سیستم عصبی است؛ منشأش از مونوسیت‌های خون و در نهایت از مغز استخوان و لایهٔ مزودرم جنینی است.</li></ul></section></div><div class="ufoot"><span>مرور فوق‌فشرده — مکمل جزوهٔ کامل است، نه جایگزین آن؛ جزئیات کامل در متن اصلی جزوه آمده است.</span><span>هامزیار</span></div></div></body></html>

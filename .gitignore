@@ -1,0 +1,26 @@
+.venv/
+__pycache__/
+.pytest_cache/
+engine/node_modules/
+engine/package-lock.json
+output/_work/
+output/pages/
+output/*_final.html
+output/theme_b/pages/
+output/theme_b/_work/
+output/theme_b/*.html
+output/theme_b/*.json
+output/workbook/pages/
+output/workbook/_work/
+output/workbook/*.html
+output/workbook/*.json
+output/workbook/*.md
+audit/renders/
+.DS_Store
+output/theme_b/*.md
+
+# خروجی بیلد تست‌های راند ۳
+tests/_out/
+output/_mother/
+output/*.prev.pdf
+output/_audit/
