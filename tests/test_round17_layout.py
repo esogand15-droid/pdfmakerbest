@@ -1,7 +1,7 @@
 """دور چیدمان (درخواست کاربر با شماره‌صفحه):
-- صفحهٔ ۲: فهرست شکل‌ها/جدول‌ها حذف؛ شبکهٔ کارت‌های مبحث با شمارهٔ واقعی.
+- صفحهٔ ۲: فهرست شکل‌ها/جدول‌ها حذف؛ فهرست مطالب لیستی کامل از بالا به پایین.
 - سیستم شکل: سقف ارتفاع عمومی ۹۰mm (یک‌سوم صفحه)، عریض ۶۲mm، کپشن‌کناری ۸۴mm.
-- کپشن ۱۰pt و جدول ۱۰pt؛ عرض ستون‌ها داده‌محور؛ جدول بلند (>۴ ردیف) قابل‌شکستن.
+- کپشن ۱۰pt و جدول ۱۰pt؛ عرض ستون‌ها داده‌محور با کفِ بلندترین کلمه؛ جدول هرگز نمی‌شکند.
 - بهینه‌سازی تصویر ۱۶۰۰px/JPEG85 در بیلد.
 """
 from __future__ import annotations
@@ -30,11 +30,13 @@ def _typeset_html() -> str:
     return Typesetter(plan).document("")
 
 
-def test_page2_card_grid_without_fig_table_lists():
+def test_page2_list_without_fig_table_lists():
+    """تصمیم نهایی کاربر: فهرست مطالب لیست کامل از بالا به پایین است، نه کارت."""
     html = _typeset_html()
     assert "فهرست شکل‌ها" not in html and "فهرست جدول‌ها" not in html
-    assert html.count('class="toc-card"') == 6
-    assert 'class="toc-grid"' in html
+    assert "toc-card" not in html and "toc-grid" not in html and "toc-card" not in CSS
+    assert html.count('class="lvl1"') == 6       # شش مبحث
+    assert html.count('class="lvl2"') == 18      # همهٔ زیرمبحث‌ها
     assert ".lists" not in CSS and "figure_table_lists" not in TYPESET
     # نقشهٔ جلسه و راهنمای خواندن سر جایشان‌اند
     assert "نقشهٔ جلسه" in html and "چطور این جزوه را بخوانیم؟" in html
@@ -55,14 +57,17 @@ def test_caption_and_table_fonts_are_10pt():
     assert "text-align:right; font-size:10pt;" in CSS  # سربرگ جدول
 
 
-def test_long_tables_split_and_columns_are_data_driven():
-    assert ".tblwrap--split{ break-inside:auto; }" in CSS
-    assert "len(d.get(\"rows\", [])) > 4" in TYPESET  # فقط جدول بلند
-    assert "weights.append" in TYPESET  # عرض ستون از طول محتوا
-    assert 'len(block.data.get("rows", [])) <= 4' in PACKING  # هم‌خوانی شبیه‌سازی
+def test_tables_never_split_and_columns_are_data_driven():
+    """قانون موتور (تأکید دوبارهٔ کاربر): جدولِ جا‌شونده در یک صفحه هرگز
+    نمی‌شکند؛ چیدمان ثابت و nowrap هم نیست تا متن روی ستون همسایه نریزد."""
+    assert "tblwrap--split" not in CSS and "tblwrap--split" not in TYPESET
+    assert "tbl--fixed" not in CSS and "tbl--fixed" not in TYPESET
+    assert "self.keep = h <= PAGE_H_MM" in PACKING
+    assert "weights.append" in TYPESET and "longest" in TYPESET  # عرض داده‌محور + کف کلمه
+    assert "background:var(--session-soft,var(--ice-100)); }" in CSS  # rowh بدون nowrap
+    assert "table.tbl .en{ font-size:.86em; }" in CSS  # انگلیسی داخل جدول کوچک‌تر
     html = _typeset_html()
-    assert 'class="tblwrap tblwrap--split"' in html  # جدول ۸ردیفهٔ جسم سلولی
-    assert "<colgroup>" in html and "tbl--fixed" in html
+    assert "tblwrap--split" not in html and "<colgroup>" in html
 
 
 def test_image_optimization_1600_q85():

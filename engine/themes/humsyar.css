@@ -82,27 +82,15 @@ p.body .src{ margin-inline-start:4pt; }
 .session-map li.in .n{ background:var(--session-header,var(--brand-deep)); color:#fff;}
 .session-map li .pg{ margin-inline-start:auto; color:var(--faint); font-size:7.6pt; white-space:nowrap;}
 
-/* فهرست مطالب: شبکهٔ ۲×N کارت مبحث */
+/* فهرست مطالب: لیست کامل از بالا به پایین */
 .toc{ margin-bottom:6pt; break-inside:avoid; }
-.toc-grid{ display:grid; grid-template-columns:1fr 1fr; gap:6pt; grid-auto-rows:1fr; }
-.toc-card{ background:var(--surface); border:1px solid var(--line-soft); border-radius:9pt;
-  padding:6pt 9pt 5pt; box-shadow:var(--shadow-sm); }
-.toc-card__head{ display:flex; align-items:center; gap:7pt; color:inherit; text-decoration:none;
-  padding-bottom:3pt; border-bottom:1px dashed var(--line); }
-.toc-card__n{ flex:0 0 auto; width:17pt; height:17pt; border-radius:50%; text-align:center;
-  line-height:17.5pt; background:var(--session-header,var(--brand-deep)); color:#fff;
-  font-weight:700; font-size:9.5pt; }
-.toc-card__t{ font-weight:700; font-size:12pt; line-height:1.45; color:var(--brand-ink); }
-.toc-card__pg{ margin-inline-start:auto; flex:0 0 auto; font-size:8pt; font-weight:700;
-  color:var(--session-deep,var(--brand-deep)); background:var(--session-soft,var(--ice-100));
-  border-radius:20px; padding:0 7px; line-height:1.7; white-space:nowrap; }
-.toc-card__subs{ list-style:none; margin-top:3pt; }
-.toc-card__subs li{ font-size:10pt; line-height:1.55; }
-.toc-card__subs li a{ display:flex; align-items:baseline; gap:6pt; color:var(--slate-deep);
-  text-decoration:none; }
-.toc-card .dots{ flex:1; border-bottom:1.2px dotted var(--line); transform:translateY(-3px);}
-.toc-card .pno{ font-weight:700; color:var(--session-deep,var(--brand-deep));
-  min-width:14pt; text-align:center;}
+.toc ol{ list-style:none; }
+.toc li{ font-size:9.6pt; line-height:var(--toc-lh,2); }
+.toc li.lvl1{ font-size:10.4pt; font-weight:700; color:var(--brand-ink); }
+.toc li.lvl2{ font-size:9.4pt; color:var(--slate-deep); margin-inline-start:16pt; }
+.toc li a{ display:flex; align-items:baseline; gap:6pt; color:inherit; text-decoration:none; }
+.toc .dots{ flex:1; border-bottom:1.2px dotted var(--line); transform:translateY(-3px);}
+.toc .pno{ font-weight:700; color:var(--session-deep,var(--brand-deep)); min-width:14pt; text-align:center;}
 .tocpage{ break-after:page; }
 .tocpage .guide{ margin-top:6pt; }
 /* صفحهٔ فهرست: نقشه + شبکهٔ کارت‌های مطالب + راهنمای خواندن — دقیقاً یک صفحه */
@@ -199,8 +187,6 @@ p.body .src{ margin-inline-start:4pt; }
 /* ============================================================= جدول */
 .tblwrap{ margin:6pt 0; break-inside:avoid;
 }
-.tblwrap--split{ break-inside:auto; }
-.tblwrap--split .tblwrap__cap{ break-after:avoid; }
 .tblwrap{ border:1pt solid var(--hairline); border-radius:9pt;
   overflow:hidden; background:#FFF; }
 .tblwrap__cap--cont .tt{ font-size:9pt; color:var(--muted); font-weight:600; }
@@ -217,8 +203,8 @@ table.tbl.tbl--dense td{ padding:2pt 6pt; }
 .tblwrap__cap .tt{ font-weight:700; font-size:10pt; color:var(--brand-ink);}
 .tblwrap__cap .src{ margin-inline-start:auto; }
 table.tbl{ width:100%; border-collapse:collapse; font-size:10pt; line-height:1.5; }
-table.tbl.tbl--fixed{ table-layout:fixed; }
-table.tbl.tbl--fixed td{ overflow-wrap:break-word; }
+table.tbl td{ overflow-wrap:break-word; }
+table.tbl .en{ font-size:.86em; }
 table.tbl th{
   background:var(--session-header,var(--primary-deep)); color:#fff; font-weight:700; padding:3pt 7pt;
   border-bottom:2pt solid var(--session-header,var(--primary-deep)); border-inline-end:.5pt solid var(--hairline);
@@ -230,7 +216,7 @@ table.tbl th:last-child, table.tbl td:last-child{ border-inline-end:none; }
 table.tbl tbody tr:last-child td{ border-bottom:none; }
 /* راه‌راه بسیار لطیف و یکدست؛ سلول سرردیف (ستون اول) همیشه یخی می‌ماند */
 table.tbl tbody tr:nth-child(even) td:not(.rowh){ background:var(--zebra); }
-table.tbl td.rowh{ font-weight:700; color:var(--session-deep,var(--primary-deep)); background:var(--session-soft,var(--ice-100)); white-space:nowrap;}
+table.tbl td.rowh{ font-weight:700; color:var(--session-deep,var(--primary-deep)); background:var(--session-soft,var(--ice-100)); }
 table.tbl .hl{ font-weight:700; color:var(--c-conflict); }
 
 /* ============================================================= خانواده‌های معنایی
