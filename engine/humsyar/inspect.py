@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Any
 
 from .model import Block, Session, normalize_text
-from .planner import MAX_H_PORTRAIT, MAX_H_SIDECAP, MAX_H_WIDE, Plan
+from .planner import MAX_H_PORTRAIT, MAX_H_SIDECAP, MAX_H_WIDE, Plan, SIDECAP_COL_MM, TEXT_WIDTH_MM
 
 MM = 72 / 25.4
 ZONE_TOP = 14.0
@@ -237,7 +237,7 @@ def _grow_to_fill(findings: list[dict[str, Any]], session: Session,
             cap_h = MAX_H_SIDECAP if layout == "sidecap" else (
                 MAX_H_WIDE if aspect >= 1.3 else MAX_H_PORTRAIT)
             pct_now = float(b.data.get("_width_pct", 100))
-            col_w = 94.6 if layout == "sidecap" else 182.0
+            col_w = SIDECAP_COL_MM if layout == "sidecap" else TEXT_WIDTH_MM
             pct_max = 100.0 if (layout == "sidecap" or b.data.get("min_width_mm")) else 75.0
             target_h = min(cap_h, img_h + blank * 0.7, img_h * 1.45)
             pct_new = min(pct_max, pct_now * (target_h / img_h))

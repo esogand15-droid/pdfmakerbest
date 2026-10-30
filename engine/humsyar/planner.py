@@ -35,13 +35,14 @@ FA_DIGITS = str.maketrans("0123456789", "۰۱۲۳۴۵۶۷۸۹")
 TEXT_WIDTH_MM = 182.0
 TEXT_HEIGHT_MM = 270.0
 SIDE_WIDTH_MM = 86.0
-SIDECAP_COL_MM = 94.6       # ستون تصویر در چیدمان «کپشن کناری»
+SIDECAP_COL_MM = 84.0       # ستون تصویر کپشن‌کناری (≈۴۶٪؛ ستون توضیح ≈۵۴٪)
 MIN_FIG_DPI = 110           # زیر این آستانه در گزارش بازبینی پرچم می‌خورد
-# سقف ارتفاع تصویر از ارتفاع مفید صفحه (راند ۲، بند ۳)
-MAX_H_WIDE = 0.32 * TEXT_HEIGHT_MM        # تصویر عریض: ≈۸۶mm
-MAX_H_PORTRAIT = 0.42 * TEXT_HEIGHT_MM    # عمودی/مربعی تمام‌عرض: ≈۱۱۳mm
-MAX_H_HARD = 0.45 * TEXT_HEIGHT_MM        # سقف مطلق حتی با کف خوانایی برچسب
-MAX_H_SIDECAP = 118.0
+# سقف ارتفاع تصویر (سیستم شکل یکپارچه): هیچ تصویری بیش از یک‌سوم ارتفاع
+# مفید صفحه (≈۹۰mm) نمی‌شود؛ عریض‌ها فشرده‌ترند تا جزوه کش نیاید.
+MAX_H_WIDE = 62.0          # تصویر عریض تمام‌عرض: ≈۶cm
+MAX_H_PORTRAIT = 90.0      # عمودی/مربعی تمام‌عرض و سقف عمومی: ≈۹cm
+MAX_H_HARD = 90.0          # سقف مطلق حتی با کف خوانایی برچسب
+MAX_H_SIDECAP = 90.0
 DEFAULT_WIDTH_CAP_MM = 0.75 * TEXT_WIDTH_MM  # ≈۱۳۶mm مگر تصویر برچسب‌دار ریز
 
 
@@ -146,7 +147,7 @@ def _size_for(layout: str, w: int, h: int, min_w: float) -> dict:
     honest_mm = w / (135 / 25.4)  # بزرگ‌نمایی صادقانه بر اساس وضوح بومی
     if layout == "side":
         img_h = SIDE_WIDTH_MM * h_over_w
-        width_pct = 100 if img_h <= 102 else max(45, round(102 / img_h * 100))
+        width_pct = 100 if img_h <= 90 else max(45, round(90 / img_h * 100))
         disp_mm = SIDE_WIDTH_MM * width_pct / 100
     elif layout == "sidecap":
         img_h = SIDECAP_COL_MM * h_over_w

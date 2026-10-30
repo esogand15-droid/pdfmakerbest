@@ -37,9 +37,10 @@ class _Item:
         if block is None or is_head:
             self.keep = True
         elif block.type == "table":
-            # سیاست راند ۳: هر جدولی که در یک صفحه جا می‌شود، واحد نشکن است
-            # (بلندتر از صفحه → تقسیم کنترل‌شده روی مرز ردیف‌ها در pack)
-            self.keep = h <= PAGE_H_MM
+            # جدول کوچک (≤۴ ردیف) واحد نشکن است؛ جدول بلند بین ردیف‌ها می‌شکند
+            # (سربرگ تکرار می‌شود) تا انتهای صفحه خالی نماند. بلندتر از یک
+            # صفحهٔ کامل همچنان تقسیم کنترل‌شدهٔ pack را می‌گیرد.
+            self.keep = h <= PAGE_H_MM and len(block.data.get("rows", [])) <= 4
         else:
             self.keep = block.type in KEEP_TYPES
 

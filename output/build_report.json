@@ -15,17 +15,17 @@
    "merged": 3
   },
   "pages_in_book": [
-   30,
-   31
+   29,
+   30
   ]
  },
- "build_seconds": 69.3,
+ "build_seconds": 70.3,
  "toc_pages_found": {
   "s01-t01": 3,
   "s01t1-s1": 3,
-  "s01t1-s2": 5,
+  "s01t1-s2": 4,
   "s01-t02": 5,
-  "s01t2-s1": 6,
+  "s01t2-s1": 5,
   "s01t2-s2": 6,
   "s01-t03": 9,
   "s01t3-s1": 9,
@@ -35,71 +35,68 @@
   "s01t4-s2": 12,
   "s01t4-s3": 12,
   "s01-t05": 14,
-  "s01t5-s1": 15,
+  "s01t5-s1": 14,
   "s01t5-s2": 15,
   "s01t5-s3": 17,
-  "s01-t06": 20,
+  "s01-t06": 19,
   "s01t6-s1": 20,
-  "s01t6-s2": 22,
-  "s01t6-s3": 23,
-  "s01t6-s4": 24,
-  "s01t6-s5": 24,
-  "s01t6-s6": 26
+  "s01t6-s2": 21,
+  "s01t6-s3": 22,
+  "s01t6-s4": 23,
+  "s01t6-s5": 23,
+  "s01t6-s6": 25
  },
  "toc_links": 24,
  "planner_decisions": [
-  "s01t1-f1: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.86؛ رقیب بعدی: full با 0.77؛ عرض چاپ ≈95mm، ارتفاع تصویر ≈108mm، وضوح مؤثر ≈169 DPI",
-  "s01t1-f2: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.83؛ رقیب بعدی: full با 0.79؛ عرض چاپ ≈95mm، ارتفاع تصویر ≈95mm، وضوح مؤثر ≈215 DPI",
-  "s01t1-f3: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.80؛ رقیب بعدی: full با 0.76؛ عرض چاپ ≈70mm، ارتفاع تصویر ≈118mm، وضوح مؤثر ≈426 DPI",
+  "s01t1-f1: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.86؛ رقیب بعدی: full با 0.78؛ عرض چاپ ≈79mm، ارتفاع تصویر ≈90mm، وضوح مؤثر ≈202 DPI",
+  "s01t1-f2: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.83؛ رقیب بعدی: full با 0.79؛ عرض چاپ ≈84mm، ارتفاع تصویر ≈85mm، وضوح مؤثر ≈242 DPI",
+  "s01t1-f3: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.81؛ رقیب بعدی: full با 0.77؛ عرض چاپ ≈53mm، ارتفاع تصویر ≈89mm، وضوح مؤثر ≈564 DPI",
   "s01t1-f4: چیدمان تصویر «full» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.92؛ عرض چاپ ≈136mm، ارتفاع تصویر ≈46mm، وضوح مؤثر ≈222 DPI",
-  "s01t2-f1: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.87؛ رقیب بعدی: full با 0.77؛ عرض چاپ ≈95mm، ارتفاع تصویر ≈98mm، وضوح مؤثر ≈182 DPI",
-  "s01t2-f2: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.80؛ رقیب بعدی: full با 0.76؛ عرض چاپ ≈62mm، ارتفاع تصویر ≈118mm، وضوح مؤثر ≈233 DPI",
-  "s01t2-f3: چیدمان تصویر «full» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.89؛ عرض چاپ ≈124mm، ارتفاع تصویر ≈86mm، وضوح مؤثر ≈182 DPI",
-  "s01t2-f4: چیدمان تصویر «full» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.84؛ رقیب بعدی: sidecap با 0.71؛ عرض چاپ ≈118mm، ارتفاع تصویر ≈86mm، وضوح مؤثر ≈179 DPI",
-  "s01t2-f5: چیدمان تصویر «full» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.83؛ رقیب بعدی: sidecap با 0.71؛ عرض چاپ ≈120mm، ارتفاع تصویر ≈86mm، وضوح مؤثر ≈162 DPI",
-  "s01t2-f6: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.83؛ رقیب بعدی: full با 0.72؛ عرض چاپ ≈95mm، ارتفاع تصویر ≈78mm، وضوح مؤثر ≈180 DPI",
+  "s01t2-f1: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.87؛ رقیب بعدی: full با 0.79؛ عرض چاپ ≈84mm، ارتفاع تصویر ≈87mm، وضوح مؤثر ≈205 DPI",
+  "s01t2-f2: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.81؛ رقیب بعدی: full با 0.76؛ عرض چاپ ≈48mm، ارتفاع تصویر ≈90mm، وضوح مؤثر ≈303 DPI",
+  "s01t2-f3: چیدمان تصویر «full» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.87؛ عرض چاپ ≈89mm، ارتفاع تصویر ≈62mm، وضوح مؤثر ≈253 DPI",
+  "s01t2-f4: چیدمان تصویر «full» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.83؛ رقیب بعدی: sidecap با 0.70؛ عرض چاپ ≈85mm، ارتفاع تصویر ≈62mm، وضوح مؤثر ≈249 DPI",
+  "s01t2-f5: چیدمان تصویر «full» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.83؛ رقیب بعدی: sidecap با 0.70؛ عرض چاپ ≈86mm، ارتفاع تصویر ≈62mm، وضوح مؤثر ≈225 DPI",
+  "s01t2-f6: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.83؛ رقیب بعدی: full با 0.73؛ عرض چاپ ≈84mm، ارتفاع تصویر ≈69mm، وضوح مؤثر ≈202 DPI",
   "s01t2-tb1: عرض ستون‌ها متناسب با طول محتوای سلول‌ها تنظیم شد: [17, 31, 27, 25]",
   "s01t2-f4+s01t2-f5: جفت‌تصویر در یک ردیف (هر دو در نیم‌عرض خوانا می‌مانند)",
-  "s01t3-f1: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.87؛ رقیب بعدی: full با 0.77؛ عرض چاپ ≈95mm، ارتفاع تصویر ≈91mm، وضوح مؤثر ≈176 DPI",
-  "s01t3-f2: چیدمان تصویر «full» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.88؛ عرض چاپ ≈136mm، ارتفاع تصویر ≈84mm، وضوح مؤثر ≈149 DPI",
+  "s01t3-f1: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.87؛ رقیب بعدی: full با 0.79؛ عرض چاپ ≈84mm، ارتفاع تصویر ≈80mm، وضوح مؤثر ≈198 DPI",
+  "s01t3-f2: چیدمان تصویر «full» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.90؛ عرض چاپ ≈100mm، ارتفاع تصویر ≈62mm، وضوح مؤثر ≈203 DPI",
   "s01t4-f1: چیدمان تصویر «full» — کهن‌الگوی بخش «mixed» و بالاترین امتیاز 0.83؛ عرض چاپ ≈118mm، ارتفاع تصویر ≈88mm، وضوح مؤثر ≈133 DPI",
   "s01t4-tb1: عرض ستون‌ها متناسب با طول محتوای سلول‌ها تنظیم شد: [25, 37, 38]",
-  "s01t4-f2: چیدمان تصویر «full» — کهن‌الگوی بخش «process» و بالاترین امتیاز 0.86؛ عرض چاپ ≈136mm، ارتفاع تصویر ≈67mm، وضوح مؤثر ≈255 DPI",
+  "s01t4-f2: چیدمان تصویر «full» — کهن‌الگوی بخش «process» و بالاترین امتیاز 0.86؛ عرض چاپ ≈126mm، ارتفاع تصویر ≈62mm، وضوح مؤثر ≈276 DPI",
   "s01t4-tb2: عرض ستون‌ها متناسب با طول محتوای سلول‌ها تنظیم شد: [23, 35, 42]",
-  "s01t5-f1: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.83؛ رقیب بعدی: full با 0.76؛ عرض چاپ ≈95mm، ارتفاع تصویر ≈94mm، وضوح مؤثر ≈180 DPI",
-  "s01t5-f2: چیدمان تصویر «full» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.72؛ رقیب بعدی: sidecap با 0.72؛ عرض چاپ ≈58mm، ارتفاع تصویر ≈101mm، وضوح مؤثر ≈135 DPI",
-  "s01t5-f3: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.82؛ رقیب بعدی: full با 0.72؛ عرض چاپ ≈95mm، ارتفاع تصویر ≈104mm، وضوح مؤثر ≈180 DPI",
-  "s01t5-f4: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.79؛ رقیب بعدی: full با 0.77؛ عرض چاپ ≈95mm، ارتفاع تصویر ≈99mm، وضوح مؤثر ≈212 DPI",
-  "s01t5-f5: چیدمان تصویر «full» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.88؛ عرض چاپ ≈130mm، ارتفاع تصویر ≈86mm، وضوح مؤثر ≈164 DPI",
-  "s01t5-f6: چیدمان تصویر «full» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.83؛ عرض چاپ ≈135mm، ارتفاع تصویر ≈86mm، وضوح مؤثر ≈156 DPI",
-  "s01t5-f7: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.83؛ رقیب بعدی: full با 0.72؛ عرض چاپ ≈95mm، ارتفاع تصویر ≈84mm، وضوح مؤثر ≈180 DPI",
+  "s01t5-f1: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.82؛ رقیب بعدی: full با 0.77؛ عرض چاپ ≈84mm، ارتفاع تصویر ≈83mm، وضوح مؤثر ≈202 DPI",
+  "s01t5-f2: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.74؛ رقیب بعدی: full با 0.73؛ عرض چاپ ≈52mm، ارتفاع تصویر ≈90mm، وضوح مؤثر ≈151 DPI",
+  "s01t5-f3: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.78؛ رقیب بعدی: full با 0.77؛ عرض چاپ ≈82mm، ارتفاع تصویر ≈90mm، وضوح مؤثر ≈206 DPI",
+  "s01t5-f4: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.78؛ رقیب بعدی: full با 0.77؛ عرض چاپ ≈84mm، ارتفاع تصویر ≈88mm، وضوح مؤثر ≈239 DPI",
+  "s01t5-f5: چیدمان تصویر «full» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.88؛ عرض چاپ ≈93mm، ارتفاع تصویر ≈62mm، وضوح مؤثر ≈228 DPI",
+  "s01t5-f6: چیدمان تصویر «full» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.84؛ عرض چاپ ≈97mm، ارتفاع تصویر ≈62mm، وضوح مؤثر ≈217 DPI",
+  "s01t5-f7: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.83؛ رقیب بعدی: full با 0.73؛ عرض چاپ ≈84mm، ارتفاع تصویر ≈75mm، وضوح مؤثر ≈202 DPI",
   "s01t5-tb2: عرض ستون‌ها متناسب با طول محتوای سلول‌ها تنظیم شد: [10, 38, 21, 31]",
-  "s01t5-f8: چیدمان تصویر «full» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.86؛ عرض چاپ ≈126mm، ارتفاع تصویر ≈86mm، وضوح مؤثر ≈144 DPI",
+  "s01t5-f8: چیدمان تصویر «full» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.87؛ عرض چاپ ≈90mm، ارتفاع تصویر ≈62mm، وضوح مؤثر ≈201 DPI",
   "s01t6-f1: چیدمان تصویر «full» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.90؛ عرض چاپ ≈140mm، ارتفاع تصویر ≈57mm، وضوح مؤثر ≈250 DPI",
-  "s01t6-f2: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.81؛ رقیب بعدی: full با 0.72؛ عرض چاپ ≈93mm، ارتفاع تصویر ≈118mm، وضوح مؤثر ≈183 DPI",
+  "s01t6-f2: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «comparison» و بالاترین امتیاز 0.81؛ رقیب بعدی: full با 0.72؛ عرض چاپ ≈71mm، ارتفاع تصویر ≈90mm، وضوح مؤثر ≈241 DPI",
   "s01t6-tb1: عرض ستون‌ها متناسب با طول محتوای سلول‌ها تنظیم شد: [19, 21, 25, 35]",
-  "s01t6-f3: چیدمان تصویر «full» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.91؛ عرض چاپ ≈136mm، ارتفاع تصویر ≈82mm، وضوح مؤثر ≈180 DPI",
-  "s01t6-f4: چیدمان تصویر «full» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.83؛ عرض چاپ ≈116mm، ارتفاع تصویر ≈68mm، وضوح مؤثر ≈135 DPI",
-  "s01t6-f5: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.84؛ رقیب بعدی: full با 0.72؛ عرض چاپ ≈65mm، ارتفاع تصویر ≈118mm، وضوح مؤثر ≈258 DPI",
-  "s01t6-f6: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.84؛ رقیب بعدی: full با 0.78؛ عرض چاپ ≈95mm، ارتفاع تصویر ≈77mm، وضوح مؤثر ≈205 DPI",
-  "s01t6-f7: چیدمان تصویر «side» — درخواست صریح در داده؛ عرض چاپ ≈64mm، ارتفاع تصویر ≈102mm، وضوح مؤثر ≈186 DPI",
+  "s01t6-f3: چیدمان تصویر «full» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.90؛ عرض چاپ ≈104mm، ارتفاع تصویر ≈62mm، وضوح مؤثر ≈237 DPI",
+  "s01t6-f4: چیدمان تصویر «full» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.84؛ عرض چاپ ≈106mm، ارتفاع تصویر ≈62mm، وضوح مؤثر ≈149 DPI",
+  "s01t6-f5: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.85؛ رقیب بعدی: full با 0.72؛ عرض چاپ ≈50mm، ارتفاع تصویر ≈90mm، وضوح مؤثر ≈340 DPI",
+  "s01t6-f6: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.84؛ رقیب بعدی: full با 0.80؛ عرض چاپ ≈84mm، ارتفاع تصویر ≈69mm، وضوح مؤثر ≈231 DPI",
+  "s01t6-f7: چیدمان تصویر «side» — درخواست صریح در داده؛ عرض چاپ ≈56mm، ارتفاع تصویر ≈90mm، وضوح مؤثر ≈212 DPI",
   "s01t6-f8: چیدمان تصویر «full» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.86؛ عرض چاپ ≈84mm، ارتفاع تصویر ≈53mm، وضوح مؤثر ≈135 DPI",
-  "s01t6-f9: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.85؛ رقیب بعدی: full با 0.73؛ عرض چاپ ≈80mm، ارتفاع تصویر ≈118mm، وضوح مؤثر ≈349 DPI",
-  "[بسته‌بندی] s01t1-f1: تصویر کپشن‌کناری برای جا شدن در صفحهٔ جاری کوچک شد",
-  "[بسته‌بندی] s01t2-f3: بلوک «s01t2-p6» از پنجرهٔ بعدی جلو کشیده شد تا جای خالی انتهای صفحه پر شود (همان بخش، بدون ارجاع پیش‌رو به شکل)",
-  "[بسته‌بندی] s01t2-f4: تصویر برای جا شدن در صفحهٔ جاری تا عرض 51٪ کوچک شد (خوانایی حفظ شده)",
-  "[بسته‌بندی] s01t3-f1: تصویر کپشن‌کناری برای جا شدن در صفحهٔ جاری کوچک شد",
+  "s01t6-f9: چیدمان تصویر «sidecap» — کهن‌الگوی بخش «figure_centric» و بالاترین امتیاز 0.85؛ رقیب بعدی: full با 0.73؛ عرض چاپ ≈60mm، ارتفاع تصویر ≈90mm، وضوح مؤثر ≈459 DPI",
+  "[بسته‌بندی] s01t3-f2: تصویر برای جا شدن در صفحهٔ جاری تا عرض 47٪ کوچک شد (خوانایی حفظ شده)",
   "[بسته‌بندی] s01t4-f1: بلوک «s01t4-p4» از پنجرهٔ بعدی جلو کشیده شد تا جای خالی انتهای صفحه پر شود (همان بخش، بدون ارجاع پیش‌رو به شکل)",
   "[بسته‌بندی] s01t4-tb2: جدول در باقیماندهٔ صفحه جا نشد و کامل به صفحهٔ بعد منتقل شد (Keep Together؛ تقسیم نشد)",
   "[بسته‌بندی] s01t5-tb1: جدول در باقیماندهٔ صفحه جا نشد و کامل به صفحهٔ بعد منتقل شد (Keep Together؛ تقسیم نشد)",
-  "[بسته‌بندی] s01t5-f6: تصویر برای جا شدن در صفحهٔ جاری تا عرض 56٪ کوچک شد (خوانایی حفظ شده)",
-  "[بسته‌بندی] s01t5-f8: تصویر برای جا شدن در صفحهٔ جاری تا عرض 52٪ کوچک شد (خوانایی حفظ شده)",
-  "[بسته‌بندی] s01t6-tb1: جدول در باقیماندهٔ صفحه جا نشد و کامل به صفحهٔ بعد منتقل شد (Keep Together؛ تقسیم نشد)",
-  "[بسته‌بندی] s01t6-f3: تصویر برای جا شدن در صفحهٔ جاری تا عرض 69٪ کوچک شد (خوانایی حفظ شده)",
-  "[بسته‌بندی] شبیه‌سازی بسته‌بندی: ≈28 صفحهٔ بدنه",
+  "[بسته‌بندی] s01t5-f8: تصویر برای جا شدن در صفحهٔ جاری تا عرض 47٪ کوچک شد (خوانایی حفظ شده)",
+  "[بسته‌بندی] s01t6-f6: تصویر کپشن‌کناری برای جا شدن در صفحهٔ جاری کوچک شد",
+  "[بسته‌بندی] شبیه‌سازی بسته‌بندی: ≈27 صفحهٔ بدنه",
   "s01t1-f3: [بازرسی بصری] زیرنویس از تصویر جدا افتاده بود؛ شکل کامل به صفحهٔ بعد منتقل می‌شود",
-  "[بسته‌بندی] s01t1-f3: [حسابرسی شکست] تهِ صفحهٔ قبل در رندر واقعی 153mm خالی بود و بلوک (120mm) جا می‌شد؛ شکست اجباری حذف شد",
-  "[بسته‌بندی] s01t2-f1: [بازخورد PDF واقعی] صفحهٔ قبل 92mm فضای خالی داشت؛ تصویر تا عرض 80٪ کوچک شد تا در همان صفحه جا شود",
+  "[بسته‌بندی] s01t5-tb1: [حسابرسی شکست] تهِ صفحهٔ قبل در رندر واقعی 89mm خالی بود و بلوک (74mm) جا می‌شد؛ شکست اجباری حذف شد",
+  "[بسته‌بندی] s01t5-f3: [بازخورد PDF واقعی] صفحهٔ قبل 102mm فضای خالی داشت؛ تصویر تا عرض 84٪ کوچک شد تا در همان صفحه جا شود",
+  "[بسته‌بندی] s01t1-f3: [حسابرسی شکست] تهِ صفحهٔ قبل در رندر واقعی 171mm خالی بود و بلوک (92mm) جا می‌شد؛ شکست اجباری حذف شد",
+  "[بسته‌بندی] s01t5-f4: [بازخورد PDF واقعی] صفحهٔ قبل 74mm فضای خالی داشت؛ تصویر تا عرض 68٪ کوچک شد تا در همان صفحه جا شود",
   "برگهٔ فوق‌فشرده: 2 صفحه، پوشش A 97/100"
  ],
  "planner_warnings": [
@@ -1157,32 +1154,32 @@
    "candidates": [
     {
      "layout": "sidecap",
-     "width_pct": 100,
-     "img_h_mm": 107.7,
+     "width_pct": 94,
+     "img_h_mm": 89.9,
      "score": {
-      "total": 0.8571,
+      "total": 0.8636,
       "content_fit": 0.8,
       "aspect_fit": 1.0,
-      "readability": 0.854,
-      "density": 0.551,
+      "readability": 0.843,
+      "density": 0.625,
       "diversity": 1.0,
       "continuity": 0.85,
-      "print_safety": 0.974
+      "print_safety": 1.0
      }
     },
     {
      "layout": "full",
-     "width_pct": 55,
-     "img_h_mm": 113.4,
+     "width_pct": 43,
+     "img_h_mm": 90.0,
      "score": {
-      "total": 0.7684,
+      "total": 0.7811,
       "content_fit": 0.85,
       "aspect_fit": 0.55,
-      "readability": 0.84,
-      "density": 0.527,
+      "readability": 0.843,
+      "density": 0.625,
       "diversity": 1.0,
       "continuity": 0.7,
-      "print_safety": 0.955
+      "print_safety": 1.0
      }
     }
    ]
@@ -1196,13 +1193,13 @@
     {
      "layout": "sidecap",
      "width_pct": 100,
-     "img_h_mm": 95.4,
+     "img_h_mm": 84.7,
      "score": {
-      "total": 0.8325,
+      "total": 0.8303,
       "content_fit": 0.8,
       "aspect_fit": 1.0,
-      "readability": 0.891,
-      "density": 0.603,
+      "readability": 0.858,
+      "density": 0.647,
       "diversity": 0.615,
       "continuity": 0.85,
       "print_safety": 1.0
@@ -1210,17 +1207,17 @@
     },
     {
      "layout": "full",
-     "width_pct": 62,
-     "img_h_mm": 113.4,
+     "width_pct": 49,
+     "img_h_mm": 90.0,
      "score": {
-      "total": 0.7896,
+      "total": 0.7873,
       "content_fit": 0.85,
       "aspect_fit": 0.55,
-      "readability": 0.946,
-      "density": 0.527,
+      "readability": 0.874,
+      "density": 0.625,
       "diversity": 1.0,
       "continuity": 0.7,
-      "print_safety": 0.955
+      "print_safety": 1.0
      }
     }
    ]
@@ -1233,32 +1230,32 @@
    "candidates": [
     {
      "layout": "sidecap",
-     "width_pct": 74,
-     "img_h_mm": 118.2,
+     "width_pct": 63,
+     "img_h_mm": 89.4,
      "score": {
-      "total": 0.8047,
+      "total": 0.8093,
       "content_fit": 0.8,
       "aspect_fit": 1.0,
-      "readability": 0.815,
-      "density": 0.508,
+      "readability": 0.763,
+      "density": 0.627,
       "diversity": 0.615,
       "continuity": 0.85,
-      "print_safety": 0.939
+      "print_safety": 1.0
      }
     },
     {
      "layout": "full",
-     "width_pct": 37,
-     "img_h_mm": 113.4,
+     "width_pct": 29,
+     "img_h_mm": 90.0,
      "score": {
-      "total": 0.7618,
+      "total": 0.7653,
       "content_fit": 0.85,
       "aspect_fit": 0.55,
-      "readability": 0.807,
-      "density": 0.527,
+      "readability": 0.764,
+      "density": 0.625,
       "diversity": 1.0,
       "continuity": 0.7,
-      "print_safety": 0.955
+      "print_safety": 1.0
      }
     }
    ]
@@ -1295,13 +1292,13 @@
     {
      "layout": "sidecap",
      "width_pct": 100,
-     "img_h_mm": 98.2,
+     "img_h_mm": 87.2,
      "score": {
-      "total": 0.8698,
+      "total": 0.8678,
       "content_fit": 0.8,
       "aspect_fit": 1.0,
-      "readability": 0.891,
-      "density": 0.591,
+      "readability": 0.858,
+      "density": 0.637,
       "diversity": 1.0,
       "continuity": 0.85,
       "print_safety": 1.0
@@ -1309,17 +1306,17 @@
     },
     {
      "layout": "full",
-     "width_pct": 60,
-     "img_h_mm": 113.4,
+     "width_pct": 48,
+     "img_h_mm": 90.0,
      "score": {
-      "total": 0.7722,
+      "total": 0.7859,
       "content_fit": 0.85,
       "aspect_fit": 0.55,
-      "readability": 0.859,
-      "density": 0.527,
+      "readability": 0.867,
+      "density": 0.625,
       "diversity": 1.0,
       "continuity": 0.7,
-      "print_safety": 0.955
+      "print_safety": 1.0
      }
     }
    ]
@@ -1332,32 +1329,32 @@
    "candidates": [
     {
      "layout": "sidecap",
-     "width_pct": 66,
-     "img_h_mm": 117.6,
+     "width_pct": 57,
+     "img_h_mm": 90.2,
      "score": {
-      "total": 0.8005,
+      "total": 0.8058,
       "content_fit": 0.8,
       "aspect_fit": 1.0,
-      "readability": 0.792,
-      "density": 0.51,
+      "readability": 0.747,
+      "density": 0.624,
       "diversity": 0.615,
       "continuity": 0.85,
-      "print_safety": 0.941
+      "print_safety": 1.0
      }
     },
     {
      "layout": "full",
-     "width_pct": 33,
-     "img_h_mm": 113.4,
+     "width_pct": 29,
+     "img_h_mm": 97.9,
      "score": {
-      "total": 0.7574,
+      "total": 0.7612,
       "content_fit": 0.85,
       "aspect_fit": 0.55,
-      "readability": 0.785,
-      "density": 0.527,
+      "readability": 0.76,
+      "density": 0.592,
       "diversity": 1.0,
       "continuity": 0.7,
-      "print_safety": 0.955
+      "print_safety": 1.0
      }
     }
    ]
@@ -1370,14 +1367,14 @@
    "candidates": [
     {
      "layout": "full",
-     "width_pct": 68,
-     "img_h_mm": 86.4,
+     "width_pct": 49,
+     "img_h_mm": 62.0,
      "score": {
-      "total": 0.8854,
+      "total": 0.874,
       "content_fit": 0.8,
       "aspect_fit": 1.0,
-      "readability": 0.982,
-      "density": 0.64,
+      "readability": 0.874,
+      "density": 0.742,
       "diversity": 1.0,
       "continuity": 0.7,
       "print_safety": 1.0
@@ -1393,14 +1390,14 @@
    "candidates": [
     {
      "layout": "full",
-     "width_pct": 65,
-     "img_h_mm": 86.4,
+     "width_pct": 47,
+     "img_h_mm": 62.0,
      "score": {
-      "total": 0.8427,
+      "total": 0.8329,
       "content_fit": 0.8,
       "aspect_fit": 1.0,
-      "readability": 0.961,
-      "density": 0.64,
+      "readability": 0.861,
+      "density": 0.742,
       "diversity": 0.615,
       "continuity": 0.7,
       "print_safety": 1.0
@@ -1409,13 +1406,13 @@
     {
      "layout": "sidecap",
      "width_pct": 100,
-     "img_h_mm": 69.0,
+     "img_h_mm": 61.3,
      "score": {
-      "total": 0.707,
+      "total": 0.7036,
       "content_fit": 0.65,
       "aspect_fit": 0.35,
-      "readability": 0.891,
-      "density": 0.713,
+      "readability": 0.858,
+      "density": 0.745,
       "diversity": 1.0,
       "continuity": 0.85,
       "print_safety": 1.0
@@ -1431,14 +1428,14 @@
    "candidates": [
     {
      "layout": "full",
-     "width_pct": 66,
-     "img_h_mm": 86.4,
+     "width_pct": 47,
+     "img_h_mm": 62.0,
      "score": {
-      "total": 0.8323,
+      "total": 0.8337,
       "content_fit": 0.8,
       "aspect_fit": 1.0,
-      "readability": 0.909,
-      "density": 0.64,
+      "readability": 0.865,
+      "density": 0.742,
       "diversity": 0.615,
       "continuity": 0.7,
       "print_safety": 1.0
@@ -1447,13 +1444,13 @@
     {
      "layout": "sidecap",
      "width_pct": 100,
-     "img_h_mm": 68.2,
+     "img_h_mm": 60.6,
      "score": {
-      "total": 0.7073,
+      "total": 0.7039,
       "content_fit": 0.65,
       "aspect_fit": 0.35,
-      "readability": 0.891,
-      "density": 0.716,
+      "readability": 0.858,
+      "density": 0.748,
       "diversity": 1.0,
       "continuity": 0.85,
       "print_safety": 1.0
@@ -1470,13 +1467,13 @@
     {
      "layout": "sidecap",
      "width_pct": 100,
-     "img_h_mm": 78.2,
+     "img_h_mm": 69.4,
      "score": {
-      "total": 0.8331,
+      "total": 0.8302,
       "content_fit": 0.65,
       "aspect_fit": 1.0,
-      "readability": 0.891,
-      "density": 0.674,
+      "readability": 0.858,
+      "density": 0.711,
       "diversity": 1.0,
       "continuity": 0.85,
       "print_safety": 1.0
@@ -1484,17 +1481,17 @@
     },
     {
      "layout": "full",
-     "width_pct": 69,
-     "img_h_mm": 104.0,
+     "width_pct": 60,
+     "img_h_mm": 90.0,
      "score": {
-      "total": 0.7199,
+      "total": 0.73,
       "content_fit": 0.8,
       "aspect_fit": 0.55,
-      "readability": 0.837,
-      "density": 0.567,
+      "readability": 0.855,
+      "density": 0.625,
       "diversity": 0.615,
       "continuity": 0.7,
-      "print_safety": 0.987
+      "print_safety": 1.0
      }
     }
    ]
@@ -1525,13 +1522,13 @@
     {
      "layout": "sidecap",
      "width_pct": 100,
-     "img_h_mm": 90.6,
+     "img_h_mm": 80.4,
      "score": {
-      "total": 0.8704,
+      "total": 0.8706,
       "content_fit": 0.8,
       "aspect_fit": 1.0,
-      "readability": 0.878,
-      "density": 0.623,
+      "readability": 0.858,
+      "density": 0.665,
       "diversity": 1.0,
       "continuity": 0.85,
       "print_safety": 1.0
@@ -1539,17 +1536,17 @@
     },
     {
      "layout": "full",
-     "width_pct": 65,
-     "img_h_mm": 113.4,
+     "width_pct": 52,
+     "img_h_mm": 90.0,
      "score": {
-      "total": 0.7674,
+      "total": 0.7883,
       "content_fit": 0.85,
       "aspect_fit": 0.55,
-      "readability": 0.835,
-      "density": 0.527,
+      "readability": 0.879,
+      "density": 0.625,
       "diversity": 1.0,
       "continuity": 0.7,
-      "print_safety": 0.955
+      "print_safety": 1.0
      }
     }
    ]
@@ -1562,14 +1559,14 @@
    "candidates": [
     {
      "layout": "full",
-     "width_pct": 75,
-     "img_h_mm": 84.5,
+     "width_pct": 55,
+     "img_h_mm": 62.0,
      "score": {
-      "total": 0.8842,
+      "total": 0.8958,
       "content_fit": 0.85,
       "aspect_fit": 1.0,
-      "readability": 0.897,
-      "density": 0.648,
+      "readability": 0.908,
+      "density": 0.742,
       "diversity": 1.0,
       "continuity": 0.7,
       "print_safety": 1.0
@@ -1623,14 +1620,14 @@
    "candidates": [
     {
      "layout": "full",
-     "width_pct": 75,
-     "img_h_mm": 67.0,
+     "width_pct": 69,
+     "img_h_mm": 62.0,
      "score": {
-      "total": 0.8586,
+      "total": 0.8585,
       "content_fit": 0.8,
       "aspect_fit": 1.0,
-      "readability": 1.0,
-      "density": 0.721,
+      "readability": 0.989,
+      "density": 0.742,
       "diversity": 0.615,
       "continuity": 0.7,
       "print_safety": 1.0
@@ -1662,13 +1659,13 @@
     {
      "layout": "sidecap",
      "width_pct": 100,
-     "img_h_mm": 93.9,
+     "img_h_mm": 83.4,
      "score": {
-      "total": 0.8266,
+      "total": 0.8243,
       "content_fit": 0.65,
       "aspect_fit": 1.0,
-      "readability": 0.891,
-      "density": 0.609,
+      "readability": 0.858,
+      "density": 0.652,
       "diversity": 1.0,
       "continuity": 0.85,
       "print_safety": 1.0
@@ -1676,17 +1673,17 @@
     },
     {
      "layout": "full",
-     "width_pct": 63,
-     "img_h_mm": 113.4,
+     "width_pct": 50,
+     "img_h_mm": 90.0,
      "score": {
-      "total": 0.755,
+      "total": 0.7733,
       "content_fit": 0.8,
       "aspect_fit": 0.55,
-      "readability": 0.848,
-      "density": 0.527,
+      "readability": 0.879,
+      "density": 0.625,
       "diversity": 1.0,
       "continuity": 0.7,
-      "print_safety": 0.955
+      "print_safety": 1.0
      }
     }
    ]
@@ -1695,36 +1692,36 @@
    "block": "s01t5-f2",
    "kind": "figure",
    "archetype": "comparison",
-   "chosen": "full",
+   "chosen": "sidecap",
    "candidates": [
     {
-     "layout": "full",
-     "width_pct": 32,
-     "img_h_mm": 100.8,
+     "layout": "sidecap",
+     "width_pct": 62,
+     "img_h_mm": 90.0,
      "score": {
-      "total": 0.7187,
-      "content_fit": 0.8,
-      "aspect_fit": 0.55,
-      "readability": 0.629,
-      "density": 0.58,
-      "diversity": 1.0,
-      "continuity": 0.7,
-      "print_safety": 0.997
+      "total": 0.7443,
+      "content_fit": 0.65,
+      "aspect_fit": 1.0,
+      "readability": 0.664,
+      "density": 0.625,
+      "diversity": 0.615,
+      "continuity": 0.85,
+      "print_safety": 1.0
      }
     },
     {
-     "layout": "sidecap",
-     "width_pct": 72,
-     "img_h_mm": 117.8,
+     "layout": "full",
+     "width_pct": 29,
+     "img_h_mm": 90.0,
      "score": {
-      "total": 0.7161,
-      "content_fit": 0.65,
-      "aspect_fit": 1.0,
-      "readability": 0.596,
-      "density": 0.509,
-      "diversity": 0.615,
-      "continuity": 0.85,
-      "print_safety": 0.941
+      "total": 0.7303,
+      "content_fit": 0.8,
+      "aspect_fit": 0.55,
+      "readability": 0.664,
+      "density": 0.625,
+      "diversity": 1.0,
+      "continuity": 0.7,
+      "print_safety": 1.0
      }
     }
    ]
@@ -1737,32 +1734,32 @@
    "candidates": [
     {
      "layout": "sidecap",
-     "width_pct": 100,
-     "img_h_mm": 103.6,
+     "width_pct": 98,
+     "img_h_mm": 90.2,
      "score": {
-      "total": 0.8219,
+      "total": 0.782,
       "content_fit": 0.65,
       "aspect_fit": 1.0,
-      "readability": 0.891,
-      "density": 0.568,
-      "diversity": 1.0,
+      "readability": 0.853,
+      "density": 0.624,
+      "diversity": 0.615,
       "continuity": 0.85,
-      "print_safety": 0.988
+      "print_safety": 1.0
      }
     },
     {
      "layout": "full",
-     "width_pct": 57,
-     "img_h_mm": 113.4,
+     "width_pct": 45,
+     "img_h_mm": 90.0,
      "score": {
-      "total": 0.7199,
+      "total": 0.7681,
       "content_fit": 0.8,
       "aspect_fit": 0.55,
-      "readability": 0.865,
-      "density": 0.527,
-      "diversity": 0.615,
+      "readability": 0.853,
+      "density": 0.625,
+      "diversity": 1.0,
       "continuity": 0.7,
-      "print_safety": 0.955
+      "print_safety": 1.0
      }
     }
    ]
@@ -1776,13 +1773,13 @@
     {
      "layout": "sidecap",
      "width_pct": 100,
-     "img_h_mm": 98.7,
+     "img_h_mm": 87.6,
      "score": {
-      "total": 0.7861,
+      "total": 0.7841,
       "content_fit": 0.65,
       "aspect_fit": 1.0,
-      "readability": 0.891,
-      "density": 0.589,
+      "readability": 0.858,
+      "density": 0.635,
       "diversity": 0.615,
       "continuity": 0.85,
       "print_safety": 1.0
@@ -1790,17 +1787,17 @@
     },
     {
      "layout": "full",
-     "width_pct": 60,
-     "img_h_mm": 113.4,
+     "width_pct": 47,
+     "img_h_mm": 90.0,
      "score": {
-      "total": 0.7722,
+      "total": 0.7707,
       "content_fit": 0.8,
       "aspect_fit": 0.55,
-      "readability": 0.934,
-      "density": 0.527,
+      "readability": 0.866,
+      "density": 0.625,
       "diversity": 1.0,
       "continuity": 0.7,
-      "print_safety": 0.955
+      "print_safety": 1.0
      }
     }
    ]
@@ -1813,14 +1810,14 @@
    "candidates": [
     {
      "layout": "full",
-     "width_pct": 71,
-     "img_h_mm": 86.4,
+     "width_pct": 51,
+     "img_h_mm": 62.0,
      "score": {
-      "total": 0.8782,
+      "total": 0.8764,
       "content_fit": 0.8,
       "aspect_fit": 1.0,
-      "readability": 0.946,
-      "density": 0.64,
+      "readability": 0.886,
+      "density": 0.742,
       "diversity": 1.0,
       "continuity": 0.7,
       "print_safety": 1.0
@@ -1836,14 +1833,14 @@
    "candidates": [
     {
      "layout": "full",
-     "width_pct": 74,
-     "img_h_mm": 86.4,
+     "width_pct": 53,
+     "img_h_mm": 62.0,
      "score": {
-      "total": 0.8345,
+      "total": 0.8403,
       "content_fit": 0.8,
       "aspect_fit": 1.0,
-      "readability": 0.92,
-      "density": 0.64,
+      "readability": 0.898,
+      "density": 0.742,
       "diversity": 0.615,
       "continuity": 0.7,
       "print_safety": 1.0
@@ -1860,13 +1857,13 @@
     {
      "layout": "sidecap",
      "width_pct": 100,
-     "img_h_mm": 84.0,
+     "img_h_mm": 74.6,
      "score": {
-      "total": 0.8307,
+      "total": 0.828,
       "content_fit": 0.65,
       "aspect_fit": 1.0,
-      "readability": 0.891,
-      "density": 0.65,
+      "readability": 0.858,
+      "density": 0.689,
       "diversity": 1.0,
       "continuity": 0.85,
       "print_safety": 1.0
@@ -1874,17 +1871,17 @@
     },
     {
      "layout": "full",
-     "width_pct": 69,
-     "img_h_mm": 111.8,
+     "width_pct": 56,
+     "img_h_mm": 90.0,
      "score": {
-      "total": 0.7154,
+      "total": 0.7334,
       "content_fit": 0.8,
       "aspect_fit": 0.55,
-      "readability": 0.837,
-      "density": 0.534,
+      "readability": 0.872,
+      "density": 0.625,
       "diversity": 0.615,
       "continuity": 0.7,
-      "print_safety": 0.961
+      "print_safety": 1.0
      }
     }
    ]
@@ -1914,14 +1911,14 @@
    "candidates": [
     {
      "layout": "full",
-     "width_pct": 69,
-     "img_h_mm": 86.4,
+     "width_pct": 50,
+     "img_h_mm": 62.0,
      "score": {
-      "total": 0.8622,
+      "total": 0.8748,
       "content_fit": 0.8,
       "aspect_fit": 1.0,
-      "readability": 0.866,
-      "density": 0.64,
+      "readability": 0.878,
+      "density": 0.742,
       "diversity": 1.0,
       "continuity": 0.7,
       "print_safety": 1.0
@@ -1960,32 +1957,32 @@
    "candidates": [
     {
      "layout": "sidecap",
-     "width_pct": 98,
-     "img_h_mm": 117.8,
+     "width_pct": 84,
+     "img_h_mm": 89.7,
      "score": {
-      "total": 0.8125,
+      "total": 0.8135,
       "content_fit": 0.65,
       "aspect_fit": 1.0,
-      "readability": 0.885,
-      "density": 0.509,
+      "readability": 0.817,
+      "density": 0.626,
       "diversity": 1.0,
       "continuity": 0.85,
-      "print_safety": 0.941
+      "print_safety": 1.0
      }
     },
     {
      "layout": "full",
-     "width_pct": 49,
-     "img_h_mm": 113.4,
+     "width_pct": 39,
+     "img_h_mm": 90.0,
      "score": {
-      "total": 0.7219,
+      "total": 0.7226,
       "content_fit": 0.8,
       "aspect_fit": 0.55,
-      "readability": 0.875,
-      "density": 0.527,
+      "readability": 0.818,
+      "density": 0.625,
       "diversity": 0.615,
       "continuity": 0.7,
-      "print_safety": 0.955
+      "print_safety": 1.0
      }
     }
    ]
@@ -2015,14 +2012,14 @@
    "candidates": [
     {
      "layout": "full",
-     "width_pct": 75,
-     "img_h_mm": 81.6,
+     "width_pct": 57,
+     "img_h_mm": 62.0,
      "score": {
-      "total": 0.906,
+      "total": 0.898,
       "content_fit": 0.85,
       "aspect_fit": 1.0,
-      "readability": 1.0,
-      "density": 0.66,
+      "readability": 0.919,
+      "density": 0.742,
       "diversity": 1.0,
       "continuity": 0.7,
       "print_safety": 1.0
@@ -2038,14 +2035,14 @@
    "candidates": [
     {
      "layout": "full",
-     "width_pct": 64,
-     "img_h_mm": 68.3,
+     "width_pct": 58,
+     "img_h_mm": 62.0,
      "score": {
-      "total": 0.8346,
+      "total": 0.8401,
       "content_fit": 0.85,
       "aspect_fit": 1.0,
-      "readability": 0.808,
-      "density": 0.715,
+      "readability": 0.822,
+      "density": 0.742,
       "diversity": 0.615,
       "continuity": 0.7,
       "print_safety": 1.0
@@ -2061,32 +2058,32 @@
    "candidates": [
     {
      "layout": "sidecap",
-     "width_pct": 69,
-     "img_h_mm": 118.0,
+     "width_pct": 59,
+     "img_h_mm": 89.6,
      "score": {
-      "total": 0.8405,
+      "total": 0.8458,
       "content_fit": 0.8,
       "aspect_fit": 1.0,
-      "readability": 0.801,
-      "density": 0.508,
+      "readability": 0.753,
+      "density": 0.627,
       "diversity": 1.0,
       "continuity": 0.85,
-      "print_safety": 0.94
+      "print_safety": 1.0
      }
     },
     {
      "layout": "full",
-     "width_pct": 34,
-     "img_h_mm": 113.4,
+     "width_pct": 29,
+     "img_h_mm": 94.0,
      "score": {
-      "total": 0.7206,
+      "total": 0.7243,
       "content_fit": 0.85,
       "aspect_fit": 0.55,
-      "readability": 0.793,
-      "density": 0.527,
+      "readability": 0.76,
+      "density": 0.608,
       "diversity": 0.615,
       "continuity": 0.7,
-      "print_safety": 0.955
+      "print_safety": 1.0
      }
     }
    ]
@@ -2100,13 +2097,13 @@
     {
      "layout": "sidecap",
      "width_pct": 100,
-     "img_h_mm": 77.2,
+     "img_h_mm": 68.6,
      "score": {
-      "total": 0.84,
+      "total": 0.837,
       "content_fit": 0.8,
       "aspect_fit": 1.0,
-      "readability": 0.891,
-      "density": 0.678,
+      "readability": 0.858,
+      "density": 0.714,
       "diversity": 0.615,
       "continuity": 0.85,
       "print_safety": 1.0
@@ -2114,17 +2111,17 @@
     },
     {
      "layout": "full",
-     "width_pct": 75,
-     "img_h_mm": 111.5,
+     "width_pct": 61,
+     "img_h_mm": 90.0,
      "score": {
-      "total": 0.7762,
+      "total": 0.7977,
       "content_fit": 0.85,
       "aspect_fit": 0.55,
-      "readability": 0.873,
-      "density": 0.535,
+      "readability": 0.926,
+      "density": 0.625,
       "diversity": 1.0,
       "continuity": 0.7,
-      "print_safety": 0.962
+      "print_safety": 1.0
      }
     }
    ]
@@ -2137,17 +2134,17 @@
    "candidates": [
     {
      "layout": "side",
-     "width_pct": 74,
-     "img_h_mm": 101.9,
+     "width_pct": 65,
+     "img_h_mm": 89.5,
      "score": {
-      "total": 0.8164,
+      "total": 0.8171,
       "content_fit": 0.7,
       "aspect_fit": 0.95,
-      "readability": 0.796,
-      "density": 0.575,
+      "readability": 0.772,
+      "density": 0.627,
       "diversity": 1.0,
       "continuity": 1.0,
-      "print_safety": 0.994
+      "print_safety": 1.0
      }
     }
    ]
@@ -2183,32 +2180,32 @@
    "candidates": [
     {
      "layout": "sidecap",
-     "width_pct": 84,
-     "img_h_mm": 118.3,
+     "width_pct": 72,
+     "img_h_mm": 90.1,
      "score": {
-      "total": 0.8491,
+      "total": 0.8522,
       "content_fit": 0.8,
       "aspect_fit": 1.0,
-      "readability": 0.845,
-      "density": 0.507,
+      "readability": 0.786,
+      "density": 0.625,
       "diversity": 1.0,
       "continuity": 0.85,
-      "print_safety": 0.939
+      "print_safety": 1.0
      }
     },
     {
      "layout": "full",
-     "width_pct": 42,
-     "img_h_mm": 113.4,
+     "width_pct": 33,
+     "img_h_mm": 90.0,
      "score": {
-      "total": 0.7288,
+      "total": 0.7312,
       "content_fit": 0.85,
       "aspect_fit": 0.55,
-      "readability": 0.834,
-      "density": 0.527,
+      "readability": 0.786,
+      "density": 0.625,
       "diversity": 0.615,
       "continuity": 0.7,
-      "print_safety": 0.955
+      "print_safety": 1.0
      }
     }
    ]
@@ -2221,7 +2218,7 @@
    "figures": 1,
    "process_tree": 0,
    "callouts": 0,
-   "height": 181.4,
+   "height": 163.9,
    "density": "mid",
    "signature": "TFalseFTruePFalseCFalseDmid"
   },
@@ -2231,7 +2228,7 @@
    "figures": 2,
    "process_tree": 0,
    "callouts": 0,
-   "height": 239.3,
+   "height": 252.0,
    "density": "high",
    "signature": "TFalseFTruePFalseCFalseDhigh"
   },
@@ -2241,19 +2238,19 @@
    "figures": 1,
    "process_tree": 0,
    "callouts": 1,
-   "height": 186.1,
+   "height": 149.4,
    "density": "mid",
    "signature": "TFalseFTruePFalseCFalseDmid"
   },
   {
    "page": 4,
    "tables": 0,
-   "figures": 1,
+   "figures": 2,
    "process_tree": 0,
    "callouts": 0,
-   "height": 144.6,
-   "density": "low",
-   "signature": "TFalseFTruePFalseCFalseDlow"
+   "height": 262.6,
+   "density": "high",
+   "signature": "TFalseFTruePFalseCFalseDhigh"
   },
   {
    "page": 5,
@@ -2261,109 +2258,109 @@
    "figures": 1,
    "process_tree": 0,
    "callouts": 0,
-   "height": 250.3,
+   "height": 238.1,
    "density": "high",
    "signature": "TFalseFTruePFalseCFalseDhigh"
   },
   {
    "page": 6,
    "tables": 0,
-   "figures": 2,
+   "figures": 3,
    "process_tree": 0,
    "callouts": 0,
-   "height": 282.0,
-   "density": "high",
-   "signature": "TFalseFTruePFalseCFalseDhigh"
+   "height": 209.8,
+   "density": "mid",
+   "signature": "TFalseFTruePFalseCFalseDmid"
   },
   {
    "page": 7,
    "tables": 1,
-   "figures": 2,
+   "figures": 0,
    "process_tree": 0,
    "callouts": 1,
-   "height": 242.8,
-   "density": "high",
-   "signature": "TTrueFTruePFalseCFalseDhigh"
+   "height": 183.3,
+   "density": "mid",
+   "signature": "TTrueFFalsePFalseCFalseDmid"
   },
   {
    "page": 8,
    "tables": 0,
-   "figures": 1,
+   "figures": 2,
    "process_tree": 0,
    "callouts": 0,
-   "height": 206.8,
-   "density": "mid",
-   "signature": "TFalseFTruePFalseCFalseDmid"
+   "height": 271.7,
+   "density": "high",
+   "signature": "TFalseFTruePFalseCFalseDhigh"
   },
   {
    "page": 9,
    "tables": 0,
-   "figures": 1,
+   "figures": 0,
    "process_tree": 0,
    "callouts": 1,
-   "height": 180.2,
+   "height": 173.2,
    "density": "mid",
-   "signature": "TFalseFTruePFalseCFalseDmid"
+   "signature": "TFalseFFalsePFalseCFalseDmid"
   },
   {
    "page": 10,
-   "tables": 0,
-   "figures": 0,
-   "process_tree": 0,
-   "callouts": 0,
-   "height": 105.8,
-   "density": "low",
-   "signature": "TFalseFFalsePFalseCFalseDlow"
-  },
-  {
-   "page": 11,
    "tables": 1,
    "figures": 1,
    "process_tree": 0,
    "callouts": 0,
-   "height": 247.0,
+   "height": 244.5,
    "density": "high",
    "signature": "TTrueFTruePFalseCFalseDhigh"
   },
   {
-   "page": 12,
+   "page": 11,
    "tables": 0,
    "figures": 1,
    "process_tree": 1,
    "callouts": 0,
-   "height": 254.6,
+   "height": 257.3,
    "density": "high",
    "signature": "TFalseFTruePTrueCFalseDhigh"
   },
   {
-   "page": 13,
+   "page": 12,
    "tables": 1,
    "figures": 0,
    "process_tree": 0,
    "callouts": 2,
-   "height": 161.9,
+   "height": 157.9,
    "density": "mid",
    "signature": "TTrueFFalsePFalseCTrueDmid"
   },
   {
-   "page": 14,
+   "page": 13,
    "tables": 0,
    "figures": 1,
    "process_tree": 0,
    "callouts": 0,
-   "height": 195.2,
+   "height": 205.8,
    "density": "mid",
    "signature": "TFalseFTruePFalseCFalseDmid"
   },
   {
-   "page": 15,
+   "page": 14,
    "tables": 1,
    "figures": 1,
    "process_tree": 0,
    "callouts": 0,
-   "height": 214.7,
+   "height": 167.0,
+   "density": "mid",
+   "signature": "TTrueFTruePFalseCFalseDmid"
+  },
+  {
+   "page": 15,
+   "tables": 0,
+   "figures": 2,
+   "process_tree": 0,
+   "callouts": 0,
+   "height": 233.5,
    "density": "high",
-   "signature": "TTrueFTruePFalseCFalseDhigh"
+   "signature": "TFalseFTruePFalseCFalseDhigh"
   },
   {
    "page": 16,
@@ -2371,32 +2368,22 @@
    "figures": 2,
    "process_tree": 0,
    "callouts": 0,
-   "height": 243.2,
+   "height": 248.3,
    "density": "high",
    "signature": "TFalseFTruePFalseCFalseDhigh"
   },
   {
    "page": 17,
-   "tables": 0,
-   "figures": 2,
-   "process_tree": 0,
-   "callouts": 0,
-   "height": 284.4,
-   "density": "high",
-   "signature": "TFalseFTruePFalseCFalseDhigh"
-  },
-  {
-   "page": 18,
    "tables": 1,
    "figures": 2,
    "process_tree": 0,
    "callouts": 0,
-   "height": 284.6,
+   "height": 266.3,
    "density": "high",
    "signature": "TTrueFTruePFalseCFalseDhigh"
   },
   {
-   "page": 19,
+   "page": 18,
    "tables": 0,
    "figures": 0,
    "process_tree": 0,
@@ -2406,54 +2393,64 @@
    "signature": "TFalseFFalsePFalseCTrueDlow"
   },
   {
-   "page": 20,
+   "page": 19,
    "tables": 0,
    "figures": 2,
    "process_tree": 0,
    "callouts": 0,
-   "height": 210.9,
+   "height": 201.0,
    "density": "mid",
    "signature": "TFalseFTruePFalseCFalseDmid"
   },
   {
-   "page": 21,
+   "page": 20,
    "tables": 1,
    "figures": 1,
    "process_tree": 0,
    "callouts": 0,
-   "height": 269.6,
+   "height": 243.3,
    "density": "high",
    "signature": "TTrueFTruePFalseCFalseDhigh"
   },
   {
-   "page": 22,
+   "page": 21,
    "tables": 0,
    "figures": 1,
    "process_tree": 0,
    "callouts": 1,
-   "height": 261.6,
+   "height": 257.6,
    "density": "high",
    "signature": "TFalseFTruePFalseCFalseDhigh"
   },
   {
-   "page": 23,
+   "page": 22,
    "tables": 1,
-   "figures": 1,
+   "figures": 2,
    "process_tree": 0,
    "callouts": 0,
-   "height": 252.3,
+   "height": 297.8,
    "density": "high",
    "signature": "TTrueFTruePFalseCFalseDhigh"
   },
   {
-   "page": 24,
+   "page": 23,
    "tables": 0,
    "figures": 2,
    "process_tree": 0,
    "callouts": 0,
-   "height": 250.1,
+   "height": 260.5,
    "density": "high",
    "signature": "TFalseFTruePFalseCFalseDhigh"
+  },
+  {
+   "page": 24,
+   "tables": 0,
+   "figures": 0,
+   "process_tree": 0,
+   "callouts": 0,
+   "height": 44.5,
+   "density": "low",
+   "signature": "TFalseFFalsePFalseCFalseDlow"
   },
   {
    "page": 25,
@@ -2461,22 +2458,12 @@
    "figures": 1,
    "process_tree": 0,
    "callouts": 0,
-   "height": 131.9,
-   "density": "low",
-   "signature": "TFalseFTruePFalseCFalseDlow"
-  },
-  {
-   "page": 26,
-   "tables": 0,
-   "figures": 1,
-   "process_tree": 0,
-   "callouts": 0,
-   "height": 579.1,
+   "height": 551.2,
    "density": "high",
    "signature": "TFalseFTruePFalseCFalseDhigh"
   },
   {
-   "page": 28,
+   "page": 27,
    "tables": 0,
    "figures": 0,
    "process_tree": 1,
@@ -2492,10 +2479,34 @@
     "round": 1,
     "findings": [
      {
+      "page": 2,
+      "type": "overfull",
+      "severity": "info",
+      "detail": "تراکم نویسه 2668 در برابر میانهٔ 1895",
+      "cause": "تراکم بالای محتوای همان بخش",
+      "block": null
+     },
+     {
+      "page": 6,
+      "type": "low_fill",
+      "severity": "warn",
+      "detail": "پُری صفحه 70% است",
+      "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
+      "block": null
+     },
+     {
+      "page": 8,
+      "type": "overfull",
+      "severity": "info",
+      "detail": "تراکم نویسه 2754 در برابر میانهٔ 1895",
+      "cause": "تراکم بالای محتوای همان بخش",
+      "block": null
+     },
+     {
       "page": 10,
       "type": "overfull",
       "severity": "info",
-      "detail": "تراکم نویسه 3330 در برابر میانهٔ 1983",
+      "detail": "تراکم نویسه 2938 در برابر میانهٔ 1895",
       "cause": "تراکم بالای محتوای همان بخش",
       "block": null
      },
@@ -2503,7 +2514,7 @@
       "page": 13,
       "type": "overfull",
       "severity": "info",
-      "detail": "تراکم نویسه 2815 در برابر میانهٔ 1983",
+      "detail": "تراکم نویسه 3089 در برابر میانهٔ 1895",
       "cause": "تراکم بالای محتوای همان بخش",
       "block": null
      },
@@ -2511,7 +2522,23 @@
       "page": 14,
       "type": "low_fill",
       "severity": "warn",
-      "detail": "پُری صفحه 71% است",
+      "detail": "پُری صفحه 67% است",
+      "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
+      "block": null
+     },
+     {
+      "page": 15,
+      "type": "low_fill",
+      "severity": "warn",
+      "detail": "پُری صفحه 62% است",
+      "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
+      "block": null
+     },
+     {
+      "page": 22,
+      "type": "low_fill",
+      "severity": "warn",
+      "detail": "پُری صفحه 67% است",
       "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
       "block": null
      },
@@ -2527,7 +2554,7 @@
       "page": 29,
       "type": "overfull",
       "severity": "info",
-      "detail": "تراکم نویسه 3717 در برابر میانهٔ 1983",
+      "detail": "تراکم نویسه 3717 در برابر میانهٔ 1895",
       "cause": "تراکم بالای محتوای همان بخش",
       "block": null
      },
@@ -2540,24 +2567,18 @@
       "block": "s01t1-f3"
      },
      {
-      "page": 5,
+      "page": 4,
       "type": "monotony",
       "severity": "info",
-      "detail": "6 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
-      "cause": "تکرار قالب در بخش‌های هم‌ساختار",
-      "block": null
-     },
-     {
-      "page": 23,
-      "type": "monotony",
-      "severity": "info",
-      "detail": "5 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
+      "detail": "4 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
       "cause": "تکرار قالب در بخش‌های هم‌ساختار",
       "block": null
      }
     ],
     "repairs": [
-     "s01t1-f3: [بازرسی بصری] زیرنویس از تصویر جدا افتاده بود؛ شکل کامل به صفحهٔ بعد منتقل می‌شود"
+     "s01t1-f3: [بازرسی بصری] زیرنویس از تصویر جدا افتاده بود؛ شکل کامل به صفحهٔ بعد منتقل می‌شود",
+     "s01t5-tb1: [حسابرسی شکست] تهِ صفحهٔ قبل در رندر واقعی 89mm خالی بود و بلوک (74mm) جا می‌شد؛ شکست اجباری حذف شد",
+     "s01t5-f3: [بازخورد PDF واقعی] صفحهٔ قبل 102mm فضای خالی داشت؛ تصویر تا عرض 84٪ کوچک شد تا در همان صفحه جا شود"
     ]
    },
    {
@@ -2567,12 +2588,20 @@
       "page": 3,
       "type": "low_fill",
       "severity": "warn",
-      "detail": "پُری صفحه 43% است",
+      "detail": "پُری صفحه 36% است",
       "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
       "block": null
      },
      {
-      "page": 5,
+      "page": 6,
+      "type": "low_fill",
+      "severity": "warn",
+      "detail": "پُری صفحه 69% است",
+      "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
+      "block": null
+     },
+     {
+      "page": 7,
       "type": "low_fill",
       "severity": "warn",
       "detail": "پُری صفحه 65% است",
@@ -2583,7 +2612,7 @@
       "page": 11,
       "type": "overfull",
       "severity": "info",
-      "detail": "تراکم نویسه 3330 در برابر میانهٔ 1855",
+      "detail": "تراکم نویسه 2938 در برابر میانهٔ 2043",
       "cause": "تراکم بالای محتوای همان بخش",
       "block": null
      },
@@ -2591,28 +2620,12 @@
       "page": 14,
       "type": "overfull",
       "severity": "info",
-      "detail": "تراکم نویسه 2815 در برابر میانهٔ 1855",
+      "detail": "تراکم نویسه 3089 در برابر میانهٔ 2043",
       "cause": "تراکم بالای محتوای همان بخش",
       "block": null
      },
      {
-      "page": 15,
-      "type": "low_fill",
-      "severity": "warn",
-      "detail": "پُری صفحه 71% است",
-      "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
-      "block": null
-     },
-     {
-      "page": 23,
-      "type": "overfull",
-      "severity": "info",
-      "detail": "تراکم نویسه 2606 در برابر میانهٔ 1855",
-      "cause": "تراکم بالای محتوای همان بخش",
-      "block": null
-     },
-     {
-      "page": 29,
+      "page": 28,
       "type": "low_fill",
       "severity": "warn",
       "detail": "پُری صفحه 51% است",
@@ -2620,10 +2633,10 @@
       "block": null
      },
      {
-      "page": 30,
+      "page": 29,
       "type": "overfull",
       "severity": "info",
-      "detail": "تراکم نویسه 3717 در برابر میانهٔ 1855",
+      "detail": "تراکم نویسه 3717 در برابر میانهٔ 2043",
       "cause": "تراکم بالای محتوای همان بخش",
       "block": null
      },
@@ -2636,55 +2649,47 @@
       "block": "s01t1-f3"
      },
      {
-      "page": 24,
+      "page": 21,
       "type": "monotony",
       "severity": "info",
-      "detail": "5 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
+      "detail": "9 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
       "cause": "تکرار قالب در بخش‌های هم‌ساختار",
       "block": null
      }
     ],
     "repairs": [
-     "s01t1-f3: [حسابرسی شکست] تهِ صفحهٔ قبل در رندر واقعی 153mm خالی بود و بلوک (120mm) جا می‌شد؛ شکست اجباری حذف شد",
-     "s01t2-f1: [بازخورد PDF واقعی] صفحهٔ قبل 92mm فضای خالی داشت؛ تصویر تا عرض 80٪ کوچک شد تا در همان صفحه جا شود"
+     "s01t1-f3: [حسابرسی شکست] تهِ صفحهٔ قبل در رندر واقعی 171mm خالی بود و بلوک (92mm) جا می‌شد؛ شکست اجباری حذف شد",
+     "s01t5-f4: [بازخورد PDF واقعی] صفحهٔ قبل 74mm فضای خالی داشت؛ تصویر تا عرض 68٪ کوچک شد تا در همان صفحه جا شود"
     ]
    }
   ],
   "final_findings": [
    {
     "page": 6,
-    "type": "overfull",
-    "severity": "info",
-    "detail": "تراکم نویسه 2825 در برابر میانهٔ 1983",
-    "cause": "تراکم بالای محتوای همان بخش",
-    "block": null
-   },
-   {
-    "page": 10,
-    "type": "overfull",
-    "severity": "info",
-    "detail": "تراکم نویسه 3330 در برابر میانهٔ 1983",
-    "cause": "تراکم بالای محتوای همان بخش",
+    "type": "low_fill",
+    "severity": "warn",
+    "detail": "پُری صفحه 70% است",
+    "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
     "block": null
    },
    {
     "page": 13,
     "type": "overfull",
     "severity": "info",
-    "detail": "تراکم نویسه 2815 در برابر میانهٔ 1983",
+    "detail": "تراکم نویسه 3089 در برابر میانهٔ 2171",
     "cause": "تراکم بالای محتوای همان بخش",
     "block": null
    },
    {
-    "page": 14,
+    "page": 16,
     "type": "low_fill",
     "severity": "warn",
-    "detail": "پُری صفحه 71% است",
+    "detail": "پُری صفحه 63% است",
     "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
     "block": null
    },
    {
-    "page": 28,
+    "page": 27,
     "type": "low_fill",
     "severity": "warn",
     "detail": "پُری صفحه 51% است",
@@ -2692,10 +2697,10 @@
     "block": null
    },
    {
-    "page": 29,
+    "page": 28,
     "type": "overfull",
     "severity": "info",
-    "detail": "تراکم نویسه 3717 در برابر میانهٔ 1983",
+    "detail": "تراکم نویسه 3717 در برابر میانهٔ 2171",
     "cause": "تراکم بالای محتوای همان بخش",
     "block": null
    },
@@ -2711,15 +2716,15 @@
     "page": 4,
     "type": "monotony",
     "severity": "info",
-    "detail": "5 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
+    "detail": "4 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
     "cause": "تکرار قالب در بخش‌های هم‌ساختار",
     "block": null
    },
    {
-    "page": 23,
+    "page": 21,
     "type": "monotony",
     "severity": "info",
-    "detail": "5 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
+    "detail": "8 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
     "cause": "تکرار قالب در بخش‌های هم‌ساختار",
     "block": null
    }
@@ -2912,12 +2917,13 @@
   "errors": [],
   "warnings": [
    "ماتریس پوشش: 31 مورد جزئیات درون‌تصویر ماشینی قابل استخراج نیست و به خود شکل ارجاع داده شده است",
-   "صفحات با پُری زیر ۷۰٪ (نیازمند توضیح/اصلاح): [29]",
-   "بازرسی بصری: صفحهٔ 15 — پُری صفحه 71% است (علت محتمل: بلوک نشکن بعدی در باقیمانده جا نشده)",
-   "بازرسی بصری: صفحهٔ 29 — پُری صفحه 51% است (علت محتمل: بلوک نشکن بعدی در باقیمانده جا نشده)",
+   "صفحات با پُری زیر ۷۰٪ (نیازمند توضیح/اصلاح): [17, 28]",
+   "بازرسی بصری: صفحهٔ 7 — پُری صفحه 70% است (علت محتمل: بلوک نشکن بعدی در باقیمانده جا نشده)",
+   "بازرسی بصری: صفحهٔ 17 — پُری صفحه 63% است (علت محتمل: بلوک نشکن بعدی در باقیمانده جا نشده)",
+   "بازرسی بصری: صفحهٔ 28 — پُری صفحه 51% است (علت محتمل: بلوک نشکن بعدی در باقیمانده جا نشده)",
    "بازرسی بصری: صفحهٔ 4 — عنوان شکل در صفحهٔ تصویر پیدا نشد (علت محتمل: شکستن قاب شکل بین دو صفحه)"
   ],
-  "pages": 32,
+  "pages": 31,
   "checked_fragments": 553,
   "figures_model": 31,
   "figures_pdf": 31,
@@ -2938,28 +2944,27 @@
   "min_font_pt": 7.0,
   "chars_per_page": [
    232,
-   3824,
-   2547,
-   1953,
-   2628,
-   2050,
-   2947,
-   2195,
-   2599,
-   2103,
-   3452,
+   1895,
+   2790,
+   2367,
+   2601,
+   2349,
+   2016,
+   2622,
+   2873,
+   1821,
+   3061,
    1929,
    1590,
-   2932,
-   2226,
-   1234,
-   1911,
-   1815,
-   1778,
-   2697,
-   1399,
-   1922,
-   2726,
+   3206,
+   2568,
+   1993,
+   1661,
+   1876,
+   2487,
+   2086,
+   2317,
+   2331,
    2291,
    1944,
    1890,
@@ -2970,35 +2975,34 @@
    5175,
    4097
   ],
-  "avg_chars_per_page": 2394,
+  "avg_chars_per_page": 2407,
   "cover_full_bleed": true,
   "fill_per_page": [
    null,
    null,
-   99,
-   96,
-   96,
-   99,
-   98,
-   75,
    100,
    98,
-   95,
+   96,
+   98,
+   70,
    99,
-   86,
-   92,
-   71,
-   79,
-   89,
-   96,
-   96,
-   79,
-   77,
-   97,
-   96,
-   93,
+   95,
+   88,
+   84,
+   98,
+   87,
+   99,
+   95,
+   98,
+   63,
+   99,
+   98,
    91,
-   93,
+   99,
+   84,
+   81,
+   88,
+   85,
    78,
    85,
    51,
@@ -3032,8 +3036,8 @@
    "s01t2-p3 [needs_review] (paragraph)",
    "s01t2-p4 [needs_review] (paragraph)",
    "s01t2-p5 [needs_review] (paragraph)",
-   "s01t2-p6 [needs_review] (paragraph)",
    "s01t2-f3 [needs_review] (figure)",
+   "s01t2-p6 [needs_review] (paragraph)",
    "s01t2-p7 [needs_review] (paragraph)",
    "s01t2-f4 [needs_review] (figure)",
    "s01t2-f5 [needs_review] (figure)",
@@ -3131,38 +3135,30 @@
   "inspection_findings": [
    {
     "page": 6,
-    "type": "overfull",
-    "severity": "info",
-    "detail": "تراکم نویسه 2825 در برابر میانهٔ 1983",
-    "cause": "تراکم بالای محتوای همان بخش",
-    "block": null
-   },
-   {
-    "page": 10,
-    "type": "overfull",
-    "severity": "info",
-    "detail": "تراکم نویسه 3330 در برابر میانهٔ 1983",
-    "cause": "تراکم بالای محتوای همان بخش",
+    "type": "low_fill",
+    "severity": "warn",
+    "detail": "پُری صفحه 70% است",
+    "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
     "block": null
    },
    {
     "page": 13,
     "type": "overfull",
     "severity": "info",
-    "detail": "تراکم نویسه 2815 در برابر میانهٔ 1983",
+    "detail": "تراکم نویسه 3089 در برابر میانهٔ 2171",
     "cause": "تراکم بالای محتوای همان بخش",
     "block": null
    },
    {
-    "page": 14,
+    "page": 16,
     "type": "low_fill",
     "severity": "warn",
-    "detail": "پُری صفحه 71% است",
+    "detail": "پُری صفحه 63% است",
     "cause": "بلوک نشکن بعدی در باقیمانده جا نشده",
     "block": null
    },
    {
-    "page": 28,
+    "page": 27,
     "type": "low_fill",
     "severity": "warn",
     "detail": "پُری صفحه 51% است",
@@ -3170,10 +3166,10 @@
     "block": null
    },
    {
-    "page": 29,
+    "page": 28,
     "type": "overfull",
     "severity": "info",
-    "detail": "تراکم نویسه 3717 در برابر میانهٔ 1983",
+    "detail": "تراکم نویسه 3717 در برابر میانهٔ 2171",
     "cause": "تراکم بالای محتوای همان بخش",
     "block": null
    },
@@ -3189,15 +3185,15 @@
     "page": 4,
     "type": "monotony",
     "severity": "info",
-    "detail": "5 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
+    "detail": "4 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
     "cause": "تکرار قالب در بخش‌های هم‌ساختار",
     "block": null
    },
    {
-    "page": 23,
+    "page": 21,
     "type": "monotony",
     "severity": "info",
-    "detail": "5 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
+    "detail": "8 صفحهٔ متوالی با امضای بصری یکسان (ITrueTFalseDhigh)",
     "cause": "تکرار قالب در بخش‌های هم‌ساختار",
     "block": null
    }
@@ -3205,9 +3201,9 @@
   "toc_verified": true,
   "toc_links": 24,
   "back_matter": {
-   "tree_page": 27,
-   "ultra_first_page": 30,
-   "glossary_page": 32,
+   "tree_page": 26,
+   "ultra_first_page": 29,
+   "glossary_page": 31,
    "revmap_present": false,
    "errors": []
   }
@@ -3243,7 +3239,6 @@
   "/home/user/pdfmakerbest/output/pages/page_28.png",
   "/home/user/pdfmakerbest/output/pages/page_29.png",
   "/home/user/pdfmakerbest/output/pages/page_30.png",
-  "/home/user/pdfmakerbest/output/pages/page_31.png",
-  "/home/user/pdfmakerbest/output/pages/page_32.png"
+  "/home/user/pdfmakerbest/output/pages/page_31.png"
  ]
 }

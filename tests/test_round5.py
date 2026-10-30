@@ -178,15 +178,19 @@ def test_dual_rail_svg_from_block_data():
     assert "آنتروگراد: از سوما به پایانه" in html  # عین عنوان داده
 
 
-# ---------------------------------------------- فهرست شکل‌ها/جدول‌ها و پایداری
+# ---------------------------------------------- صفحهٔ ۲: کارت‌های مطالب (بدون فهرست شکل/جدول)
 def test_lists_render_stable_across_passes():
+    """تصمیم کاربر: فهرست شکل‌ها و جدول‌ها از صفحهٔ ۲ حذف شده‌اند؛ به‌جای آن
+    شبکهٔ کارت‌های مبحث است و شماره‌ها از toc_pages واقعی می‌آیند."""
     s, plan = _plan()
-    no_pages = Typesetter(plan).figure_table_lists()
-    assert "فهرست شکل‌ها" in no_pages and "…" in no_pages
-    pages = {b.id: 7 for b in s.all_blocks() if b.type in ("figure", "table")}
-    with_pages = Typesetter(plan, fig_pages=pages).figure_table_lists()
-    assert with_pages.count("<li>") == no_pages.count("<li>")  # همان ساختار، فقط عدد
-    assert "۷" in with_pages
+    assert not hasattr(Typesetter(plan), "figure_table_lists")
+    html = Typesetter(plan).toc_page()
+    assert "فهرست شکل‌ها" not in html and "فهرست جدول‌ها" not in html
+    assert html.count('class="toc-card"') == len(s.topics)
+    pages = {h[2]: 7 for h in plan.headings}
+    html2 = Typesetter(plan, toc_pages=pages).toc_page()
+    assert html2.count('class="toc-card"') == len(s.topics)  # همان ساختار، فقط عدد
+    assert "ص ۷" in html2
 
 
 # ---------------------------------------------------------- قاب چندواریانتی

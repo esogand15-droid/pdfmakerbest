@@ -193,9 +193,9 @@ def _optimize_figures(session: Session, work: Path) -> None:
             continue
         dst = fig_dir / (src.stem + ".jpg")
         im = Image.open(src).convert("RGB")
-        if im.width > 1500:
-            im = im.resize((1500, round(im.height * 1500 / im.width)), Image.LANCZOS)
-        im.save(dst, quality=82, optimize=True)
+        if im.width > 1600:
+            im = im.resize((1600, round(im.height * 1600 / im.width)), Image.LANCZOS)
+        im.save(dst, quality=85, optimize=True)
         b.data["_opt_file"] = str(dst.relative_to(REPO_ROOT))
 
 

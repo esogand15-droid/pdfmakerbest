@@ -135,7 +135,7 @@ class Typesetter:
     def toc_page(self) -> str:
         """صفحهٔ اختصاصی فهرست: نقشهٔ جلسه + فهرست پیونددار + نوار راهنمای خواندن."""
         return (f'<div class="tocpage">{self.session_map()}{self.toc()}'
-                f'{self.figure_table_lists()}{self.reading_guide()}</div>')
+                f'{self.reading_guide()}</div>')
 
     def render_blocks(self, blocks: list[Block]) -> str:
         """رندر ترتیبی بلوک‌ها در بازه‌های بخشی (secpan) با پشتیبانی جفت‌تصویر.
@@ -194,43 +194,34 @@ class Typesetter:
         return f'<nav class="session-map"><h2>نقشهٔ جلسه</h2><ol>{"".join(items)}</ol></nav>'
 
     def toc(self) -> str:
-        n = len(self.plan.headings)
-        lh = 2.35 if n <= 12 else (2.05 if n <= 20 else 1.8)
-        if any(b.type in ("figure", "table") for b in self.session.all_blocks()):
-            lh = max(1.42, lh - 0.62)  # جای فهرست‌ها و راهنمای خانوادگی نشانه‌ها در همان صفحه
-        items = []
+        """فهرست مطالب: شبکهٔ دوستونهٔ کارت‌های مبحث؛ هر کارت شمارهٔ رنگی،
+        عنوان درشت، قرص صفحهٔ شروع و زیرمبحث‌ها با خط‌چین و شمارهٔ صفحه.
+        شماره‌ها از رندر واقعی بدنه می‌آیند (toc_pages)، نه دستی."""
+        secs: dict[str, list[tuple[str, str]]] = {}
+        cur = ""
         for lvl, text, anchor in self.plan.headings:
-            pg = self.toc_pages.get(anchor)
-            items.append(
-                f'<li class="lvl{lvl}"><a href="#{escape(anchor)}"><span>{escape(text)}</span>'
+            if lvl == 1:
+                cur = anchor
+                secs.setdefault(cur, [])
+            elif cur:
+                secs[cur].append((text, anchor))
+        cards = []
+        for t in self.session.topics:
+            pg = self.toc_pages.get(t.id)
+            subs = "".join(
+                f'<li><a href="#{escape(a)}"><span>{escape(tx)}</span>'
                 f'<span class="dots"></span>'
-                f'<span class="pno">{fa_num(pg) if pg else "…"}</span></a></li>')
-        return (f'<nav class="toc" style="--toc-lh:{lh}"><h2>فهرست مطالب</h2>'
-                f'<ol>{"".join(items)}</ol></nav>')
-
-    def figure_table_lists(self) -> str:
-        """فهرست شکل‌ها و جدول‌ها — فقط وقتی صفحهٔ واقعی هر مورد از بدنه خوانده شده باشد."""
-        figs, tbls = [], []
-        for b in self.session.all_blocks():
-            if b.type not in ("figure", "table"):
-                continue
-            pg = self.fig_pages.get(b.id)
-            label = escape(self.plan.labels.get(b.id, ""))
-            if b.type == "figure":
-                t = escape(str(b.data.get("title_fa", "")))
-                figs.append(f'<li><span class="ln">{label}</span><span>{t}</span>'
-                            f'<span class="dots"></span><span class="pno">{fa_num(pg) if pg else "…"}</span></li>')
-            elif b.type == "table":
-                t = escape(str(b.data.get("title", "")))
-                tbls.append(f'<li><span class="ln">{label}</span><span>{t}</span>'
-                            f'<span class="dots"></span><span class="pno">{fa_num(pg) if pg else "…"}</span></li>')
-        if not figs and not tbls:
-            return ""
-        col_f = (f'<div class="lists__col"><h2>فهرست شکل‌ها</h2><ol>{"".join(figs)}</ol></div>'
-                 if figs else "")
-        col_t = (f'<div class="lists__col"><h2>فهرست جدول‌ها</h2><ol>{"".join(tbls)}</ol></div>'
-                 if tbls else "")
-        return f'<div class="lists">{col_f}{col_t}</div>'
+                f'<span class="pno">{fa_num(self.toc_pages[a]) if a in self.toc_pages else "…"}</span></a></li>'
+                for tx, a in secs.get(t.id, []))
+            cards.append(
+                f'<section class="toc-card">'
+                f'<a class="toc-card__head" href="#{escape(t.id)}">'
+                f'<span class="toc-card__n">{fa_num(t.number)}</span>'
+                f'<span class="toc-card__t">{escape(t.title)}</span>'
+                f'<span class="toc-card__pg">ص {fa_num(pg) if pg else "…"}</span></a>'
+                f'<ol class="toc-card__subs">{subs}</ol></section>')
+        return (f'<nav class="toc"><h2>فهرست مطالب</h2>'
+                f'<div class="toc-grid">{"".join(cards)}</div></nav>')
 
     def reading_guide(self) -> str:
         """راهنمای نشانه‌ها: شش کارت خانوادهٔ معنایی؛ رنگ نشانه از خانواده‌اش
@@ -640,9 +631,26 @@ class Typesetter:
         label = escape(self.plan.labels.get(b.id, "جدول"))
         head = "".join(f"<th>{inline(h)}</th>" for h in d["headers"])
         colgroup = ""
-        if d.get("col_widths"):
+        widths = d.get("col_widths")
+        if not widths and len(d.get("headers", [])) >= 3:
+            # وزن هر ستون از طول متن سلول‌ها (سقف‌دار تا یک سلول بلند ستون را نبلعد)
+            ncol = len(d["headers"])
+            weights = []
+            for ci in range(ncol):
+                cells = [str(d["headers"][ci])] + [
+                    str(r[ci]) if ci < len(r) else "" for r in d.get("rows", [])]
+                weights.append(max(min(len(c), 60) for c in cells) ** 0.7 + 4.0)
+            tot = sum(weights)
+            widths = [max(11.0, min(52.0, 100 * w / tot)) for w in weights]
+            k = 100 / sum(widths)
+            widths = [round(w * k, 1) for w in widths]
+        if widths:
             colgroup = "<colgroup>" + "".join(
-                f'<col style="width:{float(w)}%">' for w in d["col_widths"]) + "</colgroup>"
+                f'<col style="width:{float(w)}%">' for w in widths) + "</colgroup>"
+            dense_fixed = " tbl--fixed"
+        else:
+            dense_fixed = ""
+
         dense = " tbl--dense" if len(d.get("rows", [])) > 10 else ""
         # سبک متناسب با نقش جدول: مقایسه‌ای (۳ ستونه) یا مرجع راه‌راه (بلند)
         style_cls = str(d.get("style", ""))
@@ -668,10 +676,11 @@ class Typesetter:
                 # ادامهٔ همان جدول: همان شماره و عنوان، بدون شمارهٔ مستقل تازه
                 cap = (f'<div class="tblwrap__cap tblwrap__cap--cont"><span class="tno">{label}</span>\n'
                        f'  <span class="tt">ادامهٔ جدول — {inline(d["title"])}</span></div>')
+            wrap_cls = "tblwrap tblwrap--split" if (len(chunks) == 1 and len(d.get("rows", [])) > 4) else "tblwrap"
             parts.append(f"""
-<div class="tblwrap"{bid}{style}>
+<div class="{wrap_cls}"{bid}{style}>
   {cap}
-  <table class="tbl{dense}">{colgroup}<thead><tr>{head}</tr></thead><tbody>{self._tbl_rows_html(d, idxs)}</tbody></table>
+  <table class="tbl{dense}{dense_fixed}">{colgroup}<thead><tr>{head}</tr></thead><tbody>{self._tbl_rows_html(d, idxs)}</tbody></table>
 </div>""")
         if d.get("takeaway"):
             parts.append(f'<p class="tbl__takeaway"><b>برداشت کلیدی:</b> '
