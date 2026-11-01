@@ -355,7 +355,8 @@ def _build_ultra_sheet(content_path: str, session: Session, work: Path,
 def _check_back_matter(pdf_path: Path, *, ultra_first_page: int | None,
                        revmap_enabled: bool) -> dict:
     """کنترل ترتیب مادهٔ پایانی روی PDF نهایی: درخت ← جمع‌بندی ← برگهٔ
-    فوق‌فشرده ← واژه‌نامه (صفحهٔ آخر) + نبودن «مرور جامع» وقتی خاموش است."""
+    فوق‌فشرده (پایان جزوه؛ واژه‌نامه از خروجی حذف شده است) + نبودن
+    «مرور جامع» وقتی خاموش است."""
     import pymupdf
     doc = pymupdf.open(str(pdf_path))
     errors: list[str] = []
@@ -512,7 +513,7 @@ def _build_inner(content_path: str, *, edition: str = "final", theme: str = "a",
                     omit_background=True)
         frame_pdfs[tnum] = fp
 
-    # ادغام: کاور + بدنه + برگهٔ فوق‌فشرده (پیش از واژه‌نامه)، مهر قاب و شماره‌ها
+    # ادغام: کاور + بدنه + برگهٔ فوق‌فشرده (در پایان جزوه)، مهر قاب و شماره‌ها
     import pymupdf
     final = pymupdf.open(str(cover_pdf))
     final.insert_pdf(pymupdf.open(str(body_pdf)))

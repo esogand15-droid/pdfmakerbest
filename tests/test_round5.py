@@ -140,21 +140,16 @@ def test_pilot_is_final_without_quickcheck_or_provisional_labels():
 
 
 # ---------------------------------------------------------- مادهٔ پایانی
-def test_glossary_only_session_terms_with_pages():
+def test_no_glossary_in_output_anymore():
+    """چرخش محصول (بازخورد کاربر): صفحهٔ واژه‌نامه از خروجی حذف شده است.
+    اصطلاحات همچنان در سرآغاز مبحث‌ها و متن می‌آیند؛ حذفِ ابزار نمایشی
+    پایانی است، نه حذف محتوا."""
     s, plan = _plan()
     ts = Typesetter(plan, toc_pages={})
-    g = ts.glossary()
-    assert "واژه‌نامه" in g
-    # هر اصطلاح واژه‌نامه باید در دادهٔ جلسه ریشه داشته باشد
-    known = set()
-    for t in s.topics:
-        for kt in t.key_terms:
-            known.add(str(kt.get("fa", "")).strip())
-    fafound = [x.strip() for x in re.findall(r'gloss__fa">([^<]+)', g)]
-    assert len(fafound) >= 20
-    assert "تپهٔ آکسونی" in fafound  # از برچسب شکل/اصطلاح درون‌متنی
-    # بدون toc_pages جای شماره‌ها «…» است (پایداری ارتفاع بین گذrها)
-    assert "…" in g
+    assert not hasattr(ts, "glossary")
+    html = ts.document("")
+    assert "واژه‌نامهٔ فارسی–انگلیسی" not in html
+    assert "gloss__fa" not in html and "gloss--page" not in html
 
 
 def test_no_colophon_or_doc_end():

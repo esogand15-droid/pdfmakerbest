@@ -115,9 +115,7 @@ class Typesetter:
                 '<div class="section closing-head"><h2 class="h-ic">'
                 + icon_svg("summary", 15) + 'جمع‌بندی و مرور جلسه</h2></div>')
             body.append(self.render_blocks(closing_blocks))
-            body.append(self.sources_list())
         body.append(self.answer_key())
-        body.append(self.glossary())
         favicon = (f'<link rel="icon" type="image/png" href="{self.brand["favicon_uri"]}">'
                    if self.brand.get("favicon_uri") else "")
         _paper_white = (self.print_theme or self.bw_theme
@@ -223,7 +221,7 @@ class Typesetter:
                             ("terminology", "اصطلاحات کلیدی"), ("process", "فرایند گام‌به‌گام"),
                             ("compare", "مقایسه"), ("branch", "نمودار درختی/طبقه‌بندی"),
                             ("compass", "مرور فوق‌فشرده"), ("microscope", "جزئیات درون شکل"),
-                            ("book", "واژه‌نامه"), ("reference", "منبع مطلب")):
+                            ("reference", "منبع مطلب")):
             add(name, label)
 
         from .icons import family_of_icon
@@ -320,6 +318,12 @@ class Typesetter:
 
         ریشه ← مبحث ← بخش ← طبقه‌بندی‌ها/جدول‌ها/فرایندها + درخت(های) تألیفیِ
         خود محتوا (با attach_to). هیچ برچسبی ساخته یا بازنویسی نمی‌شود.
+
+        قانون محصول (بازخورد کاربر): نمودار همیشه دقیقاً در «یک» صفحهٔ
+        اختصاصی می‌آید — هرگز دو صفحه و هرگز شکسته. جاگیری با سبک فشردهٔ
+        همین صفحه (PAGE_STYLE) است؛ همهٔ شاخه‌ها و جزئیات می‌مانند و
+        برچسب‌ها بالای کف خوانایی QA می‌ایستند. زیر درخت هیچ نوار
+        اصطلاحاتی نمی‌آید؛ فقط چیپ‌های منبعِ درخت تألیفی (ردیابی‌پذیری).
         """
         cfg = (self.plan.layout_cfg or {}).get("tree_page", {})
         if not cfg.get("enabled", True):
@@ -328,67 +332,26 @@ class Typesetter:
                             root_label=f"جلسهٔ {fa_num(self.session.session_number)}")
         if len(root.get("children", [])) < 1:
             return ""
-        # ابعاد صریح چاپی (pt): عنوان + درخت + نوار اصطلاحات باید با هم در صفحهٔ
-        # اختصاصی جا شوند و برچسب‌ها هرگز زیر کف خوانایی نروند (یادداشت ۸٫۶ واحد
-        # ← مقیاس ≥۰٫۸۲). اگر درخت کامل در یک صفحه با این مقیاس جا نشد، شاخه‌های
-        # ریشه (مبحث‌ها) دست‌نخورده میان چند صفحهٔ اختصاصی پیاپی پخش می‌شوند —
-        # هیچ شاخه‌ای حذف یا ریز نمی‌شود.
-        def _scale_of(sub: dict) -> float:
-            tw, th = measure_tree(sub, TREE_PAGE_STYLE)
-            return min(516 / tw, 540 / th, 1.0)
-
-        min_scale = 0.82
-        groups: list[list[dict]] = []
-        cur: list[dict] = []
-        for child in root.get("children", []):
-            trial = {**root, "children": cur + [child]}
-            if cur and _scale_of(trial) < min_scale:
-                groups.append(cur)
-                cur = [child]
-            else:
-                cur.append(child)
-        if cur:
-            groups.append(cur)
-
-        def _svg_for(children: list[dict]) -> str:
-            sub = {**root, "children": children}
-            out = tree_svg(sub, style=TREE_PAGE_STYLE)
-            tw, th = measure_tree(sub, TREE_PAGE_STYLE)
-            sc = _scale_of(sub)
-            return out.replace('<svg class="tree-svg"',
-                               f'<svg class="tree-svg" width="{tw * sc:.0f}pt" '
-                               f'height="{th * sc:.0f}pt"', 1)
-        # نوار یکپارچهٔ اصطلاحات کلیدی جلسه، زیر درخت (فهرست‌های خود مباحث)
-        parts = []
-        for t in self.session.topics:
-            if not t.key_terms:
-                continue
-            chips = "".join(
-                f'<span class="chip">{escape(str(kt.get("fa", "")))}'
-                + (f' · <bdi class="en">{escape(str(kt["en"]))}</bdi>' if kt.get("en") else "")
-                + "</span>"
-                for kt in t.key_terms)
-            parts.append(f'<b>مبحث {fa_num(t.number)}:</b> {chips}')
+        # بودجهٔ چاپی صفحهٔ اختصاصی (pt): عرض متن ۵۱۶؛ ارتفاع ۶۷۶ تا عنوان و
+        # زیرعنوان (با چیپ‌های منبعِ درون‌خطی) هم در همان صفحه بمانند و SVG
+        # هرگز تنها به صفحهٔ بعد نرود (اندازه‌گیری واقعی روی خروجی: سقف ~۶۹۰).
+        out = tree_svg(root, style=TREE_PAGE_STYLE)
+        tw, th = measure_tree(root, TREE_PAGE_STYLE)
+        sc = min(516 / tw, 676 / th, 1.0)
+        svg = out.replace('<svg class="tree-svg"',
+                          f'<svg class="tree-svg" width="{tw * sc:.0f}pt" '
+                          f'height="{th * sc:.0f}pt"', 1)
         srcs = ""
         tree_blocks = [b for b in self.session.closing if b.type == "tree"]
         if tree_blocks and self.show_sources:
-            srcs = " " + "".join(src_chips(b.sources, True) for b in tree_blocks)
-        term_rows = (f'<div class="treepage__terms"><b>اصطلاحات کلیدی جلسه —</b> '
-                     + " ".join(parts) + srcs + "</div>") if parts else ""
-        n_pages = len(groups)
-        out_pages = []
-        for gi, children in enumerate(groups):
-            suffix = (f" (بخش {fa_num(gi + 1)} از {fa_num(n_pages)})"
-                      if n_pages > 1 else "")
-            span = "یک صفحه" if n_pages == 1 else f"{fa_num(n_pages)} صفحهٔ پیاپی"
-            out_pages.append(f"""
+            srcs = "".join(src_chips(b.sources, True) for b in tree_blocks)
+        srcs_inline = f'<span class="treepage__srcs">{srcs}</span>' if srcs else ""
+        return f"""
 <div class="treepage">
-  <h2 class="h-ic">{icon_svg("branch", 15)}نمودار درختی جامع جلسه{suffix}</h2>
-  <p class="treepage__sub">اسکلت طبقه‌بندی همین جلسه در {span}؛ برای مرور سریع. جزئیات کامل هر شاخه در متن آمده و جمع‌بندی دوصفحه‌ای پایان جزوه آن‌ها را یکجا مرور می‌کند.</p>
-  {_svg_for(children)}
-  {term_rows if gi == n_pages - 1 else ""}
-</div>""")
-        return "".join(out_pages)
+  <h2 class="h-ic">{icon_svg("branch", 15)}نمودار درختی جامع جلسه</h2>
+  <p class="treepage__sub">اسکلت طبقه‌بندی همین جلسه در یک صفحه؛ برای مرور سریع. جزئیات کامل هر شاخه در متن آمده و جمع‌بندی دوصفحه‌ای پایان جزوه آن‌ها را یکجا مرور می‌کند. {srcs_inline}</p>
+  {svg}
+</div>"""
 
     def revision_map(self) -> str:
         """نقشهٔ جامع مرور: همهٔ گزاره‌های علمی جلسه، عین عبارت منبع، زیر بخش خودشان.
@@ -487,78 +450,6 @@ class Typesetter:
                 f'نشانهٔ میکروسکوپ به خود شکل ارجاع داده شده است.</p>'
                 f'<div class="rev__legend">{legend}</div>'
                 f'{"".join(panels)}</div>')
-
-    def sources_list(self) -> str:
-        """منابع علمی همین جلسه — گردآوری مکانیکی برچسب‌های منبعِ خود بلوک‌ها."""
-        if not self.show_sources:
-            return ""
-        by_book: dict[str, list[str]] = {}
-        seen: set[tuple[str, str]] = set()
-        for b in self.session.all_blocks():
-            for src in b.sources or []:
-                detail = "، ".join(x for x in (
-                    f"شکل {src.figure}" if src.figure else "",
-                    f"ص {src.pages}" if src.pages else "") if x)
-                key = (src.book, detail)
-                if key in seen:
-                    continue
-                seen.add(key)
-                by_book.setdefault(src.book, []).append(detail)
-        if not by_book:
-            return ""
-        rows = ""
-        for book, details in by_book.items():
-            chips = "".join(f'<span class="chip">{escape(d)}</span>'
-                            for d in details if d)
-            rows += (f'<div class="srclist__row"><b>{icon_svg("reference", 11)}'
-                     f'{escape(book)}</b><span class="chips">{chips}</span></div>')
-        return (f'<div class="srclist"><h3 class="h-ic">{icon_svg("book", 13)}'
-                f'منابع علمی این جلسه</h3>{rows}</div>')
-
-    def glossary(self) -> str:
-        """واژه‌نامهٔ فارسی–انگلیسی: فقط معادل‌هایی که در خود جلسه آمده‌اند + صفحهٔ نخستین کاربرد."""
-        terms: dict[str, dict[str, str]] = {}
-        order: list[str] = []
-
-        def add(fa: str, en: str, anchor: str) -> None:
-            fa = str(fa).strip()
-            if not fa or fa in terms:
-                return
-            terms[fa] = {"en": str(en or "").strip(), "anchor": anchor}
-            order.append(fa)
-
-        def scan(blocks: list[Block], anchor: str) -> None:
-            for b in blocks:
-                if b.type == "section":
-                    anchor = b.id
-                if b.type == "figure":
-                    for lb in b.data.get("labels", []) or []:
-                        if isinstance(lb, dict):
-                            add(str(lb.get("fa", "")), str(lb.get("en", "")), anchor)
-                for frag in b.text_fragments():
-                    for m in re.finditer(r"\[\[term:(.+?)\|(.+?)\]\]", str(frag)):
-                        add(m.group(1), m.group(2), anchor)
-
-        for t in self.session.topics:
-            for kt in t.key_terms:
-                if isinstance(kt, dict):
-                    add(str(kt.get("fa", "")), str(kt.get("en", "")), t.id)
-            scan(t.blocks, t.id)
-        scan(self.session.closing, self.session.topics[-1].id if self.session.topics else "")
-        if len(order) < 4:
-            return ""
-        items = []
-        for fa in order:
-            en = terms[fa]["en"]
-            pg = self.toc_pages.get(terms[fa]["anchor"])
-            pg_txt = f"ص {fa_num(pg)}" if pg else "…"
-            en_html = f' <bdi class="en">({escape(en)})</bdi>' if en else ""
-            items.append(f'<div class="gloss__it"><span class="gloss__fa">{escape(fa)}{en_html}</span>'
-                         f'<span class="dots"></span><span class="gloss__pg">{pg_txt}</span></div>')
-        return (f'<div class="glossary gloss--page"><h2 class="h-ic">' + icon_svg("book", 15) + 'واژه‌نامهٔ فارسی–انگلیسی همین جلسه</h2>'
-                f'<p class="gloss__note">فقط اصطلاح‌هایی که در متن همین جلسه آمده‌اند؛ '
-                f'شمارهٔ صفحه، نخستین کاربرد هر اصطلاح است.</p>'
-                f'<div class="gloss__grid">{"".join(items)}</div></div>')
 
     def answer_key(self) -> str:
         """پاسخ‌نامهٔ خودآزمایی‌های سریع — پاسخ‌ها عین عبارت‌های متن جلسه‌اند."""

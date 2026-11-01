@@ -224,11 +224,13 @@ def build_components(session: Session, uitems: list[UItem]) -> list[Comp]:
         comps.append(Comp("points", "نکات متمایزکننده", 2, uitems=bpts,
                           min_priority="B"))
 
-    # اصطلاحات: چیپ فارسی+انگلیسی — صفحهٔ ۲
-    terms = take(lambda u: u.item.kind == "terminology")
-    if terms:
-        comps.append(Comp("chips", "اصطلاحات کلیدی", 2, uitems=terms,
-                          min_priority="B"))
+    # اصطلاحات: برگهٔ فوق‌فشرده بخش «اصطلاحات کلیدی» ندارد (قانون محصول)؛
+    # آیتم‌های اصطلاح‌شناسی با دلیل شفاف کنار گذاشته می‌شوند تا در هیچ جزء
+    # دیگری هم برنگردند — معادل‌ها عیناً در متن جزوه و سرآغاز مباحث‌اند.
+    for u in uitems:
+        if (u.item.kind == "terminology" and not u.dropped
+                and u.item.id not in used):
+            u.dropped = "برگهٔ فوق‌فشرده بخش اصطلاحات ندارد؛ در متن جزوه هست"
 
     # «با هم اشتباه نکن» مشتق از جدول‌های مقایسه‌ای خود منبع — صفحهٔ ۲
     comps.append(Comp("confuse", "این‌ها را با هم اشتباه نکن", 2, movable=False))
@@ -254,7 +256,7 @@ def build_components(session: Session, uitems: list[UItem]) -> list[Comp]:
                                           for b in t.blocks if b.type == "section")
                        for t in session.topics)
     w1 = skel_w + sum(_w(c) for c in comps if c.kind in ("defs", "proc", "numbers"))
-    w2 = sum(_w(c) for c in comps if c.kind in ("alerts", "chips"))
+    w2 = sum(_w(c) for c in comps if c.kind in ("alerts",))
     for c in comps:
         if c.kind != "table":
             continue

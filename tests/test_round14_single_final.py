@@ -91,8 +91,8 @@ def test_final_contains_sheet_not_revmap_and_order():
     _n = normalize_text("مرور فوق‌فشرده")
     ultra = next((i + 1 for i, t in enumerate(pages)
                   if tree and i + 1 > tree and _n in t), None)
-    gloss = first("واژه‌نامهٔ فارسی–انگلیسی")
-    assert tree and ultra and gloss and tree < ultra < gloss == len(pages)
+    assert not first("واژه‌نامهٔ فارسی–انگلیسی")   # واژه‌نامه حذف شده است
+    assert tree and ultra and tree < ultra == len(pages) - 1
     titles = [t for _l, t, _p in doc.get_toc()]
     assert any("فوق‌فشرده" in t for t in titles)   # نشانک برگه
 

@@ -65,7 +65,7 @@ def test_every_new_topic_block_has_sources():
                 assert b.sources, f"{b.id} بدون منبع"
 
 
-def test_tree_pages_cover_all_six_topics_readably():
+def test_tree_single_page_covers_all_six_topics_readably():
     s = _session()
     plan = Plan(session=s)
     html = Typesetter(plan).tree_page()
@@ -75,13 +75,15 @@ def test_tree_pages_cover_all_six_topics_readably():
         assert re.sub(r"\s+", " ", t.title) in flat, t.id
     svgs = re.findall(r'<svg class="tree-svg" width="(\d+)pt" height="(\d+)pt" '
                       r'viewBox="0 0 ([\d.]+) ([\d.]+)"', html)
-    assert svgs
+    # قانون تک‌صفحه‌ای (بازخورد کاربر): دقیقاً یک SVG؛ سبک فشردهٔ درخت
+    # فونت مؤثر را بالای کف QA نگه می‌دارد.
+    from humsyar.diagrams import PAGE_STYLE
+    assert len(svgs) == 1
     for wp, hp, vw, _vh in svgs:
         eff = int(wp) / float(vw)
-        assert eff >= 0.82          # یادداشت ۸٫۶واحدی → ≥۷٫۰۵pt مؤثر
-        assert int(hp) <= 540       # سقف ارتفاع چاپی صفحهٔ اختصاصی
-    if len(svgs) > 1:
-        assert "بخش ۱ از" in html   # شماره‌گذاری شفاف بخش‌های درخت
+        assert PAGE_STYLE["fs_note"] * eff >= 7.0, eff
+        assert int(hp) <= 676       # بودجهٔ ارتفاع صفحهٔ اختصاصی
+    assert "بخش ۱ از" not in html   # درخت دیگر بخش‌بندی چندصفحه‌ای ندارد
 
 
 def test_textual_arrows_render_as_svg_not_fallback_glyph():

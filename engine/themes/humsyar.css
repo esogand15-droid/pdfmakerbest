@@ -519,6 +519,7 @@ span.h-ic{ display:inline-flex; }
 .treepage h2{ margin:0 0 2pt; }
 .treepage__sub{ font-size:8.6pt; color:var(--muted); margin:0 0 5pt; }
 .treepage .tree-svg{ display:block; margin-inline:auto; width:auto; max-width:100%; }
+.treepage__srcs{ font-size:7.9pt; white-space:nowrap; }
 .treepage__terms{ font-size:7.9pt; line-height:1.82; border-top:.6pt solid var(--line);
   padding-top:4pt; margin-top:4pt; color:var(--brand-deep); }
 .treepage__terms .chip{ margin:1pt 0 1pt 3pt; white-space:nowrap; display:inline-block; }

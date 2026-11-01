@@ -185,10 +185,21 @@ def test_fill_metrics_reported_round10_policy():
     assert qa["ok"]
     raw_fills = qa.get("fill_per_page") or []
     # برای هر صفحه خط گزارش هست (کاور و صفحهٔ فهرست/نقشه: None = بی‌معیار قاب)
-    assert len(raw_fills) == fitz.open(str(pdf)).page_count
-    fills = [f for f in raw_fills if f is not None]
+    doc = fitz.open(str(pdf))
+    assert len(raw_fills) == doc.page_count
     assert qa.get("fill_avg_pct", 0) >= 70                # هشدار فرایند، نه قانون
-    assert all(f >= 25 for f in fills), fills             # هیچ صفحه‌ای تقریباً خالی نیست
+    # هیچ صفحه‌ای تقریباً خالی نیست — تنها استثنا صفحهٔ جمع‌بندی است: فقط یک
+    # بلوک تألیفی دارد و بلوک «منابع علمی این جلسه» که هم‌صفحه‌اش بود به
+    # دستور کاربر از خروجی حذف شده است؛ خلوتی‌اش ساختاری است و پرکردن
+    # مصنوعی (بزرگ‌کردن تزئینی) هم ممنوع. کف عمومی برای بقیه برقرار می‌ماند.
+    closing_idx = next((i for i, pg in enumerate(doc)
+                          if pg.search_for("جمع‌بندی و مرور جلسه")), None)
+    for i, f in enumerate(raw_fills):
+        if f is None or i == closing_idx:
+            continue
+        assert f >= 25, (i + 1, f)
+    if closing_idx is not None and raw_fills[closing_idx] is not None:
+        assert raw_fills[closing_idx] >= 15
 
 
 def test_science_conflict_still_displayed(pdf):

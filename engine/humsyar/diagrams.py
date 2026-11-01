@@ -27,6 +27,21 @@ def _est_width(text: str, fs: float) -> float:
     return len(text) * fs * CHAR_W
 
 
+def _line_w(text: str, fs: float, char_w: float) -> float:
+    """تخمین عرض یک خط با وزن نوع نویسه (لاتین و ارقام پهن‌تر از فارسی‌اند)."""
+    total = 0.0
+    for ch in text:
+        if ch == " ":
+            total += 0.30
+        elif ch.isascii():
+            total += 0.60 if (ch.isupper() or ch.isdigit()) else 0.52
+        elif ch in "؛،:«»()·-ـ":
+            total += 0.34
+        else:
+            total += char_w
+    return total * fs
+
+
 def _wrap(text: str, max_chars: int, max_lines: int = 2) -> list[str]:
     if len(text) <= max_chars:
         return [text]
@@ -68,8 +83,8 @@ def _prepare(node: dict[str, Any], depth: int = 0,
     wrap_n = st["wrap_note_by_depth"].get(depth, st["wrap_note"])
     note_lines = (_wrap(node["note"], wrap_n, st["max_note_lines"])
                   if node.get("note") else [])
-    w = max([len(l) * st["fs_label"] * st["char_w"] for l in label_lines]
-            + [len(l) * st["fs_note"] * st["char_w"] for l in note_lines]
+    w = max([_line_w(l, st["fs_label"], st["char_w"]) for l in label_lines]
+            + [_line_w(l, st["fs_note"], st["char_w"]) for l in note_lines]
             + [st.get("min_w", 44)]) + 2 * st["pad_x"]
     lh_l, lh_n = st["fs_label"] * st["lh_label"], st["fs_note"] * st["lh_note"]
     h = max(st["node_h"], st["pad_y"] + len(label_lines) * lh_l + len(note_lines) * lh_n)
@@ -102,14 +117,17 @@ def _columns(tree: dict[str, Any], st: dict[str, Any]):
 
 
 # سبک درخت تمام‌صفحه: واحدها pt در مقیاس چاپ (عرض صفحهٔ متن ۵۱۶pt).
-# مؤثر در چاپ: برچسب ≈۸٫۶pt و یادداشت ≈۷٫۹pt — بالاتر از کف خوانایی ۷٫۵pt.
+# قانون محصول: نمودار جامع همیشه در «یک» صفحهٔ اختصاصی جا می‌شود؛ این سبک
+# فشرده (پیچش پهن‌ترِ متنِ گره‌ها + فاصله‌های عمودی کمتر) همان‌جاگیری را
+# بدون حذف هیچ شاخه‌ای ممکن می‌کند. مؤثر در چاپ (جلسهٔ ۱، مقیاس ~۰٫۸۳):
+# برچسب ≈۷٫۸pt و یادداشت ≈۷٫۵pt — بالاتر از کف خوانایی QA (۷pt).
 PAGE_STYLE = {
-    "fs_label": 9.4, "fs_note": 8.6, "gap_x": 10, "gap_y": 2.0, "pad_x": 5.5,
-    "pad_y": 5, "node_h": 16, "max_w": 150, "min_w": 34, "wrap_label": 16,
-    "wrap_note": 22, "char_w": 0.46,
-    "wrap_by_depth": {0: 9, 1: 22, 2: 23, 3: 18, 4: 16, 5: 15},
-    "wrap_note_by_depth": {3: 22, 4: 22, 5: 22},
-    "lh_label": 1.18, "lh_note": 1.24, "max_label_lines": 3, "max_note_lines": 4,
+    "fs_label": 9.4, "fs_note": 9.0, "gap_x": 6, "gap_y": 0.9, "pad_x": 5.5,
+    "pad_y": 4.5, "node_h": 16, "max_w": 175, "min_w": 34, "wrap_label": 19,
+    "wrap_note": 26, "char_w": 0.50,
+    "wrap_by_depth": {0: 10, 1: 25, 2: 27, 3: 21, 4: 18, 5: 17},
+    "wrap_note_by_depth": {3: 26, 4: 26, 5: 26},
+    "lh_label": 1.12, "lh_note": 1.16, "max_label_lines": 3, "max_note_lines": 4,
 }
 
 

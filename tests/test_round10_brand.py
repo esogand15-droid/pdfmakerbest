@@ -149,9 +149,13 @@ def test_no_concept_color_system():
     assert hex_of("dir-forward") in html and hex_of("dir-reverse") in html
 
 
-def test_glossary_two_columns_on_last_page():
-    css = (ROOT / "engine" / "themes" / "humsyar.css").read_text(encoding="utf-8")
-    assert ".gloss--page .gloss__grid{ columns:2;" in css
+def test_no_glossary_markup_in_document():
+    """چرخش محصول (بازخورد کاربر): واژه‌نامه از خروجی حذف شده است
+    (قرارداد قدیمِ «دوستونهٔ صفحهٔ آخر» بازنشسته است)."""
+    s = load_session(ROOT / "content" / "session01_pilot.yaml")
+    html = Typesetter(plan_session(s, "final", ROOT)).document("")
+    assert "gloss--page" not in html and "gloss__fa" not in html
+    assert "واژه‌نامهٔ فارسی–انگلیسی" not in html
 
 
 def test_frame_and_progress_use_palette():
