@@ -1,0 +1,11 @@
+# ثابت مرکزی برند — تنها جایی که نام برند تعریف می‌شود؛ همهٔ قالب‌ها از اینجا می‌خوانند.
+# قانون برند (راند ۲، بند ۰): فارسی «هامزیار» و انگلیسی «HumsYar» — هر شکل دیگری غلط است.
+fa: هامزیار
+en: HumsYar
+tagline_fa: علوم پایهٔ پزشکی
+series_fa: جزوهٔ علوم پایهٔ پزشکی
+latin_line: "HumsYar · Medical Notes"
+# دارایی‌های رسمی لوگو (شفاف واقعی) — اگر فایلی نباشد، موتور به برند تایپوگرافیک برمی‌گردد و کمبود را گزارش می‌کند.
+logo: assets/brand/logo.png
+logo_mono: assets/brand/logo_mono.png
+favicon: assets/brand/favicon.png

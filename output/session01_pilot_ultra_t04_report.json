@@ -1,0 +1,225 @@
+{
+ "pdf": "../output/session01_pilot_ultra_t04.pdf",
+ "pages": 2,
+ "fits_two_pages": true,
+ "single_page": false,
+ "status": "standard",
+ "font": {
+  "base_pt": 8.8,
+  "floor_pt": 7.5
+ },
+ "items_total": 65,
+ "coverage": {
+  "A": {
+   "total": 27,
+   "in_sheet": 27,
+   "merged": 0
+  },
+  "B": {
+   "total": 15,
+   "in_sheet": 10,
+   "merged": 5
+  },
+  "C": {
+   "total": 21,
+   "in_sheet": 6,
+   "merged": 0
+  }
+ },
+ "excluded_figure_visual": 2,
+ "merges": [
+  {
+   "kept": "s01-t04#term0",
+   "merged": "s01t4-f1#3",
+   "similarity": "1.00"
+  },
+  {
+   "kept": "s01-t04#term3",
+   "merged": "s01t4-f2#3",
+   "similarity": "1.00"
+  },
+  {
+   "kept": "s01-t04#term4",
+   "merged": "s01t4-f2#4",
+   "similarity": "1.00"
+  },
+  {
+   "kept": "s01-t04#term5",
+   "merged": "s01t4-f2#5",
+   "similarity": "1.00"
+  },
+  {
+   "kept": "s01-t04#term6",
+   "merged": "s01t4-f2#6",
+   "similarity": "1.00"
+  }
+ ],
+ "dropped": [
+  {
+   "id": "s01t4-p1#0",
+   "priority": "C",
+   "reason": "اولویت C — بیرون از بودجهٔ برگه؛ در جزوهٔ کامل هست"
+  },
+  {
+   "id": "s01t4-p2#1",
+   "priority": "C",
+   "reason": "توضیح بلند (اولویت C) — جایش متن اصلی جزوه است"
+  },
+  {
+   "id": "s01t4-p2#2",
+   "priority": "C",
+   "reason": "اولویت C — بیرون از بودجهٔ برگه؛ در جزوهٔ کامل هست"
+  },
+  {
+   "id": "s01t4-p3#0",
+   "priority": "C",
+   "reason": "اولویت C — بیرون از بودجهٔ برگه؛ در جزوهٔ کامل هست"
+  },
+  {
+   "id": "s01t4-f1#0",
+   "priority": "C",
+   "reason": "اولویت C — بیرون از بودجهٔ برگه؛ در جزوهٔ کامل هست"
+  },
+  {
+   "id": "s01t4-p4#0",
+   "priority": "C",
+   "reason": "اولویت C — بیرون از بودجهٔ برگه؛ در جزوهٔ کامل هست"
+  },
+  {
+   "id": "s01t4-p4#1",
+   "priority": "C",
+   "reason": "توضیح بلند (اولویت C) — جایش متن اصلی جزوه است"
+  },
+  {
+   "id": "s01t4-p5#0",
+   "priority": "C",
+   "reason": "توضیح بلند (اولویت C) — جایش متن اصلی جزوه است"
+  },
+  {
+   "id": "s01t4-p5#1",
+   "priority": "C",
+   "reason": "اولویت C — بیرون از بودجهٔ برگه؛ در جزوهٔ کامل هست"
+  },
+  {
+   "id": "s01t4-p6#0",
+   "priority": "C",
+   "reason": "اولویت C — بیرون از بودجهٔ برگه؛ در جزوهٔ کامل هست"
+  },
+  {
+   "id": "s01t4-p6#1",
+   "priority": "C",
+   "reason": "اولویت C — بیرون از بودجهٔ برگه؛ در جزوهٔ کامل هست"
+  },
+  {
+   "id": "s01t4-p6#2",
+   "priority": "C",
+   "reason": "توضیح بلند (اولویت C) — جایش متن اصلی جزوه است"
+  },
+  {
+   "id": "s01t4-f2#0",
+   "priority": "C",
+   "reason": "اولویت C — بیرون از بودجهٔ برگه؛ در جزوهٔ کامل هست"
+  },
+  {
+   "id": "s01t4-p7#0",
+   "priority": "C",
+   "reason": "اولویت C — بیرون از بودجهٔ برگه؛ در جزوهٔ کامل هست"
+  },
+  {
+   "id": "s01t4-p7#2",
+   "priority": "C",
+   "reason": "اولویت C — بیرون از بودجهٔ برگه؛ در جزوهٔ کامل هست"
+  }
+ ],
+ "overflow_a_count": 0,
+ "missing_numbers_check": [],
+ "text_chars": {
+  "source_items": 5518,
+  "in_sheet": 2813,
+  "reduction_pct": 49.0
+ },
+ "note": "پوشش A یعنی پوشش نکات ضروریِ مرور؛ این برگه ادعای پوشش همهٔ جزئیات منبع را ندارد (آن پوشش در نقشهٔ جامع مرورِ جزوه است).",
+ "fit_trace": [
+  {
+   "step": "A-only",
+   "pages": 2,
+   "p2_marker": 2,
+   "base_pt": 8.8,
+   "tight": false,
+   "last_used": 0.55
+  },
+  {
+   "step": "balance:chips->p1",
+   "pages": 2,
+   "p1_used": 0.49,
+   "last_used": 0.5
+  },
+  {
+   "step": "balance:table->p1",
+   "pages": 2,
+   "p1_used": 0.62,
+   "last_used": 0.37
+  },
+  {
+   "step": "balance:table->p1",
+   "pages": 2,
+   "p1_used": 0.83,
+   "last_used": 0.16
+  },
+  {
+   "step": "fillB:+4",
+   "pages": 2,
+   "last_used": 0.16
+  },
+  {
+   "step": "fillB:+3",
+   "pages": 2,
+   "last_used": 0.16
+  },
+  {
+   "step": "fillB:+2",
+   "pages": 2,
+   "last_used": 0.21
+  },
+  {
+   "step": "fillB:+1",
+   "pages": 2,
+   "last_used": 0.26
+  },
+  {
+   "step": "measure",
+   "p1_used": 0.88,
+   "last_used": 0.26
+  },
+  {
+   "step": "single-try",
+   "pages": 2,
+   "last_used": 0.21
+  },
+  {
+   "step": "single-revert",
+   "pages": 2
+  },
+  {
+   "step": "fillC:+6",
+   "pages": 2,
+   "last_used": 0.33
+  },
+  {
+   "step": "fillC:ratio-cap",
+   "kept_chars": 2813
+  },
+  {
+   "step": "final-balance:chips->2",
+   "pages": 2,
+   "p1_used": 0.82,
+   "last_used": 0.48
+  },
+  {
+   "step": "final-balance:numbers->2",
+   "pages": 2,
+   "p1_used": 0.7,
+   "last_used": 0.48
+  }
+ ]
+}
